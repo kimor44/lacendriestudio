@@ -9,13 +9,14 @@
 function cendrie_add_theme_scripts() {
     /* Enqueue styles */
     wp_enqueue_style( 'style', get_stylesheet_uri() );
-    /* others stylesheets
-      wp_enqueue_style( 'name_of_file', get_template_directory_uri() . '/assets/css/name_of_file.css', array(), '1.1', 'all' );
-    */
+    /* others stylesheets */
+    wp_enqueue_style( 'main.prod', get_template_directory_uri() . '/assets/css/main.prod.css', array(), '1.1', 'all' );
+    wp_enqueue_style( 'main', get_template_directory_uri() . '/assets/css/main.css', array(), '1.1', 'all' );
     
-    /* Enqueue scripts 
-      wp_enqueue_script( 'script', get_template_directory_uri() . '/assets/js/script.js', array ( 'jquery' ), 1.1, true);
-    */
+    
+    /* Enqueue scripts */
+    wp_enqueue_script( 'script', get_template_directory_uri() . '/node_modules/tw-elements/dist/js/index.min.js');
+
 
     /* conditional loading script
       if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
