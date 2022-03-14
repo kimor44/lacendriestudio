@@ -9,8 +9,14 @@
 </head>
 
 
-<body <?php body_class(['bg-white']); ?> id="rjs_body" >
-  <header></header>
+<body>
+  <header class="bg-black" >
+    <?php if ( get_header_image() ) : ?>
+          <a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+              <img class="mx-auto" src="<?php header_image(); ?>" width="<?php echo absint( get_custom_header()->width ); ?>" height="<?php echo absint( get_custom_header()->height ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">
+          </a>
+    <?php endif; ?>
+  </header>
 
 
 
