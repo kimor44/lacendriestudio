@@ -3877,18 +3877,27 @@ textarea.form-control.is-invalid {
   padding-right: 1rem;
 }
 
-#cendrie-body .px-2 {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-}
-
-#cendrie-body .text-center {
-  text-align: center;
+#cendrie-body .text-justify {
+  text-align: justify;
 }
 
 #cendrie-body .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
+}
+
+#cendrie-body .text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+#cendrie-body .text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+#cendrie-body .leading-relaxed {
+  line-height: 1.625;
 }
 
 #cendrie-body .text-white {
@@ -3926,43 +3935,62 @@ textarea.form-control.is-invalid {
 } */
 
 @media (min-width: 640px) {
-  .sm\:container {
+  #cendrie-body .sm\:w-full {
     width: 100%;
   }
 
-  @media (min-width: 640px) {
-    .sm\:container {
-      max-width: 640px;
-    }
+  #cendrie-body .sm\:w-full {
+    width: 100%;
   }
 
-  @media (min-width: 768px) {
-    .sm\:container {
-      max-width: 768px;
-    }
+  #cendrie-body .sm\:w-full {
+    width: 100%;
   }
 
-  @media (min-width: 1024px) {
-    .sm\:container {
-      max-width: 1024px;
-    }
+  #cendrie-body .sm\:w-full {
+    width: 100%;
   }
 
-  @media (min-width: 1280px) {
-    .sm\:container {
-      max-width: 1280px;
-    }
+  #cendrie-body .sm\:w-full {
+    width: 100%;
   }
 
-  @media (min-width: 1536px) {
-    .sm\:container {
-      max-width: 1536px;
-    }
+  #cendrie-body .sm\:w-full {
+    width: 100%;
   }
 
-  #cendrie-body .sm\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
+  #cendrie-body .sm\:w-full {
+    width: 100%;
+  }
+
+  #cendrie-body .sm\:text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  #cendrie-body .sm\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  #cendrie-body .sm\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  #cendrie-body .sm\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  #cendrie-body .sm\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  #cendrie-body .sm\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 }
 
@@ -4001,100 +4029,126 @@ textarea.form-control.is-invalid {
     }
   }
 
-  #cendrie-body .md\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
+  #cendrie-body .md\:w-11\/12 {
+    width: 91.666667%;
   }
 
-  #cendrie-body .md\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
+  #cendrie-body .md\:w-11\/12 {
+    width: 91.666667%;
   }
 
-  #cendrie-body .md\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
+  #cendrie-body .md\:w-11\/12 {
+    width: 91.666667%;
+  }
+
+  #cendrie-body .md\:w-11\/12 {
+    width: 91.666667%;
+  }
+
+  #cendrie-body .md\:w-11\/12 {
+    width: 91.666667%;
+  }
+
+  #cendrie-body .md\:w-11\/12 {
+    width: 91.666667%;
+  }
+
+  #cendrie-body .md\:w-11\/12 {
+    width: 91.666667%;
+  }
+
+  #cendrie-body .md\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  #cendrie-body .md\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  #cendrie-body .md\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  #cendrie-body .md\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  #cendrie-body .md\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  #cendrie-body .md\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  #cendrie-body .md\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 }
 
 @media (min-width: 1024px) {
-  .lg\:container {
-    width: 100%;
+  #cendrie-body .lg\:w-9\/12 {
+    width: 75%;
   }
 
-  @media (min-width: 640px) {
-    .lg\:container {
-      max-width: 640px;
-    }
+  #cendrie-body .lg\:w-9\/12 {
+    width: 75%;
   }
 
-  @media (min-width: 768px) {
-    .lg\:container {
-      max-width: 768px;
-    }
+  #cendrie-body .lg\:w-9\/12 {
+    width: 75%;
   }
 
-  @media (min-width: 1024px) {
-    .lg\:container {
-      max-width: 1024px;
-    }
+  #cendrie-body .lg\:w-9\/12 {
+    width: 75%;
   }
 
-  @media (min-width: 1280px) {
-    .lg\:container {
-      max-width: 1280px;
-    }
+  #cendrie-body .lg\:w-9\/12 {
+    width: 75%;
   }
 
-  @media (min-width: 1536px) {
-    .lg\:container {
-      max-width: 1536px;
-    }
+  #cendrie-body .lg\:w-9\/12 {
+    width: 75%;
   }
 
-  #cendrie-body .lg\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-@media (min-width: 1280px) {
-  .xl\:container {
-    width: 100%;
+  #cendrie-body .lg\:w-9\/12 {
+    width: 75%;
   }
 
-  @media (min-width: 640px) {
-    .xl\:container {
-      max-width: 640px;
-    }
+  #cendrie-body .lg\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
-  @media (min-width: 768px) {
-    .xl\:container {
-      max-width: 768px;
-    }
+  #cendrie-body .lg\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
-  @media (min-width: 1024px) {
-    .xl\:container {
-      max-width: 1024px;
-    }
+  #cendrie-body .lg\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
-  @media (min-width: 1280px) {
-    .xl\:container {
-      max-width: 1280px;
-    }
+  #cendrie-body .lg\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
-  @media (min-width: 1536px) {
-    .xl\:container {
-      max-width: 1536px;
-    }
+  #cendrie-body .lg\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
-  #cendrie-body .xl\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
+  #cendrie-body .lg\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 }

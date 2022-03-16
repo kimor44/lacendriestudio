@@ -12,8 +12,10 @@ if (!defined('ABSPATH')) { exit; }?>
 if ( have_posts() ) : 
   while ( have_posts() ) : the_post();
     ?>
-      <div class="md:container md:mx-auto sm:container sm:mx-auto lg:container lg:mx-auto xl:container xl:mx-auto px-4 flex flex-col">
-        <?php the_content(); ?>
+      <div class="text-base md:text-xl lg:text-2xl px-4 md:container mx-auto">
+        <div class="sm:w-full md:w-11/12 lg:w-9/12 mx-auto text-justify leading-relaxed">
+          <?php the_content(); ?>
+        </div>
       </div>
     <?php
   endwhile;
