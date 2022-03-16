@@ -39,6 +39,10 @@ if ( ! function_exists( 'cendrie_custom_header_setup' ) ) {
      * Enable support for post thumbnails and featured images.
     */
     add_theme_support( 'post-thumbnails' );
+    
+    set_post_thumbnail_size( 1568, 9999 );
+    // Add new image size
+    add_image_size( 'cendrie_large_size', 1600, 1000 );
 
     /**
      * Enable support for the following post formats:
