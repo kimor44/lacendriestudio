@@ -7,10 +7,3 @@
     background-image: linear-gradient(#3490dc, #6574cd) !important;
   }
 } */
-
-.bg-image-cendrie {
-  background-image: url("../images/default.jpg");
-  background-repeat: no-repeat;
-  background-size: contain;
-  height: 235px;
-}

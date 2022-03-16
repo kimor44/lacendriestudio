@@ -8,14 +8,14 @@
 
 function cendrie_add_theme_scripts() {
     /* Enqueue styles */
-    wp_enqueue_style( 'style', get_stylesheet_uri() );
-    /* others stylesheets */
-    wp_enqueue_style( 'main', get_template_directory_uri() . '/assets/css/main.css' );
-    wp_enqueue_style( 'main.prod', get_template_directory_uri() . '/assets/css/main.prod.css', array(), '1.1', 'all' );
+    wp_enqueue_style( 'style', get_stylesheet_uri(), array(), time(), 'all' );
+    // others stylesheets
+    wp_enqueue_style( 'main', get_template_directory_uri() . '/assets/css/main.css', array(), time(), 'all' );
+    wp_enqueue_style( 'main.prod', get_template_directory_uri() . '/assets/css/main.prod.css', array(), time(), 'all' );
     
     
     /* Enqueue scripts */
-    wp_enqueue_script( 'script', get_template_directory_uri() . '/node_modules/tw-elements/dist/js/index.min.js');
+    wp_enqueue_script( 'script', get_template_directory_uri() . '/node_modules/tw-elements/dist/js/index.min.js', array(), time(), true);
 
 
     /* conditional loading script
@@ -33,8 +33,8 @@ if ( ! isset( $content_width ) )
     $content_width = 800; // pixels
 */
 
-if ( ! function_exists( 'lacendriestudio_setup' ) ) :
-  function lacendriestudio_setup() {
+if ( ! function_exists( 'cendrie_custom_header_setup' ) ) {
+  function cendrie_custom_header_setup() {
     /**
      * Enable support for post thumbnails and featured images.
     */
@@ -45,11 +45,15 @@ if ( ! function_exists( 'lacendriestudio_setup' ) ) :
      * aside, gallery, quote, image, and video
      */
     add_theme_support( 'post-formats',  array ( 'aside', 'gallery', 'quote', 'image', 'video' ) );
-  }
-endif;
+    
+    // Custom background
+    $args_cbg = array(
+      'default-color' => '000001',
+    );
+    add_theme_support( 'custom-background', $args_cbg );
 
-function cendrie_custom_header_setup() {
-  $args = array(
+    // Custom header image
+    $args_ch = array(
       'default-image' => get_template_directory_uri() . '/assets/images/logo_la_cendrie.jpg',
       'header-text' => false,
       'width' => 800,
@@ -57,7 +61,8 @@ function cendrie_custom_header_setup() {
       'flex-width' => true,
       'flex-height' => true,
       'uploads' => true,
-  );
-  add_theme_support( 'custom-header', $args );
-}
+    );
+    add_theme_support( 'custom-header', $args_ch );
+  }
+}  
 add_action( 'after_setup_theme', 'cendrie_custom_header_setup' );

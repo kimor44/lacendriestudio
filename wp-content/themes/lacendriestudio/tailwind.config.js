@@ -4,8 +4,7 @@ module.exports = {
   mode: "jit",
   content: [
     "*.{php,html,js}",
-    "./assets/**/*.{html,js,jsx,ts,tsx}",
-    "./**/*.php",
+    "./assets/**/*.{html,js}",
     "./node_modules/tw-elements/dist/js/**/*.js",
   ],
   theme: {
@@ -45,4 +44,5 @@ module.exports = {
     },
   },
   plugins: [require("tw-elements/dist/plugin")],
+  important: "#cendrie-body",
 };
