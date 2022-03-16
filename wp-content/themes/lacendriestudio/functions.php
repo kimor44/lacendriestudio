@@ -66,3 +66,17 @@ if ( ! function_exists( 'cendrie_custom_header_setup' ) ) {
   }
 }  
 add_action( 'after_setup_theme', 'cendrie_custom_header_setup' );
+
+// Add classes to the_content() hook
+function cendrie_replace_content( $text_content ) {
+    if ( is_page() ) {
+        $text = array(
+            '<p>' => '<p class="text-white">',
+        );    
+ 
+        $text_content = str_ireplace( array_keys( $text ), $text, $text_content );
+    }    
+ 
+    return $text_content;
+}    
+add_filter( 'the_content', 'cendrie_replace_content' );
