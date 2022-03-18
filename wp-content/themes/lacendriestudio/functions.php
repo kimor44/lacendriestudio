@@ -40,7 +40,7 @@ if ( ! function_exists( 'cendrie_custom_header_setup' ) ) {
     */
     add_theme_support( 'post-thumbnails' );
     
-    set_post_thumbnail_size( 1568, 9999 );
+    set_post_thumbnail_size( 2000, 9999 );
     // Add new image size
     add_image_size( 'cendrie_large_size', 1600, 1000 );
 
@@ -74,13 +74,28 @@ add_action( 'after_setup_theme', 'cendrie_custom_header_setup' );
 // Add classes to the_content() hook
 function cendrie_replace_content( $text_content ) {
     if ( is_page() ) {
-        $text = array(
-            '<p>' => '<p class="text-white">',
-        );    
- 
-        $text_content = str_ireplace( array_keys( $text ), $text, $text_content );
-    }    
- 
+      $text = array(
+        '<p>' => '<p class="text-white">',
+      );
+
+      $text_content = str_ireplace( array_keys( $text ), $text, $text_content );
+    }
+
+    if ( is_front_page() ) {
+      /**
+       * Parts to handle (filter) HTML elements & attributes passed in the_content() function
+       * Don't hesitate to take a look in the wp_kses_allowed_html function
+       * in the file : wp-includes/kses.php
+       */
+
+      // Returns an array of allowed HTML tags and attributes for a given context.
+      $allowedHtmltags = wp_kses_allowed_html('post');
+      // set the allowed attributes for <img> tag
+      $allowedHtmltags['img'] = array('alt' => true, 'id' => true, 'src' => true, 'srcset' => true);
+      // Filter given text by the allowed HTML elements names, attribute names
+      $text_content = wp_kses($text_content, $allowedHtmltags);
+    }
+
     return $text_content;
 }    
 add_filter( 'the_content', 'cendrie_replace_content' );
