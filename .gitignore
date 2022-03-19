@@ -1,2 +1,4 @@
 wp-config.php
 wp-content/themes/lacendriestudio/node_modules/
+**/*.DS_Store
+wp-content/ai1wm-backups/

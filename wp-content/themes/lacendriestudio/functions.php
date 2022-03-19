@@ -91,7 +91,7 @@ function cendrie_replace_content( $text_content ) {
       // Returns an array of allowed HTML tags and attributes for a given context.
       $allowedHtmltags = wp_kses_allowed_html('post');
       // set the allowed attributes for <img> tag
-      $allowedHtmltags['img'] = array('alt' => true, 'id' => true, 'src' => true, 'srcset' => true);
+      $allowedHtmltags['img'] = array('alt' => true, 'id' => true, 'src' => true, 'srcset' => true, 'sizes' => true);
       // Filter given text by the allowed HTML elements names, attribute names
       $text_content = wp_kses($text_content, $allowedHtmltags);
     }
