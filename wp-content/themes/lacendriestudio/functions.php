@@ -85,7 +85,7 @@ add_action( 'after_setup_theme', 'cendrie_custom_header_setup' );
 function cendrie_replace_content( $text_content ) {
     if ( is_page() ) {
       $text = array(
-        '<p>' => '<p class="text-white">',
+        '<p>' => '<p class="text-white my-10">',
       );
 
       $text_content = str_ireplace( array_keys( $text ), $text, $text_content );
