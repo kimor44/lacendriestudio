@@ -6,6 +6,18 @@
 * @since LaCendrieStudio 1.0
 */
 
+/*
+* Remove useless image sizes
+*/
+function cendrie_remove_extra_image_sizes() {
+  foreach ( get_intermediate_image_sizes() as $size ) {
+    if ( in_array( $size, array( '1536x1536', '2048x2048' ) ) ) {
+      remove_image_size( $size );
+    }
+  }
+}
+add_action('init', 'cendrie_remove_extra_image_sizes');
+
 function cendrie_add_theme_scripts() {
     /* Enqueue styles */
     wp_enqueue_style( 'style', get_stylesheet_uri(), array(), time(), 'all' );

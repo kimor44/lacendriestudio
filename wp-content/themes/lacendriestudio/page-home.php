@@ -44,7 +44,7 @@ $loop = new WP_Query($args);
             }
           ?>
             <div class="carousel-item relative float-left h-[20rem] md:h-[30rem] lg:h-[35rem] xl:h-[40rem] w-full <?php echo $class_ac; ?>">
-              <?php the_post_thumbnail('large', ['class' => 'block h-[20rem] md:h-[30rem] lg:h-[35rem] xl:h-[40rem] mx-auto']); ?>
+              <?php if(has_post_thumbnail()): the_post_thumbnail('cendrie_large_size', ['class' => 'block h-[20rem] md:h-[30rem] lg:h-[35rem] xl:h-[40rem] mx-auto']); endif; ?>
             </div>
           <?php
             $counter++;
