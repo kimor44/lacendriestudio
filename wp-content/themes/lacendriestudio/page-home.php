@@ -22,13 +22,4 @@ if ( have_posts() ) :
 else :
   _e( 'Désolé, nous n\'avons pas trouvé de résultats.' );
 endif;
-
-
-$args = array(
-    'post_type'      => 'slider',
-    'posts_per_page' => 3,
-);
-$loop = new WP_Query($args);
-?>
-<?php
-get_footer(); ?>
+get_footer();
