@@ -120,3 +120,4 @@ function tw_sliders_init(){
 add_action('init', 'tw_sliders_init');
 
 add_filter( 'wp_lazy_loading_enabled', '__return_false' );
+
