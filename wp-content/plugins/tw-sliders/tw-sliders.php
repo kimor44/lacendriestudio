@@ -71,14 +71,14 @@ register_deactivation_hook( __FILE__, 'cendrie_pluginprefix_deactivate' );
 require_once('class-carousel-builder.php');
 
 /**
- * [tw_sliders size="large"] returns the Carousel with your images.
+ * [tw_sliders size="large" number_of_slides=3] returns the Carousel with your images.
  * @return string Carousel
 */
 add_shortcode( 'tw_slider', 'build_carousel' );
 function tw_sliders_init(){
   function build_carousel( $atts ) {
     $attributs = shortcode_atts( array(
-      'size' => '',
+      'size'             => '',
       'number_of_slides' => null,
     ), $atts );
 
@@ -88,7 +88,7 @@ function tw_sliders_init(){
     $image_size = $builder->get_the_format_image_size($attributs['size']);
 
     $args = array(
-      'post_type'      => 'slider',
+      'post_type' => 'slider',
     );
     
     $query_filter = $builder->get_the_query_builder(intval($attributs['number_of_slides']));
@@ -103,9 +103,9 @@ function tw_sliders_init(){
     while ( $sliders->have_posts() ) {
       $sliders->the_post();
 
-      $class_ac = $sliders->current_post === 0 ? 'active' : '';
+      $class_ac = $sliders->current_post === 0 ? ' active' : '';
 
-      $carousel .= '<div class="carousel-item relative float-left h-[20rem] md:h-[30rem] lg:h-[35rem] xl:h-[40rem] w-full ' . $class_ac . '">';
+      $carousel .= '<div class="carousel-item relative float-left h-[20rem] md:h-[30rem] lg:h-[35rem] xl:h-[40rem] w-full' . $class_ac . '">';
 
       if(has_post_thumbnail()): $carousel .= get_the_post_thumbnail(get_the_ID(), $image_size, ['class' => 'block h-[20rem] md:h-[30rem] lg:h-[35rem] xl:h-[40rem] mx-auto']); endif;
 
@@ -118,3 +118,5 @@ function tw_sliders_init(){
   }
 }
 add_action('init', 'tw_sliders_init');
+
+add_filter( 'wp_lazy_loading_enabled', '__return_false' );
