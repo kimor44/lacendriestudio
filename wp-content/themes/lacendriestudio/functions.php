@@ -87,6 +87,7 @@ function cendrie_replace_content( $text_content ) {
       $text = array(
         '<p>' => '<p class="text-white mt-10">',
         '<figure class="' => '<figure class="mb-10 ',
+        '<ul>' => '<ul class="sm:list-disc sm:ml-8 md:ml-12 lg:ml-16 xl:ml-32">',
       );
 
       $text_content = str_ireplace( array_keys( $text ), $text, $text_content );
