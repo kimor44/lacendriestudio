@@ -97,7 +97,7 @@ function tw_sliders_init(){
 
     $sliders = new WP_Query($args); 
 
-    $carousel .= '<div id="carouselExampleSlidesOnly" class="carousel slide relative" data-bs-ride="carousel">';
+    $carousel .= '<div id="carouselExampleSlidesOnly" class="carousel slide relative my-10" data-bs-ride="carousel">';
     $carousel .= ' <div class="carousel-inner relative w-full overflow-hidden">';
 
     while ( $sliders->have_posts() ) {
