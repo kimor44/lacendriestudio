@@ -11,3 +11,7 @@
 #cendrie-body .cendrie-page .home-content figure img {
   width: 100%;
 }
+
+#cendrie-body .cendrie-page .home-content p a {
+  text-decoration: underline;
+}
