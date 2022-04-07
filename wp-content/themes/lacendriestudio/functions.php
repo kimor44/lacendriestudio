@@ -85,8 +85,8 @@ add_action( 'after_setup_theme', 'cendrie_custom_header_setup' );
 function cendrie_replace_content( $text_content ) {
     if ( is_page() ) {
       $text = array(
-        '<p>' => '<p class="text-white mt-10">',
-        '<figure class="' => '<figure class="mb-10 ',
+        '<p>' => '<p class="mt-4 md:mt-5 lg:mt-6 xl:mt-8 2xl:mt-10">',
+        '<figure class="' => '<figure class="mb-4 md:mb-5 lg:mb-6 xl:mb-8 2xl:mb-10 ',
       );
 
       $text_content = str_ireplace( array_keys( $text ), $text, $text_content );
