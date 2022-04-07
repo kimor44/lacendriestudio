@@ -12,6 +12,7 @@
   width: 100%;
 }
 
-#cendrie-body .cendrie-page .home-content p a {
+#cendrie-body .cendrie-page .home-content p a,
+#cendrie-body #cendrie-footer p a {
   text-decoration: underline;
 }
