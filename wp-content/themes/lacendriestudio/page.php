@@ -7,7 +7,7 @@
       <div class="sm:w-full md:w-11/12 lg:w-9/12 mx-auto text-justify leading-relaxed text-white">
       <?php
         while ( have_posts() ) : the_post();
-          the_title('<h1 class="text-3xl font-semibold">', '</h1>');
+          the_title('<h1 class="text-3xl font-semibold my-4 md:my-5 lg:my-6 xl:my-8 2xl:my-10">', '</h1>');
           the_content();
         endwhile;
       ?>

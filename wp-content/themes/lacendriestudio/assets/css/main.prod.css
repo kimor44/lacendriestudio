@@ -3788,6 +3788,12 @@ textarea.form-control.is-invalid {
   }
 }
 
+#cendrie-body .cendrie-page .cendrie-submit-button-contact-form {
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+}
+
 #cendrie-body .visible {
   visibility: visible;
 }
@@ -3974,12 +3980,6 @@ textarea.form-control.is-invalid {
 #cendrie-body .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
-
-/* @layer utilities {
-  .bg-brand-gradient {
-    background-image: linear-gradient(#3490dc, #6574cd) !important;
-  }
-} */
 
 #cendrie-body .cendrie-page .home-content figure img {
   width: 100%;
