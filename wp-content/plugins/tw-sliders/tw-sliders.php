@@ -97,27 +97,26 @@ function tw_sliders_init(){
 
     $sliders = new WP_Query($args); 
 
-    $carousel .= '<div id="carouselExampleSlidesOnly" class="carousel slide relative my-10" data-bs-ride="carousel">';
-    $carousel .= ' <div class="carousel-inner relative w-full overflow-hidden">';
+    $carousel .= '<div id="carouselExampleSlidesOnly" class="carousel slide relative my-4 md:my-5 lg:my-6 xl:my-8 2xl:my-10" data-bs-ride="carousel">';
+    $carousel .= '<div class="carousel-inner relative w-full overflow-hidden">';
 
     while ( $sliders->have_posts() ) {
       $sliders->the_post();
 
       $class_ac = $sliders->current_post === 0 ? ' active' : '';
 
-      $carousel .= '<div class="carousel-item relative float-left h-[20rem] md:h-[30rem] lg:h-[35rem] xl:h-[40rem] w-full' . $class_ac . '">';
+      $carousel .= '<div class="carousel-item relative float-left w-full h-[15rem] sm:h-[25rem] md:h-[39.375rem]' . $class_ac . '">';
+      $carousel .= '<div class="flex items-center h-full">';
 
-      if(has_post_thumbnail()): $carousel .= get_the_post_thumbnail(get_the_ID(), $image_size, ['class' => 'block h-[20rem] md:h-[30rem] lg:h-[35rem] xl:h-[40rem] mx-auto']); endif;
+      if(has_post_thumbnail()): $carousel .= get_the_post_thumbnail(get_the_ID(), $image_size, ['class' => 'block w-full']); endif;
 
-      $carousel .= '</div>';
+      $carousel .= '</div></div>';
     }
     wp_reset_query();
-    $carousel .= ' </div>';
-    $carousel .= '</div>'; 
+    $carousel .= '</div></div>';
     return $carousel;
   }
 }
 add_action('init', 'tw_sliders_init');
 
 add_filter( 'wp_lazy_loading_enabled', '__return_false' );
-
