@@ -3788,10 +3788,34 @@ textarea.form-control.is-invalid {
   }
 }
 
+/* Custom button */
+
 #cendrie-body .cendrie-page .cendrie-submit-button-contact-form {
+  width: 100%;
   border-radius: 0.25rem;
   --tw-bg-opacity: 1;
-  background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+#cendrie-body .cendrie-page .cendrie-submit-button-contact-form:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+}
+
+@media (min-width: 640px) {
+  #cendrie-body .cendrie-page .cendrie-submit-button-contact-form {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+  }
 }
 
 #cendrie-body .visible {
@@ -3981,9 +4005,15 @@ textarea.form-control.is-invalid {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
+/****** Custom components ******/
+
+/* Main image on home page */
+
 #cendrie-body .cendrie-page .home-content figure img {
   width: 100%;
 }
+
+/* Link style */
 
 #cendrie-body .cendrie-page .home-content p a,
 #cendrie-body #cendrie-footer p a {
