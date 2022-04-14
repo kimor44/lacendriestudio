@@ -8,6 +8,19 @@
   #cendrie-body .cendrie-page .cendrie-submit-button-contact-form {
     @apply bg-blue-500 hover:bg-blue-700 text-white text-lg py-2 px-4 rounded sm:w-fit w-full;
   }
+
+  /* Turn extra container to flex column */
+  .cendrie-body-template {
+    display: flex;
+    flex-direction: column;
+  }
+}
+/******* Custom utililties  ******/
+@layer utilities {
+  /* extra height container */
+  .cendrie-h-full {
+    height: 100%;
+  }
 }
 
 /* Main image on home page */
@@ -19,4 +32,9 @@
 #cendrie-body .cendrie-page .home-content p a,
 #cendrie-body #cendrie-footer p a {
   text-decoration: underline;
+}
+
+/* set body's height to maximum value */
+.cendrie-page {
+  flex: 1 0 auto;
 }
