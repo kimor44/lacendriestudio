@@ -781,7 +781,7 @@ class WBK_Service_Schedule
                             
                             }
                             
-                            $book_text = get_option( 'wbk_book_text_timeslot', '' );
+                            $book_text = WBK_Validator::alfa_numeric( get_option( 'wbk_book_text_timeslot', '' ) );
                             if ( $book_text == '' ) {
                                 $book_text = sanitize_text_field( $wbk_wording['book_text'] );
                             }
@@ -823,13 +823,19 @@ class WBK_Service_Schedule
                             if ( $this->service->getQuantity( $timeslot->getStart() ) > 1 ) {
                                 $available_count = $this->getAvailableCount( $timeslot->getStart() );
                                 if ( $available_count == 0 ) {
+                                    
                                     if ( get_option( 'wbk_show_booked_slots', 'disabled' ) == 'disabled' ) {
                                         continue;
+                                    } else {
+                                        $slot_html = '<input  data-start="' . $timeslot->getStart() . '" data-service="' . $this->service->getId() . '"  type="button" value="' . get_option( 'wbk_booked_text', '' ) . '" class="wbk-slot-button wbk-slot-booked" />';
                                     }
+                                
                                 }
                             }
                             
-                            $slot_html = '<input type="button"  data-service="' . $this->service->getId() . '"  data-end="' . $timeslot->getEnd() . '"  data-start="' . $timeslot->getStart() . '" value="' . $time . '" id="wbk-timeslot-btn_' . $timeslot->getStart() . '" data-available="' . $available_count . '"   class="wbk-slot-button" />';
+                            if ( $slot_html == '' ) {
+                                $slot_html = '<input type="button"  data-service="' . $this->service->getId() . '"  data-end="' . $timeslot->getEnd() . '"  data-start="' . $timeslot->getStart() . '" value="' . $time . '" id="wbk-timeslot-btn_' . $timeslot->getStart() . '" data-available="' . $available_count . '"   class="wbk-slot-button" />';
+                            }
                         }
                         
                         $availability = '';

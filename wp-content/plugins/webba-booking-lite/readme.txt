@@ -3,8 +3,8 @@ Contributors: Webba agency, freemius
 Donate link: https://webba-booking.com/
 Tags: appointment, booking, calendar, reservation
 Requires at least: 5.6
-Tested up to: 5.9
-Stable tag: 4.2.18
+Tested up to: 5.9.3
+Stable tag: 4.2.21
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -169,10 +169,18 @@ Just find the button Webba Booking form above content editor for a post or a pag
 
 == Upgrade Notice ==
 
-= 4.2.18  =
-Maintenance update
+= 4.2.21  =
+Security update. Due to security reason we removed opportunity of using certain HTML tags in some frontend texts. We recommend doing a test booking after the update.
+
 
 == Changelog ==
+
+13/04/2022
+
+4.2.21
+
+* Security update
+* Minor bugfix
 
 25/02/2022
 
@@ -209,6 +217,7 @@ Maintenance update
 
 4.2.11
 
+* Improvements: sending SMS on approval
 * Improvements: update of total amount removed when regular fields are changed
 * Improvements: option to automatically change status to arrived and send 'On arrival' notification
 * Improvements: option to remove default value from the 'Number of seats' field

@@ -9,7 +9,7 @@ class WBK_Renderer {
 
     }
     public static function load_template( $template, $data, $echo = true ){
-        $file_name = WP_WEBBA_BOOKING__PLUGIN_DIR . DIRECTORY_SEPARATOR . 'renderer' . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template . '.php';
+        $file_name = WP_WEBBA_BOOKING__PLUGIN_DIR . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template . '.php';
         ob_start();
         include $file_name;
         if( $echo ){

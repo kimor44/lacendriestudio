@@ -31,6 +31,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
     {
         
         if ( isset( $_GET['page'] ) && $_GET['page'] == 'wbk-options' ) {
+            $in['forced_root_block'] = false;
             $in['remove_linebreaks'] = false;
             $in['remove_redundant_brs'] = false;
             $in['wpautop'] = false;
@@ -475,8 +476,8 @@ class WBK_Backend_Options extends WBK_Backend_Component
         wbk_opt()->add_option(
             'wbk_appointments_expiration_time_pending',
             'text',
-            __( 'Delete pending appointments', 'wbk' ),
-            __( 'Automatically delete appointments with the "Awaiting approval" status after X minutes.', 'wbk' ) . '<br>' . __( 'Set 0 to not delete automatically', 'wbk' ),
+            __( 'Delete pending bookings', 'wbk' ),
+            __( 'Automatically delete bookings with the "Awaiting approval" status after X minutes.', 'wbk' ) . '<br>' . __( 'Set 0 to not delete automatically', 'wbk' ),
             'wbk_appointments_settings_section',
             '0'
         );
@@ -499,7 +500,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
         wbk_opt()->add_option(
             'wbk_appointments_continuous',
             'select_multiple',
-            __( 'Continuous appointments', 'wbk' ),
+            __( 'Continuous bookings', 'wbk' ),
             __( 'Select the services for which this rule is applied', 'wbk' ),
             'wbk_mode_settings_section',
             '',
@@ -526,8 +527,8 @@ class WBK_Backend_Options extends WBK_Backend_Component
         wbk_opt()->add_option(
             'wbk_appointments_lock_one_before_and_one_after',
             'select_multiple',
-            __( 'Lock one time slot before and after appointment', 'wbk' ),
-            __( 'Select the services for which this rule is applied', 'wbk' ) . '<br>' . __( 'Note: if autolock is enabled, appointments of the connected services are taken into amount.', 'wbk' ),
+            __( 'Lock one timeslot before and after booking', 'wbk' ),
+            __( 'Select the services for which this rule is applied', 'wbk' ) . '<br>' . __( 'Note: if autolock is enabled, bookings of the connected services are taken into amount.', 'wbk' ),
             'wbk_appointments_settings_section',
             '',
             WBK_Model_Utils::get_services()
@@ -536,7 +537,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
             'wbk_appointments_special_hours',
             'textarea',
             __( 'Special business hours', 'wbk' ),
-            __( 'Set this option to override the business hours of certain services on specific dates.', 'wbk' ) . '<br />' . __( 'Example 1:', 'wbk' ) . '<br />' . __( '1 01/15/2020 15:00-18:00', 'wbk' ) . '<br />' . __( 'Service with the id equals 1 is availeble on 01/15/2021 at 15:00-18:00', 'wbk' ) . '<br />' . __( 'Example 2:', 'wbk' ) . '<br />' . __( '01/15/2020 15:00-18:00:', 'wbk' ) . '<br />' . __( 'All services are available on 01/15/2021 at 15:00-18:00', 'wbk' ),
+            __( 'Set this option to override the business hours of certain services on specific dates.', 'wbk' ) . '<br />' . __( 'Example 1:', 'wbk' ) . '<br />' . __( '1 01/15/2020 15:00-18:00', 'wbk' ) . '<br />' . __( 'Service with the id equals 1 is available on 01/15/2021 at 15:00-18:00', 'wbk' ) . '<br />' . __( 'Example 2:', 'wbk' ) . '<br />' . __( '01/15/2020 15:00-18:00', 'wbk' ) . '<br />' . __( 'All services are available on 01/15/2021 at 15:00-18:00', 'wbk' ),
             'wbk_appointments_settings_section',
             ''
         );
@@ -1003,7 +1004,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
             'wbk_email_admin_daily_time',
             'select',
             __( 'Reminder sending time', 'wbk' ),
-            __( 'Current local time: ', 'wbk' ) . date( $format ),
+            __( 'Current local time: ', 'wbk' ) . wp_date( $format, time(), new DateTimeZone( get_option( 'wbk_timezone', 'UTC' ) ) ),
             'wbk_general_settings_section',
             'disabled',
             $data_time
@@ -1396,7 +1397,10 @@ class WBK_Backend_Options extends WBK_Backend_Component
             __( 'Select date label (extended mode)', 'wbk' ),
             __( 'Date frontend label', 'wbk' ),
             'wbk_translation_settings_section',
-            __( 'Book an appointment on or after', 'wbk' )
+            __( 'Book an appointment on or after', 'wbk' ),
+            array(
+            'no_html' => true,
+        )
         );
         wbk_opt()->add_option(
             'wbk_date_basic_label',
@@ -1406,16 +1410,17 @@ class WBK_Backend_Options extends WBK_Backend_Component
             'wbk_translation_settings_section',
             __( 'Book an appointment on', 'wbk' )
         );
-        // *** 2.2.8 settings pack
         wbk_opt()->add_option(
             'wbk_date_input_placeholder',
-            'text',
+            'text_alfa_numeric',
             __( 'Select date input placeholder', 'wbk' ),
             '',
             'wbk_translation_settings_section',
-            __( 'date', 'wbk' )
+            __( 'date', 'wbk' ),
+            array(
+            'no_html' => true,
+        )
         );
-        // end 2.2.8 settings pack
         wbk_opt()->add_option(
             'wbk_hours_label',
             'text',
@@ -1493,7 +1498,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
         );
         wbk_opt()->add_option(
             'wbk_book_text_timeslot',
-            'text',
+            'text_alfa_numeric',
             __( 'Book button text (timeslot)', 'wbk' ),
             '',
             'wbk_translation_settings_section',
@@ -1568,23 +1573,15 @@ class WBK_Backend_Options extends WBK_Backend_Component
         );
         wbk_opt()->add_option(
             'wbk_payment_pay_with_paypal_btn_text',
-            'text',
+            'text_alfa_numeric',
             __( 'PayPal payment button text', 'wbk' ),
             '',
             'wbk_translation_settings_section',
             __( 'Pay now with PayPal', 'wbk' )
         );
         wbk_opt()->add_option(
-            'wbk_payment_pay_with_cc_btn_text',
-            'text',
-            __( 'Credit card payment button text', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Pay now with credit card', 'wbk' )
-        );
-        wbk_opt()->add_option(
             'wbk_payment_details_title',
-            'text',
+            'text_alfa_numeric',
             __( 'Payment details title', 'wbk' ),
             '',
             'wbk_translation_settings_section',
@@ -1691,7 +1688,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
         wbk_opt()->add_option(
             'wbk_allow_cross_midnight',
             'checkbox',
-            __( 'Allow time slots to cross midnight', 'wbk' ),
+            __( 'Allow timeslots to cross midnight', 'wbk' ),
             '',
             'wbk_appointments_settings_section',
             ''
@@ -1773,7 +1770,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
         wbk_opt()->add_option(
             'wbk_mode_overlapping_availabiliy',
             'checkbox',
-            __( 'Consider the availabiliy of overlapping time intervals', 'wbk' ),
+            __( 'Consider the availability of overlapping time intervals', 'wbk' ),
             '',
             'wbk_appointments_settings_section',
             'true'
@@ -1781,14 +1778,14 @@ class WBK_Backend_Options extends WBK_Backend_Component
         wbk_opt()->add_option(
             'wbk_set_arrived_after',
             'text',
-            __( 'Set the status to "Arrived" X minutes after the end of the booking.', 'wbk' ),
+            __( 'Set the status to "Arrived" X minutes after the end of the booking', 'wbk' ),
             __( 'Leave empty to not update the status', 'wbk' ),
             'wbk_appointments_settings_section',
             ''
         );
         wbk_opt()->add_option(
             'wbk_payment_approve_text',
-            'text',
+            'text_alfa_numeric',
             __( 'Approve payment', 'wbk' ),
             '',
             'wbk_translation_settings_section',
@@ -1820,7 +1817,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
         );
         wbk_opt()->add_option(
             'wbk_cancel_button_text',
-            'text',
+            'text_alfa_numeric',
             __( 'Booking cancel button text', 'wbk' ),
             '',
             'wbk_translation_settings_section',
@@ -2004,7 +2001,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
         );
         wbk_opt()->add_option(
             'wbk_stripe_button_text',
-            'text',
+            'text_alfa_numeric',
             __( 'Stripe button text', 'wbk' ),
             '',
             'wbk_translation_settings_section',
@@ -2028,7 +2025,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
         );
         wbk_opt()->add_option(
             'wbk_pay_on_arrival_button_text',
-            'text',
+            'text_alfa_numeric',
             __( 'Pay on arrival button text', 'wbk' ),
             '',
             'wbk_translation_settings_section',
@@ -2044,7 +2041,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
         );
         wbk_opt()->add_option(
             'wbk_bank_transfer_button_text',
-            'text',
+            'text_alfa_numeric',
             __( 'Bank transfer button text', 'wbk' ),
             '',
             'wbk_translation_settings_section',
@@ -2060,7 +2057,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
         );
         wbk_opt()->add_option(
             'wbk_coupon_field_placeholder',
-            'text',
+            'text_alfa_numeric',
             __( 'Coupon code field placeholder', 'wbk' ),
             '',
             'wbk_translation_settings_section',
@@ -2100,7 +2097,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
         );
         wbk_opt()->add_option(
             'wbk_woo_button_text',
-            'text',
+            'text_alfa_numeric',
             __( 'WooCommerce button text', 'wbk' ),
             '',
             'wbk_translation_settings_section',

@@ -576,10 +576,7 @@ class WBK_Ajax_Controller
         
         if ( get_option( 'wbk_show_cancel_button', 'disabled' ) == 'enabled' ) {
             global  $wbk_wording ;
-            $cancel_label = get_option( 'wbk_cancel_button_text', '' );
-            if ( $cancel_label == '' ) {
-                $cancel_label = sanitize_text_field( $wbk_wording['cancel_label_form'] );
-            }
+            $cancel_label = WBK_Validator::alfa_numeric( get_option( 'wbk_cancel_button_text', '' ) );
             $html .= '<input class="wbk-button wbk-width-100 wbk-cancel-button"  value="' . $cancel_label . '" type="button">';
         }
         
@@ -1293,21 +1290,18 @@ class WBK_Ajax_Controller
             
             if ( $payment_methods_html != '' ) {
                 if ( get_option( 'wbk_allow_coupons', 'disabled' ) == 'enabled' ) {
-                    $payment_methods_html = '<input class="wbk-input" id="wbk-coupon" placeholder="' . get_option( 'wbk_coupon_field_placeholder', __( 'coupon code', 'wbk' ) ) . '" >' . $payment_methods_html;
+                    $payment_methods_html = '<input class="wbk-input" id="wbk-coupon" placeholder="' . WBK_Validator::alfa_numeric( get_option( 'wbk_coupon_field_placeholder', __( 'coupon code', 'wbk' ) ) ) . '" >' . $payment_methods_html;
                 }
             }
             
             if ( in_array( 'arrival', $payment_methods ) ) {
-                $button_text = get_option( 'wbk_pay_on_arrival_button_text', __( 'Pay on arrival', 'wbk' ) );
-                if ( $button_text == '' ) {
-                    $button_text = __( 'Pay on arrival', 'wbk' );
-                }
+                $button_text = WBK_Validator::alfa_numeric( get_option( 'wbk_pay_on_arrival_button_text', __( 'Pay on arrival', 'wbk' ) ) );
                 $payment_methods_html .= '<input class="wbk-button wbk-width-100 wbk-mt-10-mb-10 wbk-payment-init wbk-payment-on-booking-init" data-method="arrival" data-app-id="' . implode( ',', $appointment_ids ) . '"  value="' . $button_text . '  " type="button">';
             }
             
             
             if ( in_array( 'bank', $payment_methods ) ) {
-                $button_text = get_option( 'wbk_bank_transfer_button_text', __( 'Pay by bank transfer', 'wbk' ) );
+                $button_text = WBK_Validator::alfa_numeric( get_option( 'wbk_bank_transfer_button_text', __( 'Pay by bank transfer', 'wbk' ) ) );
                 $payment_methods_html .= '<input class="wbk-button wbk-width-100 wbk-mt-10-mb-10 wbk-payment-init wbk-payment-on-booking-init" data-method="bank" data-app-id="' . implode( ',', $appointment_ids ) . '"  value="' . $button_text . '  " type="button">';
             }
             
@@ -1992,7 +1986,7 @@ class WBK_Ajax_Controller
         
         if ( get_option( 'wbk_show_cancel_button', 'disabled' ) == 'enabled' ) {
             global  $wbk_wording ;
-            $cancel_label = get_option( 'wbk_cancel_button_text', '' );
+            $cancel_label = WBK_Validator::alfa_numeric( get_option( 'wbk_cancel_button_text', '' ) );
             if ( $cancel_label == '' ) {
                 $cancel_label = sanitize_text_field( $wbk_wording['cancel_label_form'] );
             }
@@ -2230,10 +2224,7 @@ class WBK_Ajax_Controller
         
         if ( get_option( 'wbk_show_cancel_button', 'disabled' ) == 'enabled' ) {
             global  $wbk_wording ;
-            $cancel_label = get_option( 'wbk_cancel_button_text', '' );
-            if ( $cancel_label == '' ) {
-                $cancel_label = sanitize_text_field( $wbk_wording['cancel_label_form'] );
-            }
+            $cancel_label = WBK_Validator::alfa_numeric( get_option( 'wbk_cancel_button_text', '' ) );
             $html .= '<input class="wbk-button wbk-width-100 wbk-cancel-button"  value="' . $cancel_label . '" type="button">';
         }
         

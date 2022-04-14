@@ -209,10 +209,7 @@ class WBK_Stripe
             }
         }
         $html = '';
-        $stripe_btn_text = get_option( 'wbk_stripe_button_text', 'Pay with credit card' );
-        if ( $stripe_btn_text == '' ) {
-            $stripe_btn_text = __( 'Pay with credit card', 'wbk' );
-        }
+        $stripe_btn_text = WBK_Validator::alfa_numeric( get_option( 'wbk_stripe_button_text', 'Pay with credit card' ) );
         $html .= '<input class="wbk-button wbk-width-100 wbk-mt-10-mb-10 wbk-payment-init ' . $button_class . '" data-method="stripe" data-app-id="' . implode( ',', $appointment_ids ) . '"  value="' . $stripe_btn_text . '" type="button">';
         return $html;
     }

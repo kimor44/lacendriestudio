@@ -291,7 +291,7 @@ class WBK_WooCommerce
             }
         }
         $html = '';
-        $woo_btn_text = wbk_get_translation_string( 'wbk_woo_button_text', 'wbk_woo_button_text', 'Add to cart' );
+        $woo_btn_text = WBK_Validator::alfa_numeric( wbk_get_translation_string( 'wbk_woo_button_text', 'wbk_woo_button_text', 'Add to cart' ) );
         $html .= '<input class="wbk-button wbk-width-100 wbk-mt-10-mb-10 wbk-payment-init wbk-payment-init-woo" data-method="woocommerce" data-app-id="' . implode( ',', $appointment_ids ) . '"  value="' . $woo_btn_text . '  " type="button">';
         return $html;
     }

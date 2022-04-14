@@ -4,7 +4,7 @@
 * Plugin Name: Webba Booking
 * Plugin URI: https://webba-booking.com
 * Description: Responsive appointment and reservation plugin.
-* Version: 4.2.18
+* Version: 4.2.21
 * Author: WebbaPlugins
 * Text Domain: wbk
 * Author URI: https://webba-booking.com
@@ -13,8 +13,6 @@
 if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
-https:
-//drive.google.com/drive/u/1/folders/190v5WxbCo0RFFdTIn4DOTRq6rc3EZctn
 // added for the capabilities with the old versions of WordPress
 if ( !function_exists( 'wp_date' ) ) {
     function wp_date( $format, $timestamp, $timezone )
@@ -68,7 +66,7 @@ if ( !defined( 'WP_WEBBA_BOOKING__PLUGIN_DIR' ) ) {
 }
 
 if ( !defined( 'WP_WEBBA_BOOKING__VERSION' ) ) {
-    define( 'WP_WEBBA_BOOKING__VERSION', '4.2.17' );
+    define( 'WP_WEBBA_BOOKING__VERSION', '4.2.21' );
 }
 
 if ( !function_exists( 'wbk_load_textdomain' ) ) {
@@ -103,6 +101,38 @@ if ( !function_exists( 'wbk_load_textdomain' ) ) {
         include 'common/ical/class_wbk_ical_blank.php';
     }
     
+    // Data
+    include 'includes/data/class-wbk-model-object.php';
+    include 'includes/data/class-wbk-service.php';
+    include 'includes/data/class-wbk-service-category.php';
+    include 'includes/data/class-wbk-coupon.php';
+    include 'includes/data/class-wbk-pricing-rule.php';
+    include 'includes/data/class-wbk-booking.php';
+    include 'includes/data/class-wbk-model.php';
+    // Utilities
+    include 'includes/utilities/class_wbk_time_math_utils.php';
+    include 'includes/utilities/class_wbk_model_utils.php';
+    include 'includes/utilities/class_wbk_user_utils.php';
+    include 'includes/utilities/class-wbk-model-updater.php';
+    include 'vendor/plugion/autoload.php';
+    // Plugion extensions
+    include 'includes/plugion_extensions/class-wbk-pe-business-hours.php';
+    include 'includes/plugion_extensions/class-wbk-google-access-token.php';
+    include 'includes/plugion_extensions/class-wbk-pe-date.php';
+    include 'includes/plugion_extensions/class-wbk-pe-time.php';
+    include 'includes/plugion_extensions/class-wbk-pe-app-custom-data.php';
+    include 'includes/plugion_extensions/plugion_hooks.php';
+    // Request manager
+    include 'includes/class-wbk-request-manager.php';
+    // Processors
+    include 'includes/processors/class-wbk-schedule-processor.php';
+    include 'includes/processors/class-wbk-price-processor.php';
+    include 'includes/processors/class-wbk-placeholder-processor.php';
+    include 'includes/processors/class-wbk-options-processor.php';
+    // Assets manager
+    include 'includes/class-wbk-assets-manager.php';
+    // Renderer
+    include 'includes/class-wbk-renderer.php';
     add_action( 'init', 'wbk_update_data', 30 );
     add_action( 'admin_init', 'wbk_admin_init' );
     add_action( 'wbk_daily_event', 'wbk_daily' );
@@ -114,38 +144,13 @@ if ( !function_exists( 'wbk_load_textdomain' ) ) {
         10,
         1
     );
-    include 'model/class-wbk-model-object.php';
-    include 'model/class-wbk-service.php';
-    include 'model/class-wbk-service-category.php';
-    include 'model/class-wbk-coupon.php';
-    include 'model/class-wbk-pricing-rule.php';
-    include 'model/class-wbk-booking.php';
-    include 'utilities/class_wbk_time_math_utils.php';
-    include 'utilities/class_wbk_model_utils.php';
-    include 'utilities/class_wbk_user_utils.php';
-    include 'vendor/plugion/autoload.php';
-    include 'plugion_extensions/class-wbk-pe-business-hours.php';
-    include 'plugion_extensions/class-wbk-google-access-token.php';
-    include 'plugion_extensions/class-wbk-pe-date.php';
-    include 'plugion_extensions/class-wbk-pe-time.php';
-    include 'plugion_extensions/class-wbk-pe-app-custom-data.php';
-    include 'plugion_extensions/plugion_hooks.php';
-    include 'controller/class-wbk-schedule-processor.php';
-    include 'controller/class-wbk-price-processor.php';
-    include 'controller/class-wbk-placeholder-processor.php';
-    include 'controller/class-wbk-options-processor.php';
-    include 'controller/class-wbk-controller.php';
     // init plugion extensions
     $wbk_google_access_token_obj = new WBK_Google_Access_Token();
     $wbk_pe_business_hours_obj = new WBK_PE_Business_Hours();
     $wbk_pe_date_obj = new WBK_PE_Date();
     $wbk_pe_time_obj = new WBK_PE_Time();
-    $wbk_controller = new WBK_Controller();
+    $wbk_request_manager = new WBK_Request_Manager();
     $wbk_pe_appointment_custom_data = new WBK_PE_Appointment_Custom_Data();
-    include 'renderer/class-wbk-renderer.php';
-    include 'model/class-wbk-model.php';
-    include 'model/class-wbk-model-updater.php';
-    include 'controller/class-wbk-assets-manager.php';
     $wbk_model = new WBK_Model();
     // common ajax controller
     $ajaxController = new WBK_Ajax_Controller();
@@ -398,7 +403,6 @@ if ( !function_exists( 'wbk_activate' ) ) {
         add_option( 'wbk_book_text_form', __( 'Book', 'wbk' ) );
         add_option( 'wbk_book_text_timeslot', __( 'Book', 'wbk' ) );
         add_option( 'wbk_payment_pay_with_paypal_btn_text', __( 'Pay now with PayPal', 'wbk' ) );
-        add_option( 'wbk_payment_pay_with_cc_btn_text', __( 'Pay now with credit card', 'wbk' ) );
         add_option( 'wbk_payment_details_title', __( 'Payment details', 'wbk' ) );
         add_option( 'wbk_payment_item_name', __( '#service on #date at #time', 'wbk' ) );
         add_option( 'wbk_payment_price_format', '$#price' );
@@ -620,7 +624,6 @@ if ( !function_exists( 'wbk_uninstall' ) ) {
         delete_option( 'wbk_book_text_form' );
         delete_option( 'wbk_book_text_timeslot' );
         delete_option( 'wbk_payment_pay_with_paypal_btn_text' );
-        delete_option( 'wbk_payment_pay_with_cc_btn_text' );
         delete_option( 'wbk_payment_details_title' );
         delete_option( 'wbk_payment_item_name' );
         delete_option( 'wbk_payment_price_format' );

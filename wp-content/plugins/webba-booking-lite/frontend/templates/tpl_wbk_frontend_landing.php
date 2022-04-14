@@ -531,10 +531,7 @@ if ( isset( $_GET['cancelation'] ) ) {
             }
             $content = '<label class="wbk-input-label" for="wbk-customer_email">' . $email_cancel_label . '</label>';
             $content .= '<input name="wbk-email" class="wbk-input wbk-width-100 wbk-mb-10" id="wbk-customer_email" type="text">';
-            $cancel_label = get_option( 'wbk_cancel_button_text', '' );
-            if ( $cancel_label == '' ) {
-                $cancel_label = sanitize_text_field( $wbk_wording['cancel_label'] );
-            }
+            $cancel_label = WBK_Validator::alfa_numeric( get_option( 'wbk_cancel_button_text', '' ) );
             $content .= '<input class="wbk-button wbk-width-100 wbk-mt-10-mb-10" id="wbk-cancel_booked_appointment" data-appointment="' . implode( '-', $token_result ) . '" value="' . $cancel_label . '" type="button">';
         } else {
             $content = '';

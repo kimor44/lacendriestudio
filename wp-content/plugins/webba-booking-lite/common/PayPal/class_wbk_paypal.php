@@ -88,10 +88,7 @@ class WBK_PayPal
             }
         }
         $html = '';
-        $paypal_btn_text = get_option( 'wbk_payment_pay_with_paypal_btn_text', '' );
-        if ( $paypal_btn_text == '' ) {
-            $paypal_btn_text = sanitize_text_field( $wbk_wording['paypal_btn_text'] );
-        }
+        $paypal_btn_text = WBK_Validator::alfa_numeric( get_option( 'wbk_payment_pay_with_paypal_btn_text', '' ) );
         $html .= '<input class="wbk-button wbk-width-100 wbk-mt-10-mb-10 wbk-payment-init' . $button_class . '" data-method="paypal" data-app-id="' . implode( ',', $appointment_ids ) . '"  value="' . $paypal_btn_text . '  " type="button">';
         return $html;
     }

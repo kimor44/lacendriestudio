@@ -209,7 +209,7 @@ class WBK_Stripe
             }
         }
         $html = '';
-        $stripe_btn_text = get_option( 'wbk_stripe_button_text', 'Pay with credit card' );
+        $stripe_btn_text = WBK_Validator::alfa_numeric( get_option( 'wbk_stripe_button_text', 'Pay with credit card' ) );
         if ( $stripe_btn_text == '' ) {
             $stripe_btn_text = __( 'Pay with credit card', 'wbk' );
         }

@@ -614,8 +614,6 @@ WBK_jQuery_ = jQuery;
     jQuery(document).on( 'wbk_on_form_rendered', function( event, container ){
         wbk_form = new WBK_Form( container );
         wbk_form.update_amounts();
-        console.log()
-
         container.find('input, select').not('#wbk-name, #wbk-email, #wbk-phone').change( function(){
             wbk_form = new WBK_Form( container );
             wbk_form.update_amounts();

@@ -32,7 +32,6 @@ jQuery(function ($) {
     });
 
     function wbk_init_dependencies() {
- 
         jQuery('.wbk_option_block').each(function() {
             var dependency = JSON.parse(jQuery(this).attr('data-dependency'));
             for (var slug in dependency) {

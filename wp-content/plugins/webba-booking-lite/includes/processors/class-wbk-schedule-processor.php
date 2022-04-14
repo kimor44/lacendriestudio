@@ -103,7 +103,7 @@ class WBK_Schedule_Processor
         }
         
         $day_end = WBK_Time_Math_Utils::adjust_times( $day, 86400, get_option( 'wbk_timezone', 'UTC' ) );
-        $this->load_appointments_in_range( $start_all, $end_all, $service_id );
+        $this->load_appointments_by_day( $day, $service_id );
         // load data from google caelndar
         if ( !$skip_gg_calendar ) {
         }
@@ -175,13 +175,12 @@ class WBK_Schedule_Processor
             if ( $working && $interval->status != 'active' ) {
                 continue;
             }
-            $start = WBK_Time_Math_Utils::adjust_times( $day, $interval->start, get_option( 'wbk_timezone', 'UTC' ) );
-            $end = WBK_Time_Math_Utils::adjust_times( $day, $interval->end, get_option( 'wbk_timezone', 'UTC' ) );
-            error_log( 'day: ' . $day );
-            error_log( 'interval start: ' . $start );
+            // $start = WBK_Time_Math_Utils::adjust_times( $day, $interval->start, get_option( 'wbk_timezone', 'UTC' ) );
+            // $end =  WBK_Time_Math_Utils::adjust_times( $day, $interval->end, get_option( 'wbk_timezone', 'UTC' ) );
+            $start = $day + $interval->start;
+            $end = $day + $interval->end;
             //for ($time = $start; $time < $end; $time += $step  ) {
             for ( $time = $start ;  $time < $end ;  $time = WBK_Time_Math_Utils::adjust_times( $time, $step, get_option( 'wbk_timezone', 'UTC' ) ) ) {
-                error_log( 'current interval time: ' . $time );
                 if ( get_option( 'wbk_allow_ongoing_time_slot', 'disallow' ) == 'disallow' ) {
                     if ( $time < time() + $preparation_time * 60 ) {
                         if ( !$ignore_preparation ) {
@@ -209,11 +208,8 @@ class WBK_Schedule_Processor
                 $timeslots[] = $slot;
             }
         }
-        error_log( count( $timeslots ) );
         // check for not attached appointments
         $need_sort = false;
-        error_log( 'before attached slots: ' . count( $timeslots ) );
-        error_log( 'apps length: ' . count( $this->appointments ) );
         foreach ( $this->appointments as $appointment ) {
             $appointment_found = false;
             foreach ( $timeslots as $timeslot ) {
@@ -235,7 +231,6 @@ class WBK_Schedule_Processor
             }
         
         }
-        error_log( 'after attached slots: ' . count( $timeslots ) );
         
         if ( $need_sort ) {
             $arr_temp = [];
@@ -346,6 +341,13 @@ class WBK_Schedule_Processor
                     }
                     
                     $available = $service->get_quantity( $timeslots[$i]->getStart() ) - $booked_count - $connected_quantity - $same_service_quantity - $gg_count - $ext_count + $current_quantity;
+                    $available = apply_filters(
+                        'wbk_available_at_time',
+                        $available,
+                        $timeslots[$i]->getStart(),
+                        $day,
+                        $service_id
+                    );
                     
                     if ( $available < $service->get( 'min_quantity' ) ) {
                         $timeslots[$i]->set_free_places( 0 );
@@ -376,51 +378,34 @@ class WBK_Schedule_Processor
             }
             
             // set formated time strings
-            //if ($i == 0) {
-            $timezone_to_use = new DateTimeZone( date_default_timezone_get() );
-            $this_tz = new DateTimeZone( date_default_timezone_get() );
-            $date = ( new DateTime( '@' . $timeslots[$i]->getStart() ) )->setTimezone( new DateTimeZone( date_default_timezone_get() ) );
-            $date_end = ( new DateTime( '@' . $timeslots[$i]->getEnd() ) )->setTimezone( new DateTimeZone( date_default_timezone_get() ) );
-            $now = new DateTime( 'now', $this_tz );
-            $offset_sign = $this_tz->getOffset( $date );
             
-            if ( $offset_sign > 0 ) {
-                $sign = '+';
-            } else {
-                $sign = '-';
+            if ( $i == 0 ) {
+                $timezone_to_use = new DateTimeZone( date_default_timezone_get() );
+                $this_tz = new DateTimeZone( date_default_timezone_get() );
+                $date = ( new DateTime( '@' . $day ) )->setTimezone( new DateTimeZone( date_default_timezone_get() ) );
+                $now = new DateTime( 'now', $this_tz );
+                $offset_sign = $this_tz->getOffset( $date );
+                
+                if ( $offset_sign > 0 ) {
+                    $sign = '+';
+                } else {
+                    $sign = '-';
+                }
+                
+                $offset_rounded = abs( $offset_sign / 3600 );
+                $offset_int = floor( $offset_rounded );
+                
+                if ( $offset_rounded - $offset_int == 0.5 ) {
+                    $offset_fractional = ':30';
+                } else {
+                    $offset_fractional = '';
+                }
+                
+                $timezone_utc_string = $sign . $offset_int . $offset_fractional;
+                $timezone_to_use = new DateTimeZone( $timezone_utc_string );
+                $timezone_to_use_end = $timezone_to_use;
             }
             
-            $offset_rounded = abs( $offset_sign / 3600 );
-            $offset_int = floor( $offset_rounded );
-            
-            if ( $offset_rounded - $offset_int == 0.5 ) {
-                $offset_fractional = ':30';
-            } else {
-                $offset_fractional = '';
-            }
-            
-            $timezone_utc_string = $sign . $offset_int . $offset_fractional;
-            $offset_sign = $this_tz->getOffset( $date_end );
-            
-            if ( $offset_sign > 0 ) {
-                $sign = '+';
-            } else {
-                $sign = '-';
-            }
-            
-            $offset_rounded = abs( $offset_sign / 3600 );
-            $offset_int = floor( $offset_rounded );
-            
-            if ( $offset_rounded - $offset_int == 0.5 ) {
-                $offset_fractional = ':30';
-            } else {
-                $offset_fractional = '';
-            }
-            
-            $timezone_utc_string_end = $sign . $offset_int . $offset_fractional;
-            $timezone_to_use = new DateTimeZone( $timezone_utc_string );
-            $timezone_to_use_end = new DateTimeZone( $timezone_utc_string_end );
-            $timezone_to_use = new DateTimeZone( date_default_timezone_get() );
             $timeslot_time_string = get_option( 'wbk_timeslot_time_string', 'start' );
             
             if ( $timeslot_time_string == 'start' ) {
@@ -445,7 +430,6 @@ class WBK_Schedule_Processor
             $end_minus_gap = $timeslots[$i]->getEnd() - $service->get_interval_between() * 60;
             
             if ( $timeslot_time_string == 'start_end' ) {
-                error_log( 'time zone to use: ' . var_export( $timezone_to_use, true ) );
                 $time = wp_date( $time_format, $timeslots[$i]->getStart(), $timezone_to_use ) . ' - ' . wp_date( $time_format, $end_minus_gap, $timezone_to_use_end );
                 
                 if ( get_option( 'wbk_show_local_time', 'disabled' ) == 'enabled' || get_option( 'wbk_show_local_time', 'disabled' ) == 'enabled_only' ) {
@@ -479,7 +463,6 @@ class WBK_Schedule_Processor
             
             $timeslots[$i]->set_formated_time_backend( $time );
         }
-        error_log( 'last count time slots:' . count( $timeslots ) );
         $timeslots = apply_filters(
             'get_time_slots_by_day',
             $timeslots,
@@ -577,6 +560,53 @@ class WBK_Schedule_Processor
     {
         $event_data_arr = [];
         return $event_data_arr;
+    }
+    
+    public function load_appointments_by_day( $day, $service_id )
+    {
+        global  $wpdb ;
+        $db_arr = $wpdb->get_results( $wpdb->prepare( "                                       SELECT *\r\n\t\t\t\t\t\t\t\t\t\t\t\t\tFROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments\r\n\t\t\t\t\t\t\t\t\t\t\t\t\twhere service_id = %d AND day = %d\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t", $service_id, $day ) );
+        $this->appointments = [];
+        if ( count( $db_arr ) == 0 ) {
+            return 0;
+        }
+        foreach ( $db_arr as $item ) {
+            $appointment = new WBK_Appointment_deprecated();
+            
+            if ( $appointment->set(
+                $item->id,
+                $item->name,
+                $item->description,
+                $item->email,
+                $item->duration,
+                $item->time,
+                $item->day,
+                $item->phone,
+                $item->extra,
+                $item->attachment,
+                $item->quantity
+            ) ) {
+                array_push( $this->appointments, $appointment );
+                // create breaker
+                $service = new WBK_Service_deprecated();
+                if ( !$service->setId( $service_id ) ) {
+                    continue;
+                }
+                if ( !$service->load() ) {
+                    continue;
+                }
+                
+                if ( $service->getQuantity() == 1 ) {
+                    $betw_interval = $service->getInterval();
+                    $app_end = $item->time + $item->duration * 60 + $betw_interval * 60;
+                    $breaker = new WBK_Time_Slot( $item->time, $app_end );
+                    array_push( $this->breakers, $breaker );
+                }
+            
+            }
+        
+        }
+        return;
     }
     
     public function load_appointments_in_range( $start, $end, $service_id )

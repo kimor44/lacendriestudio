@@ -1821,10 +1821,7 @@ class WBK_Backend_Schedule extends WBK_Backend_Component
         
         if ( get_option( 'wbk_show_cancel_button', 'disabled' ) == 'enabled' ) {
             global  $wbk_wording ;
-            $cancel_label = get_option( 'wbk_cancel_button_text', '' );
-            if ( $cancel_label == '' ) {
-                $cancel_label = sanitize_text_field( $wbk_wording['cancel_label_form'] );
-            }
+            $cancel_label = WBK_Validator::alfa_numeric( get_option( 'wbk_cancel_button_text', '' ) );
             $html .= '<input class="wbk-button wbk-width-100 wbk-cancel-button"  value="' . $cancel_label . '" type="button">';
         }
         

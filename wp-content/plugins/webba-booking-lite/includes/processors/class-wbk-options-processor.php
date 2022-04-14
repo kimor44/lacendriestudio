@@ -13,11 +13,15 @@ final class WBK_Options_Processor {
     private function __construct() {
     }
     public function add_option( $slug, $type, $title, $description, $section, $default_value, $extra = null, $page = 'wbk-options', $group = 'wbk_options',  $dependency = null ){
-     
+
         switch ( $type ) {
             case 'text':
                 $render_callback = 'render_text';
                 $validation_callback = 'validate_text';
+                break;
+            case 'text_alfa_numeric':
+                $render_callback = 'render_text';
+                $validation_callback = 'validate_text_alfa_numeric';
                 break;
             case 'pass':
                 $render_callback = 'render_pass';
@@ -63,32 +67,13 @@ final class WBK_Options_Processor {
         );
     }
     public function validate_text( $input ){
-         return $input;
-        $args = array(
-            'strong' => array(),
-            'em'     => array(),
-            'b'      => array(),
-            'i'      => array(),
-            'br'     => array(),
-            'p'      => array(
-                             'class' => array()
-                     ),
-            'a'      => array(
-                            'href' => array(),
-                            'class' => array()
-                        )
-        );
-         $result = str_replace( '&lt', '', $input );
-         $result = str_replace( '&gt;', '', $result );
-         $result = str_replace( '&#', '', $result );
-         $result = str_replace( '\x', '', $result );
-         $result = str_replace( '=', '', $input );
-         $result = wp_kses( $input, $args );
-         return $result;
-
+        return WBK_Validator::kses( $input );
+    }
+    public function validate_text_alfa_numeric( $input ){
+        return WBK_Validator::alfa_numeric( $input );
     }
     public function validate_textarea( $input ){
-        return $input;
+        return WBK_Validator::kses( $input );
     }
     public function validate_checkbox( $input ){
         return sanitize_text_field( $input );
@@ -97,7 +82,7 @@ final class WBK_Options_Processor {
         return sanitize_text_field( $input );
     }
     public function validate_editor( $input ){
-        return $input;
+        return WBK_Validator::kses( $input );
     }
     public function validate_select_multiple( $input ){
         return $input;
@@ -137,6 +122,7 @@ final class WBK_Options_Processor {
 
         return self::$inst;
     }
+
 
 }
 
