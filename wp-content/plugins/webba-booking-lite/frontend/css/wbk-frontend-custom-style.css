@@ -27,7 +27,7 @@ border-top: 1px solid #c7c7c7 !important;
 margin: 10px 0 10px 0 !important;
 border-top: 1px solid #c7c7c7 !important;
 }
-.wbk-input-label, .wbk-amount-label {
+.wbk-input-label{
 padding: 0 0 0 0 !important;
 margin: 10px 0 2px 0 !important;
 color: #ffffff !important;
@@ -35,7 +35,7 @@ font-size: 24px !important;
 font-style: normal !important;
 font-weight: normal !important;
 }
-.wbk-input, .wbk-text, .wbk-textarea, .wbk-select, .wbk-email-custom, #wbk-payment .StripeElement {
+.wbk-input, .wbk-text, .wbk-textarea, .wbk-select, #wbk-payment .StripeElement {
 padding: 0 5px 0 5px !important;
 background-color: #ffffff !important;
 color: #000000 !important;

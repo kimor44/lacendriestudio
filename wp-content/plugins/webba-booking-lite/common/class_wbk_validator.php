@@ -248,5 +248,50 @@ class WBK_Validator {
 		date_default_timezone_set('UTC');
 		return true;
 	}
+	public static function alfa_numeric( $input ){
+		return trim( preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 ]/', ' ', urldecode( html_entity_decode( strip_tags( $input ) ) ) ) ) );
+
+	}
+
+    public static function kses( $input ){
+	        $default_attribs = array(
+	            'id' => array(),
+	            'class' => array(),
+	            'title' => array(),
+	            'style' => array(),
+	            'data' => array(),
+	            'data-mce-id' => array(),
+	            'data-mce-style' => array(),
+	            'data-mce-bogus' => array(),
+	        );
+
+	        $allowed_tags = array(
+	            'div'           => $default_attribs,
+	            'span'          => $default_attribs,
+	            'p'             => $default_attribs,
+	            'a'             => array_merge( $default_attribs, array(
+	                'href' => array(),
+	                'target' => array('_blank', '_top'),
+	            ) ),
+	            'u'             =>  $default_attribs,
+	            'i'             =>  $default_attribs,
+	            'q'             =>  $default_attribs,
+	            'b'             =>  $default_attribs,
+	            'ul'            => $default_attribs,
+	            'ol'            => $default_attribs,
+	            'li'            => $default_attribs,
+	            'br'            => $default_attribs,
+	            'hr'            => $default_attribs,
+	            'strong'        => $default_attribs,
+	            'blockquote'    => $default_attribs,
+	            'del'           => $default_attribs,
+	            'strike'        => $default_attribs,
+	            'em'            => $default_attribs,
+	            'code'          => $default_attribs,
+	        );
+
+	        return wp_kses( $input, $allowed_tags );
+	    }
+
 }
 ?>

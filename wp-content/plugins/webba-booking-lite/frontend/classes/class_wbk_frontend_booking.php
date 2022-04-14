@@ -345,10 +345,7 @@ class WBK_Frontend_Booking
             if ( $thanks_message == '' ) {
                 $thanks_message = sanitize_text_field( $wbk_wording['book_thanks_message'] );
             }
-            $select_date_placeholder = get_option( 'wbk_date_input_placeholder', '' );
-            if ( $select_date_placeholder == '' ) {
-                $select_date_placeholder = sanitize_text_field( $wbk_wording['date_input_placeholder'] );
-            }
+            $select_date_placeholder = WBK_Validator::alfa_numeric( get_option( 'wbk_date_input_placeholder', '' ) );
             $booked_text = get_option( 'wbk_booked_text', '' );
             if ( $booked_text == '' ) {
                 $booked_text = sanitize_text_field( $wbk_wording['booked_text'] );
@@ -457,7 +454,7 @@ class WBK_Frontend_Booking
                 'jquery_no_conflict'        => get_option( 'wbk_jquery_nc', 'disabled' ),
                 'no_available_dates'        => get_option( 'wbk_no_dates_label', __( 'No available dates message', 'wbk' ) ),
                 'auto_select_first_date'    => get_option( 'wbk_auto_select_first_date', 'disabled' ),
-                'book_text_timeslot'        => get_option( 'wbk_book_text_timeslot', __( 'Book', 'wbk' ) ),
+                'book_text_timeslot'        => WBK_Validator::alfa_numeric( get_option( 'wbk_book_text_timeslot', __( 'Book', 'wbk' ) ) ),
                 'deselect_text_timeslot'    => get_option( 'wbk_deselect_text_timeslot', '' ),
             );
             $sanitized_array = array();

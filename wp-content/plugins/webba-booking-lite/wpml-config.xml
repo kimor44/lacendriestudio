@@ -27,8 +27,7 @@
 			<key name="wbk_book_items_quantity_label"/>
 			<key name="wbk_local_time_format"/>
 			<key name="wbk_book_not_found_message"/>
-			<key name="wbk_stripe_button_text"/>
-			<key name="wbk_payment_pay_with_cc_btn_text"/>
+			<key name="wbk_stripe_button_text"/>			 
 			<key name="wbk_payment_item_name"/>
 			<key name="wbk_payment_subtotal_title"/>
 			<key name="wbk_payment_total_title"/>

@@ -344,18 +344,18 @@ if ( isset( $_GET['order_payment'] ) ) {
             $title .= WBK_WooCommerce::renderPaymentMethods( $service_id, $appointment_ids );
             if ( $title != '' ) {
                 if ( get_option( 'wbk_allow_coupons', 'disabled' ) == 'enabled' ) {
-                    $title = '<input class="wbk-input" id="wbk-coupon" placeholder="' . get_option( 'wbk_coupon_field_placeholder', __( 'coupon code', 'wbk' ) ) . '" >' . $title;
+                    $title = '<input class="wbk-input" id="wbk-coupon" placeholder="' . WBK_Validator::alfa_numeric( get_option( 'wbk_coupon_field_placeholder', __( 'coupon code', 'wbk' ) ) ) . '" >' . $title;
                 }
             }
             
             if ( in_array( 'arrival', $payment_methods ) ) {
-                $button_text = get_option( 'wbk_pay_on_arrival_button_text', __( 'Pay on arrival', 'wbk' ) );
+                $button_text = WBK_Validator::alfa_numeric( get_option( 'wbk_pay_on_arrival_button_text', __( 'Pay on arrival', 'wbk' ) ) );
                 $title .= '<input class="wbk-button wbk-width-100 wbk-mt-10-mb-10 wbk-payment-init" data-method="arrival" data-app-id="' . implode( ',', $appointment_ids ) . '"  value="' . $button_text . '  " type="button">';
             }
             
             
             if ( in_array( 'bank', $payment_methods ) ) {
-                $button_text = get_option( 'wbk_bank_transfer_button_text', __( 'Pay by bank transfer', 'wbk' ) );
+                $button_text = WBK_Validator::alfa_numeric( get_option( 'wbk_bank_transfer_button_text', __( 'Pay by bank transfer', 'wbk' ) ) );
                 $title .= '<input class="wbk-button wbk-width-100 wbk-mt-10-mb-10 wbk-payment-init" data-method="bank" data-app-id="' . implode( ',', $appointment_ids ) . '"  value="' . $button_text . '  " type="button">';
             }
         
@@ -494,10 +494,7 @@ if ( isset( $_GET['cancelation'] ) ) {
             }
             $content = '<label class="wbk-input-label" for="wbk-customer_email">' . $email_cancel_label . '</label>';
             $content .= '<input name="wbk-email" class="wbk-input wbk-width-100 wbk-mb-10" id="wbk-customer_email" type="text">';
-            $cancel_label = get_option( 'wbk_cancel_button_text', '' );
-            if ( $cancel_label == '' ) {
-                $cancel_label = sanitize_text_field( $wbk_wording['cancel_label'] );
-            }
+            $cancel_label = WBK_Validator::alfa_numeric( get_option( 'wbk_cancel_button_text', '' ) );
             $content .= '<input class="wbk-button wbk-width-100 wbk-mt-10-mb-10" id="wbk-cancel_booked_appointment" data-appointment="' . implode( '-', $token_result ) . '" value="' . $cancel_label . '" type="button">';
         } else {
             $content = '';
