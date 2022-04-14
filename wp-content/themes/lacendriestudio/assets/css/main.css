@@ -21,6 +21,11 @@
   .cendrie-h-full {
     height: 100%;
   }
+
+  /* set body's height to maximum value */
+  .cendrie-page {
+    flex: 1 0 auto;
+  }
 }
 
 /* Main image on home page */
@@ -32,9 +37,4 @@
 #cendrie-body .cendrie-page .home-content p a,
 #cendrie-body #cendrie-footer p a {
   text-decoration: underline;
-}
-
-/* set body's height to maximum value */
-.cendrie-page {
-  flex: 1 0 auto;
 }
