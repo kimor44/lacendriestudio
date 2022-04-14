@@ -3818,6 +3818,13 @@ textarea.form-control.is-invalid {
   }
 }
 
+/* Turn extra container to flex column */
+
+.cendrie-body-template {
+  display: flex;
+  flex-direction: column;
+}
+
 #cendrie-body .visible {
   visibility: visible;
 }
@@ -3895,6 +3902,10 @@ textarea.form-control.is-invalid {
 
 #cendrie-body .w-full {
   width: 100%;
+}
+
+#cendrie-body .shrink {
+  flex-shrink: 1;
 }
 
 #cendrie-body .transform {
@@ -4005,7 +4016,15 @@ textarea.form-control.is-invalid {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
+/* extra height container */
+
+#cendrie-body .cendrie-h-full {
+  height: 100%;
+}
+
 /****** Custom components ******/
+
+/******* Custom utililties  ******/
 
 /* Main image on home page */
 
@@ -4018,6 +4037,12 @@ textarea.form-control.is-invalid {
 #cendrie-body .cendrie-page .home-content p a,
 #cendrie-body #cendrie-footer p a {
   text-decoration: underline;
+}
+
+/* set body's height to maximum value */
+
+.cendrie-page {
+  flex: 1 0 auto;
 }
 
 @media (min-width: 640px) {
