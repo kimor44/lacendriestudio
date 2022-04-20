@@ -4,7 +4,7 @@ Donate link: https://webba-booking.com/
 Tags: appointment, booking, calendar, reservation
 Requires at least: 5.6
 Tested up to: 5.9.3
-Stable tag: 4.2.21
+Stable tag: 4.2.22
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -169,11 +169,18 @@ Just find the button Webba Booking form above content editor for a post or a pag
 
 == Upgrade Notice ==
 
-= 4.2.21  =
+= 4.2.22  =
 Security update. Due to security reason we removed opportunity of using certain HTML tags in some frontend texts. We recommend doing a test booking after the update.
 
 
 == Changelog ==
+
+15/04/2022
+
+4.2.22
+
+* Security update
+* Bug with certain characters in the front-end texts
 
 13/04/2022
 

@@ -4,7 +4,7 @@
 * Plugin Name: Webba Booking
 * Plugin URI: https://webba-booking.com
 * Description: Responsive appointment and reservation plugin.
-* Version: 4.2.21
+* Version: 4.2.22
 * Author: WebbaPlugins
 * Text Domain: wbk
 * Author URI: https://webba-booking.com
@@ -114,6 +114,16 @@ if ( !function_exists( 'wbk_load_textdomain' ) ) {
     include 'includes/utilities/class_wbk_model_utils.php';
     include 'includes/utilities/class_wbk_user_utils.php';
     include 'includes/utilities/class-wbk-model-updater.php';
+    include 'includes/utilities/class_wbk_validator.php';
+    if ( version_compare( PHP_VERSION, '7.0.0' ) >= 0 ) {
+        
+        if ( !class_exists( 'voku\\helper\\AntiXSS' ) ) {
+            include 'vendor/voku/portable-ascii/src/voku/helper/ASCII.php';
+            include 'vendor/voku/portable-utf8/src/voku/helper/UTF8.php';
+            include 'vendor/voku/anti-xss/src/voku/helper/AntiXSS.php';
+        }
+    
+    }
     include 'vendor/plugion/autoload.php';
     // Plugion extensions
     include 'includes/plugion_extensions/class-wbk-pe-business-hours.php';

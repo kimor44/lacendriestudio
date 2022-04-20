@@ -3,8 +3,7 @@
 // check if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 // include validator class
-require_once  dirname(__FILE__) . '/class_wbk_validator.php';
-class WBK_Entity {
+ class WBK_Entity {
 	// entity id
 	protected $id;
 	// entity name
@@ -87,7 +86,7 @@ class WBK_Entity {
 			}
 			if ( !$this->setDescription( $result->description ) ) {
 				// return false;
-			}			
+			}
 		}
 		return $result;
 	}

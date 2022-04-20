@@ -13,7 +13,7 @@ final class WBK_Options_Processor {
     private function __construct() {
     }
     public function add_option( $slug, $type, $title, $description, $section, $default_value, $extra = null, $page = 'wbk-options', $group = 'wbk_options',  $dependency = null ){
-
+     
         switch ( $type ) {
             case 'text':
                 $render_callback = 'render_text';
