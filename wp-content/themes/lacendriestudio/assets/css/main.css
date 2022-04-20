@@ -35,6 +35,7 @@
 
 /* Link style */
 #cendrie-body .cendrie-page .home-content p a,
+#cendrie-body .cendrie-page a.cendrie-booking-link,
 #cendrie-body #cendrie-footer p a {
   text-decoration: underline;
 }
