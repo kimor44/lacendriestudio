@@ -3806,6 +3806,7 @@ textarea.form-control.is-invalid {
 }
 
 #cendrie-body .cendrie-page .cendrie-submit-button-contact-form:hover {
+  cursor: pointer;
   --tw-bg-opacity: 1;
   background-color: rgb(29 78 216 / var(--tw-bg-opacity));
 }
@@ -3823,6 +3824,114 @@ textarea.form-control.is-invalid {
 .cendrie-body-template {
   display: flex;
   flex-direction: column;
+}
+
+/* contact's fields */
+
+#cendrie-body .cendrie-page .cendrie-form {
+  margin-top: 0.75rem;
+  width: 100%;
+}
+
+#cendrie-body .cendrie-page .cendrie-name-wrapper {
+  margin-left: -0.75rem;
+  margin-right: -0.75rem;
+  margin-bottom: 0.25rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  #cendrie-body .cendrie-page .cendrie-name-wrapper {
+    margin-bottom: 0.75rem;
+  }
+}
+
+#cendrie-body .cendrie-page .cendrie-container-name {
+  margin-bottom: 0.75rem;
+  width: 100%;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  #cendrie-body .cendrie-page .cendrie-container-name {
+    margin-bottom: 0px;
+  }
+
+  #cendrie-body .cendrie-page .cendrie-container-name {
+    width: 50%;
+  }
+}
+
+#cendrie-body .cendrie-page .cendrie-name-field {
+  margin-bottom: 0.75rem;
+  display: block;
+  width: 100%;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  line-height: 1.25;
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+
+#cendrie-body .cendrie-page .cendrie-name-field:focus {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+#cendrie-body .cendrie-page .cendrie-container-message {
+  margin-bottom: 0.75rem;
+  width: 100%;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  #cendrie-body .cendrie-page .cendrie-container-message {
+    margin-bottom: 0px;
+  }
+}
+
+#cendrie-body .cendrie-page .cendrie-message-field {
+  margin-bottom: 0.75rem;
+  display: block;
+  width: 100%;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  line-height: 1.25;
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+
+#cendrie-body .cendrie-page .cendrie-message-field:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(107 114 128 / var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  outline: 2px solid transparent;
+  outline-offset: 2px;
 }
 
 #cendrie-body .visible {

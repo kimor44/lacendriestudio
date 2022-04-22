@@ -6,13 +6,33 @@
 @layer components {
   /* Custom button */
   #cendrie-body .cendrie-page .cendrie-submit-button-contact-form {
-    @apply bg-blue-500 hover:bg-blue-700 text-white text-lg py-2 px-4 rounded sm:w-fit w-full;
+    @apply bg-blue-500 hover:bg-blue-700 text-white text-lg py-2 px-4 rounded sm:w-fit w-full hover:cursor-pointer;
   }
 
   /* Turn extra container to flex column */
   .cendrie-body-template {
     display: flex;
     flex-direction: column;
+  }
+
+  /* contact's fields */
+  #cendrie-body .cendrie-page .cendrie-form {
+    @apply w-full mt-3;
+  }
+  #cendrie-body .cendrie-page .cendrie-name-wrapper {
+    @apply flex flex-wrap -mx-3 mb-1 md:mb-3;
+  }
+  #cendrie-body .cendrie-page .cendrie-container-name {
+    @apply w-full md:w-1/2 px-3 mb-3 md:mb-0;
+  }
+  #cendrie-body .cendrie-page .cendrie-name-field {
+    @apply appearance-none block w-full bg-gray-200 text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white;
+  }
+  #cendrie-body .cendrie-page .cendrie-container-message {
+    @apply w-full px-3 mb-3 md:mb-0;
+  }
+  #cendrie-body .cendrie-page .cendrie-message-field {
+    @apply appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500;
   }
 }
 /******* Custom utililties  ******/
