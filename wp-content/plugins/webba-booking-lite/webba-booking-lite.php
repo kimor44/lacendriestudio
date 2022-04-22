@@ -4,7 +4,7 @@
 * Plugin Name: Webba Booking
 * Plugin URI: https://webba-booking.com
 * Description: Responsive appointment and reservation plugin.
-* Version: 4.2.22
+* Version: 4.2.23
 * Author: WebbaPlugins
 * Text Domain: wbk
 * Author URI: https://webba-booking.com

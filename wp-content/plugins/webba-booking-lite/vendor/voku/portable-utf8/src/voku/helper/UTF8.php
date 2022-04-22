@@ -5365,7 +5365,7 @@ final class UTF8
                 $replacement_char_helper = \ord($replacement_char);
             }
 
-            if (self::$SUPPORT['mbstring'] === false) {
+            if ( isset( self::$SUPPORT['mbstring'] ) && self::$SUPPORT['mbstring'] === false) {
                 // if there is no native support for "mbstring",
                 // then we need to clean the string before ...
                 $str = self::clean($str);
@@ -8579,7 +8579,7 @@ final class UTF8
         // the main substitutions
         $str = (string) \preg_replace_callback(
             '~\\b (_*) (?:                                                           # 1. Leading underscore and
-                        ( (?<=[ ][/\\\\]) [[:alpha:]]+ [-_[:alpha:]/\\\\]+ |                # 2. file path or 
+                        ( (?<=[ ][/\\\\]) [[:alpha:]]+ [-_[:alpha:]/\\\\]+ |                # 2. file path or
                           [-_[:alpha:]]+ [@.:] [-_[:alpha:]@.:/]+ ' . $apostrophe_rx . ' )  #    URL, domain, or email
                         |
                         ( (?i: ' . $small_words_rx . ' ) ' . $apostrophe_rx . ' )           # 3. or small word (case-insensitive)

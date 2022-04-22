@@ -4,7 +4,7 @@ Donate link: https://webba-booking.com/
 Tags: appointment, booking, calendar, reservation
 Requires at least: 5.6
 Tested up to: 5.9.3
-Stable tag: 4.2.22
+Stable tag: 4.2.23
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -175,19 +175,25 @@ Security update. Due to security reason we removed opportunity of using certain 
 
 == Changelog ==
 
+21/04/2022
+
+4.2.23
+
+* Bugfix: minor bugs fixed
+
 15/04/2022
 
 4.2.22
 
 * Security update
-* Bug with certain characters in the front-end texts
+* Bugfix: Bug with certain characters in the front-end texts
 
 13/04/2022
 
 4.2.21
 
 * Security update
-* Minor bugfix
+* Bugfix: Minor bugfix
 
 25/02/2022
 
