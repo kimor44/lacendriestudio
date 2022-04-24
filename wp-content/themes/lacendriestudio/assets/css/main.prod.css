@@ -1373,6 +1373,60 @@ textarea.form-control.is-invalid {
   transition: opacity 0s 0.6s;
 }
 
+.carousel-control-prev {
+  z-index: 1;
+  width: 15%;
+  color: #fff;
+  background: none;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
+
+.carousel-control-next {
+  z-index: 1;
+  width: 15%;
+  color: #fff;
+  background: none;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
+
+.carousel-control-prev:hover {
+  color: #fff;
+  opacity: 0.9;
+}
+
+.carousel-control-prev:focus {
+  color: #fff;
+  opacity: 0.9;
+}
+
+.carousel-control-next:hover {
+  color: #fff;
+  opacity: 0.9;
+}
+
+.carousel-control-next:focus {
+  color: #fff;
+  opacity: 0.9;
+}
+
+.carousel-control-prev-icon {
+  width: 2rem;
+  height: 2rem;
+  background-position: 50%;
+  background-size: 100% 100%;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e");
+}
+
+.carousel-control-next-icon {
+  width: 2rem;
+  height: 2rem;
+  background-position: 50%;
+  background-size: 100% 100%;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
 .carousel-indicators {
   z-index: 2;
   margin-right: 15%;
@@ -1402,6 +1456,14 @@ textarea.form-control.is-invalid {
 
 .carousel-indicators .active {
   opacity: 1;
+}
+
+.carousel-dark .carousel-control-prev-icon {
+  filter: invert(1) grayscale(100);
+}
+
+.carousel-dark .carousel-control-next-icon {
+  filter: invert(1) grayscale(100);
 }
 
 .carousel-dark .carousel-indicators [data-bs-target] {
@@ -1439,6 +1501,18 @@ textarea.form-control.is-invalid {
   position: sticky;
   top: 0;
   z-index: 1020;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 .vr {
@@ -3959,6 +4033,22 @@ textarea.form-control.is-invalid {
   position: sticky;
 }
 
+#cendrie-body .top-0 {
+  top: 0px;
+}
+
+#cendrie-body .bottom-0 {
+  bottom: 0px;
+}
+
+#cendrie-body .left-0 {
+  left: 0px;
+}
+
+#cendrie-body .right-0 {
+  right: 0px;
+}
+
 #cendrie-body .float-left {
   float: left;
 }
@@ -3973,6 +4063,11 @@ textarea.form-control.is-invalid {
   margin-right: auto;
 }
 
+#cendrie-body .my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 #cendrie-body .mt-4 {
   margin-top: 1rem;
 }
@@ -3983,6 +4078,10 @@ textarea.form-control.is-invalid {
 
 #cendrie-body .block {
   display: block;
+}
+
+#cendrie-body .inline-block {
+  display: inline-block;
 }
 
 #cendrie-body .flex {
@@ -3999,6 +4098,14 @@ textarea.form-control.is-invalid {
 
 #cendrie-body .hidden {
   display: none;
+}
+
+#cendrie-body .h-\[15rem\] {
+  height: 15rem;
+}
+
+#cendrie-body .h-full {
+  height: 100%;
 }
 
 #cendrie-body .h-\[15rem\] {
@@ -4057,8 +4164,20 @@ textarea.form-control.is-invalid {
   overflow: hidden;
 }
 
+#cendrie-body .border-0 {
+  border-width: 0px;
+}
+
+#cendrie-body .bg-no-repeat {
+  background-repeat: no-repeat;
+}
+
 #cendrie-body .p-4 {
   padding: 1rem;
+}
+
+#cendrie-body .p-0 {
+  padding: 0px;
 }
 
 #cendrie-body .px-4 {
@@ -4127,9 +4246,13 @@ textarea.form-control.is-invalid {
 
 /* extra height container */
 
+/* extra height container */
+
 #cendrie-body .cendrie-h-full {
   height: 100%;
 }
+
+/* set body's height to maximum value */
 
 /* set body's height to maximum value */
 
@@ -4155,7 +4278,31 @@ textarea.form-control.is-invalid {
   text-decoration: underline;
 }
 
+#cendrie-body .hover\:no-underline:hover {
+  -webkit-text-decoration-line: none;
+          text-decoration-line: none;
+}
+
+#cendrie-body .hover\:outline-none:hover {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+#cendrie-body .focus\:no-underline:focus {
+  -webkit-text-decoration-line: none;
+          text-decoration-line: none;
+}
+
+#cendrie-body .focus\:outline-none:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
 @media (min-width: 640px) {
+  #cendrie-body .sm\:h-\[25rem\] {
+    height: 25rem;
+  }
+
   #cendrie-body .sm\:h-\[25rem\] {
     height: 25rem;
   }
@@ -4205,12 +4352,21 @@ textarea.form-control.is-invalid {
     margin-bottom: 1.25rem;
   }
 
+  #cendrie-body .md\:my-5 {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
   #cendrie-body .md\:mt-5 {
     margin-top: 1.25rem;
   }
 
   #cendrie-body .md\:mb-5 {
     margin-bottom: 1.25rem;
+  }
+
+  #cendrie-body .md\:h-\[39\.375rem\] {
+    height: 39.375rem;
   }
 
   #cendrie-body .md\:h-\[39\.375rem\] {
@@ -4233,6 +4389,11 @@ textarea.form-control.is-invalid {
 }
 
 @media (min-width: 1024px) {
+  #cendrie-body .lg\:my-6 {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
   #cendrie-body .lg\:my-6 {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
@@ -4267,6 +4428,11 @@ textarea.form-control.is-invalid {
     margin-bottom: 2rem;
   }
 
+  #cendrie-body .xl\:my-8 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
   #cendrie-body .xl\:mt-8 {
     margin-top: 2rem;
   }
@@ -4277,6 +4443,11 @@ textarea.form-control.is-invalid {
 }
 
 @media (min-width: 1536px) {
+  #cendrie-body .\32xl\:my-10 {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
   #cendrie-body .\32xl\:my-10 {
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
