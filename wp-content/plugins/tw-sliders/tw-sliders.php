@@ -38,7 +38,7 @@ function cendrie_create_slider_post_type() {
     'menu_icon'=>'dashicons-images-alt2', /**valeur de votre choix : https://developer.wordpress.org/resource/dashicons/#editor-underline **/
     'supports' => array(
       'title',
-      'thumbnail','excerpt'
+      'thumbnail',
     ),
   );
   register_post_type( 'slider', $args);
@@ -140,3 +140,47 @@ function tw_sliders_init(){
 add_action('init', 'tw_sliders_init');
 
 add_filter( 'wp_lazy_loading_enabled', '__return_false' );
+
+/**
+ * Create the checkbox metabox in the admin panel of "sliders" plugin
+ * to show or not the slide in the carousel
+*/
+function add_checkbox_is_visible() {
+    add_meta_box(
+        'is_visible',
+        'Afficher l\'image dans le caroussel ?',
+        'build_is_visible_form',
+        'slider',
+        'advanced',
+        'high',
+    );
+}
+add_action( 'add_meta_boxes', 'add_checkbox_is_visible' );
+
+/**
+ * Render Meta Box content.
+ *
+ * @param WP_Post $post The post object.
+ */
+function build_is_visible_form( $post ) {
+    $value = get_post_meta( $post->ID, 'is_visible_meta_key', true );
+    $checked = $value == "yes" ? "checked" : "";
+    ?>
+    <input type="checkbox" id="is_visible" name="is_visible" value="yes" <?php echo $checked; ?>>
+    <label for="is_visible">Cocher pour afficher l'image dans le carousel</label>
+    <?php
+}
+
+/**
+ * Save the meta when the post is saved.
+ *
+ * @param int $post_id The ID of the post being saved.
+ */
+function save_is_visible_postdata( $post_id ) {
+    update_post_meta(
+        $post_id,
+        'is_visible_meta_key',
+        $_POST['is_visible']
+    );
+}
+add_action( 'save_post', 'save_is_visible_postdata' );
