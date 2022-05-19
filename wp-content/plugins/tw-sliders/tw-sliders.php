@@ -175,6 +175,9 @@ function build_is_visible_form( $post ) {
  * @param int $post_id The ID of the post being saved.
  */
 function save_is_visible_postdata( $post_id ) {
+    if(!array_key_exists('is_visible', $_POST)){
+      $_POST['is_visible'] = "no";
+    }
     update_post_meta(
         $post_id,
         'is_visible_meta_key',
