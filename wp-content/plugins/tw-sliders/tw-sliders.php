@@ -93,10 +93,6 @@ function tw_sliders_init(){
       'meta_value'  => 'yes',
     );
     
-    $query_filter = $builder->get_the_query_builder(intval($attributs['number_of_slides']));
-
-    $args = array_merge($args, $query_filter);
-
     $sliders = new WP_Query($args); 
 
     $carousel .= '<div id="carouselExampleControls" class="carousel slide relative" data-bs-ride="carousel">';

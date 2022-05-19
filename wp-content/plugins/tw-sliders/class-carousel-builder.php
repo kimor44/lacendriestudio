@@ -22,21 +22,5 @@ if ( ! class_exists( 'Carousel_Builder' ) ) {
 
       return $size;
     }
-
-    /**
-     * format the query.
-     *
-     * @param int $nb_slides
-     * @return array
-     */
-    function get_the_query_builder( int $nb_slides = null ) {
-      $query_filter = array();
-
-      if ( $nb_slides > 0 ) {
-        $query_filter['posts_per_page'] = $nb_slides;
-      }
-
-      return $query_filter;
-    }
   }
 }
