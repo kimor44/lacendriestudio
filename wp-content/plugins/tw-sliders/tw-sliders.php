@@ -88,7 +88,9 @@ function tw_sliders_init(){
     $image_size = $builder->get_the_format_image_size($attributs['size']);
 
     $args = array(
-      'post_type' => 'slider',
+      'post_type'   => 'slider',
+      'meta_key'    => 'is_visible_meta_key',
+      'meta_value'  => 'yes',
     );
     
     $query_filter = $builder->get_the_query_builder(intval($attributs['number_of_slides']));
@@ -180,7 +182,7 @@ function save_is_visible_postdata( $post_id ) {
     update_post_meta(
         $post_id,
         'is_visible_meta_key',
-        $_POST['is_visible']
+        $_POST['is_visible'],
     );
 }
 add_action( 'save_post', 'save_is_visible_postdata' );
