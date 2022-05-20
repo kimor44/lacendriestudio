@@ -8,6 +8,15 @@
  * Author:            Julien Guibert
  */
 
+
+/**
+ * Load script & styles for slider admin panel
+ */
+function slider_admin_scripts() {
+  wp_enqueue_style('slider_admin', plugin_dir_url(__FILE__) . '/assets/css/slider_admin.css');
+}
+add_action( 'admin_enqueue_scripts', 'slider_admin_scripts' );
+
  /**
  * Register the "sliders" custom post type
  */
@@ -185,3 +194,29 @@ function save_is_visible_postdata( $post_id ) {
     );
 }
 add_action( 'save_post', 'save_is_visible_postdata' );
+
+/**
+* Add custom columns at the slider custom-post-type
+* @return array columns
+*/
+function slider_custom_columns($columns) {
+  $custom_col_order = array(
+    'cb' => $columns['cb'],
+    'overview' => __( 'Aperçu', 'textdomain' ),
+    'title' => $columns['title'],
+    'date' => $columns['date']
+  );
+  return $custom_col_order;
+}
+add_filter( 'manage_slider_posts_columns', 'slider_custom_columns' );
+
+/**
+* Display related content for the expected column
+*/
+function display_thumbnail_of_slider( $column, $post_id ) {
+  if ($column == 'overview'){
+    the_post_thumbnail('thumbnail', $post_id);
+  }
+}
+add_action( 'manage_slider_posts_custom_column' , 'display_thumbnail_of_slider', 10, 2 );
+ 
