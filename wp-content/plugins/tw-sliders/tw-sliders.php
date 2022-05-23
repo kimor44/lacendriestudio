@@ -17,10 +17,14 @@ function slider_admin_scripts() {
 }
 add_action( 'admin_enqueue_scripts', 'slider_admin_scripts' );
 
+/**
+ * Add metabox for carousel, build HTML and save data
+ */
+require_once('class-carousel-metabox.php');
+
  /**
  * Register the "sliders" custom post type
  */
-
 function cendrie_create_slider_post_type() {
   $labels = array (
     'name' => __( 'Sliders' ),
@@ -147,53 +151,6 @@ function tw_sliders_init(){
 add_action('init', 'tw_sliders_init');
 
 add_filter( 'wp_lazy_loading_enabled', '__return_false' );
-
-/**
- * Create the checkbox metabox in the admin panel of "sliders" plugin
- * to show or not the slide in the carousel
-*/
-function add_checkbox_is_visible() {
-    add_meta_box(
-        'is_visible',
-        'Afficher l\'image dans le caroussel ?',
-        'build_is_visible_form',
-        'slider',
-        'advanced',
-        'high',
-    );
-}
-add_action( 'add_meta_boxes', 'add_checkbox_is_visible' );
-
-/**
- * Render Meta Box content.
- *
- * @param WP_Post $post The post object.
- */
-function build_is_visible_form( $post ) {
-    $value = get_post_meta( $post->ID, 'is_visible_meta_key', true );
-    $checked = $value == "yes" ? "checked" : "";
-    ?>
-    <input type="checkbox" id="is_visible" name="is_visible" value="yes" <?php echo $checked; ?>>
-    <label for="is_visible">Cocher pour afficher l'image dans le carousel</label>
-    <?php
-}
-
-/**
- * Save the meta when the post is saved.
- *
- * @param int $post_id The ID of the post being saved.
- */
-function save_is_visible_postdata( $post_id ) {
-    if(!array_key_exists('is_visible', $_POST)){
-      $_POST['is_visible'] = "no";
-    }
-    update_post_meta(
-        $post_id,
-        'is_visible_meta_key',
-        $_POST['is_visible'],
-    );
-}
-add_action( 'save_post', 'save_is_visible_postdata' );
 
 /**
 * Add custom columns at the slider custom-post-type
