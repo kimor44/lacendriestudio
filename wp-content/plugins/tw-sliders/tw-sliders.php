@@ -6,6 +6,7 @@
  * Requires at least: 5.2
  * Requires PHP:      7.4.21
  * Author:            Julien Guibert
+ * Text Domain:       text-slider
  */
 
 
@@ -162,8 +163,9 @@ add_filter( 'wp_lazy_loading_enabled', '__return_false' );
 function slider_custom_columns($columns) {
   $custom_col_order = array(
     'cb' => $columns['cb'],
-    'overview' => __( 'Aperçu', 'textdomain' ),
+    'overview' => __( 'Aperçu', 'text-slider' ),
     'title' => $columns['title'],
+    'visible' => __( 'Visible ?', 'text-slider' ),
     'date' => $columns['date']
   );
   return $custom_col_order;
