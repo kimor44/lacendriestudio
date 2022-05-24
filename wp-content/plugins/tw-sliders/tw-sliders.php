@@ -13,7 +13,10 @@
  * Load script & styles for slider admin panel
  */
 function slider_admin_scripts() {
-  wp_enqueue_style('slider_admin', plugin_dir_url(__FILE__) . '/assets/css/slider_admin.css');
+  $screen = get_current_screen();
+  if($screen->post_type == 'slider'){
+    wp_enqueue_style('slider_admin', plugin_dir_url(__FILE__) . '/assets/css/slider_admin.css');
+  }
 }
 add_action( 'admin_enqueue_scripts', 'slider_admin_scripts' );
 
@@ -171,8 +174,15 @@ add_filter( 'manage_slider_posts_columns', 'slider_custom_columns' );
 * Display related content for the expected column
 */
 function display_thumbnail_of_slider( $column, $post_id ) {
+  require_once('class-admin-handling.php');
+  $admin_handle_init = new Admin_Handling($post_id);
+
   if ($column == 'overview'){
-    the_post_thumbnail('thumbnail', $post_id);
+    $admin_handle_init->get_the_thumbnail_for_custom_column();
+  }
+
+  if($column == 'visible'){
+    $admin_handle_init->get_is_visible_metabox_for_custom_column();
   }
 }
 add_action( 'manage_slider_posts_custom_column' , 'display_thumbnail_of_slider', 10, 2 );

@@ -6,7 +6,7 @@ module.exports = {
     "*.{php,html,js}",
     "./assets/**/*.{html,js}",
     "./node_modules/tw-elements/dist/js/**/*.js",
-    "../../plugins/tw-sliders/*.php",
+    "../../plugins/tw-sliders/*.{php,html,js}",
   ],
   theme: {
     fontFamily: {

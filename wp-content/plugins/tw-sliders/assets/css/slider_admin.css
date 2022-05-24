@@ -1,3 +1,24 @@
 .widefat thead tr th.column-overview {
   width: 150px;
 }
+
+table.fixed tbody tr td.column-visible .visible-cell {
+  display: inline_block;
+  width: 50px;
+  color: white;
+  justify-content: center;
+  text-align: center;
+  padding: 8px 15px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-transform: capitalize;
+  transition: 0.5s;
+}
+
+table.fixed tbody tr td.column-visible .visible-no {
+  background-color: #d71010;
+}
+
+table.fixed tbody tr td.column-visible .visible-yes {
+  background-color: #27a75ee8;
+}
