@@ -1,3 +1,8 @@
+:root {
+  --success-indicator: #27a75ee8;
+  --danger-indicator: #d71010;
+}
+
 .widefat thead tr th.column-overview {
   width: 150px;
 }
@@ -16,9 +21,21 @@ table.fixed tbody tr td.column-visible .visible-cell {
 }
 
 table.fixed tbody tr td.column-visible .visible-no {
-  background-color: #d71010;
+  background-color: var(--danger-indicator);
 }
 
 table.fixed tbody tr td.column-visible .visible-yes {
-  background-color: #27a75ee8;
+  background-color: var(--success-indicator);
+}
+
+div.meta-box-sortables div#is_visible {
+  /* border: solid 4px green; */
+  border-radius: 10px;
+  box-shadow: 1px 1px 4px 1px #002200;
+}
+
+div.meta-box-sortables div#is_visible div.inside {
+  height: 40px;
+  line-height: 40px;
+  font-size: 20px;
 }

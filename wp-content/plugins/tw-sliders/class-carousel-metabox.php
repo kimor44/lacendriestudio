@@ -43,7 +43,7 @@ abstract class Carousel_Metabox {
     $checked = $value == "yes" ? "checked" : "";
     ?>
       <input type="checkbox" id="is_visible" name="is_visible" value="yes" <?php echo $checked; ?>>
-      <label for="is_visible">Cocher pour afficher l'image dans le carousel</label>
+      <label for="is_visible">Cocher la case pour afficher l'image dans le caroussel</label>
     <?php
   }
 }
