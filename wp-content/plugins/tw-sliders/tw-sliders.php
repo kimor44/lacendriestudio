@@ -188,4 +188,27 @@ function display_thumbnail_of_slider( $column, $post_id ) {
   }
 }
 add_action( 'manage_slider_posts_custom_column' , 'display_thumbnail_of_slider', 10, 2 );
- 
+
+function add_presentation_page_to_slider()
+{
+  add_submenu_page(
+    'edit.php?post_type=slider',
+    'Comment se servir du caroussel',
+    'Présentation',
+    'manage_options',
+    'presentation',
+    'build_sub_menu_slider',
+    0
+  );
+}
+add_action('admin_menu', 'add_presentation_page_to_slider');
+
+function build_sub_menu_slider() {
+  // check user capabilities
+  if ( ! current_user_can( 'manage_options' ) ) {
+    return;
+  }
+  ?>
+    <h1>Coucou les gens ! </h1>
+  <?php
+}
