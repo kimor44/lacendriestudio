@@ -15,8 +15,10 @@
  */
 function slider_admin_scripts() {
   $screen = get_current_screen();
+  // print_r($screen->base); // => slider_page_presentation / edit / post
   if($screen->post_type == 'slider'){
-    wp_enqueue_style('slider_admin', plugin_dir_url(__FILE__) . '/assets/css/slider_admin.css');
+    $css_file = plugin_dir_url(__FILE__) . '/assets/css/slider_admin.css';
+    wp_enqueue_style('slider_admin', $css_file, array(), dirname($css_file), false);
   }
 }
 add_action( 'admin_enqueue_scripts', 'slider_admin_scripts' );
