@@ -15,8 +15,7 @@
  */
 function slider_admin_scripts() {
   $screen = get_current_screen();
-  // print_r($screen->base); // => slider_page_presentation / edit / post
-  if($screen->post_type == 'slider'){
+  if($screen->post_type == 'slider' || $screen->base == 'slider_page_presentation'){
     $css_file = plugin_dir_url(__FILE__) . '/assets/css/slider_admin.css';
     wp_enqueue_style('slider_admin', $css_file, array(), dirname($css_file), false);
   }
@@ -90,15 +89,14 @@ register_deactivation_hook( __FILE__, 'cendrie_pluginprefix_deactivate' );
 require_once('class-carousel-builder.php');
 
 /**
- * [tw_sliders size="large" number_of_slides=3] returns the Carousel with your images.
+ * [tw_sliders size="large"] returns the Carousel with your images.
  * @return string Carousel
 */
 add_shortcode( 'tw_slider', 'build_carousel' );
 function tw_sliders_init(){
   function build_carousel( $atts ) {
     $attributs = shortcode_atts( array(
-      'size'             => '',
-      'number_of_slides' => null,
+      'size' => '',
     ), $atts );
 
     $builder = new Carousel_Builder();
@@ -209,6 +207,14 @@ function build_sub_menu_slider() {
   // check user capabilities
   if ( ! current_user_can( 'manage_options' ) ) {
     return;
+  }
+  $screen = get_current_screen();
+  if ($screen->base == 'slider_page_presentation') {
+    require_once('includes/presentation.php');
+
+    $presentation = new Presentation();
+
+    echo $presentation->get_the_content();
   }
   ?>
     <h1>Coucou les gens ! </h1>
