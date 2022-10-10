@@ -40,8 +40,15 @@ div.meta-box-sortables div#is_visible div.inside {
   font-size: 20px;
 }
 
-#wpcontent #wpbody #wpbody-content p.slider-presentation-paragraph {
+#wpcontent #wpbody #wpbody-content .presentation-content p {
   font-size: 1.5em;
+}
+
+#wpcontent #wpbody #wpbody-content .presentation-content ul li {
+  text-indent: 1em;
+  font-size: 1.5em;
+  font-style: italic;
+  line-height: 1.5em;
 }
 
 #wpcontent #wpbody #wpbody-content #get-started-button {
