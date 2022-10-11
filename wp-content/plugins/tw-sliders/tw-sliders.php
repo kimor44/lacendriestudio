@@ -191,7 +191,7 @@ add_action( 'manage_slider_posts_custom_column' , 'display_thumbnail_of_slider',
 
 function add_presentation_page_to_slider()
 {
-  add_submenu_page(
+  $slider_pres_page = add_submenu_page(
     'edit.php?post_type=slider',
     'Comment se servir du caroussel',
     'Présentation',
@@ -200,6 +200,8 @@ function add_presentation_page_to_slider()
     'build_sub_menu_slider',
     0
   );
+
+  add_action('load-' . $slider_pres_page, 'pres_help_menu');
 }
 add_action('admin_menu', 'add_presentation_page_to_slider');
 
@@ -216,7 +218,43 @@ function build_sub_menu_slider() {
 
     echo $presentation->get_the_content();
   }
-  ?>
-    <h1>Coucou les gens ! </h1>
-  <?php
+}
+
+function pres_help_menu() {
+  $screen = get_current_screen();
+  $screen->add_help_tab(array(
+    'id' => 'overview',
+    'title' => 'Vue d\'ensemble',
+    'content' => '<p>Sur cette page, vous allez avoir un guide pour apprendre à
+                  créer et gérer votre caroussel.</p>',
+    'priority' => 1,
+  ));
+}
+
+function second_helper() {
+  global $pagenow, $page; // marche aussi sans
+
+  $screen = get_current_screen();
+
+  $content = presentation_helper();
+
+  $screen->add_help_tab(
+    array(
+      'id'       => 'carousel_management',
+      'title'    => __( 'Gestion du Carrousel' ),
+      'content'  => $content,
+      'priority' => 10,
+    )
+  );
+}
+add_action( 'admin_head-slider_page_presentation', 'second_helper', 50 );
+
+function presentation_helper() {
+  return '<p>
+            Suivez ce guide pas à pas pour ajoutez, supprimez et gérez la visibilité des slides.<br/>
+            Intégrez ensuite votre carrousel où vous voulez dans votre site,
+            sois dans une page sois dans un article.<br/>
+            Vous avez aussi la possibilité de préciser quelle taille d\'images vous souhaiter
+            utiliser parmis celles proposées.
+          </p>';
 }
