@@ -41,7 +41,7 @@ function cendrie_create_slider_post_type() {
     'edit_item' => __( 'Editer slide' ),
     'update_item' => __( 'Mettre à jour slide' ),
     'search_items' => __( 'Rechercher une slide' ),
-    'search_items' => __('Sliders')
+    'search_items' => __('Rechercher des slides')
   );
   $args = array (
     'labels' => $labels,
@@ -205,6 +205,9 @@ function add_presentation_page_to_slider()
 }
 add_action('admin_menu', 'add_presentation_page_to_slider');
 
+
+require_once('includes/slider-help-tabs.php');
+
 function build_sub_menu_slider() {
   // check user capabilities
   if ( ! current_user_can( 'manage_options' ) ) {
@@ -221,20 +224,12 @@ function build_sub_menu_slider() {
 }
 
 function pres_help_menu() {
-  $screen = get_current_screen();
-  $screen->add_help_tab(array(
-    'id' => 'overview',
-    'title' => 'Vue d\'ensemble',
-    'content' => '<p>Sur cette page, vous allez avoir un guide pour apprendre à
-                  créer et gérer votre caroussel.</p>',
-    'priority' => 1,
-  ));
+  $current_screen = get_current_screen();
+
+  $help_tabs = new Slider_Help_Tabs( $current_screen );
+
+  $help_tabs->set_help_tabs('presentation');
 }
-
-function second_helper() {
-  global $pagenow, $page; // marche aussi sans
-
-  $screen = get_current_screen();
 
   $content = presentation_helper();
 
