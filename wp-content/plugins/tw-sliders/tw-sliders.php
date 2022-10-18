@@ -231,25 +231,18 @@ function pres_help_menu() {
   $help_tabs->set_help_tabs('presentation');
 }
 
-  $content = presentation_helper();
+add_action( 'load-edit.php', 'slide_listing_screen_help_tab' );
+/**
+ * This will be added to the admin page listing all post in "book" CPT.
+ */
+function slide_listing_screen_help_tab() {
+  $current_screen = get_current_screen();
 
-  $screen->add_help_tab(
-    array(
-      'id'       => 'carousel_management',
-      'title'    => __( 'Gestion du Carrousel' ),
-      'content'  => $content,
-      'priority' => 10,
-    )
-  );
-}
-add_action( 'admin_head-slider_page_presentation', 'second_helper', 50 );
+  if ( 'edit-slider' != $current_screen->id ) {
+      return;
+  }
 
-function presentation_helper() {
-  return '<p>
-            Suivez ce guide pas à pas pour ajoutez, supprimez et gérez la visibilité des slides.<br/>
-            Intégrez ensuite votre carrousel où vous voulez dans votre site,
-            sois dans une page sois dans un article.<br/>
-            Vous avez aussi la possibilité de préciser quelle taille d\'images vous souhaiter
-            utiliser parmis celles proposées.
-          </p>';
+  $help_tabs = new Slider_Help_Tabs( $current_screen );
+
+  $help_tabs->set_help_tabs('list');
 }
