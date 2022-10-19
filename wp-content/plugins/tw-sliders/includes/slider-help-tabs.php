@@ -44,6 +44,16 @@ class Slider_Help_Tabs {
 				$this->sidebar();
 
 				return;
+
+			case 'edit':
+				$this->screen->add_help_tab( array(
+					'id' => 'edit_sliders_overview',
+					'title' => __( 'Vue d\'ensemble', 'text-slider' ),
+					'content' => $this->content( 'edit_sliders_overview' ) ) );
+					
+				$this->sidebar();
+
+				return;
 		}
   }
 
@@ -72,6 +82,11 @@ class Slider_Help_Tabs {
 		$content['list_available_actions'] .= '<li>' . __( "<strong>Modification Rapide</strong> vous donne un accès rapide aux métadonnées de votre slide, vous permettant de mettre à jour certains détails sans devoir quitter la liste.", 'text-slider') . '</li>';
 		$content['list_available_actions'] .= '<li>' . __( "<strong>Corbeille</strong> retire la slide de la liste et la déplace dans la corbeille, d’où vous pourrez la supprimer définitivement.", 'text-slider') . '</li>';
 		$content['list_available_actions'] .= '</ul>';
+    
+		$content['edit_sliders_overview'] = '<p>' . __( "Sur cet écran, vous pouvez éditer une slide. Une slide se compose des éléments suivants:", 'text-slider') . '</p>';
+		$content['edit_sliders_overview'] .= '<p>' . __( "<strong>Titre</strong> est le titre que vous donnerez à votre slide. Il apparaîtra uniquement sur le récapitulatif des slides.", 'text-slider') . '</p>';
+		$content['edit_sliders_overview'] .= '<p>' . __( "<strong>Afficher l'image dans le carrousel</strong> est la case à cocher si vous voulez que votre slide soit visible.", 'text-slider') . '</p>';
+		$content['edit_sliders_overview'] .= '<p>' . __( "<strong>Image mise en avant</strong> est l'endroit où vous choisissez la photo de votre slide.", 'text-slider') . '</p>';
 
 		if ( ! empty( $content[$name] ) ) {
 			return $content[$name];
