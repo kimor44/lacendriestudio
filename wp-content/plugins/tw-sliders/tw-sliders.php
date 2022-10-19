@@ -233,7 +233,7 @@ function pres_help_menu() {
 
 add_action( 'load-edit.php', 'slide_listing_screen_help_tab' );
 /**
- * This will be added to the admin page listing all post in "book" CPT.
+ * This will be added to the admin page listing all posts in "Sliders" CPT.
  */
 function slide_listing_screen_help_tab() {
   $current_screen = get_current_screen();
@@ -245,4 +245,20 @@ function slide_listing_screen_help_tab() {
   $help_tabs = new Slider_Help_Tabs( $current_screen );
 
   $help_tabs->set_help_tabs('list');
+}
+
+add_action( 'load-post-new.php', 'slide_editing_screen_help_tab' );
+/**
+ * This will be added to the admin page editing a post in "Sliders" CPT.
+ */
+function slide_editing_screen_help_tab() {
+  $current_screen = get_current_screen();
+
+  if ( 'slider' != $current_screen->id ) {
+      return;
+  }
+
+  $help_tabs = new Slider_Help_Tabs( $current_screen );
+
+  $help_tabs->set_help_tabs('edit');
 }
