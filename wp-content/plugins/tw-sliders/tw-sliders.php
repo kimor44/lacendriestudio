@@ -81,6 +81,7 @@ function cendrie_create_slider_post_type() {
     ),
   );
   register_post_type( 'slider', $args);
+  add_filter( 'page_row_actions', 'tw_sliders_remove_view_action', 10, 2 );
 }
 add_action( 'init', 'cendrie_create_slider_post_type' );
   
@@ -153,6 +154,14 @@ function tw_sliders_init(){
 add_action('init', 'tw_sliders_init');
 
 add_filter( 'wp_lazy_loading_enabled', '__return_false' );
+
+function tw_sliders_remove_view_action($actions, $post) {
+  if( $post->post_type == 'slider') {
+    unset($actions['view']);
+  }
+
+  return $actions;
+}
 
 /**
 * Add custom columns at the slider custom-post-type
