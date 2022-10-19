@@ -9,6 +9,27 @@
  * Text Domain:       text-slider
  */
 
+/**
+* Activate the plugin.
+*/
+function cendrie_pluginprefix_activate() { 
+  // Trigger our function that registers the custom post type plugin.
+  cendrie_create_slider_post_type(); 
+  // Clear the permalinks after the post type has been registered.
+  flush_rewrite_rules(); 
+}
+register_activation_hook( __FILE__, 'cendrie_pluginprefix_activate' );
+
+/**
+ * Deactivation hook.
+ */
+function cendrie_pluginprefix_deactivate() {
+  // Unregister the post type, so the rules are no longer in memory.
+  unregister_post_type( 'slider' );
+  // Clear the permalinks to remove our post type's rules from the database.
+  flush_rewrite_rules();
+}
+register_deactivation_hook( __FILE__, 'cendrie_pluginprefix_deactivate' );
 
 /**
  * Load script & styles for slider admin panel
@@ -63,29 +84,6 @@ function cendrie_create_slider_post_type() {
 }
 add_action( 'init', 'cendrie_create_slider_post_type' );
   
-
-/**
-* Activate the plugin.
-*/
-function cendrie_pluginprefix_activate() { 
-  // Trigger our function that registers the custom post type plugin.
-  cendrie_create_slider_post_type(); 
-  // Clear the permalinks after the post type has been registered.
-  flush_rewrite_rules(); 
-}
-register_activation_hook( __FILE__, 'cendrie_pluginprefix_activate' );
-
-/**
- * Deactivation hook.
- */
-function cendrie_pluginprefix_deactivate() {
-  // Unregister the post type, so the rules are no longer in memory.
-  unregister_post_type( 'slider' );
-  // Clear the permalinks to remove our post type's rules from the database.
-  flush_rewrite_rules();
-}
-register_deactivation_hook( __FILE__, 'cendrie_pluginprefix_deactivate' );
-
 require_once('class-carousel-builder.php');
 
 /**
@@ -189,8 +187,7 @@ function display_thumbnail_of_slider( $column, $post_id ) {
 }
 add_action( 'manage_slider_posts_custom_column' , 'display_thumbnail_of_slider', 10, 2 );
 
-function add_presentation_page_to_slider()
-{
+function add_presentation_page_to_slider() {
   $slider_pres_page = add_submenu_page(
     'edit.php?post_type=slider',
     'Comment se servir du caroussel',
@@ -202,6 +199,16 @@ function add_presentation_page_to_slider()
   );
 
   add_action('load-' . $slider_pres_page, 'pres_help_menu');
+
+  /*
+  * Will add a help menu to the edit page
+  */
+  add_action( 'load-edit.php', 'tw_slider_load_help_menu' );
+  
+  /*
+  * Will add a help menu to the new post page
+  */
+  add_action( 'load-post-new.php', 'tw_slider_load_help_menu' );
 }
 add_action('admin_menu', 'add_presentation_page_to_slider');
 
@@ -209,10 +216,6 @@ add_action('admin_menu', 'add_presentation_page_to_slider');
 require_once('includes/slider-help-tabs.php');
 
 function build_sub_menu_slider() {
-  // check user capabilities
-  if ( ! current_user_can( 'manage_options' ) ) {
-    return;
-  }
   $screen = get_current_screen();
   if ($screen->base == 'slider_page_presentation') {
     require_once('includes/presentation.php');
@@ -224,6 +227,11 @@ function build_sub_menu_slider() {
 }
 
 function pres_help_menu() {
+  // check user capabilities
+  if ( ! current_user_can( 'manage_options' ) ) {
+    return;
+  }
+  
   $current_screen = get_current_screen();
 
   $help_tabs = new Slider_Help_Tabs( $current_screen );
@@ -231,34 +239,24 @@ function pres_help_menu() {
   $help_tabs->set_help_tabs('presentation');
 }
 
-add_action( 'load-edit.php', 'slide_listing_screen_help_tab' );
-/**
- * This will be added to the admin page listing all posts in "Sliders" CPT.
- */
-function slide_listing_screen_help_tab() {
-  $current_screen = get_current_screen();
-
-  if ( 'edit-slider' != $current_screen->id ) {
-      return;
+function tw_slider_load_help_menu() {
+  // check user capabilities
+  if ( ! current_user_can( 'manage_options' ) ) {
+    return;
   }
 
-  $help_tabs = new Slider_Help_Tabs( $current_screen );
+  $types = array(
+    'slider' => 'edit',
+    'edit-slider' => 'list'
+  );
 
-  $help_tabs->set_help_tabs('list');
-}
-
-add_action( 'load-post-new.php', 'slide_editing_screen_help_tab' );
-/**
- * This will be added to the admin page editing a post in "Sliders" CPT.
- */
-function slide_editing_screen_help_tab() {
   $current_screen = get_current_screen();
-
-  if ( 'slider' != $current_screen->id ) {
-      return;
+  
+  if ( 'slider' != $current_screen->id && 'edit-slider' != $current_screen->id ) {
+    return;
   }
-
+  
   $help_tabs = new Slider_Help_Tabs( $current_screen );
 
-  $help_tabs->set_help_tabs('edit');
+  $help_tabs->set_help_tabs($types[$current_screen->id]);
 }
