@@ -61,8 +61,7 @@ function cendrie_create_slider_post_type() {
     'add_new' => __( 'Ajouter une nouvelle slide' ),
     'edit_item' => __( 'Editer slide' ),
     'update_item' => __( 'Mettre à jour slide' ),
-    'search_items' => __( 'Rechercher une slide' ),
-    'search_items' => __('Rechercher des slides')
+    'search_items' => __( 'Rechercher une slide' )
   );
   $args = array (
     'labels' => $labels,
@@ -79,6 +78,7 @@ function cendrie_create_slider_post_type() {
       'title',
       'thumbnail',
     ),
+    'show_in_admin_bar' => false
   );
   register_post_type( 'slider', $args);
   add_filter( 'page_row_actions', 'tw_sliders_remove_view_action', 10, 2 );
@@ -203,8 +203,7 @@ function add_presentation_page_to_slider() {
     'Présentation',
     'manage_options',
     'presentation',
-    'build_sub_menu_slider',
-    0
+    'build_sub_menu_slider'
   );
 
   add_action('load-' . $slider_pres_page, 'pres_help_menu');
