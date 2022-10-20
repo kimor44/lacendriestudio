@@ -7,7 +7,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: GlotPress/3.0.0-rc.3\n"
+"X-Generator: GlotPress/4.0.0-alpha.3\n"
 "Language: fr\n"
 "Project-Id-Version: Themes - Twenty Twenty-Two\n"
 
@@ -140,27 +140,27 @@ msgctxt "Gradient name"
 msgid "Vertical secondary to tertiary"
 msgstr "Secondaire verticale vers ternaire"
 
-#: theme.json
+#: theme.json styles/blue.json styles/pink.json styles/swiss.json
 msgctxt "Color name"
 msgid "Tertiary"
 msgstr "Ternaire"
 
-#: theme.json
+#: theme.json styles/blue.json styles/pink.json styles/swiss.json
 msgctxt "Color name"
 msgid "Secondary"
 msgstr "Secondaire"
 
-#: theme.json
+#: theme.json styles/blue.json styles/pink.json styles/swiss.json
 msgctxt "Color name"
 msgid "Primary"
 msgstr "Primaire"
 
-#: theme.json
+#: theme.json styles/blue.json styles/pink.json styles/swiss.json
 msgctxt "Color name"
 msgid "Background"
 msgstr "Arrière-plan"
 
-#: theme.json
+#: theme.json styles/blue.json styles/pink.json styles/swiss.json
 msgctxt "Color name"
 msgid "Foreground"
 msgstr "Avant-plan"
