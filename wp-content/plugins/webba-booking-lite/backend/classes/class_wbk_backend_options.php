@@ -1432,7 +1432,7 @@ class WBK_Backend_Options extends WBK_Backend_Component
         wbk_opt()->add_option(
             'wbk_slots_label',
             'text',
-            __( 'Select timeslots lab', 'wbk' ),
+            __( 'Select timeslots label', 'wbk' ),
             __( 'Timeslots frontend label', 'wbk' ),
             'wbk_translation_settings_section',
             __( 'Available timeslots', 'wbk' )
@@ -2359,6 +2359,11 @@ class WBK_Backend_Options extends WBK_Backend_Component
     
     // woo settings section callback
     public function wbk_woo_settings_section_callback( $arg )
+    {
+    }
+    
+    // woo settings section callback
+    public function wbk_zoom_settings_section_callback( $arg )
     {
     }
     

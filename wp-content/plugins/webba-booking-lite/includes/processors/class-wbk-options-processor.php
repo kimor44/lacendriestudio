@@ -10,10 +10,10 @@ final class WBK_Options_Processor {
 
     protected $options;
 
-    private function __construct() {
+    public function __construct() {
     }
     public function add_option( $slug, $type, $title, $description, $section, $default_value, $extra = null, $page = 'wbk-options', $group = 'wbk_options',  $dependency = null ){
-     
+
         switch ( $type ) {
             case 'text':
                 $render_callback = 'render_text';
@@ -46,6 +46,10 @@ final class WBK_Options_Processor {
             case 'select_multiple':
                 $render_callback = 'render_select_multiple';
                 $validation_callback = 'validate_select_multiple';
+                break;
+            case 'zoom_auth':
+                $render_callback = 'render_zoom_auth';
+                $validation_callback = 'validate_zoom_auth';
                 break;
             default:
                 $render_callback = 'render_text';
@@ -87,6 +91,9 @@ final class WBK_Options_Processor {
     public function validate_select_multiple( $input ){
         return $input;
     }
+    public function validate_zoom_auth( $input ){
+        return $input;
+    }
     public function render_text( $args ){
         WBK_Renderer::load_template( 'options/text_field', $args );
     }
@@ -104,6 +111,9 @@ final class WBK_Options_Processor {
     }
     public function render_select_multiple( $args ){
         WBK_Renderer::load_template( 'options/select_multiple_field', $args );
+    }
+    public function render_zoom_auth( $args ){
+        WBK_Renderer::load_template( 'options/zoom_auth', $args );
     }
     public function render_editor( $args ){
         WBK_Renderer::load_template( 'options/editor_field', $args );

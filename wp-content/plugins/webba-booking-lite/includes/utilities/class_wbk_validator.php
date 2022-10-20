@@ -264,9 +264,10 @@ class WBK_Validator {
 
 	}
     public static function kses( $input ){
+
 		if( class_exists('voku\helper\AntiXSS') ){
 			$antiXss = new AntiXSS();
-			$input = $antiXss->xss_clean($input);			 		
+		 	$input = $antiXss->xss_clean($input);
 		}
         $default_attribs = array(
             'id' => array(),
@@ -277,13 +278,22 @@ class WBK_Validator {
             'data-mce-id' => array(),
             'data-mce-style' => array(),
             'data-mce-bogus' => array(),
-        );
+			'type' => array(),
+			'colspan' => array(),
+			'src' => array()
 
+        );
         $allowed_tags = array(
-            'div'           => $default_attribs,
-            'span'          => $default_attribs,
-            'p'             => $default_attribs,
-            'a'             => array_merge( $default_attribs, array(
+			'h1'           => $default_attribs,
+			'h2'           => $default_attribs,
+			'h3'           => $default_attribs,
+			'h4'           => $default_attribs,
+			'h5'           => $default_attribs,
+			'h6'           => $default_attribs,
+            'div'          => $default_attribs,
+            'span'         => $default_attribs,
+            'p'            => $default_attribs,
+            'a'            => array_merge( $default_attribs, array(
                 'href' => array(),
                 'target' => array('_blank', '_top'),
             ) ),
@@ -302,6 +312,13 @@ class WBK_Validator {
             'strike'        => $default_attribs,
             'em'            => $default_attribs,
             'code'          => $default_attribs,
+			'table'         => $default_attribs,
+			'tbody'         => $default_attribs,
+			'tr'            => $default_attribs,
+			'td'            => $default_attribs,
+			'th'            => $default_attribs,
+			'style'			=> $default_attribs,
+			'img'			=> $default_attribs
         );
         $input = wp_kses( $input, $allowed_tags );
 		return $input;

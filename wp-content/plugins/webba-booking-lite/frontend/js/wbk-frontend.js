@@ -7,7 +7,7 @@ if( wbkl10n.jquery_no_conflict == 'disabled' ){
 	WBK_jQuery = jQuery.noConflict();
 }
 
- 
+
 // onload function
 WBK_jQuery( function ($) {
 	WBK_jQuery(document).off('ajaxSend');
@@ -853,7 +853,7 @@ function wbk_setTimeslotEvent(){
 				}
 			}
 			if( wbkl10n.deselect_text_timeslot != '' ){
-				jQuery('.wbk-slot-button').val( wbkl10n.book_text_timeslot );
+				jQuery('.wbk-slot-button').not('.wbk-slot-booked').val( wbkl10n.book_text_timeslot );
 				jQuery('.wbk-slot-active-button').not('.wbk_to_checkout').val( wbkl10n.deselect_text_timeslot );
 
 			}

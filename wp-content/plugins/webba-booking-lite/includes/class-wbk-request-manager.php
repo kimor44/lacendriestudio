@@ -28,6 +28,13 @@ class WBK_Request_Manager
                 'permission_callback' => [ $this, 'wbk_csv_export_permission' ],
             ] );
         } );
+        add_action( 'rest_api_init', function () {
+            register_rest_route( 'wbk/v1', '/get-wp-users/', [
+                'methods'             => 'POST',
+                'callback'            => [ $this, 'get_wp_users' ],
+                'permission_callback' => [ $this, 'get_wp_users_permission' ],
+            ] );
+        } );
         add_action( 'wp_ajax_wbk_calculate_amounts', array( $this, 'calculate_amounts' ) );
         add_action( 'wp_ajax_nopriv_wbk_calculate_amounts', array( $this, 'calculate_amounts' ) );
         // add_action( 'wp_ajax_wbk_search_time', array( $this, 'search_time') );
@@ -124,9 +131,24 @@ class WBK_Request_Manager
         return true;
     }
     
+    public function get_wp_users_permission( $request )
+    {
+        return true;
+    }
+    
     public function wbk_csv_export_permission()
     {
         return true;
+    }
+    
+    public function get_wp_users( $request )
+    {
+        $data = array(
+            'none_admin_users' => WBK_User_Utils::get_none_admin_wp_users(),
+        );
+        $response = new \WP_REST_Response( $data );
+        $response->set_status( 200 );
+        return $response;
     }
     
     /**

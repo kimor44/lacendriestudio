@@ -461,7 +461,7 @@ class Table {
                 return apply_filters( 'plugion_row_can_delete', true, $row, $this->get_table_name() );
             }
         }
-        return apply_filters( 'plugion_row_can_delete', false, $row, $this->get_table_name() );;
+        return apply_filters( 'plugion_row_can_delete', false, $row, $this->get_table_name() );
     }
     public function current_user_can_add() {
         // filter fields list by editable
@@ -670,7 +670,6 @@ class Table {
                 }
             }
         }
-
         return [ $invalid_fields, $valid_fields, $field_formats ];
     }
 

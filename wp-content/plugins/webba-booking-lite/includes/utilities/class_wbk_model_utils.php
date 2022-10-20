@@ -324,6 +324,21 @@ class WBK_Model_Utils {
         $result = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where email = %s order by time desc", $email ) );
         return $result;
     }
+    public static function get_all_quantity_intersecting_range( $start, $end  ){
+        $service_ids = self::get_service_ids();
+        $day = strtotime( date( 'Y-m-d', $start ).' 00:00:00' );
+        $total_quantity = 0;
+        foreach( $service_ids as $service_id ){
+            $booking_ids = self:: get_booking_ids_by_day_service( $day, $service_id );
+            foreach( $booking_ids as $booking_id ){
+                $booking = new WBK_Booking( $booking_id );
+                if( WBK_Time_Math_Utils::check_range_intersect( $start, $end, $booking->get_start(), $booking->get_end() ) ){
+                    $total_quantity += $booking->get_quantity();
+                }
+            }
+        }
+        return $total_quantity;
+    }
     public static function get_booking_ids_for_today_by_service( $service_id ){
         global $wpdb;
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );

@@ -3,6 +3,7 @@
     // check if accessed directly
     if ( ! defined( 'ABSPATH' ) ) exit;
     date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+
 ?>
 <div class="wrap">
 	<h2 class="wbk_panel_title"><?php  echo 'Webba Booking ' . __( 'Settings', 'wbk' ); ?>

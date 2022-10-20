@@ -105,7 +105,7 @@ class WBK_Model
             'select',
             'general',
             array(
-            'items'    => WBK_User_Utils::get_none_admin_wp_users(),
+            'items'    => array(),
             'multiple' => true,
         ),
             0,
@@ -383,6 +383,20 @@ class WBK_Model
             'general',
             array(
             'type' => 'none_negative_integer',
+        ),
+            '',
+            true,
+            false,
+            false
+        );
+        $table->add_field(
+            'service_zoom',
+            'zoom',
+            __( 'Create Zoom events', 'wbk' ),
+            'checkbox',
+            'general',
+            array(
+            'yes' => __( 'Yes', 'wbk' ),
         ),
             '',
             true,
@@ -837,6 +851,42 @@ class WBK_Model
             false,
             false
         );
+        $table->add_field(
+            'appointment_zoom_meeting_id',
+            'zoom_meeting_id',
+            'zoom_meeting_id',
+            'text',
+            '',
+            null,
+            '',
+            false,
+            false,
+            false
+        );
+        $table->add_field(
+            'appointment_zoom_meeting_url',
+            'zoom_meeting_url',
+            'zoom_meeting_url',
+            'text',
+            '',
+            null,
+            '',
+            false,
+            false,
+            false
+        );
+        $table->add_field(
+            'appointment_zoom_meeting_pwd',
+            'zoom_meeting_pwd',
+            'zoom_meeting_pwd',
+            'text',
+            '',
+            null,
+            '',
+            false,
+            false,
+            false
+        );
         $table->sync_structure();
         $table = Plugion()->tables->add( $table, $db_prefix . 'wbk_appointments' );
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
@@ -1261,7 +1311,7 @@ class WBK_Model
             'select',
             '',
             array(
-            'items'      => WBK_User_Utils::get_wp_users(),
+            'items'      => array(),
             'null_value' => array(
             '0' => __( 'select option', 'wbk' ),
         ),

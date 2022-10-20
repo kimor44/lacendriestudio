@@ -235,6 +235,22 @@ function wbk_plugion_property_field_validation_select(
         }
     }
     
+    
+    if ( $slug == 'service_users' || $slug == 'calendar_user_id' ) {
+        foreach ( $value as $item ) {
+            if ( !is_numeric( $item ) ) {
+                return [ false, sprintf( plugion_translate_string( 'Value of %s is not acceptable' ), $field->get_title() ) ];
+            }
+        }
+        
+        if ( $slug == 'service_users' ) {
+            return [ true, json_encode( $value ) ];
+        } elseif ( $slug == 'calendar_user_id' ) {
+            return [ true, $value ];
+        }
+    
+    }
+    
     return $input;
 }
 
@@ -312,6 +328,12 @@ function wbk_plugion_on_after_row_add( $table_name, $table_name_not_filtered, $r
         WBK_Db_Utils::addAppointmentDataToGGCelendar( $service_id, $row->id );
         WBK_Db_Utils::setIPToAppointment( $row->id );
         WBK_Model_Utils::set_booking_end( $row->id );
+        
+        if ( get_option( 'wbk_zoom_when_add', 'onbooking' ) == 'onbooking' ) {
+            $wbk_zoom = new WBK_Zoom();
+            $wbk_zoom->add_meeting( $row->id );
+        }
+        
         $noifications = new WBK_Email_Notifications( $service_id, $row->id );
         $noifications->sendSingleBookedManually();
         date_default_timezone_set( 'UTC' );
@@ -339,6 +361,8 @@ function wbk_plugion_on_before_row_delete( $table_name, $table_name_not_filtered
         date_default_timezone_set( 'UTC' );
         WBK_Db_Utils::freeLockedTimeSlot( $row->id );
         do_action( 'webba_before_cancel_booking', $row->id );
+        $wbk_zoom = new WBK_Zoom();
+        $wbk_zoom->delete_meeting( $row->id );
     }
     
     if ( $table_name == get_option( 'wbk_db_prefix', '' ) . 'wbk_services' ) {
@@ -363,11 +387,21 @@ function wbk_plugion_on_after_row_update( $table_name, $table_name_not_filtered,
         if ( $prev_status == 'pending' || $prev_status == 'paid' ) {
             
             if ( $current_status == 'approved' || $current_status == 'paid_approved' ) {
+                
+                if ( get_option( 'wbk_zoom_when_add', 'onbooking' ) == 'onpaymentorapproval' ) {
+                    $wbk_zoom = new WBK_Zoom();
+                    $wbk_zoom->add_meeting( $row->id );
+                }
+                
                 $noifications = new WBK_Email_Notifications( $service_id, $row->id );
                 $noifications->sendOnApprove();
+                
                 if ( get_option( 'wbk_email_customer_send_invoice', 'disabled' ) == 'onapproval' ) {
+                    date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
                     $noifications->sendSingleInvoice();
+                    date_default_timezone_set( 'UTC' );
                 }
+                
                 $expiration_mode = get_option( 'wbk_appointments_delete_not_paid_mode', 'disabled' );
                 if ( $expiration_mode == 'on_approve' ) {
                     WBK_Db_Utils::setAppointmentsExpiration( $row->id );
@@ -384,6 +418,12 @@ function wbk_plugion_on_after_row_update( $table_name, $table_name_not_filtered,
             }
         
         }
+        
+        if ( get_option( 'wbk_zoom_when_add', 'onbooking' ) == 'onbooking' ) {
+            $wbk_zoom = new WBK_Zoom();
+            $wbk_zoom->update_meeting( $row->id );
+        }
+        
         $service_id = WBK_Db_Utils::getServiceIdByAppointmentId( $row->id );
         $noifications = new WBK_Email_Notifications( $service_id, $row->id );
         if ( $prev_status != 'arrived' && $current_status == 'arrived' ) {

@@ -12,9 +12,9 @@ class WBK_Db_Utils
         $prefix = $wpdb->prefix;
         update_option( 'wbk_db_prefix', $prefix );
         // custom on/off days
-        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_days_on_off (\r\n\t            id int unsigned NOT NULL auto_increment PRIMARY KEY,\r\n\t            service_id int unsigned NOT NULL,\r\n\t            day int unsigned NOT NULL,\r\n\t            status int unsigned NOT NULL,\r\n\t            UNIQUE KEY id (id)\r\n\t        )\r\n\t        DEFAULT CHARACTER SET = utf8\r\n\t        COLLATE = utf8_general_ci" );
+        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_days_on_off (\n\t            id int unsigned NOT NULL auto_increment PRIMARY KEY,\n\t            service_id int unsigned NOT NULL,\n\t            day int unsigned NOT NULL,\n\t            status int unsigned NOT NULL,\n\t            UNIQUE KEY id (id)\n\t        )\n\t        DEFAULT CHARACTER SET = utf8\n\t        COLLATE = utf8_general_ci" );
         // custom locked timeslots
-        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_locked_time_slots (\r\n\t            id int unsigned NOT NULL auto_increment PRIMARY KEY,\r\n\t            service_id int unsigned NOT NULL,\r\n\t            time int unsigned NOT NULL,\r\n\t            connected_id int unsigned NOT NULL default 0,\r\n\t            UNIQUE KEY id (id)\r\n\t        )\r\n\t        DEFAULT CHARACTER SET = utf8\r\n\t        COLLATE = utf8_general_ci" );
+        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_locked_time_slots (\n\t            id int unsigned NOT NULL auto_increment PRIMARY KEY,\n\t            service_id int unsigned NOT NULL,\n\t            time int unsigned NOT NULL,\n\t            connected_id int unsigned NOT NULL default 0,\n\t            UNIQUE KEY id (id)\n\t        )\n\t        DEFAULT CHARACTER SET = utf8\n\t        COLLATE = utf8_general_ci" );
     }
     
     // drop tables
@@ -995,9 +995,12 @@ class WBK_Db_Utils
             
             $valid_ids = array();
             foreach ( $ids as $appointment_id ) {
+                
                 if ( WBK_Validator::validateId( $appointment_id, 'wbk_appointments' ) ) {
                     $valid_ids[] = $appointment_id;
+                    WBK_Model_Utils::set_booking_status( $appointment_id, 'cancelled' );
                 }
+            
             }
             
             if ( $delete_rule == 'skip' ) {
@@ -1015,7 +1018,7 @@ class WBK_Db_Utils
                         $noifications->prepareOnCancel();
                         self::deleteAppointmentDataAtGGCelendar( $app_id );
                         self::copyAppointmentToCancelled( $app_id, __( 'Auto', 'wbk' ) );
-                        $wpdb->query( $wpdb->prepare( "DELETE FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where ( payment_id = '' or payment_id IS NULL ) and  ( ( payment_method <> 'Pay on arrival' and payment_method <> 'Bank transfer' ) or payment_method IS NULL ) and ( status='pending' or status='approved'  ) and  expiration_time <> 0 and expiration_time < %d and id=" . $app_id, $time ) );
+                        $wpdb->query( $wpdb->prepare( "DELETE FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where ( payment_id = '' or payment_id IS NULL ) and  ( ( payment_method <> 'Pay on arrival' and payment_method <> 'Bank transfer' ) or payment_method IS NULL ) and ( status='cancelled' ) and  expiration_time <> 0 and expiration_time < %d and id=" . $app_id, $time ) );
                         $noifications->sendOnCancelCustomer();
                         $noifications->sendOnCancel();
                         switch_to_locale( $current_locale );
@@ -1037,7 +1040,7 @@ class WBK_Db_Utils
                         $noifications->prepareOnCancel();
                         self::deleteAppointmentDataAtGGCelendar( $app_id );
                         self::copyAppointmentToCancelled( $app_id, __( 'Auto', 'wbk' ) );
-                        $wpdb->query( $wpdb->prepare( "DELETE FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where  ( status='pending' or status='approved'  ) and ( ( payment_method <> 'Pay on arrival' and payment_method <> 'Bank transfer' ) or payment_method IS NULL ) and expiration_time <> 0 and expiration_time < %d and id=" . $app_id, $time ) );
+                        $wpdb->query( $wpdb->prepare( "DELETE FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where  ( status='cancelled' ) and ( ( payment_method <> 'Pay on arrival' and payment_method <> 'Bank transfer' ) or payment_method IS NULL ) and expiration_time <> 0 and expiration_time < %d and id=" . $app_id, $time ) );
                         $noifications->sendOnCancelCustomer();
                         $noifications->sendOnCancel();
                         switch_to_locale( $current_locale );
@@ -1337,7 +1340,7 @@ class WBK_Db_Utils
         $current_category = self::getCurrentCateogryByAppointmentId( $appointment->getId() );
         $timezone_to_use = new DateTimeZone( date_default_timezone_get() );
         $this_tz = new DateTimeZone( date_default_timezone_get() );
-        $date = ( new DateTime( '@' . $appointment->getDay() ) )->setTimezone( new DateTimeZone( date_default_timezone_get() ) );
+        $date = ( new DateTime( '@' . $appointment->getTime() ) )->setTimezone( new DateTimeZone( date_default_timezone_get() ) );
         $now = new DateTime( 'now', $this_tz );
         $offset_sign = $this_tz->getOffset( $date );
         
@@ -1617,6 +1620,21 @@ class WBK_Db_Utils
         
         }
         
+        $booking = new WBK_Booking( $appointment->getId() );
+        
+        if ( !is_null( $booking->get( 'zoom_meeting_url' ) ) && $booking->get( 'zoom_meeting_url' ) != '' ) {
+            $zoom_url = '<a href="' . esc_attr( $booking->get( 'zoom_meeting_url' ) ) . '" target="_blank" rel="noopener">' . esc_html( get_option( 'wbk_zoom_link_text', 'Click here to open your meeting in Zoom' ) ) . '</a>';
+            $zoom_pass = $booking->get( 'zoom_meeting_pwd' );
+            $zoom_meeting_id = $booking->get( 'zoom_meeting_id' );
+        } else {
+            $zoom_url = '';
+            $zoom_pass = '';
+            $zoom_meeting_id = '';
+        }
+        
+        $message = str_replace( '#zoom_url', $zoom_url, $message );
+        $message = str_replace( '#zoom_pass', $zoom_pass, $message );
+        $message = str_replace( '#zoom_meeting_id', $zoom_meeting_id, $message );
         $message = str_replace( '#attachment', $attachment, $message );
         $message = str_replace( '#coupon', $coupon_name, $message );
         $message = str_replace( '#service_description', $service->getDescription(), $message );
@@ -1653,7 +1671,7 @@ class WBK_Db_Utils
         
         $message = str_replace( '#duration', $service->getDuration(), $message );
         $message = str_replace( '#customer_name', $appointment->getName(), $message );
-        $message = str_replace( '#appointment_day', wp_date( $date_format, $appointment->getDay(), $timezone_to_use ), $message );
+        $message = str_replace( '#appointment_day', wp_date( $date_format, $appointment->getTime(), $timezone_to_use ), $message );
         $message = str_replace( '#appointment_time', wp_date( $time_format, $appointment->getTime(), $timezone_to_use ), $message );
         $message = str_replace( '#appointment_local_time', wp_date( $time_format, $appointment->getLocalTime(), $timezone_to_use ), $message );
         $message = str_replace( '#appointment_local_date', wp_date( $date_format, $appointment->getLocalTime(), $timezone_to_use ), $message );
@@ -2561,7 +2579,7 @@ class WBK_Db_Utils
     {
         global  $wpdb ;
         $count = $wpdb->get_var( $wpdb->prepare(
-            " SELECT COUNT(*) FROM " . get_option( 'wbk_db_prefix', '' ) . " wbk_appointments WHERE email=%s and service_id=%d and time > %d",
+            " SELECT COUNT(*) FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE email=%s and service_id=%d and time > %d",
             $email,
             $service_id,
             time()
@@ -2794,7 +2812,7 @@ class WBK_Db_Utils
     static function getAppointmentCreatedOn( $appointment_id )
     {
         global  $wpdb ;
-        $value = $wpdb->get_var( $wpdb->prepare( "\r\n\t\t\tSELECT      created_on\r\n\t\t\tFROM        " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments\r\n \t\t\tWHERE       id = %d", $appointment_id ) );
+        $value = $wpdb->get_var( $wpdb->prepare( "\n\t\t\tSELECT      created_on\n\t\t\tFROM        " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments\n \t\t\tWHERE       id = %d", $appointment_id ) );
         return $value;
     }
     
@@ -2932,7 +2950,7 @@ class WBK_Db_Utils
     static function getAppointmentsByServiceAndTime( $service_id, $time )
     {
         global  $wpdb ;
-        $app_ids = $wpdb->get_col( $wpdb->prepare( "\r\n\t\t\tSELECT      id\r\n\t\t\tFROM        " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments\r\n \t\t\tWHERE       service_id = %d\r\n\t\t\tAND \t\ttime  = %d\r\n\t\t\t", $service_id, $time ) );
+        $app_ids = $wpdb->get_col( $wpdb->prepare( "\n\t\t\tSELECT      id\n\t\t\tFROM        " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments\n \t\t\tWHERE       service_id = %d\n\t\t\tAND \t\ttime  = %d\n\t\t\t", $service_id, $time ) );
         return $app_ids;
     }
     
@@ -3042,7 +3060,7 @@ class WBK_Db_Utils
         if ( count( $arrIds ) == 0 ) {
             return 0;
         }
-        $appts_on_day = $wpdb->get_var( $wpdb->prepare( "SELECT count(*) as cnt\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t where service_id in (" . implode( ',', $arrIds ) . ")  AND day = %d", $day ) );
+        $appts_on_day = $wpdb->get_var( $wpdb->prepare( "SELECT count(*) as cnt\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t where service_id in (" . implode( ',', $arrIds ) . ")  AND day = %d", $day ) );
         return $appts_on_day;
     }
     

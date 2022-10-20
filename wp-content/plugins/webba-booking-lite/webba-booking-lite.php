@@ -3,8 +3,8 @@
 /**
 * Plugin Name: Webba Booking
 * Plugin URI: https://webba-booking.com
-* Description: Responsive appointment and reservation plugin.
-* Version: 4.2.23
+* Description: Webba Booking is a powerful and easy-to-use WordPress booking plugin made to create, manage and accept online bookings with ease, through a modern and user-friendly booking interface.
+* Version: 4.2.30.4
 * Author: WebbaPlugins
 * Text Domain: wbk
 * Author URI: https://webba-booking.com
@@ -13,6 +13,12 @@
 if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
+
+if ( version_compare( PHP_VERSION, '7.2.5' ) >= 0 ) {
+} else {
+    return;
+}
+
 // added for the capabilities with the old versions of WordPress
 if ( !function_exists( 'wp_date' ) ) {
     function wp_date( $format, $timestamp, $timezone )
@@ -66,7 +72,7 @@ if ( !defined( 'WP_WEBBA_BOOKING__PLUGIN_DIR' ) ) {
 }
 
 if ( !defined( 'WP_WEBBA_BOOKING__VERSION' ) ) {
-    define( 'WP_WEBBA_BOOKING__VERSION', '4.2.21' );
+    define( 'WP_WEBBA_BOOKING__VERSION', '4.2.29' );
 }
 
 if ( !function_exists( 'wbk_load_textdomain' ) ) {
@@ -99,6 +105,27 @@ if ( !function_exists( 'wbk_load_textdomain' ) ) {
         include 'common/ical/class_wbk_ical.php';
     } else {
         include 'common/ical/class_wbk_ical_blank.php';
+    }
+    
+    
+    if ( version_compare( PHP_VERSION, '7.4.0' ) >= 0 ) {
+        include 'includes/third-parties/class_wbk_zoom.php';
+    } else {
+        include 'includes/third-parties/class_wbk_zoom_blank.php';
+    }
+    
+    add_action( 'template_redirect', 'wbk_template_redirect' );
+    function wbk_template_redirect()
+    {
+        if ( isset( $_GET['wbk_zoom_auth'] ) && isset( $_GET['code'] ) ) {
+            
+            if ( class_exists( 'WBK_Zoom' ) ) {
+                $wbk_zoom = new WBK_Zoom();
+                $wbk_zoom->generate_access_token( $_GET['code'] );
+                wp_redirect( get_admin_url( null, 'admin.php?page=wbk-options' ) );
+            }
+        
+        }
     }
     
     // Data
@@ -206,7 +233,8 @@ if ( !function_exists( 'wbk_load_textdomain' ) ) {
         'wbk-service-categories',
         'wbk-appointments',
         'wbk-coupons',
-        'wbk-pricing-rules'
+        'wbk-pricing-rules',
+        'wbk-gg-calendars'
     ),
         'wbk-common-script',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/wbk.js',

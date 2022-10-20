@@ -147,13 +147,30 @@ class Plugion{
                     element.chosen('destroy');
                     if( value == 'plugion_null' ){
                         element.chosen({width: '99%'});
+                        element.closest('.plugion_input_container').find('.plugion_deselect_all_options').click( function(){
+                            element.find('option').prop('selected', false);
+                            element.trigger('chosen:updated');
+                        });
+                        element.closest('.plugion_input_container').find('.plugion_select_all_options').click( function(){
+                            element.find('option').prop('selected', true);
+                            element.trigger('chosen:updated');
+                        });
                         return;
                     }
                     if( !Array.isArray( value ) ){
                         value = JSON.parse(value);
                     }
                     element.val(value);
+                    element.attr('data-initial-val', value );
                     element.chosen({width: '99%'});
+                    element.closest('.plugion_input_container').find('.plugion_deselect_all_options').click( function(){
+                        element.find('option').prop('selected', false);
+                        element.trigger('chosen:updated');
+                    });
+                    element.closest('.plugion_input_container').find('.plugion_select_all_options').click( function(){
+                        element.find('option').prop('selected', true);
+                        element.trigger('chosen:updated');
+                    });
                 } else {
                     element.niceSelect('destroy');
                     element.val(value);
@@ -206,7 +223,7 @@ class Plugion{
                     timepicker.pickatime('picker').set('select', [date1.getUTCHours(), date1.getUTCMinutes()]);
                 }
             },
-            date: function(element, value) {                 
+            date: function(element, value) {
                 var datepicker = element.pickadate({
                     firstDay: 1,
                     format: element.attr('data-dateformat'),
@@ -231,9 +248,9 @@ class Plugion{
                 }
                 element.val(value);
                 var seconds = 0;
-                if( jQuery('.plugion_accordion').length > 0 ){
-                    seconds = 300;
-                }
+                //if( jQuery('.plugion_accordion').length > 0 ){
+                //    seconds = 300;
+                //}
                 setTimeout(
                     function(){
                         wp.editor.initialize( element.attr('id'), {
@@ -597,10 +614,11 @@ class Plugion{
         }
 
         // initialize accordion
-        jQuery('.plugion_accordion').accordion({
-            'transitionSpeed': 200,
-            'singleOpen': false
-        });
+        // jQuery('.plugion_accordion').accordion({
+        //    'transitionSpeed': 200,
+        //    'singleOpen': false
+        // });
+        //
         jQuery(document).trigger('plugion_properties_form_initialized');
 
     }
@@ -623,6 +641,7 @@ class Plugion{
             });
         } else{
             jQuery('.plugion_filter_input').each(function() {
+
                 get_this().set_field_value( jQuery(this), '');
             });
         }
@@ -664,8 +683,8 @@ class Plugion{
             jQuery('#plugion_properties_discard').fadeIn('slow', function() {
                 jQuery(this).removeClass('plugion_hidden');
             });
-        });
-        jQuery(document).trigger('plugion_after_dependency_initialized' );
+        });     
+        jQuery(document).trigger('plugion_after_dependency_initialized');
     }
 
     apply_dependency(elem) {
@@ -1124,9 +1143,10 @@ class Plugion{
         const get_this = () => { return this };
         if (typeof elem.attr('data-setter') !== 'undefined') {
             get_this().field_setters[elem.attr('data-setter')](elem, value);
+
         } else {
             elem.val(value);
-        }
+         }
         jQuery(document).trigger('plugion_input_set', [elem, value] );
     }
 

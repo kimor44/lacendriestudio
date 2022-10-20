@@ -222,6 +222,12 @@ function wbk_woocommerce_payment_complete( $order_id )
         WBK_Db_Utils::setPaymentMethodToAppointment( $appointment_id, '<a target="_blank" href="' . get_admin_url() . 'post.php?post=' . $order_id . '&action=edit">#' . $order_id . '</a>' );
         $prev_time_zone = date_default_timezone_get();
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+        
+        if ( get_option( 'wbk_zoom_when_add', 'onbooking' ) == 'onpaymentorapproval' ) {
+            $wbk_zoom = new WBK_Zoom();
+            $wbk_zoom->add_meeting( $appointment_id );
+        }
+        
         if ( get_option( 'wbk_gg_when_add', 'onbooking' ) == 'onpaymentorapproval' ) {
             
             if ( !WBK_Db_Utils::idEventAddedToGoogle( $appointment_id ) ) {

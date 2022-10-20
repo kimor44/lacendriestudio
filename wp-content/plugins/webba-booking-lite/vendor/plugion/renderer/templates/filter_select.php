@@ -25,6 +25,6 @@ $filter_extra = $field->get_filter_extra();
         $i++;
     }
 ?>
-    </select>
+</select>
     <label for="<?php echo $slug ?>" name="<?php echo $slug ?>" class="plugion_input_select_label"><?php echo $field->get_title() ?></label>
 </div>

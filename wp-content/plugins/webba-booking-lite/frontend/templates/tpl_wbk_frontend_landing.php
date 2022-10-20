@@ -154,6 +154,8 @@ if ( get_option( 'wbk_allow_manage_by_link', 'no' ) == 'yes' ) {
                 if ( !$appointment->load() ) {
                     $valid = false;
                 }
+                $wbk_zoom = new WBK_Zoom();
+                $wbk_zoom->delete_meeting( $appointment_id );
                 WBK_Db_Utils::deleteAppointmentDataAtGGCelendar( $appointment_id );
                 WBK_Db_Utils::copyAppointmentToCancelled( $appointment_id, __( 'Service administrator', 'wbk' ) );
                 $service_id = WBK_Db_Utils::getServiceIdByAppointmentId( $appointment_id );
@@ -242,6 +244,12 @@ if ( get_option( 'wbk_allow_manage_by_link', 'no' ) == 'yes' ) {
                 }
                 $valid = true;
                 $service_id = WBK_Db_Utils::getServiceIdByAppointmentId( $appointment_id );
+                
+                if ( get_option( 'wbk_zoom_when_add', 'onbooking' ) == 'onpaymentorapproval' ) {
+                    $wbk_zoom = new WBK_Zoom();
+                    $wbk_zoom->add_meeting( $appointment_id );
+                }
+                
                 
                 if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' && get_option( 'wbk_email_customer_book_multiple_mode', 'foreach' ) == 'foreach' || get_option( 'wbk_multi_booking', 'disabled' ) == 'disabled' ) {
                     $noifications = new WBK_Email_Notifications( $service_id, $appointment_id );

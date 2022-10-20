@@ -21,7 +21,7 @@ include 'utils/class-validator.php';
 include 'utils/class-plugion-custom-field.php';
 include 'utils/class-plugion-translator.php';
 
-define( 'PLUGION_VERSION', '0.88' );
+define( 'PLUGION_VERSION', '0.89' );
 
 final class Plugion {
     /**

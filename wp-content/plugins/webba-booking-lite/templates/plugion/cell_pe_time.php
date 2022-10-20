@@ -38,30 +38,10 @@ if ( isset( $field->get_extra_data()['time_zone'] ) ) {
     $time_zone =  get_option('timezone_string');
 }
 
-$timezone_to_use =  new DateTimeZone( $time_zone );
-$this_tz = new DateTimeZone( $time_zone );
-$date = ( new DateTime('@' . $day ) )->setTimezone(new DateTimeZone( $time_zone ) );
-$now = new DateTime('now', $this_tz);
-$offset_sign = $this_tz->getOffset($date);
-if ($offset_sign > 0) {
-    $sign = '+';
-} else {
-    $sign = '-';
-}
-$offset_rounded =  abs($offset_sign / 3600);
-$offset_int = floor($offset_rounded);
-if (($offset_rounded - $offset_int) == 0.5) {
-    $offset_fractional = ':30';
-} else {
-    $offset_fractional = '';
-}
-$timezone_utc_string = $sign . $offset_int . $offset_fractional;
-$timezone_to_use =  new DateTimeZone($timezone_utc_string);
-$timezone_to_use_end = $timezone_to_use;
+$timezone_to_use = WBK_Time_Math_Utils::get_utc_offset_by_time( $value );
 
 $time = wp_date( $time_format, $value, $timezone_to_use );
 if( get_option( 'wbk_date_format_time_slot_schedule', 'start' ) == 'start-end' && $end != 0){
     $time .= ' - ' . wp_date( $time_format, $end, $timezone_to_use );
-
 }
 echo $time;

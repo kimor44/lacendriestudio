@@ -100,6 +100,8 @@ class Plugion_Translator {
         $this->strings['Are you sure?'] = __( 'Are you sure?', 'plugion' );
         $this->strings['Yes, delete it.'] = __( 'Yes, delete it.', 'plugion' );
         $this->strings['select option'] = __( 'select option', 'plugion' );
+        $this->strings['select all'] = __( 'select all', 'plugion' );
+        $this->strings['deselect all'] = __( 'deselect all', 'plugion' );
 
         $this->strings = apply_filters( 'plugion_strings', $this->strings );
     }

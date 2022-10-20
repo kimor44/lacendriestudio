@@ -797,3 +797,11 @@ table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child::before
 .hide_element {
     display: none;
 }
+.plugion_element_sublink, .plugion_element_sublink:focus {
+    display: inline-block;
+    margin-bottom: 10px;
+    margin-right: 5px;
+    color: #002838;
+    outline: 0 !important;
+    box-shadow: none !important;
+}

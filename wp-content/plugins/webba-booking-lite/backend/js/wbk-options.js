@@ -56,4 +56,12 @@ jQuery(function ($) {
     jQuery(document).on('input',function(){
         wbk_init_dependencies()
     });
+
+    jQuery('.wbk_zoom_remove_auth').click( function(){
+        jQuery('#wbk_zoom_auth_stat').val('');
+        jQuery(this).replaceWith('Please, do not forget to save settings.');
+        jQuery('.wbk_zoom_authorized_label').remove();
+
+    });
+
 });

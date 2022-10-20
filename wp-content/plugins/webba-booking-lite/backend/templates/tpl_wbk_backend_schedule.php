@@ -99,11 +99,14 @@
 		 		$html .= '<a class="button ml5 wbk-shedule-tools-btn" id="auto_unlock_timeslot" >' .  __( 'Time slot auto unlock', 'wbk' )   . '</a>';
 				$html .= '<a class="button ml5 wbk-shedule-tools-btn" id="create_multiple_bookings" >' .  __( 'Create multiple bookings', 'wbk' )   . '</a>';
 		 	}
+		$html = apply_filters( 'wbk_backend_schedule_tools_buttons', $html );
 		$html .= '</div>';
 		echo $html;
+
 	?>
 	<div id="days_container">
 	</div>
+	<?php do_action('wbk_backend_schedule_days_container'); ?>
 	<div id="control_container">
 	</div>
 </div>

@@ -1180,7 +1180,10 @@ class WBK_Ajax_Controller
         foreach ( $appointment_ids as $booking_id ) {
             $amount = WBK_Price_Processor::calculate_single_booking_price( $booking_id, $appointment_ids );
             WBK_Model_Utils::set_amount_for_booking( $booking_id, $amount['price'], json_encode( $amount['price_details'] ) );
-            // *** GG ADD
+            // Zoom add
+            if ( get_option( 'wbk_zoom_when_add', 'onbooking' ) == 'onbooking' ) {
+            }
+            //  GG ADD
             if ( get_option( 'wbk_gg_when_add', 'onbooking' ) == 'onbooking' ) {
             }
         }
@@ -1581,6 +1584,8 @@ class WBK_Ajax_Controller
                 $noifications->prepareOnCancelCustomer( true );
             }
             do_action( 'webba_before_cancel_booking', $appointment_id );
+            $wbk_zoom = new WBK_Zoom();
+            $wbk_zoom->delete_meeting( $appointment_id );
             
             if ( WBK_Db_Utils::deleteAppointmentByEmailTokenPair( $email, $arr_tokens[$i] ) == true ) {
                 if ( $admin_notification_mode == 'foreach' ) {

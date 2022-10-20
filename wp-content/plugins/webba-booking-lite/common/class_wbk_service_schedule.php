@@ -261,8 +261,22 @@ class WBK_Service_Schedule
             
             
             if ( $timeslot->getStatus() == -2 || in_array( $timeslot->getStart(), $this->locked_timeslots ) && !is_array( $timeslot->getStatus() ) ) {
+                $time_controls = '';
+                $remained_ids = WBK_Db_Utils::getAppointmentsByServiceAndTime( $this->service_id, $timeslot->getStart() );
+                if ( count( $remained_ids ) ) {
+                    foreach ( $remained_ids as $this_id ) {
+                        $appointment = new WBK_Appointment_deprecated();
+                        if ( !$appointment->setId( $this_id ) ) {
+                            continue;
+                        }
+                        if ( !$appointment->load() ) {
+                            continue;
+                        }
+                        $time_controls .= '<a class="wbk-appointment-backend" id="wbk_appointment_' . $this_id . '_' . $this->service_id . '_1" >' . $appointment->getName() . ' (' . $appointment->getQuantity() . ')' . '</a> ';
+                    }
+                }
                 $status_class = 'red_font';
-                $time_controls = '<a class="red_font" id="time_unlock_' . $this->service_id . '_' . $timeslot->getStart() . '"><span class="dashicons dashicons-lock"></span></a></a>';
+                $time_controls .= '<a class="red_font" id="time_unlock_' . $this->service_id . '_' . $timeslot->getStart() . '"><span class="dashicons dashicons-lock"></span></a></a>';
             }
             
             
@@ -283,6 +297,12 @@ class WBK_Service_Schedule
                 }
             }
             
+            $time_controls = apply_filters(
+                'wbk_backend_schedule_time_controls',
+                $time_controls,
+                $timeslot,
+                $this->service_id
+            );
             $html .= '<div class="timeslot_container">
 						<div class="timeslot_time ' . $status_class . '">' . $time . '</div>
 						<div class="timeslot_controls">' . $time_controls . '
@@ -425,7 +445,7 @@ class WBK_Service_Schedule
     public function loadLockedDays()
     {
         global  $wpdb ;
-        $days = $wpdb->get_col( $wpdb->prepare( "\r\n\t\t\t\t\t\tSELECT day\r\n\t\t\t\t\t\tFROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_days_on_off\r\n\t\t\t\t\t\twhere service_id = %d AND status = 0\r\n\t\t\t\t\t\t", $this->service_id ) );
+        $days = $wpdb->get_col( $wpdb->prepare( "\n\t\t\t\t\t\tSELECT day\n\t\t\t\t\t\tFROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_days_on_off\n\t\t\t\t\t\twhere service_id = %d AND status = 0\n\t\t\t\t\t\t", $this->service_id ) );
         $this->locked_days = array();
         $this->locked_days = array_merge( $this->locked_days, $days );
     }
@@ -434,7 +454,7 @@ class WBK_Service_Schedule
     public function loadUnlockedDays()
     {
         global  $wpdb ;
-        $days = $wpdb->get_col( $wpdb->prepare( "\r\n\t\t\t\t\t\tSELECT day\r\n\t\t\t\t\t\tFROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_days_on_off\r\n\t\t\t\t\t\twhere service_id = %d AND status = 1\r\n\t\t\t\t\t\t", $this->service_id ) );
+        $days = $wpdb->get_col( $wpdb->prepare( "\n\t\t\t\t\t\tSELECT day\n\t\t\t\t\t\tFROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_days_on_off\n\t\t\t\t\t\twhere service_id = %d AND status = 1\n\t\t\t\t\t\t", $this->service_id ) );
         $this->unlocked_days = array();
         $this->unlocked_days = array_merge( $this->unlocked_days, $days );
     }
@@ -443,7 +463,7 @@ class WBK_Service_Schedule
     public function loadLockedTimeSlots()
     {
         global  $wpdb ;
-        $timeslots = $wpdb->get_col( $wpdb->prepare( "\r\n\t\t\t\t\t\tSELECT time\r\n\t\t\t\t\t\tFROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_locked_time_slots\r\n\t\t\t\t\t\twhere service_id = %d", $this->service_id ) );
+        $timeslots = $wpdb->get_col( $wpdb->prepare( "\n\t\t\t\t\t\tSELECT time\n\t\t\t\t\t\tFROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_locked_time_slots\n\t\t\t\t\t\twhere service_id = %d", $this->service_id ) );
         $this->locked_timeslots = array();
         $this->locked_timeslots = array_merge( $this->locked_timeslots, $timeslots );
     }
@@ -527,7 +547,7 @@ class WBK_Service_Schedule
     public function loadAppointmentsDay( $day )
     {
         global  $wpdb ;
-        $db_arr = $wpdb->get_results( $wpdb->prepare( "\r\n\t\t\t\t\t\t\t\t\t\t\t\t\tSELECT *\r\n\t\t\t\t\t\t\t\t\t\t\t\t\tFROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments\r\n\t\t\t\t\t\t\t\t\t\t\t\t\twhere service_id = %d AND day = %d\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t", $this->service_id, $day ) );
+        $db_arr = $wpdb->get_results( $wpdb->prepare( "\n\t\t\t\t\t\t\t\t\t\t\t\t\tSELECT *\n\t\t\t\t\t\t\t\t\t\t\t\t\tFROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments\n\t\t\t\t\t\t\t\t\t\t\t\t\twhere service_id = %d AND day = %d\n\t\t\t\t\t\t\t\t\t\t\t\t\t", $this->service_id, $day ) );
         $this->appointments = array();
         if ( count( $db_arr ) == 0 ) {
             return 0;
@@ -857,8 +877,17 @@ class WBK_Service_Schedule
                         }
                         
                         if ( $timeslot_format == 'detailed' ) {
-                            $slot_html = '<div class="wbk-slot-time">' . $time . '</div>
-											<input data-start="' . $timeslot->getStart() . '" data-service="' . $this->service->getId() . '" type="button" value="' . $slot_button . '" class="wbk-slot-button wbk-slot-booked" />';
+                            
+                            if ( $this->service->getQuantity() == 1 ) {
+                                $slot_html = '<div class="wbk-slot-time">' . $time . '</div>
+								<input data-start="' . $timeslot->getStart() . '" data-service="' . $this->service->getId() . '" type="button" value="' . $slot_button . '" class="wbk-slot-button wbk-slot-booked" />';
+                            } else {
+                                $available_lablel = get_option( 'wbk_time_slot_available_text', __( 'available', 'wbk' ) );
+                                $available_html = '<div class="wbk-slot-available"><span class="wbk-abailable-container">0</span> ' . $available_lablel . '</div>';
+                                $slot_html = '<div class="wbk-slot-time">' . $time . '</div>' . $available_html . '
+								<input data-start="' . $timeslot->getStart() . '" data-service="' . $this->service->getId() . '" type="button" value="' . $slot_button . '" class="wbk-slot-button wbk-slot-booked" />';
+                            }
+                        
                         } else {
                             $slot_html = '<input  data-start="' . $timeslot->getStart() . '" data-service="' . $this->service->getId() . '"  type="button" value="' . $slot_button . '" class="wbk-slot-button wbk-slot-booked" />';
                         }
@@ -996,7 +1025,7 @@ class WBK_Service_Schedule
         
         if ( get_option( 'wbk_mode_overlapping_availabiliy', 'true' ) == 'true' ) {
             $booked = $wpdb->get_var( $wpdb->prepare(
-                "SELECT sum(quantity) FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE ( service_id = %d AND  time = %d ) ||\r\n\t\t\t\t( service_id = %d AND  ( time < %d AND ( time + %d ) > %d)  ) ||\r\n\t\t\t\t( service_id = %d AND  ( time > %d AND time < ( %d + %d ) ) )",
+                "SELECT sum(quantity) FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE ( service_id = %d AND  time = %d ) ||\n\t\t\t\t( service_id = %d AND  ( time < %d AND ( time + %d ) > %d)  ) ||\n\t\t\t\t( service_id = %d AND  ( time > %d AND time < ( %d + %d ) ) )",
                 $this->service_id,
                 $time,
                 $this->service_id,
@@ -1174,7 +1203,7 @@ class WBK_Service_Schedule
             
             if ( is_array( $timeslot->getStatus() ) ) {
                 $available = $this->getAvailableCount( $timeslot->getStart() );
-                if ( $available > 0 ) {
+                if ( $available >= $this->service->getMinQuantity() ) {
                     return true;
                 }
             }

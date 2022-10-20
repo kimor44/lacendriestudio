@@ -1,111 +1,72 @@
-=== Webba Booking ===
+=== Webba Booking: Appointment & Event Booking Calendar Plugin ===
 Contributors: Webba agency, freemius
 Donate link: https://webba-booking.com/
 Tags: appointment, booking, calendar, reservation
 Requires at least: 5.6
-Tested up to: 5.9.3
-Stable tag: 4.2.23
-Requires PHP: 5.6
+Tested up to: 6.0.3
+Stable tag: 4.2.30.4
+Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
-Webba Booking is a powerful and easy to use WordPress appointment and reservation plugin. Fully responsive, multi-service and flexible.
+
 == Description ==
 
-Webba Booking is a powerful and easy to use [WordPress booking plugin](https://webba-booking.com/) especially thought for Service Providers to optimize their time and for the comfort of their customers.
+Webba Booking is a flexible and feature-rich plugin while still being lightweight and easy to use. Here are some of the features that make Webba Booking the most complete booking solution for WordPress
 
-[Demo](https://webba-booking.com/demo/)
-[Documentation](https://webba-booking.com/documentation/)
+[HOMEPAGE](https://webba-booking.com/) | [DEMOS](https://webba-booking.com/demo/)  | [FEATURES](https://webba-booking.com/features/)| [DOCUMENTATION](https://webba-booking.com/documentation/)
 
-== Areas of usage ==
+== FEATURES ==
 
-* **Specialist booking** (personal trainer booking, consultant booking, lawyer booking, wedding coordinators, contractor booking, therapist booking, tutor booking, photographer booking, dance instructors booking, coach booking, any other specialist who needs appointment booking)
-* **Wellness and beauty booking** (beauty salon booking, nail salon booking, hair salon booking, cosmetologist booking, hairdresser booking, barbershop booking, manicurist booking, SPA booking, swimming pool booking, massage booking)
-* **Activities booking** (event booking, ticket booking, tour scheduling, golf booking, games booking, quest rooms booking, escape room booking, gym booking, fitness booking)
-* **Medical booking system** (doctor booking, dentist booking, clinic booking system and other ares related to medicine)
-* **Restaurant booking** (table reservation, dining booking, private room reservation)
-* **Equipment and transport rental** (car rental system, bike rental, boat rental, yacht booking, technics booking, any other kind of hourly rental)
-* **Education and lessons booking** (language school booking system, facility booking, language lessons booking, private tutor booking, driving school lessons booking, private teachers booking, school booking, classroom booking, seminar booking)
-* **Service booking** (car service booking, cleaning booking, repairment booking)
+* **Extensive Booking Features:** A wide array of features like group booking and chain booking, pricing rules, service grouping, and others to give you full control of the booking process.
+* **Customizable Booking Forms:** custom forms with unlimited services, business hours and custom form fields to gather all the information you need.
+* **Full Appearance Customization:** 80+ appearance customization options, 79 design presets, editable frontend text and fully responsive design.
+* **Payment Processing:** Secure online payment integrations with Paypal, Stripe, or Woocommerce (with its 100+ gateways).
+* **Notifications & Reminders:** Fully customizable E-mail and SMS notifications and reminders.
+* **Powerful Integrations:** Integrations with Woocommerce, Google Calendar (2-Ways), Paypal, Stripe.
+* **Translation Friendly:** Built-in translations and WPML compatibility.
 
-== Features ==
+Explore the full list of [Webba Booking features](https://webba-booking.com/features/)
 
-= Booking (front-end) =
+== AREAS OF USAGE ==
 
-* 80+ options for appearance customization
-* 79 design presets
-* Editable front-end texts
-* Fully responsive plugin
-* Fully translatable and multilingual (WPML compatibility) plugin
-* Unlimited custom fields with CF7 integration
-* Basic mode for fast and simple booking process
-* Extended mode for advanced time search
-* Editable date and time format
-* Users local time in time slots
-* Form for one or multiple services
-* Group services by categories
-* One or multiple bookings per time slot
-* Hidden or visible (with option to add users data) booked time slots
-* Mask input control for phone numbers
-* Option to hide fom after booking
-* Option to do a unique booking form for each Service
-* Redirection after booking with javascript API
-* Different time slot formats for short or extended presentation
-* Single or multiple bookings in one session
-* Option to limit appointments count in multiple mode
-* Option to skip time selection (default time)
-* Option to skip date selection (default date)
-* Option to control count of applicants required for booking
-* Popup or dropdown date inputs
-* Cancellation of appointment by user without registration
-* Buffer option to prevent cancellation just before the appointment time
+Webba Booking is perfect for small businesses, hotels, vacation rentals, spas, salons, and more. If you need to take any kind of appointments or bookings, this plugin is for you. Here are some of the areas where Webba Booking can be used:
 
-= Administration =
+* **Specialist booking**: personal trainer booking, consultant booking, lawyer booking, wedding coordinators, contractor booking, therapist booking, tutor booking, photographer booking, dance instructors booking, coach booking, any other specialist who needs appointment booking
+* **Wellness and beauty booking**: beauty salon booking, nail salon booking, hair salon booking, cosmetologist booking, hairdresser booking, barbershop booking, manicurist booking, SPA booking, swimming pool booking, massage booking
+* **Activities booking**: event booking, ticket booking, tour scheduling, golf booking, games booking, quest rooms booking, escape room booking, gym booking, fitness booking
+* **Medical booking system**: doctor booking, dentist booking, clinic booking system and other ares related to medicine
+* **Restaurant booking**: table reservation, dining booking, private room reservation
+* **Equipment and transport rental**: car rental system, bike rental, boat rental, yacht booking, technics booking, any other kind of hourly rental
+* **Education and lessons booking**: language school booking system, facility booking, language lessons booking, private tutor booking, driving school lessons booking, private teachers booking, school booking, classroom booking, seminar booking
+* **Service booking**: car service booking, cleaning booking, repairment booking
 
-* Manual appointments in the backend
-* Shortcode builder
-* Responsive appointments table
-* Booking form appearance preview
-* Group services by categories
-* CSV export
-* Options for sharing access to Services with other WP users
-* Options for backend customization
-* Easy translation from backend
-* Approval or cancellation of appointments with the link sent in the notification (without logging to dashboard)
+ == KEY BENEFITS ==
 
-= E-mail notifications and reminders =
+Webba Booking makes appointment scheduling and online bookings easy and painless for both business owners and their customers. Here's how:
 
-* Email notification to the user on booking
-* Email notification to the administrator on booking
-* Email notification to the user when the administrator approves the appointment
-* Email notification to the administrator when the customer cancels the appointment
-* Email notification to the user when administrator cancels the appointment
-* Email notification to other users added in the booking form (invitation)
-* Appointment reminder (date to be defined)
-* Administrator’s agenda for the next day
-* Invoice (sent to user on booking or on approval)
-* Any notification on booking, invoice and reminder sent to a user can be unique for each Service
-* All messages and subjects fully editable
-* Opportunity to add images in the notifications
-* Full compatibility with the popular SMTP plugins
+* **Flexible Scheduling:** Fully customizable scheduling options with unlimited services, business hours and calendars.
+* **Simple Administration:** Straightforward but feature-filled administration in the backend.
+* **Easy set-up and configuration:** Booking form integration with shortcodes easily integrated with popular page builders like Elementor, Divi, or Gutenberg blocks
+* **No coding required:** No need to touch a single line of code. Everything can be done from the backend.
+* **Professional Design:** Clean and modern design that looks great on all devices.
+* **Extensive Documentation:** Comprehensive documentation to guide your tough the setup and all the features.
+* **Free version available:** Most features are available in the free version. The Premium version is a great upgrade if you need more features and flexibility.
+* **Great support**: Quick and helpful support if you should ever need it.
 
 
-== Pro version features ==
+== PREMIUM VERSION FEATURES ==
 
-* Payments with PayPal
-* Payments with Stripe
+Want to take your business to the next level? Check out our Premium version with even more features:
+* Payments with PayPal and Stripe
 * Coupons
 * Export to CSV
 * Integration with WooCommerce
-* 2-ways synchronization wit the Google calendar
+* 2-ways synchronization with the Google calendar
 * iCal attachments
 * SMS notifications and reminders
 
+Get [Webba Booking Premium](https://webba-booking.com/pricing/)
 
-
-**Minimum Requirements**
-WordPress 3.9 or greater
-PHP version 5.6 or greater
-MySQL version 5.0 or greater
 
 == Installation ==
 
@@ -164,22 +125,92 @@ Add a booking form to a website page using one of the [available shortcodes](htt
 
 == Frequently Asked Questions ==
 
-**How can I embed the booking form into a post/page?**
-Just find the button Webba Booking form above content editor for a post or a page.
+**Can I see how Webba Booking works before installation?**
+Yes! Check out our [online demos](https://webba-booking.com/demo/) to see how the frontend and backend of Webba Booking works.
 
-== Upgrade Notice ==
+**Does Webba Booking offer payment integrations?**
+Yes, [Webba Booking Premium](https://webba-booking.com/pricing/) offers integrations with Paypal, Stripe, and Woocommerce (with its 100+ gateways) to provide secure online payment options for your customers.
 
-= 4.2.22  =
-Security update. Due to security reason we removed opportunity of using certain HTML tags in some frontend texts. We recommend doing a test booking after the update.
+You can preview how these integrations work in the following demos: [PayPal integration](https://webba-booking.com/demo/paypal-integration-demo/), [Stripe integration](https://webba-booking.com/demo/stripe-integration-demo/) and [Woocommerce integrations](https://woo.webbademo.tech/).
+
+**Is Webba Booking compatible with my theme and/or page builder?**
+Yes, Webba Booking is compatible with most themes and page builders (Elementor, Divi, Gutenberg). In case of any conflicts, our support team will be happy to help you out.
+
+**How can I contact Webba Booking support?**
+Visit our WordPress plugin [support forum](https://wordpress.org/support/plugin/webba-booking-lite/) or send us a message on our [website's contact form](https://webba-booking.com/contact-us/). Our team will be happy to answer any of your questions!
 
 
 == Changelog ==
 
+4.2.30.4
+
+19/10/2022
+
+* Bugfix: minor bug fix
+
+4.2.30.3
+
+17/10/2022
+
+* Bugfix: bugs on the Schedule page
+
+4.2.30.2
+
+17/10/2022
+
+* Bugfix: wrong time on the Appointments page on certain configurations
+* Bugfix: bookings not shown on the Schedule page if the timeslot is locked
+
+4.2.30.1
+
+10/10/2022
+
+* Improvements: PDF attachments for 'on booking' notifications
+* Bugfix: bug on the services page on certain configurations
+
+4.2.30
+
+23/09/2022
+
+* Bugfix: bug with the CSV export
+
+4.2.29
+
+18/09/2022
+
+* Improvements: reply-to headers in the configuration improved
+* Improvements: ability to set number of days prior sending SMS reminder
+* Improvements: integration with Zoom
+* Bugfix: wrong time in the invoices sent on approval
+* Bugfix: issue with performance on websites with large number of users
+* Bugfix: bug with the service name placeholder when adding multi-service events to the google calendar
+
+4.2.27
+
+29/06/2022
+
+* Bugfix: minor bugfix
+
+4.2.26
+
+20/06/2022
+
+* Bugfix: bug with the option 'Maximum number of bookings at a specific time'
+
+4.2.25
+
+24/05/2022
+
+* Improvements: service filter interface improved
+* Improvements: automatic cancellation improved
+* Bugfix: bug with status of time slots on the Schedule page
+* Bugfix: bug with the availability of dates in the calendar on certain configurations
+
 21/04/2022
 
-4.2.23
+4.2.24
 
-* Bugfix: minor bugs fixed
+* Bugfix: Important bug fix
 
 15/04/2022
 

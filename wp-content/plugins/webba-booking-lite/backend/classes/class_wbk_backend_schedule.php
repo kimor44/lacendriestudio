@@ -184,6 +184,7 @@ class WBK_Backend_Schedule extends WBK_Backend_Component
                 $day_to_render,
                 false,
                 false,
+                true,
                 true
             );
             
@@ -661,6 +662,8 @@ class WBK_Backend_Schedule extends WBK_Backend_Component
         }
         
         $noifications->sendOnCancelCustomer();
+        $wbk_zoom = new WBK_Zoom();
+        $wbk_zoom->delete_meeting( $appointment_id );
         WBK_Db_Utils::freeLockedTimeSlot( $appointment_id );
         $service_schedule = new WBK_Service_Schedule();
         $service_schedule->setServiceId( $service_id );

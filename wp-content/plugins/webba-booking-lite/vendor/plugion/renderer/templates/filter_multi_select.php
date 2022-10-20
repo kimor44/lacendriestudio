@@ -31,4 +31,6 @@ $filter_extra = $field->get_filter_extra();
 ?>
     </select>
     <label for="<?php echo $slug ?>" name="<?php echo $slug ?>" class="plugion_input_select_label"><?php echo $field->get_title() ?></label>
+    <a href="#" class="plugion_element_sublink plugion_select_all_options"><?php echo plugion_translate_string('select all');  ?></a>
+    <a href="#" class="plugion_element_sublink plugion_deselect_all_options"><?php echo plugion_translate_string('deselect all');  ?></a>
 </div>

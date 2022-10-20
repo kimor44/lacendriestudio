@@ -21,16 +21,13 @@ class WBK_Time_Math_Utils {
 		return false;
 	}
 	public static function adjust_times( $time_1, $time_2, $time_zone ){
-		$tz = new DateTimeZone( $time_zone );
-		$transition = $tz->getTransitions( $time_1, $time_1 );
-		$offset1 = $transition[0]['offset'];
-		$transition = $tz->getTransitions( $time_1 + $time_2, $time_1 + $time_2 );
-		$offset2 = $transition[0]['offset'];
-		$difference = $offset1 - $offset2;
-		if( $difference < 0 ){
+		$offset_1 = date( 'Z', $time_1 );
+		$offset_2 = date( 'Z', $time_1 + $time_2 );
+		$difference = $offset_1 - $offset_2;
+ 		if( $difference < 0 ){
 			$difference = 0;
 		}
- 		return $time_1 + $time_2 + $difference;
+		return $time_1 + $time_2 + $difference;
 	}
 	public static function get_offset_difference_with_midnight( $time ){
 
@@ -39,7 +36,8 @@ class WBK_Time_Math_Utils {
 		$time_midnight = strtotime( date( 'Y-m-d 00:00:00', $time ) );
 		date_default_timezone_set( $prev_time_zone );
 
-		$tz = new DateTimeZone( get_option( 'wbk_timezone', 'UTC' ) );
+		$tz = self::get_utc_offset_by_time( $time );
+		// new DateTimeZone( get_option( 'wbk_timezone', 'UTC' ) );
 		$transition = $tz->getTransitions( $time_midnight, $time_midnight );
 		$offset1 = $transition[0]['offset'];
 		$transition = $tz->getTransitions( $time, $time );
@@ -51,7 +49,7 @@ class WBK_Time_Math_Utils {
 	public static function get_utc_offset_by_time( $time ){
 		$prev_time_zone = date_default_timezone_get();
 		date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-		$date = strtotime( date( 'Y-m-d 00:00:00', $time ) );
+		$date = $time; // strtotime( date( 'Y-m-d 00:00:00', $time ) );
 		date_default_timezone_set( $prev_time_zone );
 		$time_zone =  get_option( 'wbk_timezone', 'UTC' );
 		$timezone_to_use =  new DateTimeZone( $time_zone );
@@ -73,7 +71,6 @@ class WBK_Time_Math_Utils {
 		}
 		$timezone_utc_string = $sign . $offset_int . $offset_fractional;
 		return new DateTimeZone($timezone_utc_string);
-
 	}
 
 }

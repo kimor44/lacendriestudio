@@ -246,6 +246,74 @@ WBK_jQuery_ = jQuery;
             });
 
       	}
+        build_users_fields(){
+            if( jQuery('#service_users_chosen').length == 0 && jQuery('#calendar_user_id').length == 0 ){
+                return;
+            }
+            var data = {};
+            jQuery('#service_users_chosen > ul').addClass('plugion_loader');
+            jQuery('#service_users_chosen').find('input').addClass('plugion_hidden');
+
+            var option_0 = jQuery( '#calendar_user_id' ).html();
+            jQuery('#calendar_user_id').html('');
+            jQuery('#calendar_user_id').addClass('plugion_loader');
+            jQuery('#calendar_user_id').niceSelect('update');
+
+            jQuery.ajax(plugionl10n.rest_url + 'wbk/v1/get-wp-users/', {
+                method: "POST",
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('X-WP-Nonce', plugionl10n.nonce);
+                },
+                data: data,
+                statusCode: {
+                    200: function(response) {
+                        var options_html = '';
+                        jQuery.each( response.none_admin_users, function( i, val ) {
+                            if(  val.free_places != 0 ){
+                                options_html += '<option value="' + i + '">' + val + '</option>';
+                            }
+                        });
+                        jQuery('#calendar_user_id').removeClass('plugion_loader');
+                        jQuery('#calendar_user_id').html( option_0 + options_html );
+                        jQuery('#calendar_user_id').niceSelect('update');
+
+
+                        jQuery('#service_users_chosen > ul').removeClass('plugion_loader');
+                        jQuery('#service_users_chosen').find('input').removeClass('plugion_hidden');
+                        jQuery('#service_users').html(options_html);
+
+                        if( jQuery('#service_users').length > 0 ){
+                            if( jQuery('#service_users').attr('data-initial-val') != '' ){
+                                jQuery('#service_users').val( jQuery('#service_users').attr('data-initial-val').split(',') );
+                            }
+                            jQuery('#service_users').trigger('chosen:updated');
+                        }
+                        if( jQuery('#calendar_user_id').length > 0 ){
+                            if( jQuery('#calendar_user_id').attr('data-initial-val') != '' ){
+                                jQuery('#calendar_user_id').val( jQuery('#calendar_user_id').attr('data-initial-val') );
+                                jQuery('#calendar_user_id').niceSelect('update');
+                            }
+                        }
+
+                        return;
+                    },
+                    400: function(response) {
+                        jQuery('#service_users_chosen > ul').removeClass('plugion_loader');
+                        jQuery('#service_users_chosen').find('input').removeClass('plugion_hidden');
+                        jQuery('#calendar_user_id').removeClass('plugion_loader');
+                        return;
+                    },
+                    403: function(response) {
+                        jQuery('#service_users_chosen > ul').removeClass('plugion_loader');
+                        jQuery('#service_users_chosen').find('input').removeClass('plugion_hidden');
+                        jQuery('#calendar_user_id').removeClass('plugion_loader');
+                        return;
+                    }
+
+                }
+            });
+
+        }
         build_booking_time_field(){
             if( jQuery('#appointment_time').length == 0 ){
                 return;
@@ -294,7 +362,7 @@ WBK_jQuery_ = jQuery;
                         jQuery('#appointment_time').attr('disabled', false);
                         if( jQuery('#appointment_time').attr('data-initial-val') != '' ){
                             jQuery('#appointment_time').val( jQuery('#appointment_time').attr('data-initial-val') );
-                            jQuery('#appointment_time').attr('data-initial-val', '');
+                            jQuery('#appointment_time').attr( 'data-initial-val', '' );
                         }
                         jQuery('#appointment_time').on( 'change', function(){
                             var quantity = jQuery(this).find('option:selected').attr('data-availablility');
@@ -309,7 +377,6 @@ WBK_jQuery_ = jQuery;
                                 } else {
                                     var selected = '';
                                 }
-
                                 options_html += '<option ' + selected + ' value="' + i + '">' + i + '</option>';
                             }
                             jQuery('#appointment_quantity').html(options_html);
@@ -385,6 +452,7 @@ WBK_jQuery_ = jQuery;
                     get_this().build_booking_time_field();
                 });
                 get_this().build_booking_time_field();
+                get_this().build_users_fields();
                 if( typeof( wbk_dashboardl10n ) != 'undefined' && wbk_dashboardl10n.disable_nice_select == 'true' ){
                     jQuery('.plugion_input_select').niceSelect('destroy');
                 }

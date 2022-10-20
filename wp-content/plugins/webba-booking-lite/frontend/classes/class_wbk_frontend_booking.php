@@ -237,7 +237,7 @@ class WBK_Frontend_Booking
                 'wbk-validator',
                 plugins_url( '../common/wbk-validator.js', dirname( __FILE__ ) ),
                 array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
-                '4.2.17',
+                '4.2.25',
                 $in_footer
             );
             
@@ -252,7 +252,7 @@ class WBK_Frontend_Booking
                 'wbk-frontend',
                 plugins_url( 'js/wbk-frontend.js', dirname( __FILE__ ) ),
                 array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
-                '4.2.17',
+                '4.2.25',
                 $in_footer
             );
             
@@ -261,21 +261,21 @@ class WBK_Frontend_Booking
                     'picker',
                     plugins_url( 'js/picker.js', dirname( __FILE__ ) ),
                     array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
-                    '4.2.17',
+                    '4.2.25',
                     $in_footer
                 );
                 wp_enqueue_script(
                     'picker-date',
                     plugins_url( 'js/picker.date.js', dirname( __FILE__ ) ),
                     array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
-                    '4.2.17',
+                    '4.2.25',
                     $in_footer
                 );
                 wp_enqueue_script(
                     'picker-legacy',
                     plugins_url( 'js/legacy.js', dirname( __FILE__ ) ),
                     array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
-                    '4.2.17',
+                    '4.2.25',
                     $in_footer
                 );
             }
@@ -286,26 +286,26 @@ class WBK_Frontend_Booking
                     'picker-default',
                     plugins_url( 'css/default.css', dirname( __FILE__ ) ),
                     array(),
-                    '4.2.17'
+                    '4.2.25'
                 );
                 wp_enqueue_style(
                     'picker-default-date',
                     plugins_url( 'css/default.date.css', dirname( __FILE__ ) ),
                     array(),
-                    '4.2.17'
+                    '4.2.25'
                 );
             } elseif ( get_option( 'wbk_date_input', 'popup' ) == 'classic' ) {
                 wp_enqueue_style(
                     'picker-classic',
                     plugins_url( 'css/classic.css', dirname( __FILE__ ) ),
                     array(),
-                    '4.2.17'
+                    '4.2.25'
                 );
                 wp_enqueue_style(
                     'picker-classic-date',
                     plugins_url( 'css/classic.date.css', dirname( __FILE__ ) ),
                     array(),
-                    '4.2.17'
+                    '4.2.25'
                 );
             }
             
@@ -313,13 +313,13 @@ class WBK_Frontend_Booking
                 'wbk-frontend-style-custom',
                 plugins_url( 'css/wbk-frontend-custom-style.css', dirname( __FILE__ ) ),
                 array(),
-                '4.2.17'
+                '4.2.25'
             );
             wp_enqueue_style(
                 'wbk-frontend-style',
                 plugins_url( 'css/wbk-frontend-default-style.css', dirname( __FILE__ ) ),
                 array(),
-                '4.2.17'
+                '4.2.25'
             );
             $startOfWeek = get_option( 'wbk_start_of_week', 'monday' );
             
