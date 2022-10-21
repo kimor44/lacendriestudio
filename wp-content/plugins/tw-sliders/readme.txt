@@ -4,7 +4,7 @@ Tags: pictures, carousel, animations, slides
 Requires at least: 5.4
 Tested up to: 6.0.3
 Requires PHP: 7.4.21
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 
 Create carousel and its slides.
 Manage the slides you want to show.
@@ -14,17 +14,24 @@ Tw Sliders allows you to create a carousel with as many slides you want.
 
 You can manage the visisibilty you want to show.
 
-You have to click on the \"Ajouter une slide\" to add a new slide.
+You have to click on the "Ajouter une slide" to add a new slide.
 
 You must provide a title, thumbnail and the visibility state.
 
 == Installation ==
-Upload the plugin in the \"Plugins\" directory, click on \"Activate\" and that\'s all.
+Upload the plugin in the "Plugins" directory, click on "Activate" and that's all.
 
 == Frequently Asked Questions ==
-No FAQ for now.
+Why my picture doesn't appear in the carousel ?
+You have to chek the "Cocher la case pour afficher l'image dans le carrousel" checkbox in the "Ajouter une nouvelle slide" page.
 
 == Changelog ==
+
+1.1.1
+
+21/10/2022
+
+* Added best practices for the custom functions
 
 1.1.0
 

@@ -9,7 +9,7 @@ abstract class Carousel_Metabox {
   public static function add_checkbox_is_visible() {
     add_meta_box(
         'is_visible',
-        'Afficher l\'image dans le caroussel ?',
+        'Afficher l\'image dans le carrousel ?',
         [ self::class, 'build_is_visible_form' ],
         'slider',
         'advanced',
@@ -43,7 +43,7 @@ abstract class Carousel_Metabox {
     $checked = $value == "yes" ? "checked" : "";
     ?>
       <input type="checkbox" id="is_visible" name="is_visible" value="yes" <?php echo $checked; ?>>
-      <label for="is_visible">Cocher la case pour afficher l'image dans le caroussel</label>
+      <label for="is_visible">Cocher la case pour afficher l'image dans le carrousel</label>
     <?php
   }
 }
