@@ -316,10 +316,17 @@ function ai1wm_archive_name( $params ) {
 function ai1wm_backup_url( $params ) {
 	static $backups_base_url = '';
 	if ( empty( $backups_base_url ) ) {
-		$backups_base_url = str_replace( untrailingslashit( ABSPATH ), '', AI1WM_BACKUPS_PATH );
-		$backups_base_url = site_url(
-			ai1wm_replace_directory_separator_with_forward_slash( $backups_base_url )
-		);
+		if ( Ai1wm_Backups::are_in_wp_content_folder() ) {
+			$backups_base_url = str_replace( untrailingslashit( WP_CONTENT_DIR ), '', AI1WM_BACKUPS_PATH );
+			$backups_base_url = content_url(
+				ai1wm_replace_directory_separator_with_forward_slash( $backups_base_url )
+			);
+		} else {
+			$backups_base_url = str_replace( untrailingslashit( ABSPATH ), '', AI1WM_BACKUPS_PATH );
+			$backups_base_url = site_url(
+				ai1wm_replace_directory_separator_with_forward_slash( $backups_base_url )
+			);
+		}
 	}
 
 	return $backups_base_url . '/' . ai1wm_replace_directory_separator_with_forward_slash( $params['archive'] );
