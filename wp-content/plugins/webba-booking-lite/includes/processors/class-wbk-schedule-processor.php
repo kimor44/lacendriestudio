@@ -368,7 +368,7 @@ class WBK_Schedule_Processor
                     if ( $available < $service->get( 'min_quantity' ) ) {
                         $timeslots[$i]->set_free_places( 0 );
                         // if( get_option( 'wbk_allow_cross_midnight', '' ) == 'true' ){
-                        $timeslots[$i]->setStatus( -2 );
+                        //      $timeslots[$i]->setStatus(-2);
                         // }
                     } else {
                         

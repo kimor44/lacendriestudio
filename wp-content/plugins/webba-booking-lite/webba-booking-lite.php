@@ -4,7 +4,7 @@
 * Plugin Name: Webba Booking
 * Plugin URI: https://webba-booking.com
 * Description: Webba Booking is a powerful and easy-to-use WordPress booking plugin made to create, manage and accept online bookings with ease, through a modern and user-friendly booking interface.
-* Version: 4.2.30.4
+* Version: 4.2.30.5
 * Author: WebbaPlugins
 * Text Domain: wbk
 * Author URI: https://webba-booking.com

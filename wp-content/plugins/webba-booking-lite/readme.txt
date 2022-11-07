@@ -3,8 +3,8 @@ Contributors: Webba agency, freemius
 Donate link: https://webba-booking.com/
 Tags: appointment, booking, calendar, reservation
 Requires at least: 5.6
-Tested up to: 6.0.3
-Stable tag: 4.2.30.4
+Tested up to: 6.1
+Stable tag: 4.2.30.5
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -13,7 +13,7 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Webba Booking is a flexible and feature-rich plugin while still being lightweight and easy to use. Here are some of the features that make Webba Booking the most complete booking solution for WordPress
 
-[HOMEPAGE](https://webba-booking.com/) | [DEMOS](https://webba-booking.com/demo/)  | [FEATURES](https://webba-booking.com/features/)| [DOCUMENTATION](https://webba-booking.com/documentation/)
+[HOMEPAGE](https://webba-booking.com/) | [USE CASES](https://webba-booking.com/use-cases/) | [DEMOS](https://webba-booking.com/demo/)  | [FEATURES](https://webba-booking.com/features/)| [DOCUMENTATION](https://webba-booking.com/documentation/)
 
 == FEATURES ==
 
@@ -141,6 +141,12 @@ Visit our WordPress plugin [support forum](https://wordpress.org/support/plugin/
 
 
 == Changelog ==
+
+4.2.30.5
+
+20/10/2022
+
+* Bugfix: minor bug fix
 
 4.2.30.4
 
