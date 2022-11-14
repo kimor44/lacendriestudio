@@ -1,3 +1,0 @@
-RewriteEngine On
-RewriteCond %{HTTP_REFERER} !^https://lacendriestudio.com/wp-admin/admin.php\?page\=wbk-appointments.* [NC]
-RewriteRule .* - [F]
