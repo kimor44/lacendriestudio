@@ -1,3 +1,3 @@
 # La Cendrie Studio
 
-Making readme file..
+Making readme file...
