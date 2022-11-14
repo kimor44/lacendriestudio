@@ -1,5 +1,6 @@
 wp-config.php
 wp-content/themes/lacendriestudio/node_modules/
+wp-content/plugins/webba-booking
 **/*.DS_Store
 wp-content/ai1wm-backups/
 
