@@ -9,6 +9,8 @@ class Slider_Help_Tabs {
   }
 
   public function set_help_tabs( string $type ) {
+		global $pagenow, $page;
+		
 		switch ( $type ) {
 			case 'presentation':
 				$this->screen->add_help_tab( array(
