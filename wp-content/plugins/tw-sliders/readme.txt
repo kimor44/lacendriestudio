@@ -4,7 +4,7 @@ Tags: pictures, carousel, animations, slides
 Requires at least: 5.4
 Tested up to: 6.0.3
 Requires PHP: 7.4.21
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 
 Create carousel and its slides.
 Manage the slides you want to show.
@@ -26,6 +26,12 @@ Why my picture doesn't appear in the carousel ?
 You have to chek the "Cocher la case pour afficher l'image dans le carrousel" checkbox in the "Ajouter une nouvelle slide" page.
 
 == Changelog ==
+
+1.1.2
+
+18/11/2022
+
+* Added securities about REST API & NONCE field
 
 1.1.1
 
