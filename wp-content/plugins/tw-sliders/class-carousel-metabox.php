@@ -27,7 +27,7 @@ abstract class Carousel_Metabox {
    *
    * @param int $post_id The ID of the post being saved.
    */
-  public static function save_is_visible_postdata( $post_id ) {
+  public static function save_is_visible_postdata( int $post_id ) {
     $nonce = $_POST[self::NONCE];
     if (
         wp_verify_nonce($nonce, self::NONCE) &&
@@ -49,7 +49,7 @@ abstract class Carousel_Metabox {
    *
    * @param WP_Post $post The post object.
    */
-  public static function build_is_visible_form( $post ) {
+  public static function build_is_visible_form( WP_Post $post ) {
     $value = get_post_meta( $post->ID, 'is_visible_meta_key', true );
     $checked = $value == "yes" ? "checked" : "";
 		// Add an nonce field so we can check for it later.
@@ -59,7 +59,29 @@ abstract class Carousel_Metabox {
       <label for="<?= self::META_KEY ?>">Cocher la case pour afficher l'image dans le carrousel</label>
     <?php
   }
+
+  /**
+   * Display Meta Box in quick edit mode
+   * 
+   *  @param string $column_name Name of the column to edit.
+   *  @param string $post_type The post type slug, or current screen name if this is a taxonomy list table.
+   */
+  public static function display_quick_edit_is_visible(string $column_name, string $post_type) {
+    if (current_user_can('publish_posts') && $column_name == 'visible') {
+        // Add an nonce field so we can check for it later.
+        wp_nonce_field( self::NONCE, self::NONCE );
+      ?>
+      <label class="inline-edit-status alignleft" for="<?= self::META_KEY ?>">
+        <span class="title">Visibilité</span>
+        <span class="input-text-wrap">
+          <input type="checkbox" id="<?= self::META_KEY ?>" name="<?= self::META_KEY ?>" value="yes" >
+        </span>
+      </label>
+    <?php
+    }
+  }
 }
 
 add_action( 'add_meta_boxes', [ 'Carousel_Metabox', 'add_checkbox_is_visible' ], 10, 2 );
 add_action( 'save_post', [ 'Carousel_Metabox', 'save_is_visible_postdata' ] );
+add_action( 'quick_edit_custom_box', [ 'Carousel_Metabox', 'display_quick_edit_is_visible'], 10, 2);
