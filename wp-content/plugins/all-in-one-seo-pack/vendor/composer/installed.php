@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '72c27f45a6edd4091188bbed273dfc76979e8f88',
+        'reference' => 'bc6e0a30ec162fb90d9f52b47a1ae27a154b6036',
         'name' => 'awesomemotive/all-in-one-seo-pack-pro',
         'dev' => false,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '72c27f45a6edd4091188bbed273dfc76979e8f88',
+            'reference' => 'bc6e0a30ec162fb90d9f52b47a1ae27a154b6036',
             'dev_requirement' => false,
         ),
         'jwhennessey/phpinsight' => array(
@@ -29,12 +29,12 @@
             'dev_requirement' => false,
         ),
         'monolog/monolog' => array(
-            'pretty_version' => '1.25.5',
-            'version' => '1.25.5.0',
+            'pretty_version' => '1.26.1',
+            'version' => '1.26.1.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../monolog/monolog',
             'aliases' => array(),
-            'reference' => '1817faadd1846cd08be9a49e905dc68823bc38c0',
+            'reference' => 'c6b00f05152ae2c9b04a448f99c7590beb6042f5',
             'dev_requirement' => false,
         ),
         'psr/log' => array(

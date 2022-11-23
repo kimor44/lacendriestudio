@@ -697,4 +697,35 @@ trait Wp {
 
 		return $charset;
 	}
+
+	/**
+	 * Returns the given data as JSON.
+	 * We temporarily change the floating point precision in order to prevent rounding errors.
+	 * Otherwise e.g. 4.9 could be output as 4.90000004.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @param  mixed  $data  The data.
+	 * @param  int    $flags The flags.
+	 * @return string        The JSON output.
+	 */
+	public function wpJsonEncode( $data, $flags = 0 ) {
+		$originalPrecision          = false;
+		$originalSerializePrecision = false;
+		if ( version_compare( PHP_VERSION, '7.1', '>=' ) ) {
+			$originalPrecision          = ini_get( 'precision' );
+			$originalSerializePrecision = ini_get( 'serialize_precision' );
+			ini_set( 'precision', 17 );
+			ini_set( 'serialize_precision', -1 );
+		}
+
+		$json = wp_json_encode( $data, $flags );
+
+		if ( version_compare( PHP_VERSION, '7.1', '>=' ) ) {
+			ini_set( 'precision', $originalPrecision );
+			ini_set( 'serialize_precision', $originalSerializePrecision );
+		}
+
+		return $json;
+	}
 }

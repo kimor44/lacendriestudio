@@ -132,6 +132,7 @@ class Helpers {
 			}
 
 			$lastModified = 0;
+			$timestamp    = time();
 			foreach ( $additionalPages as $page ) {
 				if ( empty( $page['lastmod'] ) ) {
 					continue;

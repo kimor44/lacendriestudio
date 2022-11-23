@@ -108,9 +108,9 @@ class Updates {
 		}
 
 		if ( version_compare( $lastActiveVersion, '4.1.5', '<' ) ) {
-			aioseo()->helpers->unscheduleAction( 'aioseo_cleanup_action_scheduler' );
+			aioseo()->actionScheduler->unschedule( 'aioseo_cleanup_action_scheduler' );
 			// Schedule routine to remove our old transients from the options table.
-			aioseo()->helpers->scheduleSingleAction( aioseo()->core->cachePrune->getOptionCacheCleanAction(), MINUTE_IN_SECONDS );
+			aioseo()->actionScheduler->scheduleSingle( aioseo()->core->cachePrune->getOptionCacheCleanAction(), MINUTE_IN_SECONDS );
 
 			// Refresh with new Redirects capability.
 			$this->accessControlNewCapabilities();
@@ -123,7 +123,7 @@ class Updates {
 
 		if ( version_compare( $lastActiveVersion, '4.1.6', '<' ) ) {
 			// Remove the recurring scheduled action for notifications.
-			aioseo()->helpers->unscheduleAction( 'aioseo_admin_notifications_update' );
+			aioseo()->actionScheduler->unschedule( 'aioseo_admin_notifications_update' );
 
 			$this->migrateOgTwitterImageColumns();
 
@@ -163,7 +163,7 @@ class Updates {
 			$this->migrateUserContactMethods();
 
 			// Unschedule any static sitemap regeneration actions to remove any that failed and are still in-progress as a result.
-			aioseo()->helpers->unscheduleAction( 'aioseo_static_sitemap_regeneration' );
+			aioseo()->actionScheduler->unschedule( 'aioseo_static_sitemap_regeneration' );
 		}
 
 		if ( version_compare( $lastActiveVersion, '4.2.4', '<' ) ) {
@@ -800,7 +800,6 @@ class Updates {
 				$searchAppearanceTaxonomy['metaDescription']
 			);
 		}
-
 	}
 
 	/**
@@ -912,7 +911,7 @@ class Updates {
 	 */
 	public function migrateContactTypes() {
 		$oldValue          = aioseo()->options->searchAppearance->global->schema->contactType;
-		$oldValueLowerCase = strtolower( $oldValue );
+		$oldValueLowerCase = strtolower( (string) $oldValue );
 
 		// Return if there is no value set or manual input is being used.
 		if ( ! $oldValue || 'manual' === $oldValueLowerCase ) {
@@ -984,7 +983,7 @@ class Updates {
 	 * @return void
 	 */
 	private function schedulePostSchemaMigration() {
-		aioseo()->helpers->scheduleSingleAction( 'aioseo_v4_migrate_post_schema', 10 );
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v4_migrate_post_schema', 10 );
 	}
 
 	/**
@@ -1011,7 +1010,7 @@ class Updates {
 		}
 
 		// Once done, schedule the next action.
-		aioseo()->helpers->scheduleSingleAction( 'aioseo_v4_migrate_post_schema', 30 );
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v4_migrate_post_schema', 30 );
 	}
 
 	/**
@@ -1022,7 +1021,7 @@ class Updates {
 	 * @return void
 	 */
 	private function schedulePostSchemaDefaultMigration() {
-		aioseo()->helpers->scheduleSingleAction( 'aioseo_v4_migrate_post_schema_default', 10 );
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v4_migrate_post_schema_default', 10 );
 
 		if ( ! aioseo()->cache->get( 'v4_migrate_post_schema_default_date' ) ) {
 			aioseo()->cache->update( 'v4_migrate_post_schema_default_date', gmdate( 'Y-m-d H:i:s' ), 3 * MONTH_IN_SECONDS );
@@ -1062,7 +1061,7 @@ class Updates {
 		}
 
 		// Once done, schedule the next action.
-		aioseo()->helpers->scheduleSingleAction( 'aioseo_v4_migrate_post_schema_default', 30 );
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_v4_migrate_post_schema_default', 30 );
 	}
 
 	/**
@@ -1158,7 +1157,7 @@ class Updates {
 							'mpn'  => ''
 						],
 						'offer'        => [
-							'price'        => ! empty( $schemaTypeOptions->product->price ) ? $schemaTypeOptions->product->price : '',
+							'price'        => ! empty( $schemaTypeOptions->product->price ) ? (float) $schemaTypeOptions->product->price : '',
 							'currency'     => ! empty( $schemaTypeOptions->product->currency ) ? $schemaTypeOptions->product->currency : '',
 							'availability' => ! empty( $schemaTypeOptions->product->availability ) ? $schemaTypeOptions->product->availability : '',
 							'validUntil'   => ! empty( $schemaTypeOptions->product->priceValidUntil ) ? $schemaTypeOptions->product->priceValidUntil : ''
@@ -1249,7 +1248,7 @@ class Updates {
 					'properties' => [
 						'name'            => ! empty( $schemaTypeOptions->software->name ) ? $schemaTypeOptions->software->name : '#post_title',
 						'description'     => '#post_excerpt',
-						'price'           => ! empty( $schemaTypeOptions->software->price ) ? $schemaTypeOptions->software->price : '',
+						'price'           => ! empty( $schemaTypeOptions->software->price ) ? (float) $schemaTypeOptions->software->price : '',
 						'currency'        => ! empty( $schemaTypeOptions->software->currency ) ? $schemaTypeOptions->software->currency : '',
 						'operatingSystem' => ! empty( $schemaTypeOptions->software->operatingSystems ) ? $schemaTypeOptions->software->operatingSystems : '',
 						'category'        => ! empty( $schemaTypeOptions->software->category ) ? $schemaTypeOptions->software->category : '',

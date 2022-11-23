@@ -60,6 +60,7 @@ class PostMeta {
 			->whereRaw( "( p.post_type IN ( '$publicPostTypes' ) )" )
 			->whereRaw( "( ap.post_id IS NULL OR ap.updated < '$timeStarted' )" )
 			->orderBy( 'p.ID DESC' )
+			->groupBy( 'p.ID' )
 			->limit( $postsPerAction )
 			->run()
 			->result();
@@ -96,13 +97,18 @@ class PostMeta {
 				->run()
 				->result();
 
-			if ( ! $postMeta || ! count( $postMeta ) ) {
-				continue;
-			}
-
 			$meta = [
 				'post_id' => $post->ID,
 			];
+
+			if ( ! $postMeta || ! count( $postMeta ) ) {
+				$aioseoPost = Models\Post::getPost( (int) $post->ID );
+				$aioseoPost->set( $meta );
+				$aioseoPost->save();
+
+				aioseo()->migration->meta->migrateAdditionalPostMeta( $post->ID );
+				continue;
+			}
 
 			foreach ( $postMeta as $record ) {
 				$name  = $record->meta_key;
@@ -190,6 +196,8 @@ class PostMeta {
 			$aioseoPost = Models\Post::getPost( $post->ID );
 			$aioseoPost->set( $meta );
 			$aioseoPost->save();
+
+			aioseo()->migration->meta->migrateAdditionalPostMeta( $post->ID );
 		}
 
 		if ( count( $posts ) === $postsPerAction ) {

@@ -69,7 +69,7 @@ class Database {
 	private $statement = '';
 
 	/**
-	 * The limit clause for the sql query.
+	 * The limit clause for the SQL query.
 	 *
 	 * @since 4.0.0
 	 *
@@ -78,7 +78,7 @@ class Database {
 	private $limit = '';
 
 	/**
-	 * The group clause for the sql query.
+	 * The group clause for the SQL query.
 	 *
 	 * @since 4.0.0
 	 *
@@ -87,7 +87,7 @@ class Database {
 	private $group = [];
 
 	/**
-	 * The order by clause for the sql query.
+	 * The order by clause for the SQL query.
 	 *
 	 * @since 4.0.0
 	 *
@@ -96,7 +96,7 @@ class Database {
 	private $order = [];
 
 	/**
-	 * The select clause for the sql query.
+	 * The select clause for the SQL query.
 	 *
 	 * @since 4.0.0
 	 *
@@ -105,7 +105,7 @@ class Database {
 	private $select = [];
 
 	/**
-	 * The set clause for the sql query.
+	 * The set clause for the SQL query.
 	 *
 	 * @since 4.0.0
 	 *
@@ -132,7 +132,7 @@ class Database {
 	private $ignore = false;
 
 	/**
-	 * The where clause for the sql query.
+	 * The where clause for the SQL query.
 	 *
 	 * @since 4.0.0
 	 *
@@ -141,13 +141,22 @@ class Database {
 	private $where = [];
 
 	/**
-	 * The union clause for the sql query.
+	 * The union clause for the SQL query.
 	 *
 	 * @since 4.0.0
 	 *
 	 * @var array
 	 */
 	private $union = [];
+
+	/**
+	 * The join clause for the SQL query.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var array
+	 */
+	private $join = [];
 
 	/**
 	 * Determines whether the select statement should be distinct.
@@ -204,7 +213,7 @@ class Database {
 	private $stripTags = false;
 
 	/**
-	 * Set which option to use to escape the sql query.
+	 * Set which option to use to escape the SQL query.
 	 *
 	 * @since 4.0.0
 	 *
@@ -252,6 +261,15 @@ class Database {
 	 * @var int
 	 */
 	const ESCAPE_QUOTE = 8;
+
+	/**
+	 * List of model class instances.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var array
+	 */
+	private $models = [];
 
 	/**
 	 * Prepares the database class for use.

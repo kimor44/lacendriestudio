@@ -701,7 +701,6 @@ class Admin {
 				return;
 			}
 		}
-
 	}
 
 	/**
@@ -999,7 +998,7 @@ class Admin {
 	 */
 	public function scheduleUnescapeData() {
 		aioseo()->core->cache->update( 'unslash_escaped_data_posts', time(), WEEK_IN_SECONDS );
-		aioseo()->helpers->scheduleSingleAction( 'aioseo_unslash_escaped_data_posts', 120 );
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_unslash_escaped_data_posts', 120 );
 	}
 
 	/**
@@ -1027,7 +1026,7 @@ class Admin {
 			return;
 		}
 
-		aioseo()->helpers->scheduleSingleAction( 'aioseo_unslash_escaped_data_posts', 120, [], true );
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_unslash_escaped_data_posts', 120, [], true );
 
 		foreach ( $posts as $post ) {
 			$aioseoPost = Models\Post::getPost( $post->post_id );
@@ -1135,13 +1134,11 @@ class Admin {
 				$post->ID
 			);
 
-			if ( ! empty( $post ) ) {
-				$posts[] = [
-					'url'    => str_replace( '__trashed', '', get_permalink( $post ) ),
-					'target' => '/',
-					'type'   => 301
-				];
-			}
+			$posts[] = [
+				'url'    => str_replace( '__trashed', '', get_permalink( $post ) ),
+				'target' => '/',
+				'type'   => 301
+			];
 		}
 
 		if ( empty( $posts ) ) {

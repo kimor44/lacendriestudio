@@ -135,6 +135,7 @@ class QueryArgs {
 			);
 		}
 
+		$allowedQueryArgs      = array_unique( $allowedQueryArgs );
 		$allowedQueryArgs      = apply_filters( 'aioseo_unrecognized_allowed_query_args', $allowedQueryArgs );
 		$currentUrlQueryArgs   = explode( '&', $currentUrlParsed['query'] );
 		$recognizedQueryArgs   = [];
@@ -481,6 +482,7 @@ class QueryArgs {
 			'add-to-cart',
 			'add_coupon',
 			'item',
+			'key',
 			'_wcsnonce',
 			'post_type',
 			'product',

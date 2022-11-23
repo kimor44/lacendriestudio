@@ -13,6 +13,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ThirdParty {
 	/**
+	 * Cache class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Cache\Cache
+	 */
+	public $cache = null;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 4.2.5

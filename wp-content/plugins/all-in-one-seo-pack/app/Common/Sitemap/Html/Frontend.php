@@ -369,13 +369,7 @@ class Frontend {
 
 		$list = '<ul>';
 		foreach ( $objects as $object ) {
-			$list .= $this->generateListItem(
-				$object,
-				[
-					'publication_date' => $this->attributes['publication_date'],
-					'nofollow_links'   => $this->attributes['nofollow_links']
-				]
-			);
+			$list .= $this->generateListItem( $object );
 
 			if ( ! empty( $object['children'] ) ) {
 				$list .= $this->generateHierarchicalTree( $object );
@@ -402,13 +396,7 @@ class Frontend {
 		$tree = '<ul>';
 		foreach ( $object['children'] as $child ) {
 			$nestedLevel++;
-			$tree .= $this->generateListItem(
-				$child,
-				[
-					'publication_date' => $this->attributes['publication_date'],
-					'nofollow_links'   => $this->attributes['nofollow_links']
-				]
-			);
+			$tree .= $this->generateListItem( $child );
 			if ( ! empty( $child['children'] ) ) {
 				$tree .= $this->generateHierarchicalTree( $child );
 			}
@@ -496,20 +484,22 @@ class Frontend {
 			return $objects;
 		}
 
-		$exploded = explode( ',', $objects );
-		if ( ! empty( $exploded ) ) {
-			$objects = array_map( function( $object ) {
-				return trim( $object );
-			}, $exploded );
-
-			$publicObjects = $arePostTypes
-				? aioseo()->helpers->getPublicPostTypes( true )
-				: aioseo()->helpers->getPublicTaxonomies( true );
-
-			$objects = array_filter( $objects, function( $object ) use ( $publicObjects ) {
-				return in_array( $object, $publicObjects, true );
-			});
+		if ( empty( $objects ) ) {
+			return [];
 		}
+
+		$exploded = explode( ',', $objects );
+		$objects  = array_map( function( $object ) {
+			return trim( $object );
+		}, $exploded );
+
+		$publicObjects = $arePostTypes
+			? aioseo()->helpers->getPublicPostTypes( true )
+			: aioseo()->helpers->getPublicTaxonomies( true );
+
+		$objects = array_filter( $objects, function( $object ) use ( $publicObjects ) {
+			return in_array( $object, $publicObjects, true );
+		});
 
 		return $objects;
 	}

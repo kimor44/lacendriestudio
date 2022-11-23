@@ -36,6 +36,69 @@ class Core {
 	];
 
 	/**
+	 * Filesystem class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Utils\Filesystem
+	 */
+	public $fs = null;
+
+	/**
+	 * Filesystem class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Utils\Filesystem
+	 */
+	public $assets = null;
+
+	/**
+	 * Assets class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Utils\Database
+	 */
+	public $db = null;
+
+	/**
+	 * Cache class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Utils\Cache
+	 */
+	public $cache = null;
+
+	/**
+	 * NetworkCache class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Utils\NetworkCache
+	 */
+	public $networkCache = null;
+
+	/**
+	 * CachePrune class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Utils\CachePrune
+	 */
+	public $cachePrune = null;
+
+	/**
+	 * Cache class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Options\Cache
+	 */
+	public $optionsCache = null;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 4.1.9

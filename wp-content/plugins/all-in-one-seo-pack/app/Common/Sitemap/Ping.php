@@ -56,9 +56,9 @@ class Ping {
 		}
 
 		// First, unschedule any ping actions that might already be enqueued.
-		aioseo()->helpers->unscheduleAction( 'aioseo_sitemap_ping' );
+		aioseo()->actionScheduler->unschedule( 'aioseo_sitemap_ping' );
 		// Then, schedule the new ping.
-		aioseo()->helpers->scheduleSingleAction( 'aioseo_sitemap_ping', 30 );
+		aioseo()->actionScheduler->scheduleSingle( 'aioseo_sitemap_ping', 30 );
 	}
 
 	/**

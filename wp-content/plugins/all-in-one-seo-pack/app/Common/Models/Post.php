@@ -295,6 +295,36 @@ class Post extends Model {
 	}
 
 	/**
+	 * Sanitize the page_analysis posted data.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @param  array $data An array containing the page_analysis field data.
+	 * @return array       The sanitized data.
+	 */
+	private static function sanitizePageAnalysis( $data ) {
+		if (
+			empty( $data['analysis'] )
+			|| ! is_array( $data['analysis'] )
+		) {
+			return $data;
+		}
+
+		foreach ( $data['analysis'] as &$analysis ) {
+			foreach ( $analysis as $key => $result ) {
+				// Remove unnecessary 'title' and 'description'.
+				foreach ( [ 'title', 'description' ] as $keyToRemove ) {
+					if ( isset( $analysis[ $key ][ $keyToRemove ] ) ) {
+						unset( $analysis[ $key ][ $keyToRemove ] );
+					}
+				}
+			}
+		}
+
+		return $data;
+	}
+
+	/**
 	 * Sanitizes the post data and sets it (or the default value) to the Post object.
 	 *
 	 * @since 4.1.5
@@ -314,7 +344,7 @@ class Post extends Model {
 		$thePost->pillar_content              = isset( $data['pillar_content'] ) ? rest_sanitize_boolean( $data['pillar_content'] ) : 0;
 		// TruSEO
 		$thePost->keyphrases                  = ! empty( $data['keyphrases'] ) ? wp_json_encode( $data['keyphrases'] ) : null;
-		$thePost->page_analysis               = ! empty( $data['page_analysis'] ) ? wp_json_encode( $data['page_analysis'] ) : null;
+		$thePost->page_analysis               = ! empty( $data['page_analysis'] ) ? wp_json_encode( self::sanitizePageAnalysis( $data['page_analysis'] ) ) : null;
 		$thePost->seo_score                   = ! empty( $data['seo_score'] ) ? sanitize_text_field( $data['seo_score'] ) : 0;
 		// Sitemap
 		$thePost->priority                    = ! empty( $data['priority'] ) ? sanitize_text_field( $data['priority'] ) : null;
@@ -468,29 +498,23 @@ class Post extends Model {
 			'analysis' => [
 				'basic'       => [
 					'lengthContent' => [
-						'error'       => 1,
-						'maxScore'    => 9,
-						'score'       => 6,
-						'title'       => __( 'Content', 'all-in-one-seo-pack' ),
-						'description' => __( 'Please add some content first.', 'all-in-one-seo-pack' )
+						'error'    => 1,
+						'maxScore' => 9,
+						'score'    => 6,
 					],
 				],
 				'title'       => [
 					'titleLength' => [
-						'error'       => 1,
-						'maxScore'    => 9,
-						'score'       => 1,
-						'title'       => __( 'Title', 'all-in-one-seo-pack' ),
-						'description' => __( 'Please add a title first.', 'all-in-one-seo-pack' )
+						'error'    => 1,
+						'maxScore' => 9,
+						'score'    => 1,
 					],
 				],
 				'readability' => [
 					'contentHasAssets' => [
-						'error'       => 1,
-						'maxScore'    => 5,
-						'score'       => 0,
-						'title'       => __( 'No content yet', 'all-in-one-seo-pack' ),
-						'description' => __( 'Please add some content first.', 'all-in-one-seo-pack' )
+						'error'    => 1,
+						'maxScore' => 5,
+						'score'    => 0,
 					],
 				]
 			]
@@ -518,6 +542,7 @@ class Post extends Model {
 					'Article'             => [],
 					'Course'              => [],
 					'Dataset'             => [],
+					'FAQPage'             => [],
 					'Movie'               => [],
 					'Person'              => [],
 					'Product'             => [],

@@ -19,7 +19,7 @@ trait Api {
 	 *
 	 * @param  array       $body    The content to retrieve from the remote URL.
 	 * @param  array       $headers The headers to send to the remote URL.
-	 * @return string|bool          JSON decoded response on success, false on failure.
+	 * @return string|null          JSON decoded response on success, false on failure.
 	 */
 	public function sendRequest( $url, $body = [], $headers = [] ) {
 		$body = wp_json_encode( $body );
@@ -45,7 +45,7 @@ trait Api {
 
 		// Bail out early if there are any errors.
 		if ( ! $responseBody ) {
-			return false;
+			return null;
 		}
 
 		// Return the json decoded content.

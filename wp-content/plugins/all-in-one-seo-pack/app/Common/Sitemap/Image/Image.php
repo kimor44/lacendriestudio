@@ -40,6 +40,15 @@ class Image {
 	];
 
 	/**
+	 * The post object.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var \WP_Post
+	 */
+	private $post = null;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 4.0.5
@@ -89,7 +98,7 @@ class Image {
 			return;
 		}
 
-		aioseo()->helpers->scheduleSingleAction( $this->imageScanAction, 10 );
+		aioseo()->actionScheduler->scheduleSingle( $this->imageScanAction, 10 );
 	}
 
 	/**
@@ -122,7 +131,7 @@ class Image {
 			->result();
 
 		if ( ! $posts ) {
-			aioseo()->helpers->scheduleSingleAction( $this->imageScanAction, 15 * MINUTE_IN_SECONDS, [], true );
+			aioseo()->actionScheduler->scheduleSingle( $this->imageScanAction, 15 * MINUTE_IN_SECONDS, [], true );
 
 			return;
 		}
@@ -131,7 +140,7 @@ class Image {
 			$this->scanPost( $post );
 		}
 
-		aioseo()->helpers->scheduleSingleAction( $this->imageScanAction, 30, [], true );
+		aioseo()->actionScheduler->scheduleSingle( $this->imageScanAction, 30, [], true );
 	}
 
 	/**

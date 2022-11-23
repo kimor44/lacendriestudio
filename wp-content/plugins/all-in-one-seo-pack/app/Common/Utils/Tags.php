@@ -805,7 +805,7 @@ class Tags {
 		$string = $this->parseTaxonomyNames( $string, $id );
 
 		// Custom fields are parsed separately.
-		$string = $this->parseCustomFields( $string, $id );
+		$string = $this->parseCustomFields( $string );
 
 		return preg_replace( '/%\|%/im', '', $string );
 	}
@@ -1100,9 +1100,9 @@ class Tags {
 	 * @return mixed          The new title.
 	 */
 	private function parseTaxonomyNames( $string, $id ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-		$pattern = '/' . $this->denotationChar . 'tax_name-([a-zA-Z0-9_]+)/im';
+		$pattern = '/' . $this->denotationChar . 'tax_name-([a-zA-Z0-9_-]+)/im';
 		$string  = preg_replace_callback( $pattern, [ $this, 'replaceTaxonomyName' ], $string );
-		$pattern = '/' . $this->denotationChar . 'tax_name(?![a-zA-Z0-9_])/im';
+		$pattern = '/' . $this->denotationChar . 'tax_name(?![a-zA-Z0-9_-])/im';
 
 		return preg_replace( $pattern, '', $string );
 	}

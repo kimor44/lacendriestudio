@@ -615,7 +615,7 @@ trait Options {
 	 * @since 4.0.0
 	 *
 	 * @param  string $name The option name.
-	 * @return void
+	 * @return mixed        The default value.
 	 */
 	public function getDefault( $name, $resetGroups = true ) {
 		$defaults = $this->defaultsMerged[ $this->groupKey ];
@@ -710,7 +710,7 @@ trait Options {
 		$this->update( $optionsName );
 
 		// First, we need to filter our options.
-		$options = $this->filterOptions( $defaults, null, $optionsName );
+		$options = $this->filterOptions( $defaults );
 
 		// Refactor options.
 		$refactored = $this->convertOptionsToValues( $options );

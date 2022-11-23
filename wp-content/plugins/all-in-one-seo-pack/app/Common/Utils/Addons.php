@@ -144,9 +144,9 @@ class Addons {
 	 *
 	 * @since 4.0.0
 	 *
-	 * @param  string  $sku        The addon sku.
-	 * @param  boolean $flushCache Whether or not to flush the cache.
-	 * @return object              The addon.
+	 * @param  string      $sku        The addon sku.
+	 * @param  bool        $flushCache Whether or not to flush the cache.
+	 * @return null|object             The addon.
 	 */
 	public function getAddon( $sku, $flushCache = false ) {
 		$addon     = null;

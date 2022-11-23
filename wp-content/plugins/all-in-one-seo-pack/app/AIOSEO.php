@@ -7,10 +7,12 @@ namespace AIOSEO\Plugin {
 
 	/**
 	 * Main AIOSEO class.
+	 * We extend the abstract class as that one holds all the class properties.
 	 *
 	 * @since 4.0.0
 	 */
-	final class AIOSEO {
+	final class AIOSEO extends \AIOSEOAbstract {
+
 		/**
 		 * Holds the instance of the plugin currently in use.
 		 *
@@ -47,96 +49,6 @@ namespace AIOSEO\Plugin {
 		 * @var boolean
 		 */
 		public $versionPath = 'Lite';
-
-		/**
-		 * The AIOSEO options.
-		 *
-		 * @since 4.0.0
-		 *
-		 * @var array
-		 */
-		public $options = [];
-
-		/**
-		 * The AIOSEO dynamic options.
-		 *
-		 * @since 4.1.4
-		 *
-		 * @var DynamicOptions
-		 */
-		public $dynamicOptions = [];
-
-		/**
-		 * The WordPress filters to run.
-		 *
-		 * @since 4.0.0
-		 *
-		 * @var Filters
-		 */
-		private $filters = null;
-
-		/**
-		 * For usage tracking when enabled.
-		 *
-		 * @since 4.0.0
-		 *
-		 * @var Filters
-		 */
-		private $usage = null;
-
-		/**
-		 * For WP site health.
-		 *
-		 * @since 4.0.0
-		 *
-		 * @var Filters
-		 */
-		private $siteHealth = null;
-
-		/**
-		 * For auto updates.
-		 *
-		 * @since 4.0.0
-		 *
-		 * @var Filters
-		 */
-		private $autoUpdates = null;
-
-		/**
-		 * Holds our addon helper and loaded addons.
-		 *
-		 * @since 4.0.17
-		 *
-		 * @var object
-		 */
-		public $addons;
-
-		/**
-		 * Holds our template helper.
-		 *
-		 * @since 4.0.17
-		 *
-		 * @var Common\Utils\Templates
-		 */
-		public $templates;
-
-		/**
-		 * Holds our cache helper.
-		 *
-		 * @since 4.1.5
-		 *
-		 * @var Common\Utils\Cache
-		 */
-		public $cache;
-
-		/**
-		 * Holds our cache prune.
-		 *
-		 * @since 4.1.6
-		 *
-		 * @var Common\Utils\CachePrune
-		 */
-		public $cachePrune;
 
 		/**
 		 * Whether we're in a dev environment.
@@ -228,20 +140,23 @@ namespace AIOSEO\Plugin {
 		 */
 		private function includes() {
 			$dependencies = [
-				'/vendor/autoload.php',
-				'/vendor/woocommerce/action-scheduler/action-scheduler.php'
+				'/vendor/autoload.php'                                      => true,
+				'/vendor/woocommerce/action-scheduler/action-scheduler.php' => true,
+				'/vendor/jwhennessey/phpinsight/autoload.php'               => false,
+				'/vendor_prefixed/monolog/monolog/src/Monolog/Logger.php'   => false
 			];
 
-			foreach ( $dependencies as $path ) {
+			foreach ( $dependencies as $path => $shouldRequire ) {
 				if ( ! file_exists( AIOSEO_DIR . $path ) ) {
 					// Something is not right.
 					status_header( 500 );
 					wp_die( esc_html__( 'Plugin is missing required dependencies. Please contact support for more information.', 'all-in-one-seo-pack' ) );
 				}
-				require AIOSEO_DIR . $path;
-			}
 
-			add_action( 'plugins_loaded', [ $this, 'actionScheduler' ], 10 );
+				if ( $shouldRequire ) {
+					require AIOSEO_DIR . $path;
+				}
+			}
 
 			$this->loadVersion();
 		}
@@ -281,28 +196,6 @@ namespace AIOSEO\Plugin {
 			if ( $proDir && 'pro' === $version ) {
 				$this->pro         = true;
 				$this->versionPath = 'Pro';
-			}
-		}
-
-		/**
-		 * Ensure our action scheduler tables are always set.
-		 *
-		 * @since 4.0.0
-		 *
-		 * @return void
-		 */
-		public function actionScheduler() {
-			// Only need to run this check in the admin.
-			if ( ! is_admin() ) {
-				return;
-			}
-
-			if ( class_exists( 'ActionScheduler' ) && class_exists( 'ActionScheduler_ListTable' ) ) {
-				new Common\Utils\ActionScheduler(
-					\ActionScheduler::store(),
-					\ActionScheduler::logger(),
-					\ActionScheduler::runner()
-				);
 			}
 		}
 
@@ -419,6 +312,7 @@ namespace AIOSEO\Plugin {
 			$this->standalone         = new Common\Standalone\Standalone();
 			$this->slugMonitor        = new Common\Admin\SlugMonitor();
 			$this->schema             = $this->pro ? new Pro\Schema\Schema() : new Common\Schema\Schema();
+			$this->actionScheduler    = new Common\Utils\ActionScheduler();
 
 			if ( ! wp_doing_ajax() && ! wp_doing_cron() ) {
 				$this->rss       = new Common\Rss();

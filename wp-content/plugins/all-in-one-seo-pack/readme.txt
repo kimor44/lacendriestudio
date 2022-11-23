@@ -2,16 +2,16 @@
 Contributors: aioseo, smub, benjaminprojas
 Tags: SEO, Google Search Console, XML Sitemap, meta description, schema, meta title, rich snippets, woocommerce seo, local seo, open graph, google news sitemap, video sitemap, robots.txt, seo audit, content analysis, seo plugin, redirection
 Requires at least: 4.9
-Tested up to: 6.0.2
-Stable tag: 4.2.6.1
+Tested up to: 6.1
+Stable tag: 4.2.7.1
 License: GPLv2 or later
 Requires PHP: 5.6
 
-The original WordPress SEO plugin. Improve your WordPress SEO rankings and traffic with our comprehensive SEO tools and smart SEO optimizations.
+🤩 The original WordPress SEO plugin. Improve your WordPress SEO rankings and traffic with our comprehensive SEO tools and smart SEO optimizations! 🚀
 
 == Description ==
 
-= AIOSEO - The Best WordPress SEO Plugin & Toolkit =
+=== AIOSEO - The Best WordPress SEO Plugin & Toolkit ===
 
 All in One SEO for WordPress is the original WordPress SEO plugin started in 2007. Over 3 million smart website owners use AIOSEO to properly setup WordPress SEO, so their websites can rank higher in search engines.
 
@@ -28,7 +28,7 @@ We took the pain out of optimizing WordPress SEO and made it easy. Here's why sm
 
 https://www.youtube.com/watch?v=OVJuc-xUslI
 
-= Properly Setup WordPress SEO (without Hiring an Expert) =
+=== ✨ Properly Setup WordPress SEO (without Hiring an Expert) ===
 
 AIOSEO makes it easy to setup WordPress SEO, the RIGHT WAY. Our smart WordPress SEO setup wizard helps you optimize your website's SEO settings based on your unique industry needs.
 
@@ -39,7 +39,7 @@ But don't just take our word. See what another website owner like yourself is sa
 > Swift, honest, full control. After all these years and having used almost every WP SEO plugin I’m amazed by AIOSEO’s depth, simplicity and fast workflow ❤️<br>
 > @aaronbol
 
-= Optimize Your Pages for Higher SEO Rankings with TruSEO Analysis =
+=== ✨ Optimize Your Pages for Higher SEO Rankings with TruSEO Analysis ===
 
 Creating SEO optimized content used to be hard. Why?
 
@@ -53,7 +53,7 @@ Our SEO readability analysis gives you further insights on how to improve your c
 
 The best part about TruSEO analysis is that you can use it to optimize your posts / pages for unlimited SEO keywords.
 
-= Seamless SEO Integrations with Webmaster Tools & Social Media =
+=== ✨ Seamless SEO Integrations with Webmaster Tools & Social Media ===
 
 All in One SEO for WordPress offers seamless integration with popular social media platforms like Facebook, Twitter, Pinterest, YouTube, LinkedIn, Instagram, and more. 
 
@@ -66,7 +66,7 @@ This helps you easily measure your SEO results and progress.
 > I’m a professional SEO and used many tools and extensions. Regarding simplicity, individuality and configurability All in One SEO Pro is by far the best SEO plugin out there for WordPress.<br>
 > Joel Steinmann
 
-= Smart XML Sitemaps and Rich Snippets (SEO Schema Markup) =
+=== ✨ Smart XML Sitemaps and Rich Snippets (SEO Schema Markup) ===
 
 Proper website SEO markup plays an important role in improving SEO rankings. That's why smart SEO experts use AIOSEO for on-page SEO optimization. An XML sitemap is a list of all the content on your website. The sitemap helps search engine bots to easily see all the content on your site in one place, The XML sitemap file is hidden from your human visitors, however search engines like Google can see it. Without an XML sitemap, some of your web pages may never be included in Google search results, and won't get any traffic. XML Sitemaps also help you tell Google which pages you DON'T want included in search results.
 
@@ -79,13 +79,13 @@ We also include an easy to use Next-Gen Schema Generator to output tons of custo
 > The best SEO plugin. All in One SEO is the best SEO Plugin. I personally find it better than Yoast. This plugin offers so much freedom in configuration.<br>
 > hanapupu
 
-= Local SEO, WooCommerce SEO, Google AMP, and More =
+=== ✨ Local SEO, WooCommerce SEO, Google AMP, and More ===
 
 All in One SEO is the most comprehensive WordPress SEO plugin / marketing toolkit in the world.
 
 We offer complete support for Google Knowledge Graph and Schema.org markup for local businesses. You can add multiple business locations, opening hours, contact info (business email, business phone, business address, etc) and more with our Local SEO module.
 
-AIOSEO also makes WooCommerce SEO easy. With our SEO plugin, you can optimize your product pages and product categories for better SEO rankings (with just a few clicks).
+AIOSEO also makes WooCommerce SEO easy. With our SEO plugin, you can optimize your product pages and product categories for better SEO rankings (with just a few clicks). AIOSEO is also fully compatible with the Google Merchant Center by adding the necessary schema without any additional customization on your part.
 
 Since AIOSEO is the original WordPress SEO plugin, we have SEO integrations with all popular WordPress plugins such as membership plugin SEO, landing page plugin SEO, Semrush SEO integration, etc. AIOSEO also offers Google AMP integration and works seamlessly with all popular speed & caching plugins.
 
@@ -94,7 +94,7 @@ Since AIOSEO is the original WordPress SEO plugin, we have SEO integrations with
 
 Since SEO is an essential feature, AIOSEO is a must have plugin for every website!
 
-= SEO Redirection Manager and 404 Monitoring = 
+=== ✨ SEO Redirection Manager and 404 Monitoring ===
 
 AIOSEO Redirection manager helps you set up proper 301 redirects to improve your SEO rankings.
 
@@ -104,7 +104,7 @@ We have an automatic 404 error monitor that helps you track and redirect 404 err
 
 Since redirect speed is important for SEO, we built in both Apache / NGINX server level redirects to help you get maximum SEO benefit.
 
-= Full All in One SEO Feature List =
+=== ✨ Full All in One SEO Feature List ===
 
 * WordPress SEO Setup Wizard - Properly setup WordPress SEO in less than 10 minutes.
 * On-page SEO Optimization - optimize SEO code markup (without hiring a developer)
@@ -145,7 +145,7 @@ Since redirect speed is important for SEO, we built in both Apache / NGINX serve
 * Crawl Quota Management - Use our Crawl Cleanup feature to manage your search engine crawl quota and index your important content faster.
 * Slack-style Emoji Picker - Include Emoji ❤️ in your meta titles and descriptions to stand out in search results and increase your rankings. 🎉🚀
 
-= WordPress SEO Integrations =
+=== ✨ WordPress SEO Integrations ===
 
 * WooCommerce SEO - optimize your WooCommerce product pages and improve your WooCommerce store's SEO rankings.
 * MemberPress SEO - optimize your MemberPress course pages and improve your membership site's SEO rankings.
@@ -161,7 +161,7 @@ Since redirect speed is important for SEO, we built in both Apache / NGINX serve
 * SEO Webmaster Tool Content - Connect your WordPress site with various webmaster tools to improve SEO rankings.
 * Semrush SEO integration - See additional SEO keywords and relevant SEO keyphrases with our Semrush SEO integration.
 
-= WordPress SEO Plugin Importer =
+=== ✨ WordPress SEO Plugin Importer ===
 
 * Yoast SEO Importer - easily switch from Yoast SEO to AIOSEO with our full SEO migration wizard that includes SEO keywords, SEO title, meta description, XML sitemaps and more.
 * Yoast SEO Premium Importer - easily import Yoast SEO premium settings including SEO redirects to AIOSEO with our full SEO migration wizard.
@@ -175,7 +175,8 @@ Since redirect speed is important for SEO, we built in both Apache / NGINX serve
 * 301 Redirects - easily import SEO redirects from 301 Redirects with our SEO migration wizard.
 * CSV Sitemap Import - import additional pages to your xml sitemaps using CSV.
 
-= Gutenberg Blocks =
+=== ✨ Gutenberg Blocks ===
+
 * Table of Contents - automatically generate table of contents for your article. The powerful features include custom headings, custom anchors and the ability to hide or reorder the headings.
 * FAQ (Frequently Asked Questions) - quickly add frequently asked questions to your article, which are then also automatically output as FAQPage schema to help improve your rankings.
 * HTML Sitemap - automatically generate an HTML sitemap for your pages and posts.
@@ -191,11 +192,11 @@ Give AIOSEO a try.
 
 Want to unlock more SEO features? <a href="https://aioseo.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin" rel="friend" title="All in One SEO for WordPress">Upgrade to AIOSEO Pro</a>.
 
-= Credits =
+=== Credits ===
 
 This plugin is created by <a href="https://benjaminrojas.net/" rel="friend" title="Benjamin Rojas">Benjamin Rojas</a> and <a href="https://syedbalkhi.com/" rel="friend" title="Syed Balkhi">Syed Balkhi</a>.
 
-= Branding Guideline = 
+=== Branding Guideline ===
 
 AIOSEO&reg; is a registered trademark of Semper Plugins LLC. When writing about the WordPress SEO plugin by AIOSEO, please use the following format.
 
@@ -205,24 +206,63 @@ AIOSEO&reg; is a registered trademark of Semper Plugins LLC. When writing about 
 * All in 1 SEO (incorrect)
 * AISEO (incorrect)
 
-= What's Next =
+=== What's Next ===
 
 If you like our WordPress SEO plugin, then consider checking out our other projects:
 
 * <a href="https://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a> - Get More Email Subscribers with the most popular conversion optimization plugin for WordPress.
 * <a href="https://wpforms.com/" rel="friend" title="WPForms">WPForms</a> - #1 drag & drop online form builder for WordPress.
-* <a href="https://www.monsterinsights.com/" rel="friend" title="MonsterInsights">MonsterInsights</a> - See the Stats that Matter and Grow Your Business with Confidence. Best Google Analytics Plugin for WordPress.
+* <a href="https://www.monsterinsights.com/" rel="friend" title="MonsterInsights">MonsterInsights</a> - See the stats that matter and grow your business with confidence. The best Google Analytics plugin for WordPress.
 * <a href="https://www.seedprod.com/" rel="friend" title="SeedProd">SeedProd</a> - Create beautiful landing pages with our powerful drag & drop landing page builder.
 * <a href="https://wpmailsmtp.com">WP Mail SMTP</a> - Improve email deliverability for your contact form with the most popular SMTP plugin for WordPress.
-* <a href="https://rafflepress.com/">RafflePress</a> - Best WordPress giveaway and contest plugin.
-* <a href="https://www.smashballoon.com">Smash Balloon</a> - #1 social feeds plugin for WordPress.
-* <a href="https://searchwp.com">SearchWP</a> - advanced WordPress search plugin.
-* <a href="https://pushengage.com">PushEngage</a> - best web push notification plugin.
+* <a href="https://rafflepress.com/">RafflePress</a> - Best WordPress giveaway and contest plugin to grow traffic and social followers.
+* <a href="https://www.smashballoon.com">Smash Balloon</a> - #1 social feeds plugin for WordPress – display social media content in WordPress without code.
+* <a href="https://www.pushengage.com/">Push Engage</a> - Connect with visitors after they leave your website with the leading web push notification plugin.
+* <a href="https://trustpulse.com/">TrustPulse</a> - Add real-time social proof notifications to boost your store conversions by up to 15%.
+* <a href="https://searchwp.com/">SearchWP</a> – The most advanced custom WordPress search plugin to improve WordPress search quality.
+* <a href="https://affiliatewp.com/">AffiliateWP</a> – #1 affiliate management plugin for WordPress. Add a referral program to your online store.
+* <a href="https://wpsimplepay.com/">WP Simple Pay</a> – #1 Stripe payments plugin for WordPress. Start accepting one-time or recurring payments without a shopping cart.
+* <a href="https://easydigitaldownloads.com/">Easy Digital Downloads</a> – The best WordPress eCommerce plugin to sell digital products (eBooks, software, music, and more).
+* <a href="https://sugarcalendar.com/">Sugar Calendar</a> – A simple event calendar plugin for WordPress that's both easy and powerful.
 
 Visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeginner</a> to learn from our <a href="http://www.wpbeginner.com/category/wp-tutorials/" rel="friend" title="WordPress Tutorials">WordPress Tutorials</a> and find out about other <a href="http://www.wpbeginner.com/category/plugins/" rel="friend" title="Best WordPress Plugins">best WordPress plugins</a>.
 
 
 == Changelog ==
+
+**New in Version 4.2.7.1**
+
+* Fixed: Importing settings from Yoast SEO sometimes failing.
+* Fixed: Product schema sometimes conflicting with the WooCommerce cart session.
+
+**New in Version 4.2.7**
+
+* New: Merchant Listing schema – Our Product schema now fully supports the new merchant listing experiences from Google for the Google Merchant Center. We have also added support for shipping (autogenerated for WooCommerce), audience and various other product attributes that will help enrich your product snippets.
+* New: Site Name schema – You can now indicate a preferred site name, as well as an alternative name, for mobile Google search results in the Knowledge Graph settings.
+* New: Added support for WooCommerce Products to the REST API addon.
+* Updated: Improved PHP 8.1 compatibility.
+* Updated: Imported post data from RankMath and SEOPress is now immediately scanned for videos by the Video Sitemap addon.
+* Fixed: Google Tag Manager container ID is no longer output on AMP pages.
+* Fixed: Article graph properties could not be edited in the Schema Generator when using the Classic Editor.
+* Fixed: FAQ Page schema sometimes not output if it set as the default graph.
+* Fixed: Schema can now correctly include floats (without floating point rounding errors).
+* Fixed: Emojis in the metabox are no longer hidden when switching between the Classic Editor and Block Editor.
+* Fixed: Reverted sitemap namespaces back to HTTP to prevent a warning in the Yandex sitemap validator.
+* Fixed: Crawl Cleanup no longer strips key query argument from WooCommerce.
+* Fixed: Global container shortcode from Avada not being parsed when AIOSEO Pro is active.
+* Fixed: WP CLI sometimes throwing an error because of an undefined WP function.
+* Fixed: Database tables are no longer dropped on Lite plugin removal when Pro plugin was previously installed with the Uninstall option activated.
+* Fixed: Loading spinner doesn’t disappear sometimes after refreshing the link & suggestion data for a post in the Links Report in Link Assistant.
+* Fixed: Space characters are no longer stripped from the target URL during sanitization when creating/updating a redirect.
+* Fixed: Table of Contents block reordering sometimes not retaining new nested state.
+* Fixed: Table of Contents block is now more responsive to smaller containers.
+* Fixed: TruSEO content analysis now correctly decodes HTML entities before running its tests.
+* Fixed: TruSEO content analysis now correctly handles phrases with inline HTML tags.
+* Fixed: Taxonomy name smart tag now correctly supports taxonomy slugs with dashes in them.
+* Fixed: SEO Analyzer sometimes not correctly detecting robots.txt rules because of their casing.
+* Fixed: System Status info in Tools menu now displays the correct site language.
+* Fixed: PHP warning when Local Business Locations are included in the results of the search archive page.
+* Fixed: Logos in Webmaster Tools sometimes not rendered in Mozilla Firefox on Linux machines.
 
 **New in Version 4.2.6.1**
 
@@ -1123,6 +1163,6 @@ As part of your SEO strategy, an XML sitemap can help you to improve your domain
 
 == Upgrade Notice ==
 
-= 4.2.6.1 =
+= 4.2.7.1 =
 
 This update adds major improvements and bugfixes.

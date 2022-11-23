@@ -271,12 +271,12 @@ class VueSettings {
 	}
 
 	/**
-	 * Gets the default value for an settings.
+	 * Gets the default value for a setting.
 	 *
 	 * @since 4.0.0
 	 *
 	 * @param  string $name The settings name.
-	 * @return void
+	 * @return mixed        The default value.
 	 */
 	public function getDefault( $name ) {
 		return isset( $this->defaults[ $name ] ) ? $this->defaults[ $name ] : null;

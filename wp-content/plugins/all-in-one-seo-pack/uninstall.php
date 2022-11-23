@@ -13,6 +13,15 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 // Load plugin file.
 require_once 'all_in_one_seo_pack.php';
 
+// In case any of the versions - Lite or Pro - is still activated we bail.
+// Meaning, if you delete Lite while the Pro is activated we bail, and vice-versa.
+if (
+	defined( 'AIOSEO_FILE' )
+	&& is_plugin_active( plugin_basename( AIOSEO_FILE ) )
+) {
+	return;
+}
+
 // Disable Action Schedule Queue Runner.
 if ( class_exists( 'ActionScheduler_QueueRunner' ) ) {
 	ActionScheduler_QueueRunner::instance()->unhook_dispatch_async_request();

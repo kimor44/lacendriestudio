@@ -24,6 +24,24 @@ final class WpFastestCache {
 	private $exclusionRules = [];
 
 	/**
+	 * The relative file path.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var string
+	 */
+	private $relativeFilePath = '';
+
+	/**
+	 * The WPFastestCache instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Object
+	 */
+	private $wpFastestCache = null;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 4.2.5

@@ -229,12 +229,12 @@ class Wizard {
 
 		// Save the features section.
 		if ( 'features' === $section && ! empty( $wizard['features'] ) ) {
-			$features = $wizard['features'];
+			$features   = $wizard['features'];
+			$pluginData = aioseo()->helpers->getPluginData();
 
 			// Install MI.
 			if ( in_array( 'analytics', $features, true ) ) {
 				$cantInstall = false;
-				$pluginData  = aioseo()->helpers->getPluginData();
 				if ( ! $pluginData['miPro']['activated'] && ! $pluginData['miLite']['activated'] ) {
 					if ( $pluginData['miPro']['installed'] ) {
 						aioseo()->addons->installAddon( 'miPro', $network );

@@ -167,12 +167,17 @@ class PostMeta {
 						if ( in_array( $post->post_type, [ 'post', 'page', 'attachment' ], true ) ) {
 							break;
 						}
-						if ( in_array( $value, ImportExport\SearchAppearance::$supportedWebPageGraphs, true ) ) {
-							$meta[ $mappedMeta[ $name ] ] = 'WebPage';
-							$options          = new \stdClass();
-							$options->webPage = [ 'webPageType' => $value ];
+
+						if ( ! in_array( $value, ImportExport\SearchAppearance::$supportedWebPageGraphs, true ) ) {
+							break;
 						}
-						$meta['schema_type_options'] = wp_json_encode( $options );
+
+						$meta[ $mappedMeta[ $name ] ] = 'WebPage';
+						$meta['schema_type_options']  = wp_json_encode( [
+							'webPage' => [
+								'webPageType' => $value
+							]
+						] );
 						break;
 					case '_yoast_wpseo_schema_article_type':
 						$value = aioseo()->helpers->pregReplace( '#\s#', '', $value );

@@ -58,6 +58,42 @@ trait Assets {
 	private $noModuleTag = [];
 
 	/**
+	 * Core class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var \AIOSEO\Plugin\Common\Core\Core
+	 */
+	protected $core = null;
+
+	/**
+	 * The LocalBusiness addon version.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var string
+	 */
+	protected $version = '';
+
+	/**
+	 * The development site domain.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var string
+	 */
+	protected $domain = '';
+
+	/**
+	 * The development server port.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var int
+	 */
+	protected $port = 0;
+
+	/**
 	 * The asset to load.
 	 *
 	 * @since 4.1.9
@@ -353,8 +389,10 @@ trait Assets {
 			return $file;
 		}
 
-		require( $this->manifestFile );
-		$file = json_decode( $manifestJson, true ); // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
+		$manifestJson = ''; // This is set in the view.
+		require $this->manifestFile;
+
+		$file = json_decode( $manifestJson, true );
 
 		return $file;
 	}
@@ -380,8 +418,10 @@ trait Assets {
 			return $file;
 		}
 
-		require( $this->assetManifestFile );
-		$file = json_decode( $manifestJson, true ); // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable
+		$manifestJson = ''; // This is set in the view.
+		require $this->assetManifestFile;
+
+		$file = json_decode( $manifestJson, true );
 
 		return $file;
 	}

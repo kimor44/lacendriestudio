@@ -76,6 +76,15 @@ class Model implements \JsonSerializable {
 	protected $pk = 'id';
 
 	/**
+	 * The ID of the model.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var int
+	 */
+	public $id = 0;
+
+	/**
 	 * An array of columns from the DB that we can use.
 	 *
 	 * @since 4.0.0

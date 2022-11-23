@@ -15,6 +15,15 @@ use AIOSEO\Plugin\Common\Admin as CommonAdmin;
  */
 class Admin extends CommonAdmin\Admin {
 	/**
+	 * Connect class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Connect
+	 */
+	public $connect = null;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 4.0.0

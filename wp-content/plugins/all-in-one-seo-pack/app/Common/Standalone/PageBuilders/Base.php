@@ -94,7 +94,7 @@ abstract class Base {
 	 * @return boolean Whether or not the plugin is active.
 	 */
 	public function isPluginActive() {
-		include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 		foreach ( $this->plugins as $basename ) {
 			if ( is_plugin_active( $basename ) ) {

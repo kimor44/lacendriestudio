@@ -46,7 +46,7 @@ class Article extends Graphs\Graph {
 				: mysql2date( DATE_W3C, $post->post_date_gmt, false ),
 			'dateModified'     => ! empty( $graphData->properties->dates->dateModified )
 				? mysql2date( DATE_W3C, $graphData->properties->dates->dateModified, false )
-				: mysql2date( DATE_W3C, $post->post_date_gmt, false ),
+				: mysql2date( DATE_W3C, $post->post_modified_gmt, false ),
 			'inLanguage'       => aioseo()->helpers->currentLanguageCodeBCP47(),
 			'commentCount'     => get_comment_count( $post->ID )['approved'],
 			'mainEntityOfPage' => empty( $graphData ) ? [ '@id' => aioseo()->schema->context['url'] . '#webpage' ] : '',

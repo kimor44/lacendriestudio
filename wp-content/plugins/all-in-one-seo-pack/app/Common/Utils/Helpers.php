@@ -14,7 +14,6 @@ use AIOSEO\Plugin\Common\Traits\Helpers as TraitHelpers;
  * @since 4.0.0
  */
 class Helpers {
-	use TraitHelpers\ActionScheduler;
 	use TraitHelpers\Api;
 	use TraitHelpers\Arrays;
 	use TraitHelpers\Constants;

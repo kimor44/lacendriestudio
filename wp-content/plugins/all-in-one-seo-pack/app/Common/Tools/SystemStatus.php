@@ -55,7 +55,7 @@ class SystemStatus {
 				],
 				[
 					'header' => __( 'Site Language', 'all-in-one-seo-pack' ),
-					'value'  => defined( 'WPLANG' ) && WPLANG ? WPLANG : 'en_US'
+					'value'  => get_locale() ?: 'en_US'
 				],
 				[
 					'header' => __( 'User Language', 'all-in-one-seo-pack' ),

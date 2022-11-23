@@ -277,7 +277,7 @@ class BadBotBlocker {
 			$fs->putContents( $filePath, '' );
 		}
 
-		return $this->getLogSize( $filePath );
+		return $this->getLogSize();
 	}
 
 	/**

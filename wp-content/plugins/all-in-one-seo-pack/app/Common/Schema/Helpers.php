@@ -65,4 +65,31 @@ class Helpers {
 
 		return $data;
 	}
+
+	/**
+	 * Sorts the schema data and then returns it as JSON.
+	 * We temporarily change the floating point precision in order to prevent rounding errors.
+	 * Otherwise e.g. 4.9 could be output as 4.90000004.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @param  array  $schema      The schema data.
+	 * @param  bool   $isValidator Whether we're grabbing the output for the validator.
+	 * @return string              The schema as JSON.
+	 */
+	public function getOutput( $schema, $isValidator = false ) {
+		$schema['@graph'] = apply_filters( 'aioseo_schema_output', $schema['@graph'] );
+		$schema['@graph'] = $this->cleanAndParseData( $schema['@graph'] );
+
+		// Sort the graphs alphabetically.
+		usort( $schema['@graph'], function ( $a, $b ) {
+			return strcmp( $a['@type'], $b['@type'] );
+		} );
+
+		$json = isset( $_GET['aioseo-dev'] ) || $isValidator
+			? aioseo()->helpers->wpJsonEncode( $schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE )
+			: aioseo()->helpers->wpJsonEncode( $schema );
+
+		return $json;
+	}
 }

@@ -31,6 +31,15 @@ class Schema {
 	public $context = [];
 
 	/**
+	 * Helpers class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Helpers
+	 */
+	public $helpers = null;
+
+	/**
 	 * The subdirectories that contain graph classes.
 	 *
 	 * @since 4.2.5
@@ -72,7 +81,8 @@ class Schema {
 	 * @var array
 	 */
 	public $nullableFields = [
-		'price' // Needs to be 0 if free for Software Application.
+		'price', // Needs to be 0 if free for Software Application.
+		'value' // Needs to be 0 if free for product shipping details.
 	];
 
 	/**
@@ -164,17 +174,7 @@ class Schema {
 			}
 		}
 
-		$schema['@graph'] = apply_filters( 'aioseo_schema_output', $schema['@graph'] );
-		$schema['@graph'] = $this->helpers->cleanAndParseData( $schema['@graph'] );
-
-		// Sort the graphs alphabetically.
-		usort( $schema['@graph'], function ( $a, $b ) {
-			return strcmp( $a['@type'], $b['@type'] );
-		} );
-
-		return isset( $_GET['aioseo-dev'] )
-			? wp_json_encode( $schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE )
-			: wp_json_encode( $schema );
+		return aioseo()->schema->helpers->getOutput( $schema );
 	}
 
 	/**

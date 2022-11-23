@@ -62,7 +62,7 @@ class Output {
 			}
 
 			echo "\r\n\r\n<?xml-stylesheet type=\"text/xsl\" href=\"" . esc_url( $xslUrl ) . "\"?>\r\n";
-			include_once( AIOSEO_DIR . '/app/Common/Views/sitemap/xml/rss.php' );
+			include_once AIOSEO_DIR . '/app/Common/Views/sitemap/xml/rss.php';
 
 			return;
 		}
@@ -71,7 +71,7 @@ class Output {
 			$xslUrl = add_query_arg( 'sitemap', aioseo()->sitemap->indexName, home_url() . '/default.xsl' );
 
 			echo "\r\n\r\n<?xml-stylesheet type=\"text/xsl\" href=\"" . esc_url( $xslUrl ) . "\"?>\r\n";
-			include( AIOSEO_DIR . '/app/Common/Views/sitemap/xml/root.php' );
+			include AIOSEO_DIR . '/app/Common/Views/sitemap/xml/root.php';
 
 			return;
 		}
@@ -79,7 +79,7 @@ class Output {
 		$xslUrl = add_query_arg( 'sitemap', aioseo()->sitemap->indexName, home_url() . '/default.xsl' );
 
 		echo "\r\n\r\n<?xml-stylesheet type=\"text/xsl\" href=\"" . esc_url( $xslUrl ) . "\"?>\r\n";
-		include( AIOSEO_DIR . '/app/Common/Views/sitemap/xml/default.php' );
+		include AIOSEO_DIR . '/app/Common/Views/sitemap/xml/default.php';
 	}
 
 	/**

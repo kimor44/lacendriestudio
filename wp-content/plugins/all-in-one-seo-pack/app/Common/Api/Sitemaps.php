@@ -22,7 +22,7 @@ class Sitemaps {
 	 * @return \WP_REST_Response The response.
 	 */
 	public static function deleteStaticFiles() {
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		require_once ABSPATH . 'wp-admin/includes/file.php';
 		$files = list_files( get_home_path(), 1 );
 		if ( ! count( $files ) ) {
 			return;

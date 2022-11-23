@@ -41,6 +41,15 @@ class Access {
 	];
 
 	/**
+	 * Whether we're already updating the roles during this request.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var bool
+	 */
+	protected $isUpdatingRoles = false;
+
+	/**
 	 * Roles we check capabilities against.
 	 *
 	 * @since 4.0.0

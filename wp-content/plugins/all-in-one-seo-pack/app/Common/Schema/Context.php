@@ -13,6 +13,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Context {
 	/**
+	 * Breadcrumb class instance.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var Breadcrumb
+	 */
+	private $breadcrumb = null;
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 4.0.0

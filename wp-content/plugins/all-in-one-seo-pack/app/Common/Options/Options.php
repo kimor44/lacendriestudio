@@ -240,15 +240,17 @@ TEMPLATE
 				'metaDescription' => [ 'type' => 'string', 'localized' => true, 'default' => '#tagline' ],
 				'keywords'        => [ 'type' => 'string', 'localized' => true ],
 				'schema'          => [
-					'siteRepresents'    => [ 'type' => 'string', 'default' => 'organization' ],
-					'person'            => [ 'type' => 'string' ],
-					'organizationName'  => [ 'type' => 'string' ],
-					'organizationLogo'  => [ 'type' => 'string' ],
-					'personName'        => [ 'type' => 'string' ],
-					'personLogo'        => [ 'type' => 'string' ],
-					'phone'             => [ 'type' => 'string' ],
-					'contactType'       => [ 'type' => 'string' ],
-					'contactTypeManual' => [ 'type' => 'string' ]
+					'websiteName'          => [ 'type' => 'string' ],
+					'websiteAlternateName' => [ 'type' => 'string' ],
+					'siteRepresents'       => [ 'type' => 'string', 'default' => 'organization' ],
+					'person'               => [ 'type' => 'string' ],
+					'organizationName'     => [ 'type' => 'string' ],
+					'organizationLogo'     => [ 'type' => 'string' ],
+					'personName'           => [ 'type' => 'string' ],
+					'personLogo'           => [ 'type' => 'string' ],
+					'phone'                => [ 'type' => 'string' ],
+					'contactType'          => [ 'type' => 'string' ],
+					'contactTypeManual'    => [ 'type' => 'string' ]
 				]
 			],
 			'advanced' => [
@@ -529,6 +531,10 @@ TEMPLATE
 		$this->defaults['searchAppearance']['global']['schema']['organizationName']['default'] = aioseo()->helpers->decodeHtmlEntities( get_bloginfo( 'name' ) );
 		$this->defaults['deprecated']['tools']['blocker']['custom']['bots']['default']         = implode( "\n", aioseo()->badBotBlocker->getBotList() );
 		$this->defaults['deprecated']['tools']['blocker']['custom']['referer']['default']      = implode( "\n", aioseo()->badBotBlocker->getRefererList() );
+
+		$this->defaults['searchAppearance']['global']['schema']['organizationName']['default'] = aioseo()->helpers->decodeHtmlEntities( get_bloginfo( 'name' ) );
+		$this->defaults['searchAppearance']['global']['schema']['websiteName']['default']      = aioseo()->helpers->decodeHtmlEntities( get_bloginfo( 'name' ) );
+		$this->defaults['searchAppearance']['global']['schema']['organizationLogo']['default'] = aioseo()->helpers->getSiteLogoUrl() ? aioseo()->helpers->getSiteLogoUrl() : '';
 	}
 
 	/**
@@ -558,9 +564,6 @@ TEMPLATE
 		$this->defaults['breadcrumbs']['archiveFormat']['default']      = sprintf( '%1$s #breadcrumb_archive_post_type_name', __( 'Archives for', 'all-in-one-seo-pack' ) );
 		$this->defaults['breadcrumbs']['searchResultFormat']['default'] = sprintf( '%1$s \'#breadcrumb_search_string\'', __( 'Search Results for', 'all-in-one-seo-pack' ) );
 		$this->defaults['breadcrumbs']['errorFormat404']['default']     = __( '404 - Page Not Found', 'all-in-one-seo-pack' );
-
-		$this->defaults['searchAppearance']['global']['schema']['organizationName']['default'] = aioseo()->helpers->decodeHtmlEntities( get_bloginfo( 'name' ) );
-		$this->defaults['searchAppearance']['global']['schema']['organizationLogo']['default'] = aioseo()->helpers->getSiteLogoUrl() ? aioseo()->helpers->getSiteLogoUrl() : '';
 	}
 
 	/**
@@ -582,7 +585,7 @@ TEMPLATE
 		$phoneNumberOptions          = isset( $options['searchAppearance']['global']['schema']['phone'] )
 				? $options['searchAppearance']['global']['schema']['phone']
 				: null;
-		$oldHtmlSitemapUrl = $this->sitemap->html->pageUrl;
+		$oldHtmlSitemapUrl = aioseo()->options->sitemap->html->pageUrl;
 
 		$options = $this->maybeRemoveUnfilteredHtmlFields( $options );
 
@@ -615,7 +618,7 @@ TEMPLATE
 		}
 
 		$newOptions = ! empty( $options['sitemap']['html'] ) ? $options['sitemap']['html'] : null;
-		if ( ! empty( $newOptions ) && $this->sitemap->html->enable ) {
+		if ( ! empty( $newOptions ) && aioseo()->options->sitemap->html->enable ) {
 			$newOptions = ! empty( $options['sitemap']['html'] ) ? $options['sitemap']['html'] : null;
 
 			$pageUrl = wp_parse_url( $newOptions['pageUrl'] );

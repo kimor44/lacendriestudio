@@ -529,6 +529,11 @@ trait ThirdParty {
 	 * @return bool Whether the current page is an AMP page.
 	 */
 	private function isAmpPageHelper() {
+		// Check if the AMP or AMP for WP plugin is active.
+		if ( ! function_exists( 'is_amp_endpoint' ) ) {
+			return false;
+		}
+
 		global $wp;
 
 		// This URL param is set when using plain permalinks.

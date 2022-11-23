@@ -76,7 +76,6 @@ class DetailsColumn {
 
 		add_filter( "manage_edit-{$screen->post_type}_columns", [ $this, 'addColumn' ] );
 		add_action( "manage_{$screen->post_type}_posts_custom_column", [ $this, 'renderColumn' ], 10, 2 );
-
 	}
 
 	/**
@@ -206,7 +205,7 @@ class DetailsColumn {
 		$wp_scripts->add_data( 'aioseo/js/' . $this->scriptSlug, 'data', '' );
 		wp_localize_script( 'aioseo/js/' . $this->scriptSlug, 'aioseo', $data );
 
-		require( AIOSEO_DIR . '/app/Common/Views/admin/posts/columns.php' );
+		require AIOSEO_DIR . '/app/Common/Views/admin/posts/columns.php';
 	}
 
 	/**

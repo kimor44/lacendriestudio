@@ -65,7 +65,7 @@ class Xsl {
 		$title = trim( $title );
 
 		echo '<?xml version="1.0" encoding="' . esc_attr( $charset ) . '"?>';
-		include_once( AIOSEO_DIR . '/app/Common/Views/sitemap/xsl/default.php' );
+		include_once AIOSEO_DIR . '/app/Common/Views/sitemap/xsl/default.php';
 		exit;
 	}
 

@@ -17,6 +17,15 @@ use AIOSEO\Plugin\Common\ImportExport;
  */
 class SearchAppearance {
 	/**
+	 * List of options.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var array
+	 */
+	private $options = [];
+
+	/**
 	 * Whether the homepage social settings have been imported here.
 	 *
 	 * @since 4.2.4

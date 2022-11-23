@@ -120,7 +120,7 @@ class Dashboard {
 		echo '<div id="' . esc_attr( $appId ) . '">';
 
 		// Loader element.
-		require( AIOSEO_DIR . '/app/Common/Views/parts/loader.php' );
+		require AIOSEO_DIR . '/app/Common/Views/parts/loader.php';
 
 		// Closing tag.
 		echo '</div>';
@@ -145,7 +145,7 @@ class Dashboard {
 	 * @return array The RSS posts.
 	 */
 	public function getAioseoRssFeed() {
-		include_once( ABSPATH . WPINC . '/feed.php' );
+		include_once ABSPATH . WPINC . '/feed.php';
 
 		$rssItems = aioseo()->core->networkCache->get( 'rss_feed' );
 		if ( null === $rssItems ) {

@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Deal with third-party cache plugins.
+ * Handles third-party caching plugins.
  *
  * @since 4.2.5
  */
@@ -25,13 +25,25 @@ class Cache {
 	];
 
 	/**
+	 * List of active plugins and their instances.
+	 *
+	 * @since 4.2.7
+	 *
+	 * @var array[Object]
+	 */
+	private $activePlugins = [];
+
+	/**
 	 * Class constructor.
 	 *
 	 * @since 4.2.5
 	 */
 	public function __construct() {
-		$this->activePlugins = [];
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			include_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
 
+		$this->activePlugins = [];
 		foreach ( $this->plugins as $class => $relativeFilePath ) {
 			if ( is_plugin_active( $relativeFilePath ) ) {
 				$this->activePlugins[] = new $class( $relativeFilePath );
