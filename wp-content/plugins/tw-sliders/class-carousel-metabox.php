@@ -71,8 +71,8 @@ abstract class Carousel_Metabox {
         // Add an nonce field so we can check for it later.
         wp_nonce_field( self::NONCE, self::NONCE );
       ?>
-      <label class="inline-edit-status alignleft" for="<?= self::META_KEY ?>">
-        <span class="title">Visibilité</span>
+      <label class="inline-edit-col-right label-is-visible" for="<?= self::META_KEY ?>">
+        <span class="title">Visible ?</span>
         <span class="input-text-wrap">
           <input type="checkbox" id="<?= self::META_KEY ?>" name="<?= self::META_KEY ?>" value="yes" >
         </span>

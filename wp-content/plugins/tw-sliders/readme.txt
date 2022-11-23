@@ -2,7 +2,7 @@
 Contributors: Julien Guibert
 Tags: pictures, carousel, animations, slides
 Requires at least: 5.4
-Tested up to: 6.0.3
+Tested up to: 6.1.1
 Requires PHP: 7.4.21
 Stable tag: 1.1.2
 
@@ -29,9 +29,10 @@ You have to chek the "Cocher la case pour afficher l'image dans le carrousel" ch
 
 1.1.2
 
-18/11/2022
+23/11/2022
 
-* Added securities about REST API & NONCE field
+* Added is_visible field in the Quick Edit mode
+* Added NONCE field in the "new slide" page
 
 1.1.1
 
