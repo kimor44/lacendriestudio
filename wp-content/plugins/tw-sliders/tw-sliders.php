@@ -42,8 +42,13 @@ if (! function_exists('slider_admin_scripts')) {
   function slider_admin_scripts() {
     $screen = get_current_screen();
     if($screen->post_type == 'slider' || $screen->base == 'slider_page_presentation'){
+      // Loading Sliders admin CSS
       $css_file = plugin_dir_url(__FILE__) . '/assets/css/slider_admin.css';
       wp_enqueue_style('slider_admin', $css_file, array(), dirname($css_file), false);
+
+      // Loadind Sliders admin script
+      $js_file = plugin_dir_url(__FILE__) . '/assets/js/populate_is_visible_field.js';
+      wp_enqueue_script('populate_is_visible_field', $js_file, array(), false, true);
     }
   }
 }
