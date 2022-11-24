@@ -80,8 +80,48 @@ abstract class Carousel_Metabox {
     <?php
     }
   }
+
+  /**
+   * Build filter for the is_visible meta data
+   * 
+   * @param string $post_type The post type slug
+   */
+  public static function is_visible_filtering( string $post_type ){
+    
+    if('slider' !== $post_type){
+      return;
+    }
+
+    $current_plugin = isset($_GET['visibility_filtering']) ? $_GET['visibility_filtering'] : '';
+
+    $meta_key = 'is_visible_meta_key';
+    global $wpdb;
+
+    $visibilities = $wpdb->get_col( 
+      $wpdb->prepare( "
+        SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
+        LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+        WHERE pm.meta_key = '%s' 
+        ORDER BY pm.meta_value DESC", 
+        $meta_key
+      ) 
+    );
+
+    $t_visibility = array(
+      'yes' => 'oui',
+      'no' => 'non'
+    );
+
+    echo '<select id="visibility_filtering" name="visibility_filtering">';
+    echo '<option value="0"'. selected('toutes les visibilités', $current_plugin) . '>' . __( 'Toutes les visibilités', 'text-slider' ) . '</option>';
+      foreach($visibilities as $visibility){
+        echo '<option value="' . $visibility . '" '. selected($visibility, $current_plugin) .'>' . ucfirst($t_visibility[$visibility]) . '</option>';
+      }
+    echo '</select>';
+  }
 }
 
 add_action( 'add_meta_boxes', [ 'Carousel_Metabox', 'add_checkbox_is_visible' ], 10, 2 );
 add_action( 'save_post', [ 'Carousel_Metabox', 'save_is_visible_postdata' ] );
 add_action( 'quick_edit_custom_box', [ 'Carousel_Metabox', 'display_quick_edit_is_visible'], 10, 2);
+add_action( 'restrict_manage_posts', [ 'Carousel_Metabox', 'is_visible_filtering' ], 10, 1);
