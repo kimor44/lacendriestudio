@@ -4,7 +4,7 @@ Tags: pictures, carousel, animations, slides
 Requires at least: 5.4
 Tested up to: 6.1.1
 Requires PHP: 7.4.21
-Stable tag: 1.1.2
+Stable tag: 1.3.0
 
 Create carousel and its slides.
 Manage the slides you want to show.
@@ -27,11 +27,22 @@ You have to chek the "Cocher la case pour afficher l'image dans le carrousel" ch
 
 == Changelog ==
 
-1.1.2
+1.3.0
+
+25/11/2022
+
+* Added dropdown to filter slides by visibility
+
+1.2.0
 
 23/11/2022
 
 * Added is_visible field in the Quick Edit mode
+
+1.1.2
+
+19/11/2022
+
 * Added NONCE field in the "new slide" page
 
 1.1.1
