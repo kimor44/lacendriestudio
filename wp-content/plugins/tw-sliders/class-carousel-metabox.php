@@ -119,9 +119,46 @@ abstract class Carousel_Metabox {
       }
     echo '</select>';
   }
+
+  /**
+   * Query filters slides according to visibility
+   * 
+   * @param WP_Query $query the WP_Query instance
+   */
+  public static function is_visible_filter_parsing( WP_Query $query ) {
+
+    // modify the query only if it admin and main query.
+    if( !(is_admin() AND $query->is_main_query()) ){ 
+      return $query;
+    }
+
+    $post_type = isset($_GET['post_type']) ? $_GET['post_type'] : '';
+    
+    // we want to modify the query for the targeted custom post and filter option
+    if( !('slider' === $post_type && isset($_GET['visibility_filtering']) ) ){
+      return $query;
+    }
+
+    // for the default value of our filter no modification is required
+    if ( $_GET['visibility_filtering'] == '0' ){
+      return $query;
+    }
+
+    // modify query_vars
+    if ($post_type == 'slider' && isset($_GET['visibility_filtering'])){
+      $query = $query->query_vars = array(
+        'post_type' => $post_type,
+        'meta_key' => 'is_visible_meta_key',
+        'meta_value' => $_GET['visibility_filtering'],
+        'meta_compare' => '='
+      );
+      return $query;
+    }
+  }
 }
 
 add_action( 'add_meta_boxes', [ 'Carousel_Metabox', 'add_checkbox_is_visible' ], 10, 2 );
 add_action( 'save_post', [ 'Carousel_Metabox', 'save_is_visible_postdata' ] );
 add_action( 'quick_edit_custom_box', [ 'Carousel_Metabox', 'display_quick_edit_is_visible'], 10, 2);
 add_action( 'restrict_manage_posts', [ 'Carousel_Metabox', 'is_visible_filtering' ], 10, 1);
+add_action( 'parse_query', [ 'Carousel_Metabox', 'is_visible_filter_parsing' ], 10, 1);
