@@ -2,8 +2,10 @@
 
 abstract class Carousel_Metabox {
 
-  const META_KEY = 'is_visible';
+  const META_BOX_ID = 'is_visible';
+  const META_KEY = 'is_visible_meta_key';
   const NONCE = '_cendrie_is_visible_nonce';
+  const FILTER = 'visibility_filtering';
  
   /**
    * Create the checkbox metabox in the admin panel of "sliders" plugin
@@ -12,7 +14,7 @@ abstract class Carousel_Metabox {
   public static function add_checkbox_is_visible($postType, $post) {
     if($postType == 'slider' && current_user_can('publish_posts', $post)){
       add_meta_box(
-          self::META_KEY,
+          self::META_BOX_ID,
           'Afficher l\'image dans le carrousel ?',
           [ self::class, 'build_is_visible_form' ],
           'slider',
@@ -28,18 +30,22 @@ abstract class Carousel_Metabox {
    * @param int $post_id The ID of the post being saved.
    */
   public static function save_is_visible_postdata( int $post_id ) {
+    if (!isset($_POST['post_type']) || $_POST['post_type'] != 'slider' ) {
+      return;
+    };
+
     $nonce = $_POST[self::NONCE];
     if (
         wp_verify_nonce($nonce, self::NONCE) &&
         current_user_can('publish_posts', $post_id)
         ) {
-        if(!array_key_exists(self::META_KEY, $_POST)){
-          $_POST[self::META_KEY] = "no";
+        if(!array_key_exists(self::META_BOX_ID, $_POST)){
+          $_POST[self::META_BOX_ID] = "no";
         }
         update_post_meta(
             $post_id,
-            'is_visible_meta_key',
-            $_POST[self::META_KEY],
+            self::META_KEY,
+            $_POST[self::META_BOX_ID],
         );
     }
   }
@@ -50,13 +56,13 @@ abstract class Carousel_Metabox {
    * @param WP_Post $post The post object.
    */
   public static function build_is_visible_form( WP_Post $post ) {
-    $value = get_post_meta( $post->ID, 'is_visible_meta_key', true );
+    $value = get_post_meta( $post->ID, self::META_KEY, true );
     $checked = $value == "yes" ? "checked" : "";
 		// Add an nonce field so we can check for it later.
 		wp_nonce_field( self::NONCE, self::NONCE );
     ?>
-      <input type="checkbox" id="<?= self::META_KEY ?>" name="<?= self::META_KEY ?>" value="yes" <?php echo $checked; ?>>
-      <label for="<?= self::META_KEY ?>">Cocher la case pour afficher l'image dans le carrousel</label>
+      <input type="checkbox" id="<?= self::META_BOX_ID ?>" name="<?= self::META_BOX_ID ?>" value="yes" <?php echo $checked; ?>>
+      <label for="<?= self::META_BOX_ID ?>">Cocher la case pour afficher l'image dans le carrousel</label>
     <?php
   }
 
@@ -71,10 +77,10 @@ abstract class Carousel_Metabox {
         // Add an nonce field so we can check for it later.
         wp_nonce_field( self::NONCE, self::NONCE );
       ?>
-      <label class="inline-edit-col-right label-is-visible" for="<?= self::META_KEY ?>">
+      <label class="inline-edit-col-right label-is-visible" for="<?= self::META_BOX_ID ?>">
         <span class="title">Visible ?</span>
         <span class="input-text-wrap">
-          <input type="checkbox" id="<?= self::META_KEY ?>" name="<?= self::META_KEY ?>" value="yes" >
+          <input type="checkbox" id="<?= self::META_BOX_ID ?>" name="<?= self::META_BOX_ID ?>" value="yes" >
         </span>
       </label>
     <?php
@@ -92,9 +98,8 @@ abstract class Carousel_Metabox {
       return;
     }
 
-    $current_plugin = isset($_GET['visibility_filtering']) ? $_GET['visibility_filtering'] : '';
+    $current_plugin = isset($_GET[self::FILTER]) ? $_GET[self::FILTER] : '';
 
-    $meta_key = 'is_visible_meta_key';
     global $wpdb;
 
     $visibilities = $wpdb->get_col( 
@@ -103,7 +108,7 @@ abstract class Carousel_Metabox {
         LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
         WHERE pm.meta_key = '%s' 
         ORDER BY pm.meta_value DESC", 
-        $meta_key
+        self::META_KEY
       ) 
     );
 
@@ -112,7 +117,7 @@ abstract class Carousel_Metabox {
       'no' => 'non'
     );
 
-    echo '<select id="visibility_filtering" name="visibility_filtering">';
+    echo '<select id="' . self::FILTER . '" name="' . self::FILTER . '">';
     echo '<option value="0"'. selected('toutes les visibilités', $current_plugin) . '>' . __( 'Toutes les visibilités', 'text-slider' ) . '</option>';
       foreach($visibilities as $visibility){
         echo '<option value="' . $visibility . '" '. selected($visibility, $current_plugin) .'>' . ucfirst($t_visibility[$visibility]) . '</option>';
@@ -135,21 +140,21 @@ abstract class Carousel_Metabox {
     $post_type = isset($_GET['post_type']) ? $_GET['post_type'] : '';
     
     // we want to modify the query for the targeted custom post and filter option
-    if( !('slider' === $post_type && isset($_GET['visibility_filtering']) ) ){
+    if( !('slider' === $post_type && isset($_GET[self::FILTER]) ) ){
       return $query;
     }
 
     // for the default value of our filter no modification is required
-    if ( $_GET['visibility_filtering'] == '0' ){
+    if ( $_GET[self::FILTER] == '0' ){
       return $query;
     }
 
     // modify query_vars
-    if ($post_type == 'slider' && isset($_GET['visibility_filtering'])){
+    if ($post_type == 'slider' && isset($_GET[self::FILTER])){
       $query = $query->query_vars = array(
         'post_type' => $post_type,
-        'meta_key' => 'is_visible_meta_key',
-        'meta_value' => $_GET['visibility_filtering'],
+        'meta_key' => self::META_KEY,
+        'meta_value' => $_GET[self::FILTER],
         'meta_compare' => '='
       );
       return $query;
