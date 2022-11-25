@@ -26,9 +26,10 @@ if ( ! class_exists( 'Admin_Handling' ) ) {
      * @return void
      */
     function get_is_visible_metabox_for_custom_column(): void{
-      $translate = array("yes" => "oui", "no" => "non");
+      require_once('includes/slider_tools.php');
+
       $value = get_post_meta( $this->post_id, 'is_visible_meta_key', true );
-      $translated_value = $translate[$value];
+      $translated_value = Slider_Tools::visibility($value);
       if(!isset($translated_value)){
         $translated_value = "no";
       }
