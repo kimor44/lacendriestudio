@@ -7,12 +7,17 @@ abstract class Carousel_Metabox {
   const NONCE = '_cendrie_is_visible_nonce';
   const FILTER = 'visibility_filtering';
 
+
+  //_____Start_Add_Meta_box_____
   /**
    * Create the checkbox metabox in the admin panel of "sliders" plugin
    * to show or not the slide in the carousel
+   * 
+   * @param string $post_type Post Type
+   * @param WP_Post $post Post Object
    */
-  public static function add_checkbox_is_visible($postType, $post) {
-    if($postType == 'slider' && current_user_can('publish_posts', $post)){
+  public static function add_checkbox_is_visible( string $post_type, WP_Post $post ) {
+    if($post_type == 'slider' && current_user_can('publish_posts', $post)){
       add_meta_box(
           self::META_BOX_ID,
           'Afficher l\'image dans le carrousel ?',
@@ -22,6 +27,22 @@ abstract class Carousel_Metabox {
           'high',
       );
     }
+  }
+
+  /**
+   * Render Meta Box content.
+   *
+   * @param WP_Post $post The post object.
+   */
+  public static function build_is_visible_form( WP_Post $post ) {
+    $value = get_post_meta( $post->ID, self::META_KEY, true );
+    $checked = $value == "yes" ? "checked" : "";
+		// Add an nonce field so we can check for it later.
+		wp_nonce_field( self::NONCE, self::NONCE );
+    ?>
+      <input type="checkbox" id="<?= self::META_BOX_ID ?>" name="<?= self::META_BOX_ID ?>" value="yes" <?php echo $checked; ?>>
+      <label for="<?= self::META_BOX_ID ?>">Cocher la case pour afficher l'image dans le carrousel</label>
+    <?php
   }
 
   /**
@@ -49,30 +70,16 @@ abstract class Carousel_Metabox {
         );
     }
   }
+  //_____End_Add_Meta_box_____
 
-  /**
-   * Render Meta Box content.
-   *
-   * @param WP_Post $post The post object.
-   */
-  public static function build_is_visible_form( WP_Post $post ) {
-    $value = get_post_meta( $post->ID, self::META_KEY, true );
-    $checked = $value == "yes" ? "checked" : "";
-		// Add an nonce field so we can check for it later.
-		wp_nonce_field( self::NONCE, self::NONCE );
-    ?>
-      <input type="checkbox" id="<?= self::META_BOX_ID ?>" name="<?= self::META_BOX_ID ?>" value="yes" <?php echo $checked; ?>>
-      <label for="<?= self::META_BOX_ID ?>">Cocher la case pour afficher l'image dans le carrousel</label>
-    <?php
-  }
 
+  //_____Start_Quick_Edit_Mode_____
   /**
    * Display Meta Box in quick edit mode
    * 
    *  @param string $column_name Name of the column to edit.
-   *  @param string $post_type The post type slug, or current screen name if this is a taxonomy list table.
    */
-  public static function display_quick_edit_is_visible(string $column_name, string $post_type) {
+  public static function display_quick_edit_is_visible(string $column_name) {
     if (current_user_can('publish_posts') && $column_name == 'visible') {
         // Add a nonce field so we can check for it later.
         wp_nonce_field( self::NONCE, self::NONCE );
@@ -86,7 +93,10 @@ abstract class Carousel_Metabox {
     <?php
     }
   }
+  //_____End_Quick_Edit_Mode_____
 
+
+  //_____Start_Filter_____
   /**
    * Build filter for the is_visible meta data
    * 
@@ -126,11 +136,12 @@ abstract class Carousel_Metabox {
    * Query filters slides according to visibility
    * 
    * @param WP_Query $query the WP_Query instance
+   * @return WP_Query $query the WP_Query instance modified
    */
   public static function is_visible_filter_parsing( WP_Query $query ) {
 
     // modify the query only if it admin and main query.
-    if( !(is_admin() AND $query->is_main_query()) ){ 
+    if( !($query->is_main_query()) ){ 
       return $query;
     }
 
@@ -157,7 +168,10 @@ abstract class Carousel_Metabox {
       return $query;
     }
   }
+  //_____End_Filter_____
 
+
+  //_____Start_Sort_Column_____
   /**
    * Insert the 'visible' column to the sortable columns array
    * 
@@ -185,17 +199,18 @@ abstract class Carousel_Metabox {
       $query->set('orderby', 'meta_value');
     }
   }
+  //_____End_Sort_Column_____
 }
 
 add_action( 'add_meta_boxes', [ 'Carousel_Metabox', 'add_checkbox_is_visible' ], 10, 2 );
 add_action( 'save_post', [ 'Carousel_Metabox', 'save_is_visible_postdata' ] );
-add_action( 'quick_edit_custom_box', [ 'Carousel_Metabox', 'display_quick_edit_is_visible'], 10, 2);
-add_action( 'restrict_manage_posts', [ 'Carousel_Metabox', 'is_visible_filtering' ], 10, 1);
-add_action( 'parse_query', [ 'Carousel_Metabox', 'is_visible_filter_parsing' ], 10, 1);
 
 global $pagenow;
 
 if ( $pagenow == 'edit.php' && is_admin() && $_GET['post_type'] == 'slider'){
+  add_action( 'quick_edit_custom_box', [ 'Carousel_Metabox', 'display_quick_edit_is_visible'], 10, 1);
+  add_action( 'restrict_manage_posts', [ 'Carousel_Metabox', 'is_visible_filtering' ], 10, 1);
+  add_action( 'parse_query', [ 'Carousel_Metabox', 'is_visible_filter_parsing' ], 10, 1);
   add_filter( 'manage_edit-slider_sortable_columns', [ 'Carousel_Metabox', 'enable_sortable_is_visible_column' ], 10, 1);
   add_action( 'pre_get_posts', [ 'Carousel_Metabox', 'visibility_order_by' ], 10, 1);
 }
