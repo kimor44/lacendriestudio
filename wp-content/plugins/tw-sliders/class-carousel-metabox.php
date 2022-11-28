@@ -157,6 +157,34 @@ abstract class Carousel_Metabox {
       return $query;
     }
   }
+
+  /**
+   * Insert the 'visible' column to the sortable columns array
+   * 
+   * @param array $columns Array with all the sortable columns
+   * @return array $columns Array of columns filterd with the new "visible" column
+   */
+  public static function enable_sortable_is_visible_column(array $columns){
+    unset($columns['comments']);
+
+    $columns['visible'] = 'visibility';
+  
+    return $columns;
+  }
+
+  /**
+   * Handle WP_Query to sort sliders by meta_values "is_visible"
+   * 
+   * @param WP_Query $query The WP_Query instance
+   */
+  public static function visibility_order_by( WP_Query $query ) {
+    $order_by = $query->get('orderby');
+
+    if ($order_by == 'visibility') {
+      $query->set('meta_key', self::META_KEY);
+      $query->set('orderby', 'meta_value');
+    }
+  }
 }
 
 add_action( 'add_meta_boxes', [ 'Carousel_Metabox', 'add_checkbox_is_visible' ], 10, 2 );
@@ -164,3 +192,10 @@ add_action( 'save_post', [ 'Carousel_Metabox', 'save_is_visible_postdata' ] );
 add_action( 'quick_edit_custom_box', [ 'Carousel_Metabox', 'display_quick_edit_is_visible'], 10, 2);
 add_action( 'restrict_manage_posts', [ 'Carousel_Metabox', 'is_visible_filtering' ], 10, 1);
 add_action( 'parse_query', [ 'Carousel_Metabox', 'is_visible_filter_parsing' ], 10, 1);
+
+global $pagenow;
+
+if ( $pagenow == 'edit.php' && is_admin() && $_GET['post_type'] == 'slider'){
+  add_filter( 'manage_edit-slider_sortable_columns', [ 'Carousel_Metabox', 'enable_sortable_is_visible_column' ], 10, 1);
+  add_action( 'pre_get_posts', [ 'Carousel_Metabox', 'visibility_order_by' ], 10, 1);
+}
