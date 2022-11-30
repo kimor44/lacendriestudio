@@ -79,7 +79,7 @@ abstract class Carousel_Metabox {
    * 
    *  @param string $column_name Name of the column to edit.
    */
-  public static function display_quick_edit_is_visible(string $column_name) {
+  public static function is_visible_custom_box_quick_edit_bulk_edit(string $column_name) {
     if (current_user_can('publish_posts') && $column_name == 'visible') {
         // Add a nonce field so we can check for it later.
         wp_nonce_field( self::NONCE, self::NONCE );
@@ -208,7 +208,7 @@ abstract class Carousel_Metabox {
    * 
    * @param int $post_ID ID of the current post 
    */
-  public static function save_bulk_update_is_visible( int $post_ID ){
+  public static function bulk_edit_custom_is_visible( int $post_ID ){
     $nonce = $_REQUEST[ self::NONCE ];
     if (! wp_verify_nonce($nonce, self::NONCE)){
       return;
@@ -231,11 +231,11 @@ add_action( 'save_post', [ 'Carousel_Metabox', 'save_is_visible_postdata' ] );
 global $pagenow;
 
 if ( $pagenow == 'edit.php' && is_admin() && $_GET['post_type'] == 'slider'){
-  add_action( 'quick_edit_custom_box', [ 'Carousel_Metabox', 'display_quick_edit_is_visible'], 10, 1);
+  add_action( 'quick_edit_custom_box', [ 'Carousel_Metabox', 'is_visible_custom_box_quick_edit_bulk_edit'], 10, 1);
   add_action( 'restrict_manage_posts', [ 'Carousel_Metabox', 'is_visible_filtering' ], 10, 1);
   add_action( 'parse_query', [ 'Carousel_Metabox', 'is_visible_filter_parsing' ], 10, 1);
   add_filter( 'manage_edit-slider_sortable_columns', [ 'Carousel_Metabox', 'enable_sortable_is_visible_column' ], 10, 1);
   add_action( 'pre_get_posts', [ 'Carousel_Metabox', 'visibility_order_by' ], 10, 1);
-  add_action( 'bulk_edit_custom_box', [ 'Carousel_Metabox', 'display_quick_edit_is_visible'], 11, 2);
-  add_action( 'save_post', [ 'Carousel_Metabox', 'save_bulk_update_is_visible' ], 11, 1 );
+  add_action( 'bulk_edit_custom_box', [ 'Carousel_Metabox', 'is_visible_custom_box_quick_edit_bulk_edit'], 11, 2);
+  add_action( 'save_post', [ 'Carousel_Metabox', 'bulk_edit_custom_is_visible' ], 11, 1 );
 }
