@@ -4,7 +4,7 @@ Tags: pictures, carousel, animations, slides
 Requires at least: 5.4
 Tested up to: 6.1.1
 Requires PHP: 7.4.21
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 
 Create carousel and its slides.
 Manage the slides you want to show.
@@ -18,6 +18,10 @@ You have to click on the "Ajouter une slide" to add a new slide.
 
 You must provide a title, thumbnail and the visibility state.
 
+Visibility is manageable from the edit page.
+
+You can use quick edit mode, filter, sort and update multiple slides by bulk edit mode.
+
 == Installation ==
 Upload the plugin in the "Plugins" directory, click on "Activate" and that's all.
 
@@ -26,6 +30,12 @@ Why my picture doesn't appear in the carousel ?
 You have to chek the "Cocher la case pour afficher l'image dans le carrousel" checkbox in the "Ajouter une nouvelle slide" page.
 
 == Changelog ==
+
+1.5.0
+
+30/11/2022
+
+* Added the ability to update multiple visibilities using bulk edit mode.
 
 1.4.0
 
