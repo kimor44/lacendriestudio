@@ -73,7 +73,7 @@ abstract class Carousel_Metabox {
   //_____End_Add_Meta_box_____
 
 
-  //_____Start_Quick_Edit_Mode_____
+  //_____Start_Quick_Edit_and_Bulk_Edit_Mode_custom_checkbox_____
   /**
    * Display Meta Box in quick edit mode
    * 
@@ -85,15 +85,16 @@ abstract class Carousel_Metabox {
         wp_nonce_field( self::NONCE, self::NONCE );
       ?>
       <label class="is_visible_field" for="<?= self::META_BOX_ID ?>">
-        <span>Visible ?</span>
+        <span class="title">Visible ?</span>
         <span class="input-text-wrap">
           <input type="checkbox" id="<?= self::META_BOX_ID ?>" name="<?= self::META_BOX_ID ?>" value="yes" >
         </span>
       </label>
-    <?php
+      <?php
+      require_once('includes/is-visible-edit-style.php');
     }
   }
-  //_____End_Quick_Edit_Mode_____
+  //_____End_Quick_Edit_and_Bulk_Edit_Mode_custom_checkbox_____
 
 
   //_____Start_Filter_____
