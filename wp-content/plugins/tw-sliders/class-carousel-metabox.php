@@ -84,8 +84,8 @@ abstract class Carousel_Metabox {
         // Add a nonce field so we can check for it later.
         wp_nonce_field( self::NONCE, self::NONCE );
       ?>
-      <label class="inline-edit-col-right label-is-visible" for="<?= self::META_BOX_ID ?>">
-        <span class="title">Visible ?</span>
+      <label class="is_visible_field" for="<?= self::META_BOX_ID ?>">
+        <span>Visible ?</span>
         <span class="input-text-wrap">
           <input type="checkbox" id="<?= self::META_BOX_ID ?>" name="<?= self::META_BOX_ID ?>" value="yes" >
         </span>
@@ -196,10 +196,33 @@ abstract class Carousel_Metabox {
 
     if ($order_by == 'visibility') {
       $query->set('meta_key', self::META_KEY);
-      $query->set('orderby', 'meta_value');
+      $query->set('orderby', 'meta_value title');
     }
   }
   //_____End_Sort_Column_____
+
+
+  //_____Start_Bulk_update_____
+  /**
+   * Update is_visible meta data in the bulk update mode
+   * 
+   * @param int $post_ID ID of the current post 
+   */
+  public static function save_bulk_update_is_visible( int $post_ID ){
+    $nonce = $_REQUEST[ self::NONCE ];
+    if (! wp_verify_nonce($nonce, self::NONCE)){
+      return;
+    }
+
+    $visibility = ! empty( $_REQUEST[self::META_BOX_ID]) ? $_REQUEST[self::META_BOX_ID] : 'no';
+
+    update_post_meta(
+      $post_ID,
+      self::META_KEY,
+      $visibility,
+  );
+}
+  //_____End_Bulk_update_____
 }
 
 add_action( 'add_meta_boxes', [ 'Carousel_Metabox', 'add_checkbox_is_visible' ], 10, 2 );
@@ -213,4 +236,6 @@ if ( $pagenow == 'edit.php' && is_admin() && $_GET['post_type'] == 'slider'){
   add_action( 'parse_query', [ 'Carousel_Metabox', 'is_visible_filter_parsing' ], 10, 1);
   add_filter( 'manage_edit-slider_sortable_columns', [ 'Carousel_Metabox', 'enable_sortable_is_visible_column' ], 10, 1);
   add_action( 'pre_get_posts', [ 'Carousel_Metabox', 'visibility_order_by' ], 10, 1);
+  add_action( 'bulk_edit_custom_box', [ 'Carousel_Metabox', 'display_quick_edit_is_visible'], 11, 2);
+  add_action( 'save_post', [ 'Carousel_Metabox', 'save_bulk_update_is_visible' ], 11, 1 );
 }
