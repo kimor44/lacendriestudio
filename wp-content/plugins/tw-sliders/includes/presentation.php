@@ -1,8 +1,10 @@
 <?php
 
-if(! class_exists('Presentation')) {
-  class Presentation {
-    function get_the_content() {
+if (!class_exists('Presentation')) {
+  class Presentation
+  {
+    function get_the_content()
+    {
       $content = '<h1>' . get_admin_page_title() . '</h1>';
       $content .= '<article class="presentation-content">';
       $content .= '<p>Le carrousel permet de créer autant de slides que vous le souhaitez
@@ -11,7 +13,7 @@ if(! class_exists('Presentation')) {
       $content .= '<p>Pour ceci, vous n&apos;avez qu&apos;&agrave; suivre le facicule ci-dessous
                   en cliquant sur le bouton :</p>
                   <p>
-                    <img id="get-started-button" src="' . plugin_dir_url( dirname( __FILE__ ) ) . 'assets/img/get_started_button.png" width="50%" />
+                    <img id="get-started-button" src="' . plugin_dir_url(dirname(__FILE__)) . 'assets/img/get_started_button.png" width="50%" />
                   </p>
                   <p>
                   et laissez vous guider.</p>';
@@ -36,7 +38,7 @@ if(! class_exists('Presentation')) {
       $content .= '<p>Par exemple : <code>[tw_sliders size="large"]</code></p>';
       $content .= '<p>Les tailles disponibles sont les suivantes :</p>';
       $content .= '<ul>';
-      foreach(wp_get_registered_image_subsizes() as $key => $image) {
+      foreach (wp_get_registered_image_subsizes() as $key => $image) {
         $content .= '<li>' . $key . ' => ' . $image['width'] . ' x ' . $image['height'] . 'px</li>';
       }
       $content .= '</ul>';

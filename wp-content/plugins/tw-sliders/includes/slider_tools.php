@@ -1,6 +1,7 @@
 <?php
 
-class Slider_Tools {
+class Slider_Tools
+{
 
   /**
    * Translation method for is_visible meta value
@@ -8,7 +9,8 @@ class Slider_Tools {
    * @param string $key the value to translate
    * @return string the value translated
    */
-  public static function visibility(string $key) {
+  public static function visibility(string $key)
+  {
     $t_visibility = array(
       'yes' => 'oui',
       'no' => 'non'
