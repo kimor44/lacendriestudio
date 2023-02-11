@@ -1,3 +1,4 @@
+
 # La Cendrie Studio
 
 <p align="center"><img src="https://github.com/kimor44/lacendriestudio/blob/main/wp-content/themes/lacendriestudio/assets/images/logo_la_cendrie.jpg"></p>
