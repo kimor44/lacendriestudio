@@ -63,6 +63,13 @@ if (!function_exists('cendrie_custom_header_setup')) {
     add_image_size('cendrie_large_size', 1200, 630);
 
     /**
+     * Enable support for document title
+     */
+    add_theme_support('title-tag');
+
+    add_theme_support('html5', array('gallery', 'caption', 'style', 'script'));
+
+    /**
      * Enable support for the following post formats:
      * aside, gallery, quote, image, and video
      */
