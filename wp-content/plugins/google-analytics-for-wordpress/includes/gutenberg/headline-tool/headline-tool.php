@@ -61,13 +61,18 @@ class MonsterInsightsHeadlineToolPlugin {
 				array( 'html' => $content, 'analysed' => false )
 			);
 		} else {
-
+			if(!isset($_REQUEST['q'])){
+				wp_send_json_error(
+					array( 'html' => '', 'analysed' => false )
+				);
+			}
+			$q = (isset($_REQUEST['q'])) ? sanitize_text_field($_REQUEST['q']) : '';
 			// send the response
 			wp_send_json_success(
 				array(
 					'result'   => $result,
 					'analysed' => ! $result->err,
-					'sentence' => ucwords( wp_unslash( sanitize_text_field( $_REQUEST['q'] ) ) ),
+					'sentence' => ucwords( wp_unslash( $q ) ),
 					'score'    => ( isset( $result->score ) && ! empty( $result->score ) ) ? $result->score : 0
 				)
 			);
@@ -117,7 +122,7 @@ class MonsterInsightsHeadlineToolPlugin {
 	 * @return Object
 	 */
 	function get_headline_scores() {
-		$input = sanitize_text_field( @$_REQUEST['q'] );
+		$input = (isset($_REQUEST['q'])) ? sanitize_text_field($_REQUEST['q']) : '';
 
 		// init the result array
 		$result                   = new \stdClass();
@@ -361,12 +366,12 @@ class MonsterInsightsHeadlineToolPlugin {
 
 		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
 			//check ip from share internet
-			$ip = $_SERVER['HTTP_CLIENT_IP'];
+			$ip = sanitize_text_field(wp_unslash($_SERVER['HTTP_CLIENT_IP']));
 		} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
 			//to check ip is pass from proxy
-			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+			$ip = sanitize_text_field(wp_unslash($_SERVER['HTTP_X_FORWARDED_FOR']));
 		} elseif ( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
-			$ip = $_SERVER['REMOTE_ADDR'];
+			$ip = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR']));
 		}
 
 		// Fix potential CSV returned from $_SERVER variables

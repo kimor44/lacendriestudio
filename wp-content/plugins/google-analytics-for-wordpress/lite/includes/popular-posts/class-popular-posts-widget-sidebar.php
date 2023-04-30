@@ -97,13 +97,16 @@ class MonsterInsights_Popular_Posts_Widget_Sidebar extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $args['before_widget'];
-
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		$title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
 
 		if ( $instance['display_title'] && ! empty( $instance['title'] ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $args['before_title'];
 			echo wp_kses_post( $title );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $args['after_title'];
 		}
 
@@ -119,9 +122,9 @@ class MonsterInsights_Popular_Posts_Widget_Sidebar extends WP_Widget {
 				$atts[ $key ] = $instance[ $key ];
 			}
 		}
-
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo MonsterInsights_Popular_Posts_Widget()->shortcode_output( $atts );
-
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $args['after_widget'];
 
 	}
@@ -370,8 +373,9 @@ class MonsterInsights_Popular_Posts_Widget_Sidebar extends WP_Widget {
 			<select id="<?php echo esc_attr( $this->get_field_id( $name ) ); ?>"
 					name="<?php echo esc_attr( $this->get_field_name( $name ) ); ?>" class="widefat">
 				<?php foreach ( $range as $font_size ) { ?>
-					<option
-						value="<?php echo absint( $font_size ); ?>" <?php selected( $instance[ $name ], $font_size ); ?>><?php printf( esc_html_x( '%dpx', 'google-analytics-for-wordpress' ), $font_size ); ?></option>
+					<option value="<?php echo absint( $font_size ); ?>" <?php selected( $instance[ $name ], $font_size ); ?>>
+						<?php printf( esc_html_x( '%dpx', 'google-analytics-for-wordpress' ), $font_size ); // phpcs:ignore ?>
+					</option>
 				<?php } ?>
 			</select>
 		</p>

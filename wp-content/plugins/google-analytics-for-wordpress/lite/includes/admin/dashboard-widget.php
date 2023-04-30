@@ -143,7 +143,7 @@ class MonsterInsights_Dashboard_Widget {
 				'</a>'
 			);
 			?>
-			<h2><?php echo $message; ?></h2>
+			<h2><?php echo $message; // phpcs:ignore ?></h2>
 			<?php if ( current_user_can( 'monsterinsights_save_settings' ) ) { ?>
 				<p><?php esc_html_e( 'To see your website stats, please connect MonsterInsights to Google Analytics.', 'google-analytics-for-wordpress' ); ?></p>
 				<a href="<?php echo esc_url( $url ); ?>"
@@ -282,6 +282,9 @@ class MonsterInsights_Dashboard_Widget {
 		if ( ! isset( $this->options ) ) {
 			$this->options = self::wp_parse_args_recursive( get_user_meta( get_current_user_id(), 'monsterinsights_user_preferences', true ), self::$default_options );
 		}
+
+        // Set interval fixed to last30days on lite plugin.
+		$this->options['interval'] = 'last30days';
 
 		return apply_filters( 'monsterinsights_dashboard_widget_options', $this->options );
 

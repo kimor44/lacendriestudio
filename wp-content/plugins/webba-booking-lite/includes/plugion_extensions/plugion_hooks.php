@@ -38,7 +38,7 @@ function my_plugion_before_table( $slug )
     ?>
         <script>
             var wbk_custom_fields = '<?php 
-    echo  get_option( 'wbk_custom_fields_columns' ) ;
+    echo  esc_html( get_option( 'wbk_custom_fields_columns' ) ) ;
     ?>';
         </script>
     <?php 
@@ -237,9 +237,11 @@ function wbk_plugion_property_field_validation_select(
     
     
     if ( $slug == 'service_users' || $slug == 'calendar_user_id' ) {
-        foreach ( $value as $item ) {
-            if ( !is_numeric( $item ) ) {
-                return [ false, sprintf( plugion_translate_string( 'Value of %s is not acceptable' ), $field->get_title() ) ];
+        if ( is_array( $value ) ) {
+            foreach ( $value as $item ) {
+                if ( !is_numeric( $item ) ) {
+                    return [ false, sprintf( plugion_translate_string( 'Value of %s is not acceptable' ), $field->get_title() ) ];
+                }
             }
         }
         
@@ -290,53 +292,8 @@ function wbk_plugion_on_after_row_add( $table_name, $table_name_not_filtered, $r
 {
     
     if ( $table_name == get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments' ) {
-        $service_id = $row->service_id;
-        $service = new WBK_Service( $row->service_id );
-        Plugion()->set_value(
-            get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-            'appointment_created_on',
-            $row->id,
-            time()
-        );
-        Plugion()->set_value(
-            get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-            'appointment_duration',
-            $row->id,
-            $service->get_duration()
-        );
-        Plugion()->set_value(
-            get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-            'appointment_prev_status',
-            $row->id,
-            $row->status
-        );
-        if ( get_option( 'wbk_gdrp', 'disabled' ) == 'disabled' ) {
-            if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
-                Plugion()->set_value(
-                    get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-                    'appointment_user_ip',
-                    $row->id,
-                    $_SERVER['REMOTE_ADDR']
-                );
-            }
-        }
-        $auto_lock = get_option( 'wbk_appointments_auto_lock', 'disabled' );
-        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-        if ( $auto_lock == 'enabled' ) {
-            WBK_Db_Utils::lockTimeSlotsOfOthersServices( $service_id, $row->id );
-        }
-        WBK_Db_Utils::addAppointmentDataToGGCelendar( $service_id, $row->id );
-        WBK_Db_Utils::setIPToAppointment( $row->id );
-        WBK_Model_Utils::set_booking_end( $row->id );
-        
-        if ( get_option( 'wbk_zoom_when_add', 'onbooking' ) == 'onbooking' ) {
-            $wbk_zoom = new WBK_Zoom();
-            $wbk_zoom->add_meeting( $row->id );
-        }
-        
-        $noifications = new WBK_Email_Notifications( $service_id, $row->id );
-        $noifications->sendSingleBookedManually();
-        date_default_timezone_set( 'UTC' );
+        $bf = new WBK_Booking_Factory();
+        $bf->post_production( array( $row->id ), 'on_manual_booking' );
     }
 
 }
@@ -352,17 +309,8 @@ function wbk_plugion_on_before_row_delete( $table_name, $table_name_not_filtered
     global  $wpdb ;
     
     if ( $table_name == get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments' ) {
-        WBK_Db_Utils::deleteAppointmentDataAtGGCelendar( $row->id );
-        $noifications = new WBK_Email_Notifications( $row->service_id, $row->id );
-        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-        $noifications->prepareOnCancelCustomer();
-        $noifications->sendOnCancelCustomer();
-        WBK_Db_Utils::copyAppointmentToCancelled( $row->id, __( 'Service administrator', 'wbk' ) );
-        date_default_timezone_set( 'UTC' );
-        WBK_Db_Utils::freeLockedTimeSlot( $row->id );
-        do_action( 'webba_before_cancel_booking', $row->id );
-        $wbk_zoom = new WBK_Zoom();
-        $wbk_zoom->delete_meeting( $row->id );
+        $bf = new WBK_Booking_Factory();
+        $bf->destroy( $row->id, 'Service administrator (dashboard)' );
     }
     
     if ( $table_name == get_option( 'wbk_db_prefix', '' ) . 'wbk_services' ) {
@@ -380,76 +328,8 @@ function wbk_plugion_on_after_row_update( $table_name, $table_name_not_filtered,
 {
     
     if ( $table_name == get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments' ) {
-        global  $wpdb ;
-        $current_status = $row->status;
-        $prev_status = $row->prev_status;
-        $service_id = $row->service_id;
-        if ( $prev_status == 'pending' || $prev_status == 'paid' ) {
-            
-            if ( $current_status == 'approved' || $current_status == 'paid_approved' ) {
-                
-                if ( get_option( 'wbk_zoom_when_add', 'onbooking' ) == 'onpaymentorapproval' ) {
-                    $wbk_zoom = new WBK_Zoom();
-                    $wbk_zoom->add_meeting( $row->id );
-                }
-                
-                $noifications = new WBK_Email_Notifications( $service_id, $row->id );
-                $noifications->sendOnApprove();
-                
-                if ( get_option( 'wbk_email_customer_send_invoice', 'disabled' ) == 'onapproval' ) {
-                    date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-                    $noifications->sendSingleInvoice();
-                    date_default_timezone_set( 'UTC' );
-                }
-                
-                $expiration_mode = get_option( 'wbk_appointments_delete_not_paid_mode', 'disabled' );
-                if ( $expiration_mode == 'on_approve' ) {
-                    WBK_Db_Utils::setAppointmentsExpiration( $row->id );
-                }
-                if ( get_option( 'wbk_gg_when_add', 'onbooking' ) == 'onpaymentorapproval' ) {
-                    
-                    if ( !WBK_Db_Utils::idEventAddedToGoogle( $row->id ) ) {
-                        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-                        WBK_Db_Utils::addAppointmentDataToGGCelendar( $service_id, $row->id );
-                        date_default_timezone_set( 'UTC' );
-                    }
-                
-                }
-            }
-        
-        }
-        
-        if ( get_option( 'wbk_zoom_when_add', 'onbooking' ) == 'onbooking' ) {
-            $wbk_zoom = new WBK_Zoom();
-            $wbk_zoom->update_meeting( $row->id );
-        }
-        
-        $service_id = WBK_Db_Utils::getServiceIdByAppointmentId( $row->id );
-        $noifications = new WBK_Email_Notifications( $service_id, $row->id );
-        if ( $prev_status != 'arrived' && $current_status == 'arrived' ) {
-            if ( get_option( 'wbk_email_customer_arrived_status', '' ) != '' ) {
-                $noifications->sendSingleArrived();
-            }
-        }
-        $service = new WBK_Service( $service_id );
-        $template = $service->get_on_changes_template();
-        
-        if ( $template != false ) {
-            $template = WBK_Db_Utils::getEmailTemplate( $template );
-            date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-            $noifications->send_single_notification( $row->id, $template, get_option( 'wbk_email_on_update_booking_subject', '' ) );
-            date_default_timezone_set( 'UTC' );
-        }
-        
-        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-        WBK_Db_Utils::updateAppointmentDataAtGGCelendar( $row->id );
-        date_default_timezone_set( 'UTC' );
-        Plugion()->set_value(
-            get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-            'appointment_prev_status',
-            $row->id,
-            $row->status
-        );
+        $bf = new WBK_Booking_Factory();
+        $bf->update( $row->id );
     }
 
 }

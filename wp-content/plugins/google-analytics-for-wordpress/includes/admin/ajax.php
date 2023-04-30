@@ -261,3 +261,90 @@ function monsterinsights_get_sem_rush_cta_status() {
 }
 
 add_action( 'wp_ajax_monsterinsights_get_sem_rush_cta_status', 'monsterinsights_get_sem_rush_cta_status' );
+
+function monsterinsights_handle_ga_queue_response() {
+
+    $auth = MonsterInsights()->auth;
+
+    //  Authenticate with public key
+    $key = sanitize_text_field($_REQUEST['key']);
+
+    $site_key = is_network_admin() ? $auth->get_network_key() : $auth->get_key();
+
+    if ( !hash_equals( $site_key, $key ) ) {
+        wp_send_json_error([
+            'error'     => __( 'Invalid site key.', 'google-analytics-for-wordpress' )
+        ], 401);
+    }
+
+    //  Check if credentials have already been saved - prevent override
+    $local_queue_status = monsterinsights_get_option( 'ga4_upgrade_queue_status' );
+
+    if ( $local_queue_status === 'fulfilled' ) {
+        wp_send_json_error([
+            'error'     => __( 'Site has already been processed.', 'google-analytics-for-wordpress' )
+        ], 400);
+    }
+
+    if ( empty($_REQUEST['profile']) || empty($_REQUEST['mp_secret']) ) {
+        wp_send_json_error([
+            'error'     => __( 'Profile or secret key missing.', 'google-analytics-for-wordpress' )
+        ], 400);
+    }
+
+    $v4_id = sanitize_text_field($_REQUEST['profile']);
+    $mp_secret = sanitize_text_field($_REQUEST['mp_secret']);
+
+    //  Update dual tracking
+    if ( is_network_admin() ) {
+        $auth->set_network_dual_tracking_id( $v4_id );
+        $auth->set_network_measurement_protocol_secret( $mp_secret );
+    } else {
+        $auth->set_dual_tracking_id( $v4_id );
+        $auth->set_measurement_protocol_secret( $mp_secret );
+    }
+
+    //  Create automatic swap cron
+    if ( false === wp_next_scheduled( 'monsterinsights_v4_property_swap' ) ) {
+        wp_schedule_single_event( strtotime( "+31 days" ), 'monsterinsights_v4_property_swap' );
+    }
+
+    //  Update queue status option
+    monsterinsights_update_option( 'ga4_upgrade_queue_status', 'fulfilled' );
+    monsterinsights_delete_option( 'ga4_upgrade_queue_job_id' );
+
+    wp_send_json_success();
+}
+
+add_action( 'wp_ajax_nopriv_monsterinsights_handle_ga_queue_response', 'monsterinsights_handle_ga_queue_response' );
+
+function monsterinsights_handle_get_plugin_info() {
+
+    $auth = MonsterInsights()->auth;
+
+    //  Authenticate with public key
+    $key = sanitize_text_field($_REQUEST['key']);
+
+    $site_key = is_network_admin() ? $auth->get_network_key() : $auth->get_key();
+
+    if ( !hash_equals( $site_key, $key ) ) {
+        wp_send_json_error([
+            'error'     => __( 'Invalid site key.', 'google-analytics-for-wordpress' )
+        ], 401);
+    }
+
+    $ua = is_network_admin() ? $auth->get_network_ua() : $auth->get_ua();
+    $v4 = is_network_admin() ? $auth->get_network_v4_id() :  $auth->get_v4_id();
+    $has_secret = is_network_admin() ?
+        !empty( $auth->get_network_measurement_protocol_secret() ) :
+        !empty( $auth->get_measurement_protocol_secret() );
+
+    wp_send_json([
+        'ua'                => $ua,
+        'v4'                => $v4,
+        'has_mp_secret'     => $has_secret,
+        'plugin_version'    => MonsterInsights()->version
+    ]);
+}
+
+add_action( 'wp_ajax_nopriv_monsterinsights_get_plugin_info', 'monsterinsights_handle_get_plugin_info' );

@@ -484,10 +484,10 @@ function ai1wm_archive_file( $blog_id = null ) {
 	}
 
 	// Add year, month and day
-	$name[] = date( 'Ymd' );
+	$name[] = date_i18n( 'Ymd' );
 
 	// Add hours, minutes and seconds
-	$name[] = date( 'His' );
+	$name[] = date_i18n( 'His' );
 
 	// Add unique identifier
 	$name[] = ai1wm_generate_random_string( 6, false );
@@ -1933,6 +1933,8 @@ function ai1wm_get_htaccess() {
 	if ( is_file( AI1WM_WORDPRESS_HTACCESS ) ) {
 		return @file_get_contents( AI1WM_WORDPRESS_HTACCESS );
 	}
+
+	return '';
 }
 
 /**
@@ -1944,6 +1946,8 @@ function ai1wm_get_webconfig() {
 	if ( is_file( AI1WM_WORDPRESS_WEBCONFIG ) ) {
 		return @file_get_contents( AI1WM_WORDPRESS_WEBCONFIG );
 	}
+
+	return '';
 }
 
 /**

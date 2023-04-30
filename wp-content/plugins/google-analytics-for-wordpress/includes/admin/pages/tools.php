@@ -24,8 +24,8 @@ function monsterinsights_process_export_settings() {
 	if ( 'monsterinsights_export_settings' !== $_POST['monsterinsights_action'] ) {
 		return;
 	}
-
-	if ( empty( $_POST['monsterinsights_export_settings'] ) || ! wp_verify_nonce( $_POST['monsterinsights_export_settings'], 'mi-admin-nonce' ) ) {
+	
+	if ( empty( $_POST['monsterinsights_export_settings'] ) || ! wp_verify_nonce( $_POST['monsterinsights_export_settings'], 'mi-admin-nonce' ) ) { // phpcs:ignore
 		return;
 	}
 
@@ -36,8 +36,7 @@ function monsterinsights_process_export_settings() {
 	header( 'Content-Type: application/json; charset=utf-8' );
 	header( 'Content-Disposition: attachment; filename=monsterinsights-settings-export-' . date( 'm-d-Y' ) . '.json' );
 	header( "Expires: 0" );
-
-	echo $settings;
+	echo $settings; // phpcs:ignore
 	exit;
 }
 

@@ -233,6 +233,11 @@ class Sentiment {
 			$words = array();
 		}
 
+		// Bail early if $words is empty.
+		if ( empty( $words ) ) {
+			return true;
+		}
+
 		//Loop through all of the entries
 		foreach ( (array) $words as $word ) {
 

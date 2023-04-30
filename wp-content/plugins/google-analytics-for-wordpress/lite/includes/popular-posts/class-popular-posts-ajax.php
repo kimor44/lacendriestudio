@@ -238,7 +238,7 @@ class MonsterInsights_Popular_Posts_Ajax {
 		}
 
 		$html         = array();
-		$widgets_args = $_POST['data'];
+		$widgets_args = $_POST['data']; // phpcs:ignore
 
 		foreach ( $widgets_args as $args ) {
 			$args = json_decode( sanitize_text_field( wp_unslash( $args ) ), true );

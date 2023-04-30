@@ -148,7 +148,7 @@ final class MonsterInsights_Notice_Admin {
 		ob_start();
 		?>
 		<div
-			class="monsterinsights-notice <?php echo 'monsterinsights-' . esc_attr( $type ) . '-notice' . $dismissible; ?>"
+			class="monsterinsights-notice <?php echo 'monsterinsights-' . esc_attr( $type ) . '-notice' . esc_attr($dismissible); ?>"
 			data-notice="<?php echo esc_attr( $name ); ?>">
 			<div
 				class="monsterinsights-notice-icon <?php echo 'monsterinsights-' . esc_attr( $type ) . '-notice-icon' ?>">
@@ -171,7 +171,7 @@ final class MonsterInsights_Notice_Admin {
 						<?php
 					} else {
 						?>
-						<p class="monsterinsights-notice-message"><?php echo $message; ?></p>
+						<p class="monsterinsights-notice-message"><?php echo $message; // phpcs:ignore ?></p>
 						<?php
 					}
 				}
@@ -199,7 +199,7 @@ final class MonsterInsights_Notice_Admin {
 						$class = ' class="' . $args['primary']['class'] . '"';
 					}
 					?>
-					<a href="<?php echo esc_attr( $url ); ?>"<?php echo $target; ?><?php echo $class; ?>><?php echo esc_html( $text ); ?></a>
+					<a href="<?php echo esc_url( $url ); ?>"<?php echo esc_attr($target); ?><?php echo esc_attr($class); ?>><?php echo esc_html( $text ); ?></a>
 					<?php
 				}
 
@@ -226,14 +226,14 @@ final class MonsterInsights_Notice_Admin {
 						$class = ' class="' . $args['secondary']['class'] . '"';
 					}
 					?>
-					<a href="<?php echo esc_attr( $url ); ?>"<?php echo $target; ?><?php echo $class; ?>><?php echo esc_html( $text ); ?></a>
+					<a href="<?php echo esc_url( $url ); ?>"<?php echo esc_attr($target); ?><?php echo esc_attr($class); ?>><?php echo esc_html( $text ); ?></a>
 					<?php
 				}
 
 				// Dismiss Button
 				if ( $is_dismissible ) {
 					?>
-					<button type="button" class="notice-dismiss<?php echo $dismissible; ?>">
+					<button type="button" class="notice-dismiss<?php echo esc_attr($dismissible); ?>">
                         <span class="screen-reader-text">
                             <?php esc_html_e( 'Dismiss this notice', 'google-analytics-for-wordpress' ); ?>
                         </span>

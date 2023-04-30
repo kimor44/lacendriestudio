@@ -15,6 +15,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+function monsterinsights_get_url($medium = '', $campaign = '', $url = '', $escape = true)
+{
+    // Setup Campaign variables
+    $source      = monsterinsights_is_pro_version() ? 'proplugin' : 'liteplugin';
+    $medium      = !empty($medium) ? $medium : 'defaultmedium';
+    $campaign    = !empty($campaign) ? $campaign : 'defaultcampaign';
+    $content     = MONSTERINSIGHTS_VERSION;
+    $default_url = monsterinsights_is_pro_version() ? '' : 'lite/';
+    $url         = !empty($url) ? $url : 'https://www.monsterinsights.com/' . $default_url;
+
+    // Put together redirect URL
+    $url = add_query_arg(
+        array(
+            'utm_source'   => $source,   // Pro/Lite Plugin
+            'utm_medium'   => sanitize_key($medium),   // Area of MonsterInsights (example Reports)
+            'utm_campaign' => sanitize_key($campaign), // Which link (example eCommerce Report)
+            'utm_content'  => $content,  // Version number of MI
+        ),
+        trailingslashit($url)
+    );
+
+    if ($escape) {
+        return esc_url($url);
+    } else {
+        return $url;
+    }
+}
+
 function monsterinsights_is_page_reload() {
 	// Can't be a refresh without having a referrer
 	if ( ! isset( $_SERVER['HTTP_REFERER'] ) ) {
@@ -22,7 +50,7 @@ function monsterinsights_is_page_reload() {
 	}
 
 	// IF the referrer is identical to the current page request, then it's a refresh
-	return ( $_SERVER['HTTP_REFERER'] === home_url( $_SERVER['REQUEST_URI'] ) );
+	return ( $_SERVER['HTTP_REFERER'] === home_url( $_SERVER['REQUEST_URI'] ) ); // phpcs:ignore
 }
 
 
@@ -109,7 +137,7 @@ function monsterinsights_get_uuid() {
 	 * if the first page visited is AMP, the cookie may be in the format amp-XXXXXXXXXXXXX-XXXXXXXX
 	 */
 
-	$ga_cookie    = $_COOKIE['_ga'];
+	$ga_cookie    = sanitize_text_field($_COOKIE['_ga']);
 	$cookie_parts = explode( '.', $ga_cookie );
 	if ( is_array( $cookie_parts ) && ! empty( $cookie_parts[2] ) ) {
 		$cookie_parts = array_slice( $cookie_parts, 2 );
@@ -141,7 +169,7 @@ function monsterinsights_get_browser_session_id( $measurement_id ) {
 	if ( isset( $_COOKIE[ $cookie_name ] ) ) {
 		// Cookie value example: 'GS1.1.1659710029.4.1.1659710504.0'.
 		// Session Id:                  ^^^^^^^^^^.
-		$parts = explode( '.', $_COOKIE[ $cookie_name ] );
+		$parts = explode( '.', sanitize_text_field($_COOKIE[ $cookie_name ]) );
 		return $parts[2];
 	}
 
@@ -190,7 +218,7 @@ function monsterinsights_get_cookie( $debug = false ) {
 		return ( $debug ) ? 'FCE' : false;
 	}
 
-	$ga_cookie    = $_COOKIE['_ga'];
+	$ga_cookie    = sanitize_text_field( $_COOKIE['_ga'] );
 	$cookie_parts = explode( '.', $ga_cookie );
 	if ( is_array( $cookie_parts ) && ! empty( $cookie_parts[2] ) ) {
 		$cookie_parts = array_slice( $cookie_parts, 2 );
@@ -209,7 +237,7 @@ function monsterinsights_get_cookie( $debug = false ) {
 
 
 function monsterinsights_generate_ga_client_id() {
-	return rand( 100000000, 999999999 ) . '.' . time();
+	return wp_rand( 100000000, 999999999 ) . '.' . time();
 }
 
 
@@ -1257,7 +1285,7 @@ function monsterinsights_get_page_title() {
 	} elseif ( is_tax() ) {
 		$tax = get_taxonomy( get_queried_object()->taxonomy );
 		/* translators: Taxonomy term archive title. 1: Taxonomy singular name, 2: Current taxonomy term */
-		$title = sprintf( __( '%1$s: %2$s' ), $tax->labels->singular_name, single_term_title( '', false ) );
+		$title = sprintf( '%1$s: %2$s', $tax->labels->singular_name, single_term_title( '', false ) );
 	}
 
 	return $title;
@@ -1486,7 +1514,7 @@ function monsterinsights_custom_track_pretty_links_redirect( $url ) {
 	monsterinsights_track_pretty_links_file_download_redirect( $url );
 
 	// Try to determine if click originated on the same site.
-	$referer = ! empty( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '';
+	$referer = ! empty( $_SERVER['HTTP_REFERER'] ) ? esc_url( $_SERVER['HTTP_REFERER'] ) : '';
 	if ( ! empty( $referer ) ) {
 		$current_site_url    = get_bloginfo( 'url' );
 		$current_site_parsed = wp_parse_url( $current_site_url );
@@ -1499,7 +1527,7 @@ function monsterinsights_custom_track_pretty_links_redirect( $url ) {
 	// Check if this is an affiliate link and use the appropriate category.
 	$ec            = 'outbound-link';
 	$inbound_paths = monsterinsights_get_option( 'affiliate_links', array() );
-	$path          = empty( $_SERVER['REQUEST_URI'] ) ? '' : $_SERVER['REQUEST_URI'];
+	$path          = empty( $_SERVER['REQUEST_URI'] ) ? '' : $_SERVER['REQUEST_URI']; // phpcs:ignore
 	if ( ! empty( $inbound_paths ) && is_array( $inbound_paths ) && ! empty( $path ) ) {
 		$found = false;
 		foreach ( $inbound_paths as $inbound_path ) {
@@ -1711,8 +1739,8 @@ function monsterinsights_trim_text( $text, $count ) {
 function monsterinsights_tools_copy_url_to_prettylinks() {
 	global $pagenow;
 
-	$post_type                 = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
-	$monsterinsights_reference = isset( $_GET['monsterinsights_reference'] ) ? $_GET['monsterinsights_reference'] : '';
+	$post_type                 = isset( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : '';
+	$monsterinsights_reference = isset( $_GET['monsterinsights_reference'] ) ? sanitize_text_field( $_GET['monsterinsights_reference'] ) : '';
 
 	if ( 'post-new.php' === $pagenow && 'pretty-link' === $post_type && 'url_builder' === $monsterinsights_reference ) { ?>
 <script>
@@ -1773,8 +1801,8 @@ add_action( 'admin_footer', 'monsterinsights_tools_copy_url_to_prettylinks' );
 function monsterinsights_skip_prettylinks_welcome_screen() {
 	global $pagenow;
 
-	$post_type                 = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
-	$monsterinsights_reference = isset( $_GET['monsterinsights_reference'] ) ? $_GET['monsterinsights_reference'] : '';
+	$post_type                 = isset( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : '';
+	$monsterinsights_reference = isset( $_GET['monsterinsights_reference'] ) ? sanitize_text_field( $_GET['monsterinsights_reference'] ) : '';
 
 	if ( 'post-new.php' === $pagenow && 'pretty-link' === $post_type && 'url_builder' === $monsterinsights_reference ) {
 		$onboard = get_option( 'prli_onboard' );
@@ -1795,7 +1823,7 @@ add_action( 'wp_loaded', 'monsterinsights_skip_prettylinks_welcome_screen', 9 );
 function monsterinsights_restore_prettylinks_onboard_value() {
 	global $pagenow;
 
-	$post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
+	$post_type = isset( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : '';
 
 	if ( 'edit.php' === $pagenow && 'pretty-link' === $post_type ) {
 		$onboard = get_option( 'monsterinsights_backup_prli_onboard_value' );

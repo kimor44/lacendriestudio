@@ -183,7 +183,7 @@ final class MonsterInsights_API_Request {
 	 * @return mixed $value The response to the API call.
 	 * @since 7.0.0
 	 */
-	public function request() {
+	public function request( $extra_params = [] ) {
 		// Make sure we're not blocked
 		$blocked = $this->is_blocked( $this->url );
 		if ( $blocked || is_wp_error( $blocked ) ) {
@@ -253,10 +253,12 @@ final class MonsterInsights_API_Request {
 
 		$body['network'] = $this->network ? 'network' : 'site';
 
-		$body['ip'] = ! empty( $_SERVER['SERVER_ADDR'] ) ? $_SERVER['SERVER_ADDR'] : '';
+		$body['ip'] = ! empty( $_SERVER['SERVER_ADDR'] ) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_ADDR'])) : '';
 
 		// This filter will be removed in the future.
 		$body = apply_filters( 'monsterinsights_api_request_body', $body );
+
+        $body = array_merge($body, $extra_params);
 
 		$string = http_build_query( $body, '', '&' );
 

@@ -139,7 +139,7 @@ if ( ! class_exists( 'MonsterInsights_MetaBox_ExcludePage' ) ) {
                             <?php _e( 'This is a PRO feature.', 'google-analytics-for-wordpress' ); ?>
                         </span>
 					<div class="monsterinsights-metabox-pro-badge-upgrade">
-						<a href="<?php echo monsterinsights_get_upgrade_link( 'exclude-page-tracking', 'lite-metabox', "https://www.monsterinsights.com/lite/" ); ?>"
+						<a href="<?php echo monsterinsights_get_upgrade_link( 'exclude-page-tracking', 'lite-metabox', "https://www.monsterinsights.com/lite/" ); // phpcs:ignore ?>"
 						   target="_blank" rel="noopener">
 							<?php _e( 'Upgrade', 'google-analytics-for-wordpress' ); ?>
 						</a>

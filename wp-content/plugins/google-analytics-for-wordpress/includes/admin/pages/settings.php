@@ -13,13 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  */
 function monsterinsights_settings_page() {
-	echo monsterinsights_ublock_notice();
+	echo monsterinsights_ublock_notice(); // phpcs:ignore
 	monsterinsights_settings_error_page( 'monsterinsights-vue-site-settings' );
 	monsterinsights_settings_inline_js();
 }
 
 function monsterinsights_network_page() {
-	echo monsterinsights_ublock_notice();
+	echo monsterinsights_ublock_notice(); // phpcs:ignore
 	monsterinsights_settings_error_page( 'monsterinsights-vue-network-settings' );
 	monsterinsights_settings_inline_js();
 }
@@ -80,14 +80,14 @@ function monsterinsights_settings_error_page( $id = 'monsterinsights-vue-site-se
 		}
 	</style>
 	<![endif]-->
-	<div id="<?php echo $id; ?>">
+	<div id="<?php echo esc_attr($id); ?>">
 		<div id="monsterinsights-settings-area" class="monsterinsights-settings-area mi-container"
 			 style="font-family:'Helvetica Neue', 'HelveticaNeue-Light', 'Helvetica Neue Light', Helvetica, Arial, 'Lucida Grande', sans-serif;margin: auto;width: 750px;max-width: 100%;">
 			<div id="monsterinsights-settings-error-loading-area">
 				<div class=""
 					 style="text-align: center; background-color: #fff;border: 1px solid #D6E2EC; padding: 15px 50px 30px; color: #777777; margin: <?php echo esc_attr( $margin ); ?>">
 					<div class="" style="border-bottom: 0;padding: 5px 20px 0;">
-						<img class="" src="<?php echo esc_attr( $inline_logo_image ); ?>" alt=""
+						<img class="" src="<?php echo esc_url( $inline_logo_image ); ?>" alt=""
 							 style="max-width: 100%;width: 240px;padding: 30px 0 15px;">
 					</div>
 					<div id="monsterinsights-error-js">

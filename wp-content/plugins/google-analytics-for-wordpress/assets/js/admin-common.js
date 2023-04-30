@@ -23,6 +23,13 @@ jQuery(document).ready(function ($) {
     }
 
   });
+
+  $('div.wp-menu-name > .monsterinsights-menu-notification-indicator').click(function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    location.href = monsterinsights.reports_url + '&open=monsterinsights_notification_sidebar';
+  });
 });
 
 var submenu_item = document.querySelector('.monsterinsights-upgrade-submenu');
@@ -38,5 +45,16 @@ if (null !== submenu_item) {
     if (li) {
       li.classList.add('monsterinsights-submenu-highlight');
     }
+  }
+}
+
+var automated_submenu_item = document.querySelector('.monsterinsights-automated-submenu');
+if (null !== automated_submenu_item) {
+  var anchorTag = automated_submenu_item.parentNode;
+
+  if ( anchorTag ) {
+    anchorTag.setAttribute("target", "_blank");
+    anchorTag.setAttribute("rel", "noopener");
+    anchorTag.setAttribute("style", "color:#1da867");
   }
 }

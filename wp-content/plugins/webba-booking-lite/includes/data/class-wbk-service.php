@@ -81,13 +81,24 @@ class WBK_Service extends WBK_Model_Object{
 
     /**
      * get maximum quantity
-     * @return ind quantity
+     * @return int quantity
      */
     public function get_quantity( $time = null ){
         if( !isset( $this->fields['quantity'] ) ){
             return null;
         }
         return apply_filters( 'wbk_service_quantity', $this->fields['quantity'], $this->get_id(), $time );
+    }
+
+    /**
+     * get minimum quantity
+     * @return int quantity
+     */
+    public function get_min_quantity( $time = null ){
+        if( !isset( $this->fields['min_quantity'] ) ){
+            return null;
+        }
+        return apply_filters( 'wbk_service_quantity', $this->fields['min_quantity'], $this->get_id(), $time );
     }
 
     /**
@@ -98,14 +109,12 @@ class WBK_Service extends WBK_Model_Object{
         if( !isset( $this->fields['date_range'] ) ){
             return null;
         }
-        $date_range = explode( '-',  $this->fields['date_range']  );
+        $date_range = explode( '-',  $this->fields['date_range'] );
         $result = array();
         foreach( $date_range as $item ){
             $result[] = trim( $item );
         }
         return $result;
-
-
     }
 
     /*
@@ -181,6 +190,13 @@ class WBK_Service extends WBK_Model_Object{
     public function get_multi_mode_limit(){
         if( !is_null( $this->fields['multi_mode_limit'] ) ){
             return $this->fields['multi_mode_limit'];
+        }
+        return '';
+    }
+
+    public function get_form(){
+        if( !is_null( $this->fields['form'] ) ){
+            return $this->fields['form'];
         }
         return '';
     }

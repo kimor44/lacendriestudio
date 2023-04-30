@@ -152,6 +152,10 @@ class MonsterInsights_Install {
 				$this->v7150_upgrades();
 			}
 
+            if ( version_compare( $version, '8.13.0', '<' ) ) {
+                $this->v8130_ga4_check();
+            }
+
 			// Do not use. See monsterinsights_after_install_routine comment below.
 			do_action( 'monsterinsights_after_existing_upgrade_routine', $version );
 			$version = get_option( 'monsterinsights_current_version', $version );
@@ -860,4 +864,62 @@ class MonsterInsights_Install {
 			$this->new_settings['gtagtracker_compatibility_mode'] = true;
 		}
 	}
+
+    /**
+     * Upgrade routine for 8.11 - GA4 automatic swap
+     *
+     * @return void
+     */
+    public function v8130_ga4_check() {
+        if ( false !== wp_next_scheduled( 'monsterinsights_v4_property_swap' ) ) {
+            //  If cron is scheduled, bail
+            return;
+        }
+
+        $auth = MonsterInsights()->auth;
+
+        if ( $auth->get_connected_type() === 'v4' ) {
+            //  If V4 is set as primary, bail
+            return;
+        }
+
+        if ( empty($auth->get_v4_id()) ) {
+            //  If there's no V4 id, bail
+            return;
+        }
+
+        $type = monsterinsights_is_pro_version() ? 'pro' : 'lite';
+
+        $route = str_replace( '{type}', $type, 'auth/{type}/v4-check/' );
+        $route = trailingslashit( $route );
+
+        $request = new MonsterInsights_API_Request( $route, [], 'GET' );
+
+        $result = $request->request([
+            'v4' => $auth->get_v4_id()
+        ]);
+
+        if ( !is_wp_error($result) && !empty( $result ) && $result['success'] === true ) {
+            if ( isset($result['swap_v4']) && $result['swap_v4'] === true ) {
+                // Create cron to run immediately
+                if ( false === wp_next_scheduled( 'monsterinsights_v4_property_swap' ) ) {
+                    wp_schedule_single_event( strtotime('now'), 'monsterinsights_v4_property_swap' );
+                }
+            } else {
+                // Create cron to run in 40 days or at ga cutoff
+
+                $ga_cutoff = strtotime('2023-07-01');
+                $time_in_40_days = strtotime(date('Y-m-d'). ' + 40 days');
+
+                /*
+                 * Choose the closer date between the 40 days limit we have and the GA3 cutoff
+                 */
+                $swap_date = min($time_in_40_days, $ga_cutoff);
+
+                if ( false === wp_next_scheduled( 'monsterinsights_v4_property_swap' ) ) {
+                    wp_schedule_single_event( $swap_date, 'monsterinsights_v4_property_swap' );
+                }
+            }
+        }
+    }
 }

@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 6.0.0
  */
 function monsterinsights_addons_page() {
-	echo monsterinsights_ublock_notice();
+	echo monsterinsights_ublock_notice(); // phpcs:ignore
 	monsterinsights_settings_error_page( 'monsterinsights-addons' );
 	monsterinsights_settings_inline_js();
 }

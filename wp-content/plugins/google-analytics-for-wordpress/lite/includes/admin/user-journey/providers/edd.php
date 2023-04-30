@@ -44,7 +44,7 @@ class MonsterInsights_Lite_User_Journey_EDD_Metabox extends MonsterInsights_User
 			return false;
 		}
 
-		if ( 'edd-payment-history' !== $_GET['page'] && 'view-order-details' !== $_GET['view'] ) {
+		if ( 'edd-payment-history' !== $_GET['page'] && 'view-order-details' !== $_GET['view'] ) { // phpcs:ignore
 			return false;
 		}
 

@@ -48,7 +48,7 @@ class MonsterInsights_Lite_User_Journey_GiveWP_Metabox extends MonsterInsights_U
 			return false;
 		}
 
-		if ( 'give_forms' !== $_GET['post_type'] && 'give-payment-history' !== $_GET['page'] && 'view-payment-details' !== $_GET['view'] ) {
+		if ( 'give_forms' !== $_GET['post_type'] && 'give-payment-history' !== $_GET['page'] && 'view-payment-details' !== $_GET['view'] ) { // phpcs:ignore
 			return false;
 		}
 

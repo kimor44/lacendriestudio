@@ -149,4 +149,23 @@ class WBK_Booking extends WBK_Model_Object{
         return $this->fields['amount_details'];
     }
 
+    public function get_local_time() {
+        $timezone = new DateTimeZone( get_option( 'wbk_timezone', 'UTC' ) );
+        $date = ( new DateTime('@' . $this->get_day() ) )->setTimezone( $timezone );
+        $current_offset =  $this->get('time_offset') * -60 - $timezone->getOffset( $date );
+        $local_time = absint( $this->get('time') ) + $current_offset;
+        return $local_time;
+    }
+
+    public function get_formated_extra(){
+        $extra = json_decode( $this->get('extra') );
+        $html = '';
+        if( !is_array( $extra ) ){
+            return '';
+        }
+        foreach( $extra as $item ){
+            $html .=  $item[1] . ': '. $item[2]  . '<br/>';
+        }
+        return $html;
+    }
 }

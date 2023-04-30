@@ -154,8 +154,8 @@ class MonsterInsights_VerifiedBadge_Controller
 			'appearance' => monsterinsights_get_option('verified_appearance'),
 			'position'   => monsterinsights_get_option('verified_position'),
 		);
-
-		echo $this->render_badge($atts);
+		// output escaped in render_badge function
+		echo $this->render_badge($atts); // phpcs:ignore
 	}
 }
 

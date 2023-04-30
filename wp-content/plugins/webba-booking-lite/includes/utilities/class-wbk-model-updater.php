@@ -45,6 +45,7 @@ class WBK_Model_Updater
         self::update_4_1_8();
         self::update_4_2_8();
         self::update_4_3_0_1();
+        self::update_4_5_1();
     }
     
     public static function run_previous_update()
@@ -194,7 +195,7 @@ class WBK_Model_Updater
     {
         global  $wpdb ;
         // email templates table
-        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_email_templates (\n                id int unsigned NOT NULL auto_increment PRIMARY KEY,\n                name varchar(128) default '',\n                template varchar(2000) default '',\n                UNIQUE KEY id (id)\n            )\n            DEFAULT CHARACTER SET = utf8\n            COLLATE = utf8_general_ci" );
+        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_email_templates (\r\n                id int unsigned NOT NULL auto_increment PRIMARY KEY,\r\n                name varchar(128) default '',\r\n                template varchar(2000) default '',\r\n                UNIQUE KEY id (id)\r\n            )\r\n            DEFAULT CHARACTER SET = utf8\r\n            COLLATE = utf8_general_ci" );
         $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_services';
         $found = false;
         foreach ( $wpdb->get_col( "DESC " . $table_name, 0 ) as $column_name ) {
@@ -241,7 +242,7 @@ class WBK_Model_Updater
             return;
         }
         // create service category table
-        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_service_categories(\n                id int unsigned NOT NULL auto_increment PRIMARY KEY,\n                name varchar(128) default '',\n                category_list varchar(512) default '',\n                UNIQUE KEY id (id)\n            )\n            DEFAULT CHARACTER SET = utf8\n            COLLATE = utf8_general_ci" );
+        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_service_categories(\r\n                id int unsigned NOT NULL auto_increment PRIMARY KEY,\r\n                name varchar(128) default '',\r\n                category_list varchar(512) default '',\r\n                UNIQUE KEY id (id)\r\n            )\r\n            DEFAULT CHARACTER SET = utf8\r\n            COLLATE = utf8_general_ci" );
         // add token and created_on fields into wbk_appointments db_prefix
         $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments';
         $found = false;
@@ -384,7 +385,7 @@ class WBK_Model_Updater
             return;
         }
         // google calendar
-        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_gg_calendars (\n                id int unsigned NOT NULL auto_increment PRIMARY KEY,\n                name varchar(128) default '',\n                access_token varchar(512) default '',\n                calendar_id  varchar(512) default '',\n                user_id int unsigned NOT NULL,\n                UNIQUE KEY id (id)\n            )\n            DEFAULT CHARACTER SET = utf8\n            COLLATE = utf8_general_ci" );
+        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_gg_calendars (\r\n                id int unsigned NOT NULL auto_increment PRIMARY KEY,\r\n                name varchar(128) default '',\r\n                access_token varchar(512) default '',\r\n                calendar_id  varchar(512) default '',\r\n                user_id int unsigned NOT NULL,\r\n                UNIQUE KEY id (id)\r\n            )\r\n            DEFAULT CHARACTER SET = utf8\r\n            COLLATE = utf8_general_ci" );
         $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_services';
         $found = false;
         foreach ( $wpdb->get_col( "DESC " . $table_name, 0 ) as $column_name ) {
@@ -504,7 +505,7 @@ class WBK_Model_Updater
         if ( get_option( 'wbk_3_3_7_upd', '' ) == 'done' ) {
             return;
         }
-        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_coupons (\n                id int unsigned NOT NULL auto_increment PRIMARY KEY,\n                name varchar(128) default '',\n                services varchar(512) default '',\n                date_range varchar(256) default '',\n                used int unsigned NOT NULL default 0,\n                amount_fixed int unsigned NOT NULL default 0,\n                amount_percentage int unsigned NOT NULL default 0,\n                maximum int unsigned default NULL,\n                UNIQUE KEY id (id)\n            )\n            DEFAULT CHARACTER SET = utf8\n            COLLATE = utf8_general_ci" );
+        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_coupons (\r\n                id int unsigned NOT NULL auto_increment PRIMARY KEY,\r\n                name varchar(128) default '',\r\n                services varchar(512) default '',\r\n                date_range varchar(256) default '',\r\n                used int unsigned NOT NULL default 0,\r\n                amount_fixed int unsigned NOT NULL default 0,\r\n                amount_percentage int unsigned NOT NULL default 0,\r\n                maximum int unsigned default NULL,\r\n                UNIQUE KEY id (id)\r\n            )\r\n            DEFAULT CHARACTER SET = utf8\r\n            COLLATE = utf8_general_ci" );
         $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments';
         $found = false;
         foreach ( $wpdb->get_col( "DESC " . $table_name, 0 ) as $column_name ) {
@@ -814,7 +815,7 @@ class WBK_Model_Updater
         if ( get_option( 'wbk_3_3_61_upd', '' ) == 'done' ) {
             return;
         }
-        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_cancelled_appointments (\n                    id int unsigned NOT NULL auto_increment PRIMARY KEY,\n                    id_cancelled int unsigned NOT NULL default 0,\n                    cancelled_by varchar(128) default '',\n                    name varchar(128) default '',\n                    email varchar(128) default '',\n                    phone varchar(128) default '',\n                    description varchar(1024) default '',\n                    extra varchar(2048) default '',\n                    attachment varchar(1024) default '',\n                    service_id int unsigned NOT NULL,\n                    time int unsigned NOT NULL,\n                    day int unsigned NOT NULL,\n                    duration int unsigned NOT NULL,\n                    created_on int unsigned NOT NULL default 0,\n                    quantity int unsigned NOT NULL default 1,\n                    status varchar(255) default 'pending',\n                    payment_id varchar(255) default '',\n                    token varchar(255) NOT NULL DEFAULT '',\n                    payment_cancel_token varchar(255) NOT NULL DEFAULT '',\n                    admin_token varchar(255) NOT NULL DEFAULT '',\n                    expiration_time int unsigned NOT NULL default 0,\n                    time_offset int NOT NULL default 0,\n                    gg_event_id varchar(255) default '',\n                    coupon int NOT NULL default 0,\n                    payment_method varchar(255) default '',\n\n                    lang varchar(255) default '',\n                    moment_price varchar(255) default '',\n                    UNIQUE KEY id (id)\n                )\n                    DEFAULT CHARACTER SET = utf8\n                    COLLATE = utf8_general_ci" );
+        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_cancelled_appointments (\r\n                    id int unsigned NOT NULL auto_increment PRIMARY KEY,\r\n                    id_cancelled int unsigned NOT NULL default 0,\r\n                    cancelled_by varchar(128) default '',\r\n                    name varchar(128) default '',\r\n                    email varchar(128) default '',\r\n                    phone varchar(128) default '',\r\n                    description varchar(1024) default '',\r\n                    extra varchar(2048) default '',\r\n                    attachment varchar(1024) default '',\r\n                    service_id int unsigned NOT NULL,\r\n                    time int unsigned NOT NULL,\r\n                    day int unsigned NOT NULL,\r\n                    duration int unsigned NOT NULL,\r\n                    created_on int unsigned NOT NULL default 0,\r\n                    quantity int unsigned NOT NULL default 1,\r\n                    status varchar(255) default 'pending',\r\n                    payment_id varchar(255) default '',\r\n                    token varchar(255) NOT NULL DEFAULT '',\r\n                    payment_cancel_token varchar(255) NOT NULL DEFAULT '',\r\n                    admin_token varchar(255) NOT NULL DEFAULT '',\r\n                    expiration_time int unsigned NOT NULL default 0,\r\n                    time_offset int NOT NULL default 0,\r\n                    gg_event_id varchar(255) default '',\r\n                    coupon int NOT NULL default 0,\r\n                    payment_method varchar(255) default '',\r\n\r\n                    lang varchar(255) default '',\r\n                    moment_price varchar(255) default '',\r\n                    UNIQUE KEY id (id)\r\n                )\r\n                    DEFAULT CHARACTER SET = utf8\r\n                    COLLATE = utf8_general_ci" );
         add_option( 'wbk_3_3_61_upd', 'done' );
         update_option( 'wbk_3_3_61_upd', 'done' );
     }
@@ -922,11 +923,13 @@ class WBK_Model_Updater
     // create export file
     static function create_ht_file()
     {
-        $path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'backend' . DIRECTORY_SEPARATOR . 'export' . DIRECTORY_SEPARATOR . '.htaccess';
+        $path = WP_WEBBA_BOOKING__PLUGIN_DIR . DIRECTORY_SEPARATOR . 'export' . DIRECTORY_SEPARATOR . '.htaccess';
         $content = "RewriteEngine On" . "\r\n";
         $content .= "RewriteCond %{HTTP_REFERER} !^" . get_admin_url() . 'admin.php\\?page\\=wbk-appointments' . '.* [NC]' . "\r\n";
         $content .= "RewriteRule .* - [F]";
-        file_put_contents( $path, $content );
+        if ( !file_exists( $path ) ) {
+            file_put_contents( $path, $content );
+        }
     }
     
     static function update_4_0_0()
@@ -1410,6 +1413,18 @@ class WBK_Model_Updater
             $wpdb->query( 'ALTER TABLE ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_services' . ' ROW_FORMAT=DYNAMIC' );
             $wpdb->query( 'ALTER TABLE ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments' . ' ROW_FORMAT=DYNAMIC' );
             self::set_update_as_complete( 'update_4_3_0_1' );
+        }
+    
+    }
+    
+    static function update_4_5_1()
+    {
+        global  $wpdb ;
+        
+        if ( self::is_update_required( 'update_4_5_1' ) ) {
+            update_option( 'wbk_payment_item_name', __( '#service_name on #appointment_day at #appointment_time', 'wbk' ) );
+            update_option( 'wbk_appointment_information', 'Appointment on #appointment_day #appointment_time' );
+            self::set_update_as_complete( 'update_4_5_1' );
         }
     
     }

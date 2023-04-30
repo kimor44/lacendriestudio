@@ -62,7 +62,7 @@ function monsterinsights_reports_page() {
 	 * or the hook may be removed at any time, without warning.
 	 */
 	do_action( 'monsterinsights_head' );
-	echo monsterinsights_ublock_notice();
+	echo monsterinsights_ublock_notice(); // phpcs:ignore
 	monsterinsights_settings_error_page( 'monsterinsights-reports' );
 	monsterinsights_settings_inline_js();
 }

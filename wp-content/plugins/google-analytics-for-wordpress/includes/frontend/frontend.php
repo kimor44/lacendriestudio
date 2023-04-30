@@ -36,11 +36,13 @@ function monsterinsights_tracking_script() {
 	if ( 'preview' === $mode ) {
 		require_once plugin_dir_path( MONSTERINSIGHTS_PLUGIN_FILE ) . 'includes/frontend/tracking/class-tracking-preview.php';
 		$tracking = new MonsterInsights_Tracking_Preview();
-		echo $tracking->frontend_output();
+		// Escaped in frontend_output function
+		echo $tracking->frontend_output(); // phpcs:ignore
 	} else {
 		require_once plugin_dir_path( MONSTERINSIGHTS_PLUGIN_FILE ) . 'includes/frontend/tracking/class-tracking-gtag.php';
 		$tracking = new MonsterInsights_Tracking_Gtag();
-		echo $tracking->frontend_output();
+		// Escaped in frontend_output function
+		echo $tracking->frontend_output(); // phpcs:ignore
 	}
 
 	do_action( 'monsterinsights_tracking_after_' . $mode );
@@ -117,7 +119,7 @@ add_filter( 'the_permalink_rss', 'monsterinsights_rss_link_tagger', 99 );
  * Checks used for loading the frontend scripts/admin bar button.
  */
 function monsterinsights_prevent_loading_frontend_reports() {
-	return ! current_user_can( 'monsterinsights_view_dashboard' ) || monsterinsights_get_option( 'hide_admin_bar_reports' ) || function_exists( 'monsterinsights_is_reports_page' ) && monsterinsights_is_reports_page() || function_exists( 'monsterinsights_is_settings_page' ) && monsterinsights_is_settings_page();
+	return ! current_user_can( 'monsterinsights_view_dashboard' ) || monsterinsights_get_option( 'hide_admin_bar_reports' );
 }
 
 /**

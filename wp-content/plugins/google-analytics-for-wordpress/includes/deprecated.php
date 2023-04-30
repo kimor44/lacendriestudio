@@ -129,7 +129,7 @@ function _monsterinsights_deprecated_hook( $hook, $version, $message = null ) {
 	if ( ( WP_DEBUG && apply_filters( 'deprecated_hook_trigger_error', true ) ) || monsterinsights_is_debug_mode() ) {
 		$message = empty( $message ) ? '' : ' ' . $message;
 		// Translators: Placeholders add the hook name, plugin version and bold text.
-		trigger_error( sprintf( esc_html__( '%1$s is %3$sdeprecated%4$s since MonsterInsights version %2$s!', 'google-analytics-for-wordpress' ), $hook, $version, '<strong>', '</strong>' ) . esc_html( $message ) );
+		trigger_error( sprintf( esc_html__( '%1$s is %3$sdeprecated%4$s since MonsterInsights version %2$s!', 'google-analytics-for-wordpress' ), $hook, $version, '<strong>', '</strong>' ) . $message ); // phpcs:ignore
 	}
 }
 
@@ -187,7 +187,8 @@ function _monsterinsights_deprecated_function( $function, $version, $backtrace =
 	if ( ( WP_DEBUG && apply_filters( 'deprecated_function_trigger_error', true ) ) || monsterinsights_is_debug_mode() ) {
 		// Translators: Placeholders add the hook name, plugin version and bold text.
 		trigger_error( sprintf( esc_html__( '%1$s is %3$sdeprecated%4$s since MonsterInsights version %2$s.', 'google-analytics-for-wordpress' ), $function, $version, '<strong>', '</strong>' ) );
-		trigger_error( print_r( $backtrace, 1 ) );// Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
+		// Limited to previous 1028 characters, but since we only need to move back 1 in stack that should be fine.
+		trigger_error( print_r( $backtrace, 1 ) ); // phpcs:ignore 
 		// Alternatively we could dump this to a file.
 	}
 }
