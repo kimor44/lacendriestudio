@@ -1,0 +1,20 @@
+[30-Apr-2023 11:24:10 UTC] PHP Notice:  Trying to get property 'time_taken' of non-object in /Applications/MAMP/htdocs/lacendriestudio/wp-content/plugins/query-monitor/output/headers/overview.php on line 29
+[30-Apr-2023 11:24:10 UTC] PHP Notice:  Trying to get property 'time_usage' of non-object in /Applications/MAMP/htdocs/lacendriestudio/wp-content/plugins/query-monitor/output/headers/overview.php on line 33
+[30-Apr-2023 11:24:10 UTC] PHP Notice:  Trying to get property 'time_limit' of non-object in /Applications/MAMP/htdocs/lacendriestudio/wp-content/plugins/query-monitor/output/headers/overview.php on line 34
+[30-Apr-2023 12:08:06 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:09:06 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:10:06 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:11:06 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:13:06 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:14:07 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:16:08 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:18:08 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:20:09 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:22:10 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:34:02 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:34:02 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:35:03 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:37:04 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:39:05 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:41:04 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
+[30-Apr-2023 12:43:06 UTC] PHP Notice:  Constant WP_DEFAULT_THEME already defined in /Applications/MAMP/htdocs/lacendriestudio/wp-config.php on line 105
