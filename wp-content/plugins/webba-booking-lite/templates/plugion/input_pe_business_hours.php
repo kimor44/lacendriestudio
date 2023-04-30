@@ -11,8 +11,8 @@ if ( strpos( $time_format, 'a') != false ||  strpos( $time_format, 'A') != false
 
 ?>
 <div class="plugion_input_container">
-    <label for="<?php echo $slug; ?>" class="plugion_input_label"><?php echo $field->get_title(); ?></label>
-    <input data-format="<?php echo $time_format; ?>" data-setter="wbk_business_hours" data-getter="wbk_business_hours" data-default="<?php echo $field->get_default_value(); ?>" id="<?php echo $slug ?>" name="<?php echo $field->get_name(); ?>" data-default="<?php echo $field->get_default_value(); ?>" class="plugion_input plugion_property_input" type="hidden" data-validation="wbk_business_hours" required data-required="<?php echo $field->get_required(); ?>">
+    <label for="<?php echo esc_attr( $slug ); ?>" class="plugion_input_label"><?php echo $field->get_title(); ?></label>
+    <input data-format="<?php echo esc_attr( $time_format ); ?>" data-setter="wbk_business_hours" data-getter="wbk_business_hours" data-default="<?php echo $field->get_default_value(); ?>" id="<?php echo esc_attr( $slug ) ?>" name="<?php echo $field->get_name(); ?>" data-default="<?php echo $field->get_default_value(); ?>" class="plugion_input plugion_property_input" type="hidden" data-validation="wbk_business_hours" required data-required="<?php echo $field->get_required(); ?>">
     <form class="repeater">
         <div data-repeater-list="dow_availability">
             <div data-repeater-item class="wbk_business_hours_group">

@@ -37,8 +37,24 @@ class WBK_Request_Manager
         } );
         add_action( 'wp_ajax_wbk_calculate_amounts', array( $this, 'calculate_amounts' ) );
         add_action( 'wp_ajax_nopriv_wbk_calculate_amounts', array( $this, 'calculate_amounts' ) );
-        // add_action( 'wp_ajax_wbk_search_time', array( $this, 'search_time') );
-        // add_action( 'wp_ajax_nopriv_wbk_search_time', array( $this,'search_time') );
+        add_action( 'wp_ajax_wbk_search_time', array( $this, 'search_time' ) );
+        add_action( 'wp_ajax_nopriv_wbk_search_time', array( $this, 'search_time' ) );
+        add_action( 'wp_ajax_wbk-render-days', array( $this, 'render_days' ) );
+        add_action( 'wp_ajax_nopriv_wbk-render-days', array( $this, 'render_days' ) );
+        add_action( 'wp_ajax_wbk_prepare_service_data', array( $this, 'prepare_service_data' ) );
+        add_action( 'wp_ajax_nopriv_wbk_prepare_service_data', array( $this, 'prepare_service_data' ) );
+        add_action( 'wp_ajax_wbk_render_booking_form', array( $this, 'render_booking_form' ) );
+        add_action( 'wp_ajax_nopriv_wbk_render_booking_form', array( $this, 'render_booking_form' ) );
+        add_action( 'wp_ajax_wbk_book', array( $this, 'book' ) );
+        add_action( 'wp_ajax_nopriv_wbk_book', array( $this, 'book' ) );
+        add_action( 'wp_ajax_wbk_prepare_payment', array( $this, 'prepare_payment' ) );
+        add_action( 'wp_ajax_nopriv_wbk_prepare_payment', array( $this, 'prepare_payment' ) );
+        add_action( 'wp_ajax_wbk_cancel_appointment', array( $this, 'cancel_booking' ) );
+        add_action( 'wp_ajax_nopriv_wbk_cancel_appointment', array( $this, 'cancel_booking' ) );
+        add_action( 'wp_ajax_wbk_save_appearance', array( $this, 'save_appearance' ) );
+        add_action( 'wp_ajax_wbk_schedule_tools_action', array( $this, 'schedule_tools_action' ) );
+        add_action( 'wp_ajax_wbk_report_error', array( $this, 'wbk_report_error' ) );
+        add_action( 'wp_ajax_nopriv_wbk_report_error', array( $this, 'wbk_report_error' ) );
     }
     
     /**
@@ -80,40 +96,16 @@ class WBK_Request_Manager
         $timeslots = $sp->get_time_slots_by_day(
             $day,
             $service_id,
-            false,
-            true,
-            true,
+            array(
+            'skip_gg_calendar'       => false,
+            'ignore_preparation'     => true,
+            'calculate_availability' => true,
+            'calculate_night_hours'  => false,
+        ),
             $current_booking
         );
-        $time_slots_filtered = array();
-        /*
-        foreach( $timeslots as $timeslot ){
-            $current_quantity = 0;
-            if( !is_array( $timeslot->getStatus() ) && $timeslot->getStatus() == 0 ){
-                $time_slots_filtered[] = $timeslot;
-            }
-            if( !is_array( $timeslot->getStatus() ) && Plugion\Validator::check_integer( $timeslot->getStatus(), 1, 2147483647 ) ){
-                if( $current_booking == $timeslot->getStatus() ){
-                    $booking = new WBK_Booking( $current_booking );
-                    $current_quantity = $booking->get_quantity();
-                }
-                $timeslot->set_free_places( $timeslot->get_free_places() + $current_quantity );
-                $time_slots_filtered[] = $timeslot;
-            }
-            if( is_array( $timeslot->getStatus() ) && in_array( $current_booking, $timeslot->getStatus() ) ){
-                $booking = new WBK_Booking( $current_booking );
-                $current_quantity = $booking->get_quantity();
-                $timeslot->set_free_places( $timeslot->get_free_places() + $current_quantity );
-                $time_slots_filtered[] = $timeslot;
-            } elseif ( is_array( $timeslot->getStatus() ) ){
-                $timeslot->set_free_places( $timeslot->get_free_places() + $current_quantity );
-                $time_slots_filtered[] = $timeslot;
-            }
-        }
-        */
-        $timeslots_filtered = $timeslots;
         $data = array(
-            'time_slots' => $timeslots_filtered,
+            'time_slots' => $timeslots,
         );
         $response = new \WP_REST_Response( $data );
         $response->set_status( 200 );
@@ -131,12 +123,12 @@ class WBK_Request_Manager
         return true;
     }
     
-    public function get_wp_users_permission( $request )
+    public function wbk_csv_export_permission()
     {
         return true;
     }
     
-    public function wbk_csv_export_permission()
+    public function get_wp_users_permission( $request )
     {
         return true;
     }
@@ -161,6 +153,12 @@ class WBK_Request_Manager
     
     public function calculate_amounts()
     {
+        
+        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
+            wp_die();
+            return;
+        }
+        
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
         $times = explode( ',', $_POST['times'] );
         $services = explode( ',', $_POST['services'] );
@@ -199,12 +197,24 @@ class WBK_Request_Manager
             $bookings[] = $booking;
         }
         $sub_total = 0;
+        
+        if ( count( $bookings ) > 60 ) {
+            wp_die();
+            return;
+        }
+        
         foreach ( $bookings as $booking ) {
             $price = WBK_Price_Processor::calculate_single_booking_price( $booking, $bookings );
             $sub_total += $price['price'] * $booking->get_quantity();
         }
         $service_fees = 0;
         $services = array_unique( $services );
+        
+        if ( count( $services ) > 50 ) {
+            wp_die();
+            return;
+        }
+        
         foreach ( $services as $service ) {
             $service = new WBK_Service( $service );
             $service_fees += $service->get_fee();
@@ -253,6 +263,12 @@ class WBK_Request_Manager
     
     public function search_time()
     {
+        
+        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
+            wp_die();
+            return;
+        }
+        
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
         $service_id = $_POST['service'];
         $date = $_POST['date'];
@@ -270,7 +286,7 @@ class WBK_Request_Manager
         if ( $search_allowed !== true ) {
             $result = array(
                 'dest' => 'slot',
-                'data' => $search_allowed,
+                'data' => esc_html( $search_allowed ),
             );
             echo  json_encode( $result ) ;
             date_default_timezone_set( 'UTC' );
@@ -305,13 +321,13 @@ class WBK_Request_Manager
             
             if ( !is_array( $days ) || !is_array( $times ) ) {
                 echo  -1 ;
-                die;
+                wp_die();
                 return;
             }
             
             foreach ( $days as $day ) {
                 
-                if ( !WBK_Validator::checkDayofweek( $day ) ) {
+                if ( !WBK_Validator::check_day_of_week( $day ) ) {
                     date_default_timezone_set( 'UTC' );
                     echo  -3 ;
                     die;
@@ -321,7 +337,7 @@ class WBK_Request_Manager
             }
             foreach ( $times as $time ) {
                 
-                if ( !WBK_Validator::checkInteger( $time, 0, 1758537351 ) ) {
+                if ( !WBK_Validator::check_integer( $time, 0, 1758537351 ) ) {
                     date_default_timezone_set( 'UTC' );
                     echo  -4 ;
                     die;
@@ -332,7 +348,7 @@ class WBK_Request_Manager
         }
         
         
-        if ( !WBK_Validator::checkInteger( $day_to_render, 0, 1758537351 ) ) {
+        if ( !WBK_Validator::check_integer( $day_to_render, 0, 1758537351 ) ) {
             date_default_timezone_set( 'UTC' );
             echo  -5 ;
             die;
@@ -344,50 +360,25 @@ class WBK_Request_Manager
         $sp->load_data();
         
         if ( !is_array( $service_id ) ) {
-            // Single service booking
-            $service = new WBK_Service( $service_id );
-            
-            if ( !$service->loaded() ) {
-                date_default_timezone_set( 'UTC' );
-                echo  -5 ;
-                die;
-                return;
-            }
-            
-            $limit_end = 0;
-            $range = $service->get_availability_range();
-            if ( count( $range ) == 2 ) {
-                $limit_end = $range[2];
-            }
+            $multi_service = false;
+            $service_ids = array( $service_id );
+        } else {
+            $multi_service = true;
+            $service_ids = $service_id;
+        }
+        
+        
+        if ( is_array( $service_ids ) ) {
             $i = 0;
             // set number of days to show - $output_count
             
             if ( get_option( 'wbk_mode', 'extended' ) == 'extended' ) {
-                $days_count_opt = apply_filters(
-                    'wbk_days_extended_mode',
-                    get_option( 'wbk_days_in_extended_mode', 'default' ),
-                    $days_count_opt,
-                    $service_id
-                );
+                $output_count = apply_filters( 'wbk_days_extended_mode', get_option( 'wbk_days_in_extended_mode', 'default' ), $service_id );
                 
-                if ( $days_count_opt == 'default' ) {
+                if ( $output_count == 'default' ) {
                     $output_count = 2;
                 } else {
-                    
-                    if ( $days_count_opt == 'lowlimit' || $days_count_opt == 'uplimit' ) {
-                        $low_limit = $service->get( 'multi_mode_low_limit' );
-                        $up_limit = $service->get( 'multi_mode_limit' );
-                        $output_count = 2;
-                        if ( $days_count_opt == 'lowlimit' && $low_limit != '' ) {
-                            $output_count = $low_limit - 1;
-                        }
-                        if ( $days_count_opt == 'uplimit' && $up_limit != '' ) {
-                            $output_count = $up_limit - 1;
-                        }
-                    } else {
-                        $output_count = $days_count_opt - 1;
-                    }
-                
+                    $output_count = $output_count - 1;
                 }
             
             } else {
@@ -401,67 +392,114 @@ class WBK_Request_Manager
                 
                 if ( $limit_year > 360 ) {
                     $i = $output_count + 1;
-                    // stop loop
                     continue;
                 }
                 
-                if ( $limit_end != 0 && get_option( 'wbk_mode', 'extended' ) == 'extended' ) {
-                    
-                    if ( $day_to_render > $limit_end ) {
-                        $i = $output_count + 1;
-                        // stop loop
-                        continue;
-                    }
-                
+                $day_title_for_multiple = '';
+                if ( $multi_service ) {
+                    $day_title_for_multiple .= WBK_Renderer::load_template( 'frontend/day_title', array( $day_to_render, $offset ), false );
                 }
-                $day_status = $sp->get_day_status( $day_to_render, $service_id );
+                $take_day_into_account = false;
+                $slots_html = '';
                 
-                if ( $day_status == 1 ) {
-                    
-                    if ( get_option( 'wbk_mode', 'extended' ) == 'extended' ) {
-                        $day_name = strtolower( date( 'l', $day_to_render ) );
-                        $key = array_search( $day_name, $days );
-                        
-                        if ( $key === FALSE ) {
-                            $day_to_render = strtotime( 'tomorrow', $day_to_render );
-                            continue;
-                        } else {
-                            $time_after = WBK_Time_Math_Utils::adjust_times( $day_to_render, ${$times[$key]}, get_option( 'wbk_timezone', 'UTC' ) );
-                        }
-                    
-                    } else {
-                        $time_after = $day_to_render;
-                    }
-                    
-                    $timeslots = $sp->get_time_slots_by_day(
-                        $day_to_render,
-                        $service_id,
-                        false,
-                        false,
-                        true
-                    );
-                    $html = WBK_Renderer::load_template( 'frontend/day_with_timeslots', array( $day_to_render, $time_slots, $service_id ) );
-                    echo  json_encode( array(
-                        'data' => $html,
-                        'dest' => 'slot',
-                    ) ) ;
+                if ( count( $service_ids ) > 50 ) {
                     wp_die();
                     return;
-                    // todo procees only one slot and skip time slot selection
-                    // 	if ( substr_count( $day_slots, 'wbk-timeslot-btn' ) == 1  &&  $skip_value == 'enabled' ){
-                    /*
+                }
+                
+                foreach ( $service_ids as $service_id ) {
+                    $service = new WBK_Service( $service_id );
                     
-                    		 				$first_time = $service_schedule->getFirstAvailableTime();
-                    		 				$form_html = $this->render_booking_form( $service_id, $first_time );
-                    						$form_html = apply_filters( 'wbk_form_html', $form_html, $service_id, $first_time );
-                    		 				$result =  array( 'dest' => 'form', 'data'  => $form_html,  'time' => $first_time );
-                    		 				date_default_timezone_set('UTC');
-                    						echo json_encode( $result );
-                    				 		die();
-                    						return;
-                    		 			}
-                    */
+                    if ( !$service->is_loaded() ) {
+                        date_default_timezone_set( 'UTC' );
+                        echo  -5 ;
+                        die;
+                        return;
+                    }
+                    
+                    $limit_end = 0;
+                    $range = $service->get_availability_range();
+                    if ( count( $range ) == 2 ) {
+                        $limit_end = strtotime( $range[1] );
+                    }
+                    if ( $limit_end != 0 && get_option( 'wbk_mode', 'extended' ) == 'extended' ) {
+                        if ( $day_to_render > $limit_end ) {
+                            //$i = $output_count + 1;
+                            continue;
+                        }
+                    }
+                    $day_status = $sp->get_day_status( $day_to_render, $service_id );
+                    
+                    if ( $day_status == 1 ) {
+                        
+                        if ( get_option( 'wbk_mode', 'extended' ) == 'extended' ) {
+                            $time_after = $day_to_render;
+                            $day_name = strtolower( date( 'l', $day_to_render ) );
+                            
+                            if ( $multi_service ) {
+                                $time_after = $day_to_render;
+                            } else {
+                                $key = array_search( $day_name, $days );
+                                
+                                if ( $key === FALSE ) {
+                                    $day_to_render = strtotime( 'tomorrow', $day_to_render );
+                                    continue;
+                                } else {
+                                    $time_after = WBK_Time_Math_Utils::adjust_times( $day_to_render, $times[$key], get_option( 'wbk_timezone', 'UTC' ) );
+                                }
+                            
+                            }
+                        
+                        } else {
+                            $time_after = $day_to_render;
+                        }
+                        
+                        $timeslots = $sp->get_time_slots_by_day( $day_to_render, $service_id, array(
+                            'skip_gg_calendar'       => false,
+                            'ignore_preparation'     => false,
+                            'calculate_availability' => true,
+                        ) );
+                        $slots_html .= WBK_Renderer::load_template( 'frontend/day_with_timeslots', array(
+                            $day_to_render,
+                            $timeslots,
+                            $offset,
+                            $service_id,
+                            $multi_service,
+                            $time_after
+                        ), false );
+                        $take_day_into_account = true;
+                    }
+                    
+                    // todo procees only one slot and skip time slot selection
+                    $skip_value = apply_filters( 'wbk_skip_timeslots', get_option( 'wbk_skip_timeslot_select', 'disabled' ), $service_id );
+                    
+                    if ( substr_count( $slots_html, 'wbk-timeslot-btn' ) == 1 && $skip_value == 'enabled' ) {
+                        $first_time = $timeslots[0]->get_start();
+                        $form_html = WBK_Renderer::load_template( 'frontend/form_title', array( $service_ids, array( $first_time ) ), false );
+                        $form_html .= WBK_Renderer::load_template( 'frontend/form_fields', array( $service_ids, array( $first_time ) ), false );
+                        $form_html = apply_filters(
+                            'wbk_form_html',
+                            $form_html,
+                            $service_id,
+                            $first_time
+                        );
+                        $result = array(
+                            'dest' => 'form',
+                            'data' => $form_html,
+                            'time' => $first_time,
+                        );
+                        date_default_timezone_set( 'UTC' );
+                        echo  json_encode( $result ) ;
+                        wp_die();
+                        return;
+                    }
+                    
                     // end first time slot
+                }
+                
+                if ( $take_day_into_account ) {
+                    $html .= $day_title_for_multiple . $slots_html;
+                    $i++;
                 }
                 
                 
@@ -473,147 +511,6 @@ class WBK_Request_Manager
             
             }
         } else {
-            // multi service boooking
-            $service_ids = $service_id;
-            $date_format = WBK_Date_Time_Utils::getDateFormat();
-            
-            if ( !is_numeric( $date ) ) {
-                $day_to_render = strtotime( $date );
-            } else {
-                $day_to_render = $date;
-            }
-            
-            if ( !is_numeric( $offset ) ) {
-                $offset = 0;
-            }
-            $html = '';
-            $i = 0;
-            $multi_serv_date_limit = get_option( 'wbk_multi_serv_date_limit', '360' );
-            $up_limit = strtotime( 'today midnight' ) + 86400 * $multi_serv_date_limit;
-            $output_counts = array();
-            foreach ( $service_ids as $service_id ) {
-                $service_schedule = new WBK_Service_Schedule();
-                $service_schedule->setServiceId( $service_id );
-                if ( !$service_schedule->load() ) {
-                    continue;
-                }
-                
-                if ( get_option( 'wbk_mode', 'extended' ) == 'extended' ) {
-                    $days_count_opt = get_option( 'wbk_days_in_extended_mode', 'default' );
-                    $days_count_opt = apply_filters( 'wbk_days_extended_mode', $days_count_opt, $service_id );
-                    
-                    if ( $days_count_opt == 'default' ) {
-                        $output_count = 2;
-                    } else {
-                        
-                        if ( $days_count_opt == 'lowlimit' || $days_count_opt == 'uplimit' ) {
-                            $low_limit_x = $service_schedule->getService()->getMultipleLowLimit();
-                            $up_limit_x = $service_schedule->getService()->getMultipleLimit();
-                            $output_count = 2;
-                            if ( $days_count_opt == 'lowlimit' && $low_limit_x != '' ) {
-                                $output_count = $low_limit_x - 1;
-                            }
-                            if ( $days_count_opt == 'uplimit' && $up_limit_x != '' ) {
-                                $output_count = $up_limit_x - 1;
-                            }
-                        } else {
-                            $output_count = $days_count_opt - 1;
-                        }
-                    
-                    }
-                
-                } else {
-                    $output_count = 0;
-                }
-                
-                $output_counts[] = $output_count;
-            }
-            $output_count = min( $output_counts );
-            $limit_end = 0;
-            while ( $i <= $output_count ) {
-                
-                if ( $day_to_render > $up_limit ) {
-                    $limit_end = $day_to_render + 1;
-                    $i = $output_count + 1;
-                }
-                
-                $day_slots_all_services = array();
-                $array_sort = array();
-                foreach ( $service_ids as $service_id ) {
-                    $service_schedule = new WBK_Service_Schedule();
-                    $service_schedule->setServiceId( $service_id );
-                    if ( !$service_schedule->load() ) {
-                        continue;
-                    }
-                    
-                    if ( $service_schedule->getService()->getDateRange() != '' ) {
-                        $limit_end_current_service = $service_schedule->getService()->getDateRangeEnd();
-                        $limit_start_current_service = $service_schedule->getService()->getDateRangeStart();
-                    } else {
-                        $limit_end_current_service = 0;
-                        $limit_start_current_service = 0;
-                    }
-                    
-                    if ( $day_to_render > $limit_end_current_service && $limit_end_current_service != 0 || $day_to_render < $limit_start_current_service && $limit_start_current_service != 0 ) {
-                        continue;
-                    }
-                    $day_status = $service_schedule->getDayStatus( $day_to_render );
-                    
-                    if ( $day_status == 1 ) {
-                        $time_after = $day_to_render;
-                        $service_schedule->buildSchedule(
-                            $day_to_render,
-                            false,
-                            false,
-                            true,
-                            true
-                        );
-                        $first_time = 0;
-                        $time_slots = $service_schedule->getTimeSlots();
-                        if ( count( $time_slots ) > 0 ) {
-                            $first_time = $time_slots[0]->getStart();
-                        }
-                        $day_slots = $service_schedule->renderDayFrontend( $time_after, $offset );
-                    } else {
-                        $day_slots = '';
-                    }
-                    
-                    
-                    if ( $day_slots != '' ) {
-                        $array_sort[] = $first_time;
-                        $day_slots_all_services[] = '<label class="wbk-multiple-service-title">' . $service_schedule->getService()->getName() . '</label>' . $day_slots;
-                    }
-                
-                }
-                array_multisort( $array_sort, $day_slots_all_services, SORT_NUMERIC );
-                $day_slots_all_services = implode( '', $day_slots_all_services );
-                $date_regular = wp_date( $date_format, $day_to_render, new DateTimeZone( date_default_timezone_get() ) );
-                $timezone = new DateTimeZone( get_option( 'wbk_timezone', 'UTC' ) );
-                $current_offset = $offset * -60 - $timezone->getOffset( new DateTime() );
-                $date_local = wp_date( $date_format, $day_to_render + $current_offset, new DateTimeZone( date_default_timezone_get() ) );
-                $day_title = get_option( 'wbk_day_label', '#date' );
-                $day_title = str_replace( '#date', $date_regular, $day_title );
-                $day_title = str_replace( '#local_date', $date_local, $day_title );
-                
-                if ( get_option( 'wbk_mode', 'extended' ) == 'extended' ) {
-                    $day_to_render = strtotime( 'tomorrow', $day_to_render );
-                } else {
-                    $i++;
-                }
-                
-                
-                if ( $day_slots_all_services != '' ) {
-                    $html .= '<div class="wbk-col-12-12">
-								<div class="wbk-day-title">
-									' . $day_title . '
-								</div>
-								<hr class="wbk-day-separator">
-	  						  </div>';
-                    $html .= '<div class="wbk-col-12-12 wbk-text-center" >' . $day_slots_all_services . '</div>';
-                    $i++;
-                }
-            
-            }
         }
         
         
@@ -623,27 +520,21 @@ class WBK_Request_Manager
                 
                 if ( $limit_end != 0 ) {
                     if ( $day_to_render <= $limit_end ) {
-                        $html .= '<div class="wbk-frontend-row" id="wbk-show_more_container">
-									<input type="button" class="wbk-button"  id="wbk-show_more_btn" value="' . __( 'Show more', 'wbk' ) . '"  />
-									<input type="hidden" id="wbk-show-more-start" value="' . $day_to_render . '">
-								  </div>';
+                        $html .= WBK_Renderer::load_template( 'frontend/show_more_btn', array( $day_to_render ), false );
                     }
-                    $html .= '<div class="wbk-more-container"></div>';
+                    $html .= WBK_Renderer::load_template( 'frontend/more_container', array(), false );
                 } else {
-                    $html .= '<div class="wbk-frontend-row" id="wbk-show_more_container">
-								<input type="button" class="wbk-button"  id="wbk-show_more_btn" value="' . __( 'Show more', 'wbk' ) . '"  />
-								<input type="hidden" id="wbk-show-more-start" value="' . $day_to_render . '">
-							  </div>';
-                    $html .= '<div class="wbk-more-container"></div>';
+                    $html .= WBK_Renderer::load_template( 'frontend/show_more_btn', array( $day_to_render ), false );
+                    $html .= WBK_Renderer::load_template( 'frontend/more_container', array(), false );
                 }
             
             } else {
-                $html = get_option( 'wbk_book_not_found_message', 'Unfortunately we were unable to meet your search criteria. Please change the criteria and try again.' );
+                $html .= WBK_Renderer::load_template( 'frontend/no_results', array(), false );
             }
         
         } else {
             if ( $html == '' ) {
-                $html = get_option( 'wbk_book_not_found_message', 'Unfortunately we were unable to meet your search criteria. Please change the criteria and try again.' );
+                $html .= WBK_Renderer::load_template( 'frontend/no_results', array(), false );
             }
         }
         
@@ -651,10 +542,7 @@ class WBK_Request_Manager
         if ( get_option( 'wbk_show_cancel_button', 'disabled' ) == 'enabled' ) {
             global  $wbk_wording ;
             $cancel_label = get_option( 'wbk_cancel_button_text', '' );
-            if ( $cancel_label == '' ) {
-                $cancel_label = sanitize_text_field( $wbk_wording['cancel_label_form'] );
-            }
-            $html .= '<input class="wbk-button wbk-width-100 wbk-cancel-button"  value="' . $cancel_label . '" type="button">';
+            $html .= '<input class="wbk-button wbk-width-100 wbk-cancel-button"  value="' . esc_attr( $cancel_label ) . '" type="button">';
         }
         
         $result = array(
@@ -665,6 +553,1303 @@ class WBK_Request_Manager
         date_default_timezone_set( 'UTC' );
         die;
         return;
+    }
+    
+    public function render_days()
+    {
+        
+        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
+            wp_die();
+            return;
+        }
+        
+        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+        $total_steps = $_POST['step'];
+        $service_id = $_POST['service'];
+        
+        if ( !WBK_Validator::check_integer( $service_id, 1, 9999999999 ) ) {
+            echo  -1 ;
+            wp_die();
+            return;
+        }
+        
+        $service = new WBK_Service( $service_id );
+        $sp = new WBK_Schedule_Processor();
+        $sp->load_unlocked_days();
+        WBK_Renderer::load_template( 'frontend/suitable_hours', array( $service_id, $sp ), true );
+        wp_die();
+        return;
+    }
+    
+    public function prepare_service_data()
+    {
+        try {
+            
+            if ( !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
+                wp_die();
+                return;
+            }
+            
+            date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+            $service_id = $_POST['service'];
+            $offset = $_POST['offset'];
+            $result = array();
+            
+            if ( !is_array( $service_id ) ) {
+                
+                if ( !is_numeric( $service_id ) ) {
+                    $result['disabilities'] = '';
+                    $result['limits'] = '';
+                    $result['abilities'] = '';
+                    echo  json_encode( $result ) ;
+                    date_default_timezone_set( 'UTC' );
+                    wp_die();
+                    return;
+                }
+                
+                
+                if ( get_option( 'wbk_date_input', 'popup' ) == 'popup' || get_option( 'wbk_date_input', 'popup' ) == 'classic' ) {
+                    $disabilities = WBK_Model_Utils::get_service_availability_in_range( $service_id, get_option( 'wbk_avaiability_popup_calendar', 365 ) );
+                    $result['disabilities'] = implode( ';', $disabilities );
+                    $result['limits'] = WBK_Model_Utils::get_service_limits( $service_id );
+                    $result['abilities'] = '';
+                    $result['week_disabilities'] = WBK_Model_Utils::get_service_weekly_availability( $service_id );
+                } else {
+                    $abilities = WBK_Model_Utils::get_service_availability_in_range( $service_id, get_option( 'wbk_date_input_dropdown_count', 7 ), 'dropdown' );
+                    $result['disabilities'] = '';
+                    $result['limits'] = '';
+                    $result['abilities'] = implode( ';', $abilities );
+                    $result['week_disabilities'] = '';
+                }
+            
+            } else {
+                $service_ids = $service_id;
+                $total_array = array();
+                $use_limits = TRUE;
+                $range_start = 7863319160;
+                $range_end = 0;
+                
+                if ( count( $service_ids ) > 50 ) {
+                    wp_die();
+                    return;
+                }
+                
+                foreach ( $service_ids as $service_id ) {
+                    if ( !is_numeric( $service_id ) ) {
+                        continue;
+                    }
+                    
+                    if ( get_option( 'wbk_date_input', 'popup' ) == 'popup' || get_option( 'wbk_date_input', 'popup' ) == 'classic' ) {
+                        $current_data = WBK_Model_Utils::get_service_availability_in_range( $service_id, get_option( 'wbk_avaiability_popup_calendar', 365 ) );
+                    } else {
+                        $current_data = WBK_Model_Utils::get_service_availability_in_range( $service_id, get_option( 'wbk_date_input_dropdown_count', 7 ), 'dropdown' );
+                    }
+                    
+                    
+                    if ( count( $total_array ) == 0 ) {
+                        $total_array = $current_data;
+                    } else {
+                        $total_array = array_merge( $total_array, $current_data );
+                    }
+                    
+                    $service = new WBK_Service( $service_id );
+                    
+                    if ( !is_null( $service->get_availability_range() ) && is_array( $service->get_availability_range() ) && count( $service->get_availability_range() ) == 2 ) {
+                        $availability_range = $service->get_availability_range();
+                        $current_start = strtotime( trim( $availability_range[0] ) );
+                        $current_end = strtotime( trim( $availability_range[1] ) );
+                        if ( $current_start < $range_start ) {
+                            $range_start = $current_start;
+                        }
+                        if ( $current_end > $range_end ) {
+                            $range_end = $current_end;
+                        }
+                    } else {
+                        $use_limits = FALSE;
+                    }
+                
+                }
+                $total_array = array_unique( $total_array );
+                $toal_array_filtered = array();
+                if ( get_option( 'wbk_date_input', 'popup' ) == 'dropdown' ) {
+                    foreach ( $total_array as $item ) {
+                        if ( strpos( $item, '-HM-wbk_dropdown_limit_reached' ) !== false ) {
+                            continue;
+                        }
+                        $toal_array_filtered[] = $item;
+                    }
+                }
+                $multi_serv_date_limit = get_option( 'wbk_avaiability_popup_calendar', '360' );
+                
+                if ( $use_limits ) {
+                    $result['limits'] = date( 'Y,n,j', $range_start ) . '-' . date( 'Y,n,j', $range_end );
+                } else {
+                    $result['limits'] = date( 'Y,n,j', strtotime( 'today midnight' ) ) . '-' . date( 'Y,n,j', strtotime( 'today midnight' ) + 86400 * $multi_serv_date_limit );
+                }
+                
+                if ( $range_start == $range_end ) {
+                    if ( $range_end != 0 ) {
+                        if ( $use_limits ) {
+                            $result['limits'] = $range_start;
+                        }
+                    }
+                }
+                $result['week_disabilities'] = '';
+                
+                if ( get_option( 'wbk_date_input', 'popup' ) == 'popup' || get_option( 'wbk_date_input', 'popup' ) == 'classic' ) {
+                    $result['disabilities'] = implode( ';', $total_array );
+                    $result['abilities'] = '';
+                } else {
+                    $result['disabilities'] = '';
+                    $result['abilities'] = implode( ';', $toal_array_filtered );
+                }
+            
+            }
+            
+            echo  json_encode( $result ) ;
+            date_default_timezone_set( 'UTC' );
+            wp_die();
+            return;
+        } catch ( \Exception $exception ) {
+        }
+    }
+    
+    public function render_booking_form()
+    {
+        
+        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
+            wp_die();
+            return;
+        }
+        
+        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+        $time = $_POST['time'];
+        
+        if ( isset( $_POST['service'] ) ) {
+            $service_ids = array();
+            
+            if ( is_array( $time ) ) {
+                foreach ( $time as $time_this ) {
+                    $service_ids[] = $_POST['service'];
+                }
+            } else {
+                $service_ids[] = $_POST['service'];
+            }
+        
+        } else {
+            $service_ids = $_POST['services'];
+            foreach ( $service_ids as $service_this ) {
+                
+                if ( !WBK_Validator::check_integer( $service_this, 1, 2758537351 ) ) {
+                    echo  -1 ;
+                    date_default_timezone_set( 'UTC' );
+                    wp_die();
+                    return;
+                }
+            
+            }
+        }
+        
+        
+        if ( is_array( $time ) ) {
+            foreach ( $time as $time_this ) {
+                
+                if ( !WBK_Validator::check_integer( $time_this, 0, 2758537351 ) ) {
+                    echo  -1 ;
+                    date_default_timezone_set( 'UTC' );
+                    wp_die();
+                    return;
+                }
+            
+            }
+        } else {
+            
+            if ( !WBK_Validator::check_integer( $time, 0, 2758537351 ) ) {
+                echo  -1 ;
+                date_default_timezone_set( 'UTC' );
+                wp_die();
+                return;
+            }
+            
+            $time = array( $time );
+        }
+        
+        
+        if ( count( $service_ids ) > 50 ) {
+            wp_die();
+            return;
+        }
+        
+        $category_id = 0;
+        if ( isset( $_POST['category'] ) && is_numeric( $_POST['category'] ) ) {
+            $category_id = $_POST['category'];
+        }
+        $html = WBK_Renderer::load_template( 'frontend/form_title', array( $service_ids, $time, $category_id ) );
+        $html .= WBK_Renderer::load_template( 'frontend/form_fields', array( $service_ids, $time, $category_id ) );
+        echo  $html ;
+        date_default_timezone_set( 'UTC' );
+        die;
+        return;
+    }
+    
+    public function book()
+    {
+        
+        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
+            wp_die();
+            return;
+        }
+        
+        global  $wpdb ;
+        $arr_uploaded_urls = array();
+        if ( get_option( 'wbk_allow_attachemnt', 'no' ) == 'yes' ) {
+            foreach ( $_FILES as $file ) {
+                $uploaded_file = wp_handle_upload( $file, array(
+                    'test_form' => false,
+                ) );
+                if ( $uploaded_file && !isset( $uploaded_file['error'] ) ) {
+                    $arr_uploaded_urls[] = $uploaded_file['file'];
+                }
+            }
+        }
+        
+        if ( count( $arr_uploaded_urls ) > 0 ) {
+            $attachments = json_encode( $arr_uploaded_urls );
+        } else {
+            $attachments = '';
+        }
+        
+        // external validation used by 3d parties
+        $wbk_external_validation = true;
+        $wbk_external_validation = apply_filters( 'wbk_booking_form_validation', $wbk_external_validation, $_POST );
+        
+        if ( $wbk_external_validation == false ) {
+            echo  -1 ;
+            date_default_timezone_set( 'UTC' );
+            die;
+            return;
+        }
+        
+        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+        
+        if ( isset( $_POST['current_category'] ) && $_POST['current_category'] != 'undefined' ) {
+            $current_category = esc_html( sanitize_text_field( $_POST['current_category'] ) );
+        } else {
+            $current_category = 0;
+        }
+        
+        $times = explode( ',', $_POST['time'] );
+        if ( isset( $_POST['services'] ) ) {
+            $services = explode( ',', $_POST['services'] );
+        }
+        
+        if ( isset( $_POST['time_zone_client'] ) ) {
+            $time_zone_client = $_POST['time_zone_client'];
+        } else {
+            $time_zone_client = '';
+        }
+        
+        
+        if ( isset( $_POST['secondary_data'] ) ) {
+            $scondary_data = stripslashes( $_POST['secondary_data'] );
+            $secondary_data = json_decode( $scondary_data );
+        } else {
+            $secondary_data = '';
+        }
+        
+        $per_serv_quantity_result = array();
+        
+        if ( isset( $_POST['service'] ) && $_POST['service'] != 'undefined' ) {
+            $service_id = $_POST['service'];
+            $multi_service = false;
+        } else {
+            $multi_service = true;
+            
+            if ( $_POST['per_serv_quantity'] != '' ) {
+                $per_serv_quantity = explode( ',', $_POST['per_serv_quantity'] );
+                foreach ( $per_serv_quantity as $cur_quantity ) {
+                    $cur_quantity = explode( ';', $cur_quantity );
+                    
+                    if ( count( $cur_quantity ) != 2 ) {
+                        echo  -1 ;
+                        date_default_timezone_set( 'UTC' );
+                        die;
+                        return;
+                    }
+                    
+                    $per_serv_quantity_result['service-' . $cur_quantity[0]] = $cur_quantity[1];
+                }
+            }
+        
+        }
+        
+        $booking_data['name'] = esc_html( trim( apply_filters( 'wbk_field_before_book', sanitize_text_field( $_POST['custname'] ), 'name' ) ) );
+        $booking_data['email'] = esc_html( strtolower( trim( apply_filters( 'wbk_field_before_book', sanitize_text_field( $_POST['email'] ), 'email' ) ) ) );
+        $booking_data['phone'] = esc_html( trim( sanitize_text_field( $_POST['phone'] ) ) );
+        $booking_data['extra'] = stripcslashes( $_POST['extra'] );
+        $booking_data['description'] = esc_html( sanitize_text_field( $_POST['desc'] ) );
+        $quantity = esc_html( sanitize_text_field( $_POST['quantity'] ) );
+        $booking_data['service_category'] = $current_category;
+        $booking_data['secondary_data'] = $secondary_data;
+        $booking_data['attachment'] = $attachments;
+        // end obtaining data and validation
+        $booking_ids = array();
+        $i = -1;
+        $skipped_count = 0;
+        $serices_used = array();
+        $notification_booking_ids = array();
+        $not_booked_due_limit = false;
+        $services_used = array();
+        $sp = new WBK_Schedule_Processor();
+        
+        if ( count( $times ) > 50 ) {
+            wp_die();
+            return;
+        }
+        
+        foreach ( $times as $time ) {
+            $i++;
+            $booking_data_this = $booking_data;
+            $booking_data_this['time'] = $time;
+            if ( $multi_service ) {
+                $service_id = $services[$i];
+            }
+            $booking_data_this['service_id'] = $service_id;
+            $service = new WBK_Service( $service_id );
+            $ongoing_valid = false;
+            
+            if ( get_option( 'wbk_allow_ongoing_time_slot', 'disallow' ) == 'disallow' ) {
+                if ( $time > time() ) {
+                    $ongoing_valid = true;
+                }
+            } else {
+                $end_time_current = $time + $service->get_duration() * 60;
+                if ( $time > time() || $time < time() && $end_time_current > time() ) {
+                    $ongoing_valid = true;
+                }
+            }
+            
+            if ( !$ongoing_valid ) {
+                continue;
+            }
+            $booking_data_this['time_offset'] = WBK_Time_Math_Utils::get_offset_local( $time );
+            
+            if ( isset( $per_serv_quantity_result['service-' . $service_id] ) ) {
+                $quantity_this = $per_serv_quantity_result['service-' . $service_id];
+            } else {
+                $service = new WBK_Service( $service_id );
+                
+                if ( $service->get_quantity() == 1 ) {
+                    $quantity_this = 1;
+                } else {
+                    $quantity_this = $quantity;
+                }
+            
+            }
+            
+            $booking_data_this['quantity'] = esc_html( sanitize_text_field( $quantity_this ) );
+            // ** double check for closed days
+            $day = strtotime( 'today midnight', $time );
+            $sp->load_data();
+            
+            if ( $sp->get_day_status( $day, $service_id ) != 1 ) {
+                $skipped_count++;
+                continue;
+            }
+            
+            // ** double check for timeslot status and available places
+            $timeslots = $sp->get_time_slots_by_day( $day, $service_id, array(
+                'skip_gg_calendar'       => false,
+                'ignore_preparation'     => true,
+                'calculate_availability' => true,
+                'calculate_night_hours'  => false,
+            ) );
+            $time_slot_valid = false;
+            foreach ( $timeslots as $timeslot ) {
+                if ( $timeslot->get_start() == $time ) {
+                    if ( is_array( $timeslot->get_status() ) || $timeslot->get_status() == 0 ) {
+                        if ( $booking_data_this['quantity'] <= $timeslot->get_free_places() ) {
+                            $time_slot_valid = true;
+                        }
+                    }
+                }
+            }
+            
+            if ( !$time_slot_valid ) {
+                $skipped_count++;
+                continue;
+            }
+            
+            $booking_data_this['duration'] = $service->get_duration();
+            // START LIMIT VALIDATION
+            if ( get_option( 'wbk_appointments_only_one_per_slot', 'disabled' ) == 'enabled' ) {
+                
+                if ( count( WBK_Model_Utils::get_booking_ids_by_time_service_email( $time, $service_id, $booking_data['email'] ) ) > 0 ) {
+                    $not_booked_due_limit = true;
+                    continue;
+                }
+            
+            }
+            if ( get_option( 'wbk_appointments_only_one_per_service', 'disabled' ) == 'enabled' ) {
+                
+                if ( count( WBK_Model_Utils::get_booking_ids_by_service_email( $service_id, $booking_data['email'] ) ) > 0 ) {
+                    $not_booked_due_limit = true;
+                    continue;
+                }
+            
+            }
+            if ( get_option( 'wbk_appointments_only_one_per_day', 'disabled' ) == 'enabled' ) {
+                
+                if ( count( WBK_Model_Utils::get_booking_ids_by_day_service_email( $day, $service_id, $booking_data['email'] ) ) > 0 ) {
+                    $not_booked_due_limit = true;
+                    continue;
+                }
+            
+            }
+            // END LIMIT VALIDATION
+            $boking_factory = new WBK_Booking_Factory();
+            $status = $boking_factory->build_from_array( $booking_data_this );
+            
+            if ( $status[0] == true ) {
+                $booking_ids[] = $status[1];
+                $notification_booking_ids = $status[1];
+                do_action( 'wbk_table_after_add', [ $status[1], get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments' ] );
+                $wbk_action_data = array(
+                    'appointment_id' => $status[1],
+                    'customer'       => $booking_data_this['name'],
+                    'email'          => $booking_data_this['email'],
+                    'phone'          => $booking_data_this['phone'],
+                    'time'           => $booking_data_this['time'],
+                    'serice id'      => $booking_data_this['service_id'],
+                    'duration'       => $booking_data_this['duration'],
+                    'comment'        => $booking_data_this['description'],
+                    'quantity'       => $booking_data_this['quantity'],
+                );
+                do_action( 'wbk_add_appointment', $wbk_action_data );
+            }
+        
+        }
+        
+        if ( count( $booking_ids ) == 0 && $not_booked_due_limit == true ) {
+            echo  '-14' ;
+            date_default_timezone_set( 'UTC' );
+            wp_die();
+            return;
+        }
+        
+        
+        if ( count( $booking_ids ) == 0 ) {
+            echo  '-13' ;
+            date_default_timezone_set( 'UTC' );
+            wp_die();
+            return;
+        }
+        
+        
+        if ( get_option( 'wbk_woo_prefil_fields', '' ) == 'true' ) {
+            if ( !session_id() ) {
+                session_start();
+            }
+            $booking = new WBK_Booking( $booking_ids[0] );
+            $last_name = $booking->get_custom_field_value( 'last_name' );
+            if ( is_null( $last_name ) ) {
+                $last_name = '';
+            }
+            $_SESSION['wbk_name'] = $booking->get_name();
+            $_SESSION['wbk_email'] = $booking->get( 'email' );
+            $_SESSION['wbk_phone'] = $booking->get( 'phone' );
+            $_SESSION['wbk_last_name'] = $last_name;
+        }
+        
+        $boking_factory->post_production( $booking_ids, 'on_booking' );
+        
+        if ( get_option( 'wbk_multi_booking' ) == 'disabled' && count( $booking_ids ) > 0 ) {
+            $thanks_message = WBK_Placeholder_Processor::process_placeholders( get_option( 'wbk_book_thanks_message', '' ), $booking_ids[0] );
+        } else {
+            $thanks_message = WBK_Placeholder_Processor::process_placeholders( get_option( 'wbk_book_thanks_message', '' ), $booking_ids );
+        }
+        
+        $thanks_message = str_replace( '#failed_count', $skipped_count, $thanks_message );
+        $payment_methods_allowed = WBK_Model_Utils::get_payment_methods_for_bookings( $booking_ids );
+        $thanks_message .= WBK_Renderer::load_template( 'frontend/payment_init', array( $payment_methods_allowed, $booking_ids, 'wbk_payment_button_afterform' ), false );
+        
+        if ( count( $booking_ids ) > 0 ) {
+            $booked_slot_text = WBK_Db_Utils::booked_slot_placeholder_processing( $booking_ids[0] );
+        } else {
+            $booked_slot_text = '';
+        }
+        
+        $result = array(
+            'thanks_message'   => $thanks_message,
+            'booked_slot_text' => $booked_slot_text,
+        );
+        echo  json_encode( $result ) ;
+        date_default_timezone_set( 'UTC' );
+        die;
+        return;
+    }
+    
+    public function prepare_payment()
+    {
+        
+        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
+            wp_die();
+            return;
+        }
+        
+        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+        $method = sanitize_text_field( $_POST['method'] );
+        $booking_ids_unfiltered = explode( ',', sanitize_text_field( $_POST['app_id'] ) );
+        $referer = explode( '?', wp_get_referer() );
+        $coupon = sanitize_text_field( trim( $_POST['coupon'] ) );
+        $booking_ids = array();
+        $service_ids = array();
+        $sub_total = 0;
+        $pay_not_approved = get_option( 'wbk_appointments_allow_payments', 'disabled' );
+        
+        if ( count( $booking_ids_unfiltered ) > 50 ) {
+            wp_die();
+            return;
+        }
+        
+        foreach ( $booking_ids_unfiltered as $booking_id ) {
+            if ( !is_numeric( $booking_id ) ) {
+                continue;
+            }
+            $booking = new WBK_Booking( $booking_id );
+            if ( !$booking->is_loaded( $booking ) ) {
+                continue;
+            }
+            $status = $booking->get( 'status' );
+            $price = $booking->get_price();
+            if ( $status == 'woocommerce' || $status == 'paid' || $status == 'paid_approved' || $status == 'pending' && $pay_not_approved == 'enabled' || is_null( $status ) ) {
+                continue;
+            }
+            $sub_total += $price;
+            $booking_ids[] = $booking_id;
+            $service_ids[] = $booking->get_service();
+        }
+        
+        if ( count( $booking_ids ) == 0 ) {
+            $html = get_option( 'wbk_nothing_to_pay_message', '' );
+            
+            if ( $method == 'woocommerce' ) {
+                echo  json_encode( array(
+                    'status'  => 0,
+                    'details' => $html,
+                ) ) ;
+            } else {
+                echo  $html ;
+            }
+            
+            date_default_timezone_set( 'UTC' );
+            wp_die();
+            return;
+        }
+        
+        
+        if ( get_option( 'wbk_allow_coupons', 'disabled' ) == 'enabled' ) {
+            
+            if ( $coupon != '' ) {
+                $coupon_result = WBK_Validator::check_coupon( $coupon, $service_ids );
+            } else {
+                $coupon_result = FALSE;
+            }
+        
+        } else {
+            $coupon_result = FALSE;
+        }
+        
+        
+        if ( is_array( $coupon_result ) ) {
+            foreach ( $booking_ids as $booking_id ) {
+                $booking = new WBK_Booking( $booking_id );
+                if ( !$booking->is_loaded() ) {
+                    continue;
+                }
+                $booking->set( 'coupon', $coupon_result[0] );
+                $booking->save();
+            }
+            if ( $coupon_result[2] == 100 ) {
+                $this->wbk_set_appointment_as_paid_with_coupon( $booking_ids, $method );
+            }
+            if ( $coupon_result[1] >= $sub_total ) {
+                $this->wbk_set_appointment_as_paid_with_coupon( $booking_ids, $method );
+            }
+        }
+        
+        $coupon_status_html = '';
+        
+        if ( get_option( 'wbk_allow_coupons', 'disabled' ) == 'enabled' && $coupon != '' ) {
+            global  $wbk_wording ;
+            
+            if ( is_array( $coupon_result ) ) {
+                $coupon_status_html = esc_html( get_option( 'wbk_coupon_applied', __( 'Coupon applied', 'wbk' ) ) );
+                $coupon_this = $coupon_result[0];
+            } else {
+                $coupon_status_html = get_option( 'wbk_coupon_not_applied', __( 'Coupon not applied', 'wbk' ) );
+                $coupon_this = 0;
+            }
+            
+            foreach ( $booking_ids as $booking_id ) {
+                $booking = new WBK_Booking( $booking_id );
+                if ( !$booking->is_loaded() ) {
+                    continue;
+                }
+                $booking->set( 'coupon', $coupon_this );
+                $booking->save();
+            }
+        }
+        
+        
+        if ( $method == 'arrival' ) {
+            foreach ( $booking_ids as $booking_id ) {
+                $booking = new WBK_Booking( $booking_id );
+                if ( !$booking->is_loaded() ) {
+                    continue;
+                }
+                $booking->set( 'payment_method', 'Pay on arrival' );
+            }
+            $html = WBK_Renderer::load_template( 'frontend/pay_on_arrival_message', array(), false );
+        }
+        
+        
+        if ( $method == 'bank' ) {
+            foreach ( $booking_ids as $booking_id ) {
+                $booking = new WBK_Booking( $booking_id );
+                if ( !$booking->is_loaded() ) {
+                    continue;
+                }
+                $booking->set( 'payment_method', 'Bank transfer' );
+            }
+            $html = WBK_Renderer::load_template( 'frontend/bank_message', array( $booking_ids ), false );
+        }
+        
+        if ( $method == 'paypal' ) {
+        }
+        if ( $method == 'stripe' ) {
+        }
+        
+        if ( $method == 'woocommerce' ) {
+            $result = WBK_WooCommerce::add_to_cart( $booking_ids );
+            echo  $result ;
+            wp_die();
+            return;
+        }
+        
+        $html = '<div class="wbk-details-sub-title">' . $coupon_status_html . '</div>' . $html;
+        echo  $html ;
+        date_default_timezone_set( 'UTC' );
+        wp_die();
+        return;
+    }
+    
+    public function charge_stripe()
+    {
+        
+        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
+            wp_die();
+            return;
+        }
+    
+    }
+    
+    public function wbk_set_appointment_as_paid_with_coupon( $booking_ids, $method )
+    {
+        $bf = new WBK_Booking_Factory();
+        $bf->set_as_paid( $booking_ids, 'pay by applying coupon' );
+        
+        if ( $method == 'paypal' && get_option( 'wbk_paypal_redirect_url' ) != '' ) {
+            echo  'redirect:' . get_option( 'wbk_paypal_redirect_url' ) ;
+            wp_die();
+            return;
+        }
+        
+        
+        if ( $method == 'stripe' && get_option( 'wbk_stripe_redirect_url' ) != '' ) {
+            echo  'redirect:' . get_option( 'wbk_stripe_redirect_url' ) ;
+            wp_die();
+            return;
+        }
+        
+        
+        if ( $method == 'woocommerce' ) {
+            echo  json_encode( array(
+                'status'  => 5,
+                'details' => $html,
+            ) ) ;
+            date_default_timezone_set( 'UTC' );
+            wp_die();
+            return;
+        }
+        
+        echo  WBK_Renderer::load_template( 'frontend/payment_complete', array(), false ) ;
+        date_default_timezone_set( 'UTC' );
+        wp_die();
+        return;
+    }
+    
+    public function cancel_booking()
+    {
+        
+        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
+            wp_die();
+            return;
+        }
+        
+        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+        $email = strtolower( $_POST['email'] );
+        $app_token = $_POST['app_token'];
+        
+        if ( !WBK_Validator::check_email( $email ) ) {
+            global  $wbk_wording ;
+            echo  WBK_Renderer::load_template( 'frontend/message_container', array( get_option( 'wbk_booking_cancel_error_message', '' ) ), false ) ;
+            date_default_timezone_set( 'UTC' );
+            wp_die();
+            return;
+        }
+        
+        $booking_ids = WBK_Model_Utils::get_booking_ids_by_group_token( $app_token );
+        
+        if ( count( $booking_ids ) > 50 ) {
+            wp_die();
+            return;
+        }
+        
+        $valid = true;
+        $arr_tokens = explode( '-', $app_token );
+        $i = 0;
+        $multi_booking_valid = true;
+        foreach ( $booking_ids as $booking_id ) {
+            $booking = new WBK_Booking( $booking_id );
+            
+            if ( !$booking->is_loaded() ) {
+                $multi_booking_valid = false;
+                continue;
+            }
+            
+            if ( $booking->get( 'email' ) != $email ) {
+                $multi_booking_valid = false;
+            }
+        }
+        // usage of deprecate method
+        $appointment_ids = $booking_ids;
+        
+        if ( $multi_booking_valid && count( $booking_ids ) > 0 ) {
+            $customer_notification_mode = get_option( 'wbk_email_customer_cancel_multiple_mode', 'foreach' );
+            $admin_notification_mode = get_option( 'wbk_email_admin_cancel_multiple_mode', 'foreach' );
+            $multiple = false;
+            if ( get_option( 'wbk_multi_booking' ) == 'enabled' || get_option( 'wbk_multi_booking' ) == 'enabled_slot' ) {
+                $multiple = true;
+            }
+            if ( $multiple && $customer_notification_mode == 'one' && get_option( 'wbk_email_customer_appointment_cancel_status', '' ) == 'true' ) {
+                
+                if ( count( $appointment_ids ) > 0 ) {
+                    $appointment = new WBK_Appointment_deprecated();
+                    if ( $appointment->setId( $appointment_ids[0] ) ) {
+                        
+                        if ( $appointment->load() ) {
+                            $recipient = $appointment->getEmail();
+                            $notifications = new WBK_Email_Notifications( null, null );
+                            $subject = get_option( 'wbk_email_customer_appointment_cancel_subject', '' );
+                            $message = get_option( 'wbk_email_customer_bycustomer_appointment_cancel_message', '' );
+                            $notifications->sendMultipleNotification(
+                                $appointment_ids,
+                                $message,
+                                $subject,
+                                $recipient
+                            );
+                        }
+                    
+                    }
+                }
+            
+            }
+            $multiple = false;
+            if ( get_option( 'wbk_multi_booking' ) == 'enabled' || get_option( 'wbk_multi_booking' ) == 'enabled_slot' ) {
+                $multiple = true;
+            }
+            if ( $multiple && $admin_notification_mode == 'one' && get_option( 'wbk_email_adimn_appointment_cancel_status', '' ) == 'true' ) {
+                
+                if ( count( $appointment_ids ) > 0 ) {
+                    $appointment = new WBK_Appointment_deprecated();
+                    if ( $appointment->setId( $appointment_ids[0] ) ) {
+                        
+                        if ( $appointment->load() ) {
+                            $service = WBK_Db_Utils::initServiceById( $appointment->getService() );
+                            
+                            if ( $service != FALSE ) {
+                                $recipient = $service->getEmail();
+                                $subject = get_option( 'wbk_email_adimn_appointment_cancel_subject', '' );
+                                $message = get_option( 'wbk_email_adimn_appointment_cancel_message', '' );
+                                $notifications = new WBK_Email_Notifications( null, null );
+                                $notifications->sendMultipleNotification(
+                                    $appointment_ids,
+                                    $message,
+                                    $subject,
+                                    $recipient
+                                );
+                                $super_admin_email = get_option( 'wbk_super_admin_email', '' );
+                                if ( $super_admin_email != '' ) {
+                                    $notifications->sendMultipleNotification(
+                                        $appointment_ids,
+                                        $message,
+                                        $subject,
+                                        $super_admin_email
+                                    );
+                                }
+                            }
+                        
+                        }
+                    
+                    }
+                }
+            
+            }
+            foreach ( $booking_ids as $booking_id ) {
+                $bf = new WBK_Booking_Factory();
+                $bf->destroy( $booking_id, 'customer', true );
+                $i++;
+            }
+            $message = esc_html( get_option( 'wbk_booking_canceled_message', '' ) );
+            $result = array(
+                'status'  => 1,
+                'message' => $message,
+            );
+            do_action( 'wbk_after_booking_cancelled_by_customer', $appointment_ids );
+        } else {
+            $message = '<span class="wbk-input-label">' . esc_html( get_option( 'wbk_booking_cancel_error_message', '' ) ) . '</span>';
+            $result = array(
+                'status'  => 0,
+                'message' => $message,
+            );
+        }
+        
+        echo  json_encode( $result ) ;
+        date_default_timezone_set( 'UTC' );
+        wp_die();
+        return;
+    }
+    
+    public function schedule_tools_action()
+    {
+        global  $wpdb ;
+        global  $current_user ;
+        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+        
+        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkb_nonce' ) ) {
+            wp_die();
+            return;
+        }
+        
+        
+        if ( !isset( $_POST['lock_action'] ) ) {
+            echo  json_encode( array(
+                'status'  => 0,
+                'message' => 'Wrong action.',
+            ) ) ;
+            wp_die();
+            return;
+        }
+        
+        
+        if ( $_POST['lock_action'] != 'lock' && $_POST['lock_action'] != 'unlock' ) {
+            echo  json_encode( array(
+                'status'  => 0,
+                'message' => 'Wrong action target.',
+            ) ) ;
+            wp_die();
+            return;
+        }
+        
+        $lock_action = sanitize_text_field( $_POST['lock_action'] );
+        
+        if ( !isset( $_POST['lock_target'] ) ) {
+            echo  json_encode( array(
+                'status'  => 0,
+                'message' => 'Wrong action target.',
+            ) ) ;
+            wp_die();
+            return;
+        }
+        
+        
+        if ( $_POST['lock_target'] != 'dates' && $_POST['lock_target'] != 'timeslots' ) {
+            echo  json_encode( array(
+                'status'  => 0,
+                'message' => 'Wrong action target.',
+            ) ) ;
+            wp_die();
+            return;
+        }
+        
+        $lock_target = sanitize_text_field( $_POST['lock_target'] );
+        $date_range = sanitize_text_field( $_POST['date_range'] );
+        $date_range = explode( ' - ', $date_range );
+        
+        if ( !is_array( $date_range ) || count( $date_range ) != 2 ) {
+            echo  json_encode( array(
+                'status'  => 0,
+                'message' => 'Wrong date range.',
+            ) ) ;
+            wp_die();
+            return;
+        }
+        
+        $start = strtotime( $date_range[0] );
+        $end = strtotime( $date_range[1] );
+        
+        if ( $end < $start ) {
+            echo  json_encode( array(
+                'status'  => 0,
+                'message' => 'Wrong date range.',
+            ) ) ;
+            wp_die();
+            return;
+        }
+        
+        $service_id = sanitize_text_field( $_POST['service'] );
+        $category_id = sanitize_text_field( $_POST['category'] );
+        
+        if ( !is_numeric( $service_id ) && !is_numeric( $category_id ) ) {
+            echo  json_encode( array(
+                'status'  => 0,
+                'message' => 'Wrong service or category.',
+            ) ) ;
+            wp_die();
+            return;
+        }
+        
+        
+        if ( $lock_target == 'timeslots' ) {
+            $from = sanitize_text_field( $_POST['from'] );
+            $to = sanitize_text_field( $_POST['to'] );
+            
+            if ( !WBK_Validator::check_integer( $from, 900, 85500 ) || !WBK_Validator::check_integer( $to, 0, 86400 ) ) {
+                echo  json_encode( array(
+                    'status'  => 0,
+                    'message' => 'Wrong time interval.',
+                ) ) ;
+                wp_die();
+                return;
+            }
+            
+            
+            if ( $from >= $to ) {
+                echo  json_encode( array(
+                    'status'  => 0,
+                    'message' => 'Wrong time interval.',
+                ) ) ;
+                wp_die();
+                return;
+            }
+        
+        } else {
+            $excluded_dates = explode( ',', sanitize_text_field( $_POST['exclude_dates'] ) );
+            $excluded_dates_temp = array();
+            foreach ( $excluded_dates as $date ) {
+                $date = strtotime( $date );
+                if ( $date ) {
+                    $excluded_dates_temp[] = $date;
+                }
+            }
+            $excluded_dates = $excluded_dates_temp;
+        }
+        
+        $days_of_week = explode( ',', $_POST['days_of_week'] );
+        
+        if ( !is_array( $days_of_week ) ) {
+            echo  json_encode( array(
+                'status'  => 0,
+                'message' => 'Wrong days of the week.',
+            ) ) ;
+            wp_die();
+            return;
+        }
+        
+        
+        if ( count( $days_of_week ) == 0 || count( $days_of_week ) > 7 ) {
+            echo  json_encode( array(
+                'status'  => 0,
+                'message' => 'Wrong days of the week.',
+            ) ) ;
+            wp_die();
+            return;
+        }
+        
+        foreach ( $days_of_week as $day_of_week ) {
+            
+            if ( !WBK_Validator::check_integer( $day_of_week, 1, 7 ) ) {
+                echo  json_encode( array(
+                    'status'  => 0,
+                    'message' => 'Wrong days of the week.',
+                ) ) ;
+                wp_die();
+                return;
+            }
+        
+        }
+        $total_locked = 0;
+        $arr_service_ids = array( $service_id );
+        if ( $category_id != -1 ) {
+            if ( WBK_Validator::check_integer( $category_id, 1, 999999 ) ) {
+                $arr_service_ids = WBK_Model_Utils::get_services_in_category( $category_id );
+            }
+        }
+        $sp = new WBK_Schedule_Processor();
+        $sp->load_data();
+        foreach ( $arr_service_ids as $service_id ) {
+            if ( !current_user_can( 'manage_options' ) ) {
+                
+                if ( !WBK_Validator::check_access_to_service( $service_id ) ) {
+                    echo  json_encode( array(
+                        'status'  => 0,
+                        'message' => 'Unauthorised access.',
+                    ) ) ;
+                    wp_die();
+                    return;
+                }
+            
+            }
+            $service = new WBK_Service( $service_id );
+            if ( !$service->is_loaded() ) {
+                continue;
+            }
+            $curent_day = $start;
+            while ( $curent_day <= $end ) {
+                
+                if ( !in_array( date( 'N', $curent_day ), $days_of_week ) ) {
+                    $curent_day = strtotime( 'tomorrow', $curent_day );
+                    continue;
+                }
+                
+                
+                if ( in_array( $curent_day, $excluded_dates ) ) {
+                    $curent_day = strtotime( 'tomorrow', $curent_day );
+                    continue;
+                }
+                
+                
+                if ( $lock_target == 'dates' ) {
+                    
+                    if ( $wpdb->query( $wpdb->prepare( "DELETE FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_days_on_off WHERE day = %d and service_id = %d", $curent_day, $service_id ) ) === false ) {
+                        echo  json_encode( array(
+                            'status'  => 0,
+                            'message' => 'Internal database error.',
+                        ) ) ;
+                        wp_die();
+                        return;
+                    } else {
+                        $total_locked++;
+                    }
+                    
+                    
+                    if ( $lock_action == 'lock' ) {
+                        $status = 0;
+                    } else {
+                        $status = 1;
+                    }
+                    
+                    
+                    if ( $wpdb->insert( get_option( 'wbk_db_prefix', '' ) . 'wbk_days_on_off', array(
+                        'service_id' => $service_id,
+                        'day'        => $curent_day,
+                        'status'     => $status,
+                    ), array( '%d', '%d', '%d' ) ) === false ) {
+                        echo  json_encode( array(
+                            'status'  => 0,
+                            'message' => 'Internal database error.',
+                        ) ) ;
+                        wp_die();
+                        return;
+                    }
+                    
+                    $curent_day = strtotime( 'tomorrow', $curent_day );
+                    continue;
+                }
+                
+                $day_time_start = WBK_Time_Math_Utils::adjust_times( $curent_day, $from, get_option( 'wbk_timezone', 'UTC' ) );
+                $day_time_end = WBK_Time_Math_Utils::adjust_times( $curent_day, $to, get_option( 'wbk_timezone', 'UTC' ) );
+                $i = 1;
+                $timeslots = $sp->get_time_slots_by_day( $curent_day, $service_id, array(
+                    'skip_gg_calendar'       => true,
+                    'ignore_preparation'     => true,
+                    'calculate_availability' => false,
+                ) );
+                foreach ( $timeslots as $timeslot ) {
+                    if ( $timeslot->get_start() < $day_time_start || $timeslot->get_start() > $day_time_end ) {
+                        continue;
+                    }
+                    
+                    if ( $wpdb->query( $wpdb->prepare( "DELETE FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_locked_time_slots WHERE time = %d and service_id = %d", $timeslot->get_start(), $service_id ) ) === false ) {
+                        echo  json_encode( array(
+                            'status'  => 0,
+                            'message' => 'Internal database error.',
+                        ) ) ;
+                        wp_die();
+                        return;
+                    } else {
+                        $total_locked++;
+                    }
+                    
+                    if ( $lock_action == 'lock' ) {
+                        
+                        if ( $wpdb->insert( get_option( 'wbk_db_prefix', '' ) . 'wbk_locked_time_slots', array(
+                            'service_id' => $service_id,
+                            'time'       => $timeslot->get_start(),
+                        ), array( '%d', '%d' ) ) === false ) {
+                            echo  json_encode( array(
+                                'status'  => 0,
+                                'message' => 'Internal database error.',
+                            ) ) ;
+                            wp_die();
+                            return;
+                        }
+                    
+                    }
+                    $i++;
+                }
+                $curent_day = strtotime( 'tomorrow', $curent_day );
+            }
+        }
+        
+        if ( $lock_action == 'lock' ) {
+            echo  json_encode( array(
+                'status'  => 1,
+                'message' => __( 'Total locked: ', 'wbk' ) . $total_locked,
+            ) ) ;
+        } else {
+            echo  json_encode( array(
+                'status'  => 1,
+                'message' => __( 'Total unlocked: ', 'wbk' ) . $total_locked,
+            ) ) ;
+        }
+        
+        date_default_timezone_set( 'UTC' );
+        wp_die();
+        return;
+    }
+    
+    public function save_appearance()
+    {
+        
+        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkb_nonce' ) ) {
+            wp_die();
+            return;
+        }
+        
+        $allowed_classes = array(
+            'wbk-button',
+            'wbk-slot-button',
+            'wbk-slot-inner',
+            'wbk-input',
+            'wbk-slot-active-button'
+        );
+        $allowed_properties = array( 'background-color', 'color', 'border-radius' );
+        $allowed_ids = array(
+            'wbk_appearance_field_1',
+            'wbk_appearance_field_2',
+            'wbk_appearance_field_3',
+            'wbk_appearance_field_4'
+        );
+        $app_data = stripslashes( $_POST['appearance_data'] );
+        $app_data = json_decode( $app_data );
+        
+        if ( !is_array( $app_data ) ) {
+            wp_die();
+            return;
+        }
+        
+        
+        if ( count( $app_data ) > 30 ) {
+            wp_die();
+            return;
+        }
+        
+        $classes = array();
+        $ids = array();
+        foreach ( $app_data as $item ) {
+            
+            if ( !in_array( $item->class, $allowed_classes ) || !in_array( $item->property, $allowed_properties ) || !in_array( $item->id, $allowed_ids ) ) {
+                wp_die();
+                return;
+            }
+            
+            switch ( $item->property ) {
+                case 'color':
+                case 'background-color':
+                    
+                    if ( !WBK_Validator::check_color( $item->value ) ) {
+                        wp_die();
+                        return;
+                    }
+                    
+                    break;
+                case 'color':
+                case 'border-radius':
+                    
+                    if ( !WBK_Validator::check_integer( $item->value, 0, 50 ) ) {
+                        wp_die();
+                        return;
+                    }
+                    
+                    break;
+            }
+            $classes[$item->class][] = array( $item->property, $item->value );
+            $ids[$item->id] = $item->value;
+        }
+        $css_content = '';
+        foreach ( $classes as $class_name => $class_itmes ) {
+            $css_content .= '.' . $class_name . '{';
+            foreach ( $class_itmes as $key => $value ) {
+                $css_content .= $value[0] . ': ' . $value[1] . ' !important;';
+            }
+            $css_content .= '}' . PHP_EOL;
+        }
+        update_option( 'wbk_apperance_data', $ids );
+        $dir = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'webba_booking_style';
+        if ( !is_dir( $dir ) ) {
+            mkdir( $dir );
+        }
+        file_put_contents( $dir . DIRECTORY_SEPARATOR . 'index.html', '' );
+        file_put_contents( $dir . DIRECTORY_SEPARATOR . 'wbk-frontend-custom-style.css', $css_content );
+    }
+    
+    public function wbk_report_error()
+    {
+        wp_die();
+        return;
+        $headers = 'From: ' . get_option( 'wbk_from_name' ) . ' <' . get_option( 'wbk_from_email' ) . '>' . "\r\n";
+        $when_allowed = array( 'prepare_service_data' );
+        $when = $_POST['when'];
+        
+        if ( !in_array( $when, $when_allowed ) ) {
+            wp_die();
+            return;
+        }
+        
+        $post_details = $_POST['details'];
+        
+        if ( !is_array( $post_details ) || count( $post_details ) == 0 ) {
+            wp_die();
+            return;
+        }
+        
+        $details = 'Request: ' . $when . '<br>Service: ' . $post_details[0];
+        $solution = '<br>For more information on troubleshooting please read the following article: <a href="https://webba-booking.com/documentaion/troubleshooting/hanging-after-service-selected/">Hanging when service selected</a>.';
+        add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        wp_mail(
+            get_bloginfo( 'admin_email' ),
+            'Problem with the Webba Booking plugin',
+            'The Webba Booking plugin could not complete the request. <br><br>Details:<br> ' . $details . '<br>' . $solution,
+            $headers
+        );
+        remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+    }
+    
+    public function set_email_content_type()
+    {
+        return 'text/html';
     }
 
 }

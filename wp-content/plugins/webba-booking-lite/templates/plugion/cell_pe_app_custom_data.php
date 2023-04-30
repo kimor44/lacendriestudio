@@ -16,7 +16,7 @@ $value = json_decode( $value );
 if( !is_null( $value ) ){
     foreach( $value as $item ){
         if( is_array( $item ) && count( $item ) == 3 && trim( $item[2] ) != '' ){
-            echo $item[1] .': ' . $item[2] . '<br>';
+            echo esc_html( $item[1] ) .': ' . esc_html( $item[2] ) . '<br>';
         }
     }
 }

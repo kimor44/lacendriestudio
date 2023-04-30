@@ -216,8 +216,10 @@ class WBK_Price_Processor {
             if( $booking->get_name() == '' ){
                 continue;
             }
-            $total += $booking->get_price() * $booking->get_quantity();
+            $total += floatval( $booking->get_price() ) * floatval( $booking->get_quantity() );
+
         }
+
         return $total;
     }
 
@@ -283,10 +285,9 @@ class WBK_Price_Processor {
         return array( $service_fee_total, $service_fees, $service_fee_descriptions );
     }
 
-    static function get_total_tax_fess( $bookings ){
+    static function get_total_tax_fees( $bookings ){
         $total_amount = self::get_multiple_booking_price( $bookings );
         $service_fee = self::get_servcie_fees( $bookings );
-
         if( get_option( 'wbk_do_not_tax_deposit', '' ) == 'true' ){
             $tax_value = self::get_tax_amount( $total_amount, self::get_tax_for_messages() );
             $total_amount += $tax_value + $service_fee[0];
@@ -313,10 +314,78 @@ class WBK_Price_Processor {
             $tax_value = self::get_tax_amount( $total_amount, $tax );
             $total_amount += $tax_value;
         }
-
         return array( 'total' => $total_amount,
                       'fee' => $service_fee[0],
                       'tax' => $tax_value );
+    }
+
+    static function get_payment_items( $booking_ids, $tax = 0, $coupon = null ){
+        $subtotal = 0;
+        $item_names = array();
+        $prices 	= array();
+        $quantities = array();
+        $services 	= array();
+
+        foreach( $booking_ids as $booking_id ){
+            $booking = new WBK_Booking( $booking_id );
+            if( !$booking->is_loaded() ){
+                return -4;
+            }
+            $service = new WBK_Service( $booking->get_service() );
+            if( !$service->is_loaded() ){
+                return -4;
+            }
+            $item_names[] = WBK_Placeholder_Processor::process_placeholders( get_option( 'wbk_payment_item_name', '' ), $booking_id );
+            $prices[] = $booking->get_price();
+            $quantities[] = $booking->get_quantity();
+            $services[] = $booking->get_service();
+            $subtotal += floatval( $booking->get_price() ) * floatval( $booking->get_quantity() );
+
+        }
+
+        if( $coupon != FALSE && !is_null( $coupon ) ){             
+            if( $coupon[1] > 0 ){
+                $amount_of_discount = $coupon[1];
+            } elseif( $coupon[2] > 0 ){
+                $amount_of_discount = ( $subtotal / 100 ) * $coupon[2];
+            }
+            $subtotal -= $amount_of_discount ;
+            $item_names[] = get_option( 'wbk_payment_discount_item', __( 'Discount', 'wbk' ) );
+            $prices[]  = $amount_of_discount * (- 1 );
+            $quantities[] = 1;
+            $services[] = 0;
+
+        } else {
+            $amount_of_discount = 0;
+        }
+
+        $service_fee = WBK_Price_Processor::get_servcie_fees( $booking_ids );
+        if( $service_fee[0] > 0 ){
+            $subtotal += $service_fee[0];
+            $item_names[] = implode( ', ', $service_fee[2] );
+            $prices[] = $service_fee[0];
+            $quantities[]  = 1;
+            $services[] = 'Service fee';
+        }
+
+        if( get_option( 'wbk_do_not_tax_deposit', '' ) == 'true' ){
+            $tax_to_pay = ( ( $subtotal - $service_fee[0] ) / 100 ) * $tax;
+        } else {
+            $tax_to_pay = ( ( $subtotal ) / 100 ) * $tax;
+        }
+        // $total += $service_fee[0];
+
+        $total = $subtotal + $tax_to_pay;
+        
+        return array( 'item_names' => $item_names,
+                          'prices' => $prices,
+                      'tax_to_pay' => $tax_to_pay,
+              'amount_of_discount' => $amount_of_discount,
+                      'quantities' => $quantities,
+                        'subtotal' => $subtotal,
+                           'total' => $total,
+                             'sku' => $services,
+                     'service_fee' => $service_fee );
     }
 
 }
