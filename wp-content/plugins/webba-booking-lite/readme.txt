@@ -3,8 +3,8 @@ Contributors: Webba agency, freemius
 Donate link: https://webba-booking.com/
 Tags: appointment, booking, calendar, reservation
 Requires at least: 5.6
-Tested up to: 6.1
-Stable tag: 4.2.30.5
+Tested up to: 6.2
+Stable tag: 4.5.17
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -140,7 +140,160 @@ Yes, Webba Booking is compatible with most themes and page builders (Elementor, 
 Visit our WordPress plugin [support forum](https://wordpress.org/support/plugin/webba-booking-lite/) or send us a message on our [website's contact form](https://webba-booking.com/contact-us/). Our team will be happy to answer any of your questions!
 
 
+ 
 == Changelog ==
+
+4.5.17
+
+19/04/2024
+
+* Improvement: adding multiple time slots from the backend
+* Improvement: #username placeholder for a single place services
+* Bugfix: bug with redirect after payment on certain configurations
+* Bugfix: bug with custom fields on the schedule page
+* Bugfix: doubled booked time slots
+* Bugfix: issue with iCal in the free version
+* Bugfix: bug with payment methods in the free version
+* Bugfix: bug with disabling dates in the calendar on certain configurations 
+* Bugfix: bug with the timezone after cancellation of booking on the Schedule page
+
+4.5.16
+
+13/04/2023
+
+* Bugfix: critical bug fix in the free version
+
+4.5.15
+
+11/03/2023
+
+* Bugfix: bug with redirect when payment is made using coupon
+* Bugfix: bug with DST on certain configurations
+* Bugfix: bug with showing booked time slots on certain configurations
+* Bugfix: bug on the Schedule page 
+
+4.5.12
+
+09/03/2023
+
+* Improvements: performance improvements
+* Improvements: integration with WooCommerce improved
+* Improvements: option to set service dropdown placeholder
+* Bugfix: bug with booking form submition on certain configurations
+* Bugfix: bug with expiration time on certain configurations
+
+4.5.11
+
+08/03/2023
+
+* Bugfix: bug with the locked dates
+
+4.5.10
+
+18/02/2023
+
+* Bugfix: bug dashboard on certain configurations
+
+4.5.9
+
+17/02/2023
+
+* Bugfix: bug with the option 'Show booked timeslots'
+* Bugfix: bug with the message when there is no time slots found
+* Improvements: performance improvements
+ 
+4.5.8
+
+07/02/2023
+
+* Bugfix: bug with the option 'Set status after booking is paid with Stripe to'
+* Bugfix: bug with service description on certain configurations
+
+4.5.7
+
+02/02/23
+
+* Bugfix: Bug with the option 'Default number of days shown in extended mode' 
+* Bugfix: Bug with the phone formatting on the Schedule page
+* Bugfix: Bug with the option 'Prefill fields in WooCommerce checkout with the data used in the booking form'
+* Bugfix: Bug with adding events to Google calendar when bookings are added in the dashboard
+
+4.5.6
+
+28/01/2023
+
+* Bugfix: bug with availability calculation on certain configurations
+
+4.5.5
+
+26/01/2023
+
+* Bugfix: bug with autolock on certain configurations
+* Bugfix: bug with the option 'Week starts on'
+
+4.5.4
+
+15/01/2023
+
+* Bugfix: minor bugfix
+
+4.5.3
+
+10/01/2023
+
+* Bugfix: minor bugfix
+
+4.5.2
+
+09/01/2023
+
+* Bugfix: minor bugfix
+
+4.5.1
+
+09/01/2023
+
+* Bugfix: bug with the export to CSV
+
+4.5.0
+
+05/01/2023
+
+* Core update
+
+4.4.7
+
+12/12/2022
+
+* Bugfix: rolling back to previous version due to certain amount of bugs
+
+4.4.6
+
+12/12/2022
+
+* Bugfix: bug with multiple mode on certain configurations
+* Bugfix: bug on the Schedule page when non-admin user is logged
+* Bugfix: bug with updating bookings made in 'night hours mode'
+
+4.4.5
+
+11/12/2022
+
+* Bugfix: bug with the night hours option
+* Bugfix: bug with category shortcode
+* Bugfix: bug with the placeholder in the thank you message
+
+4.4.3
+
+10/12/2022
+
+* Bugfix: bug with the Stripe payments
+
+4.4.1
+
+09/12/2022
+
+* Improvements: core update
 
 4.2.30.5
 

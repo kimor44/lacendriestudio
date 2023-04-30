@@ -7,7 +7,7 @@ use voku\helper\AntiXSS;
 
 class WBK_Validator {
     // check string size
-	public static function checkStringSize( $str, $min, $max ) {
+	public static function check_string_size( $str, $min, $max ) {
 		if ( strlen($str) > $max || strlen($str) < $min ) {
             return false;
         } else {
@@ -15,7 +15,7 @@ class WBK_Validator {
         }
     }
     // check integer
-	public static function checkInteger( $int, $min, $max ) {
+	public static function check_integer( $int, $min, $max ) {
 	  	if ( !is_numeric( $int ) ) {
             return false;
         }
@@ -28,7 +28,7 @@ class WBK_Validator {
         return true;
     }
     // check if email
-	public static function checkEmail( $eml ) {
+	public static function check_email( $eml ) {
 		if ( !preg_match( '/^([a-z0-9_+\.-]+)@([a-z0-9_\.-]+)\.([a-z\.]{2,20})$/', $eml ) ) {
             return false;
         } else {
@@ -36,7 +36,7 @@ class WBK_Validator {
         }
     }
     // check if color
-	public static function checkColor( $clr ) {
+	public static function check_color( $clr ) {
 		if ( !preg_match( '/#([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?\b/', $clr ) ) {
             return false;
         } else {
@@ -44,7 +44,7 @@ class WBK_Validator {
         }
     }
     // check if day of week
-	public static function checkDayofweek( $str ) {
+	public static function check_day_of_week( $str ) {
 		if ( $str != 'monday' && $str != 'tuesday' && $str != 'wednesday' && $str != 'thursday' && $str != 'friday' && $str != 'saturday' && $str != 'sunday' ) {
             return false;
         } else {
@@ -74,7 +74,7 @@ class WBK_Validator {
 				continue;
 			}
 			$user_arr = json_decode( $user );
-			if ( in_array( $user_id, $user_arr ) ){
+			if ( is_array(  $user_arr ) && in_array( $user_id, $user_arr ) ){
                 return true;
             }
         }
@@ -109,7 +109,7 @@ class WBK_Validator {
         return false;
     }
     // check if current user has access to specified service
-	public static function checkAccessToService( $service_id ) {
+	public static function check_access_to_service( $service_id ) {
         global $current_user;
         $user_id = get_current_user_id();
 		if ( $user_id == 0 ) {
@@ -137,7 +137,7 @@ class WBK_Validator {
         return true;
     }
     // check email loop for multiple emails
-	public static function checkEmailLoop( $value ){
+	public static function check_email_loop( $value ){
  		if( substr_count( $value, '[appointment_loop_start]' ) == 1 && substr_count( $value, '[appointment_loop_end]' )  == 1 ){
 	 		if( strpos( $value, '[appointment_loop_start]' ) < strpos( $value, '[appointment_loop_end]' ) ){
                 return true;
@@ -146,7 +146,7 @@ class WBK_Validator {
         return false;
     }
     // check if coupon is applicable
-	public static function checkCoupon( $coupon, $service_id ){
+	public static function check_coupon( $coupon, $service_ids ){
         global $wpdb;
         $data[0] = " SELECT * FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_coupons WHERE name = %s";
         $data[1] = [ $coupon ];
@@ -159,12 +159,12 @@ class WBK_Validator {
         }
         // check service
 		if( $result['services'] != ''){
-
 			$services = json_decode( $result['services'] );
-			if( is_array( $services ) && !in_array( $service_id, $services ) ){
-
-				return FALSE;
-            }
+			foreach( $service_ids as $service_id ){
+				if( is_array( $services ) && !in_array( $service_id, $services ) ){
+					return FALSE;
+				}
+			}
         }
         // check used
 		if( $result['maximum'] != 0 && $result['maximum'] != '' ){
@@ -177,13 +177,11 @@ class WBK_Validator {
 			$range = explode( ' - ', $result['date_range'] );
 			$start = strtotime( trim( $range[0] ) );
 			$end = strtotime( trim( $range[1] ) );
-
 			if( time() >= $start && time() <= $end ){
             } else {
 				return FALSE;
             }
         }
-
 		return array( $result['id'], $result['amount_fixed'], $result['amount_percentage'] );
     }
 	public function getCouponData( $coupon_id ) {
@@ -255,6 +253,7 @@ class WBK_Validator {
 		if( class_exists('voku\helper\AntiXSS') ){
 			$antiXss = new AntiXSS();
 			$input = $antiXss->xss_clean( $input );
+
 		}
 		$input = strip_tags( $input );
 		return $input;
@@ -264,7 +263,6 @@ class WBK_Validator {
 
 	}
     public static function kses( $input ){
-
 		if( class_exists('voku\helper\AntiXSS') ){
 			$antiXss = new AntiXSS();
 		 	$input = $antiXss->xss_clean($input);
@@ -284,16 +282,16 @@ class WBK_Validator {
 
         );
         $allowed_tags = array(
-			'h1'           => $default_attribs,
-			'h2'           => $default_attribs,
-			'h3'           => $default_attribs,
-			'h4'           => $default_attribs,
-			'h5'           => $default_attribs,
-			'h6'           => $default_attribs,
-            'div'          => $default_attribs,
-            'span'         => $default_attribs,
-            'p'            => $default_attribs,
-            'a'            => array_merge( $default_attribs, array(
+			'h1'            => $default_attribs,
+			'h2'            => $default_attribs,
+			'h3'            => $default_attribs,
+			'h4'            => $default_attribs,
+			'h5'            => $default_attribs,
+			'h6'            => $default_attribs,
+            'div'           => $default_attribs,
+            'span'          => $default_attribs,
+            'p'             => $default_attribs,
+            'a'             => array_merge( $default_attribs, array(
                 'href' => array(),
                 'target' => array('_blank', '_top'),
             ) ),
@@ -323,5 +321,21 @@ class WBK_Validator {
         $input = wp_kses( $input, $allowed_tags );
 		return $input;
     }
+
+	public static function get_param_sanitize( $value ){
+ 		$value = str_replace('"', '', $value );
+		$value = str_replace('<', '', $value );
+		$value = str_replace('\'', '', $value );
+		$value = str_replace('>', '', $value );
+		$value = str_replace('/', '', $value );
+		$value = str_replace('\\',  '', $value );
+		$value = str_replace('and',  '', $value );
+		$value = str_replace('union',  '', $value );
+		$value = str_replace('delete',  '', $value );
+		$value = str_replace('select',  '', $value );
+		$value = esc_html( sanitize_text_field( $value ) );
+		return $value;
+	}
+
 }
 ?>

@@ -1,19 +1,28 @@
 <?php
 if ( !defined( 'ABSPATH' ) ) exit;
-$service_ids = $data;
-$label = get_option( 'wbk_service_label',  __( 'Select service', 'wbk' ) );
-if( $label == '' ){
-    global $wbk_wording;
-    $label =  sanitize_text_field( $wbk_wording['service_label'] );
+$service_ids = $data[0];
+$is_hidden = $data[1];
+
+$placeholder = esc_html( get_option('wbk_date_service_placeholder', __( 'select...', 'wbk' ) ) );
+
+?>
+<?php
+if( $is_hidden ){
+?>
+    <select class="wbk_hidden" id="wbk_service_id_full_list">
+<?php
+} else {
+?>
+    <label class="wbk-input-label"><?php echo WBK_Validator::kses( get_option( 'wbk_service_label',  __( 'Select service', 'wbk' ) ) );  ?></label>
+    <select class="wbk-select wbk-input wbk_services" id="wbk-service-id">
+<?php
 }
 ?>
-<label class="wbk-input-label"><?php echo $label; ?></label>
-<select class="wbk-select wbk-input wbk_services" id="wbk-service-id">
-<option value="0" selected="selected"><?php echo __( 'select...', 'wbk' ) ?></option>
+    <option value="0" selected="selected"><?php echo $placeholder; ?></option>
 <?php
-foreach ( $service_ids as $id ) {
-    $service = new WBK_Service( $id );
-    if ( $service->get_name() == '' ) {
+foreach ( $service_ids as $service_id ) {
+    $service = new WBK_Service( $service_id );
+    if ( !$service->is_loaded() ){
         continue;
     }
     if( function_exists('pll__' ) ){
@@ -22,12 +31,32 @@ foreach ( $service_ids as $id ) {
         $service_name = $service->get_name( true );
     }
     $service_name = apply_filters( 'wpml_translate_single_string', $service_name, 'wbk', 'Service name id ' . $service->get_id() );
-    $service_description = apply_filters( 'wpml_translate_single_string', $service->get_description( false ), 'wbk', 'Service description id ' . $service->get_id() );
+    if( function_exists('pll__' ) ){
+        $service_description =  pll__( $service->get_description( true ) );
+    } else{
+        $service_description = $service->get_description( true );
+    }
+    apply_filters( 'wpml_translate_single_string', $service->get_description( false ), 'wbk', 'Service description id ' . $service->get_id() );
     if(  get_option( 'wbk_show_service_description', 'disabled' ) == 'disabled' ){
-        echo '<option value="' . $service->get_id() . '"  data-multi-low-limit="' . $service->get_multi_mode_low_limit() . '" data-multi-limit="' . $service->get_multi_mode_limit() . '" >' . $service_name . '</option>';
+?>
+        <option value="<?php echo esc_attr( $service->get_id() ); ?>"  data-multi-low-limit="<?php echo esc_attr( $service->get_multi_mode_low_limit() ); ?>" data-multi-limit="<?php esc_attr( $service->get_multi_mode_limit() ); ?>" ><?php echo WBK_Validator::kses( $service_name ) ?></option>
+<?php
     } else {
-        echo '<option data-desc="' . htmlspecialchars( $service_description )  . '" value="' . $service->get_id() . '"  data-multi-low-limit="' . $service->get_multi_mode_low_limit() . '"  data-multi-limit="' . $service->get_multi_mode_limit() . '" >' . $service_name . '</option>';
+?>
+        <option data-desc="<?php echo htmlspecialchars( WBK_Validator::kses(  $service_description ) ); ?>" value="<?php echo esc_attr( $service->get_id() ); ?>"  data-multi-low-limit="<?php echo esc_attr( $service->get_multi_mode_low_limit() ); ?>"  data-multi-limit="<?php echo esc_attr( $service->get_multi_mode_limit() ); ?>" ><?php echo WBK_Validator::kses( $service_name ); ?></option>
+<?php
     }
 }
 ?>
 </select>
+<?php
+if( !$is_hidden ){
+?>
+<div class="wbk_description_holder" id="wbk_description_holder">
+    <label class="wbk-input-label">
+
+    </label>
+</div>
+<?php
+}
+?>

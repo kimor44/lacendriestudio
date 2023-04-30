@@ -29,15 +29,15 @@ $data_default = json_encode( $field->get_filter_value() );
 
 ?>
 
-<input  type="hidden"  id="<?php echo $slug ?>" name="<?php echo $field->get_name(); ?>" class="plugion_input plugion_input_date_range plugion_filter_input" type="text" data-dateformat="<?php echo $date_fomrat ?>" data-default="<?php echo $data_default;?>"
- data-start="" data-end="" data-setter="wbk_date_range" data-getter="wbk_date_range" data-validation="date_range" data-required="<?php echo $field->get_required();?>" data-rangedefault="<?php echo get_option( 'wbk_filter_default_days_number', '14' );  ?>">
-<label for="<?php echo $slug; ?>" class="plugion_input_label"><?php echo $field->get_title(); ?></label>
+<input  type="hidden"  id="<?php echo esc_attr( $slug ); ?>" name="<?php echo esc_attr( $field->get_name() ); ?>" class="plugion_input plugion_input_date_range plugion_filter_input" type="text" data-dateformat="<?php echo $date_fomrat ?>" data-default="<?php echo $data_default;?>"
+ data-start="" data-end="" data-setter="wbk_date_range" data-getter="wbk_date_range" data-validation="date_range" data-required="<?php echo $field->get_required();?>" data-rangedefault="<?php echo esc_attr( get_option( 'wbk_filter_default_days_number', '14' ) ); ?>">
+<label for="<?php echo esc_attr( $slug ); ?>" class="plugion_input_label"><?php echo esc_attr( $field->get_title() ); ?></label>
 <div class="plugion_input_container_small">
-    <input id="<?php echo $slug . '_date_range_start'  ?>" class="plugion_input_date_range_start plugion_input_text" required>
-    <label for="<?php echo $slug . '_date_range_start' ?>" class="plugion_input_text_label"><?php echo plugion_translate_string( 'Start' ) ?></label>
+    <input id="<?php echo esc_attr( $slug ) . '_date_range_start'  ?>" class="plugion_input_date_range_start plugion_input_text" required>
+    <label for="<?php echo esc_attr( $slug ) . '_date_range_start' ?>" class="plugion_input_text_label"><?php echo plugion_translate_string( 'Start' ) ?></label>
 </div>
 <div class="plugion_input_container_small">
-    <input id="<?php echo $slug . '_date_range_end'  ?>" class="plugion_input_date_range_end plugion_input_text" required>
-    <label for="<?php echo $slug . '_date_range_end' ?>" class="plugion_input_text_label"><?php echo plugion_translate_string( 'End' ) ?></label>
+    <input id="<?php echo esc_attr( $slug ) . '_date_range_end'  ?>" class="plugion_input_date_range_end plugion_input_text" required>
+    <label for="<?php echo esc_attr( $slug ) . '_date_range_end' ?>" class="plugion_input_text_label"><?php echo plugion_translate_string( 'End' ) ?></label>
 </div>
 <div style="clear: both"></div>

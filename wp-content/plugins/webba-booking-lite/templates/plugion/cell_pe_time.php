@@ -1,10 +1,10 @@
 <?php
 if ( !defined( 'ABSPATH' ) ) exit;
 /*
- * This file is part of Plugion framework.
- * (c) plugion.com <hello@plugion.org>
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * This file is part of Webba Booking plugin
+
+
+
  */
 
 $field = $data[0];
@@ -38,10 +38,12 @@ if ( isset( $field->get_extra_data()['time_zone'] ) ) {
     $time_zone =  get_option('timezone_string');
 }
 
+
 $timezone_to_use = WBK_Time_Math_Utils::get_utc_offset_by_time( $value );
 
 $time = wp_date( $time_format, $value, $timezone_to_use );
 if( get_option( 'wbk_date_format_time_slot_schedule', 'start' ) == 'start-end' && $end != 0){
     $time .= ' - ' . wp_date( $time_format, $end, $timezone_to_use );
+
 }
 echo $time;

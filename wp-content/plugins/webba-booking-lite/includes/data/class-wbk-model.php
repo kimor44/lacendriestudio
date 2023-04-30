@@ -668,7 +668,7 @@ class WBK_Model
             'select',
             '',
             array(
-            'items' => WBK_Model_Utils::get_appointment_status_list(),
+            'items' => WBK_Model_Utils::get_booking_status_list(),
         ),
             get_option( 'wbk_appointments_default_status', 'pending' ),
             true,
@@ -1127,7 +1127,7 @@ class WBK_Model
             'select',
             '',
             array(
-            'items' => WBK_Model_Utils::get_appointment_status_list(),
+            'items' => WBK_Model_Utils::get_booking_status_list(),
         ),
             '',
             false,

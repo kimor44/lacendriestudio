@@ -16,7 +16,7 @@ $slug = $data[1];
             $title = '';
             preg_match("/\[[^\]]*\]/", $id, $matches);
             if( is_array( $matches ) && count( $matches ) > 0 ){
-                $title = rtrim( ltrim( $matches[0], '[' ), ']' );
+                $title = esc_html( rtrim( ltrim( $matches[0], '[' ), ']' ) );
             }
             $id = explode( '[', $id );
             $id = $id[0];
@@ -31,11 +31,10 @@ $slug = $data[1];
 ?>
              <div class="<?php echo $container_class; ?>">
                 <div class="plugion_input_container">
-                    <input  id="<?php echo $slug . '_' . $id; ?>" name="<?php echo $field->get_name(); ?>"  data-title="<?php echo $title ?>" data-field-id="<?php echo trim( $id ) ?>"  class="plugion_input plugion_input_text plugion_simple_text_input wbk_custom_data_item" type="text" required>
-                    <label for="<?php echo  $slug . '_' . $id;  ?>" class="plugion_input_text_label"><?php echo $title; ?></label>
+                    <input  id="<?php echo esc_attr( $slug ) . '_' . esc_attr( $id ); ?>" name="<?php echo $field->get_name(); ?>"  data-title="<?php echo esc_attr( $title ) ?>" data-field-id="<?php echo trim( esc_attr( $id ) ) ?>"  class="plugion_input plugion_input_text plugion_simple_text_input wbk_custom_data_item" type="text" required>
+                    <label for="<?php echo esc_attr( $slug ) . '_' . esc_attr( $id );  ?>" class="plugion_input_text_label"><?php echo $title; ?></label>
                 </div>
             </div>
-
 <?php
         }
     }
