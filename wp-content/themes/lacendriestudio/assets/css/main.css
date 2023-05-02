@@ -59,3 +59,13 @@
 #cendrie-body #cendrie-footer p a {
   text-decoration: underline;
 }
+
+#cendrie-body .cendrie-page img[data-lazyloaded] {
+  opacity: 0;
+}
+
+#cendrie-body .cendrie-page img.litespeed-loaded {
+  -moz-transition: opacity 0.5s linear 0.2s;
+  transition: opacity 0.5s linear 0.2s;
+  opacity: 1;
+}
