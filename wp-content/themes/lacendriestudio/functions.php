@@ -8,11 +8,6 @@
  */
 
 /*
-* Require authentication for API REST
-*/
-require_once('includes/reset-wp-json.php');
-
-/*
 * Remove useless image sizes
 */
 function cendrie_remove_extra_image_sizes()
