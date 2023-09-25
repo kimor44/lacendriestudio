@@ -4,10 +4,33 @@
  * API end points
  */
 
+/**
+ * Current version of TailwindCSS
+ * @return string the tailwind version
+ */
+function current_tailwind_version()
+{
+  $pathToPackageJsonFile = get_template_directory_uri() . '/package.json';
+
+  $json = file_get_contents($pathToPackageJsonFile);
+
+  $packageJson = json_decode($json, true);
+
+  // check if tailwind dependency exists
+  if (isset($packageJson['devDependencies']['tailwindcss'])) {
+    $tailwindCSSVersion = $packageJson['devDependencies']['tailwindcss'];
+  } else {
+    $tailwindCSSVersion =  "Not found";
+  }
+
+  return $tailwindCSSVersion;
+}
+
 function cendrie_dependencies_versions()
 {
   $return = array(
-    'wordpress'  => get_bloginfo('version')
+    'wordpress'  => get_bloginfo('version'),
+    'tailwindcss' => current_tailwind_version()
   );
 
   // the twice commented returns work
