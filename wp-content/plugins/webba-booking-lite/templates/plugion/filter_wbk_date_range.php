@@ -5,39 +5,35 @@ $field = $data[0];
 $slug = $data[1];
 
 if( isset( $field->get_extra_data()['date_format'] ) ){
-    $date_fomrat =  $field->get_extra_data()['date_format'];
+    $date_format =  $field->get_extra_data()['date_format'];
 } else {
-    $date_fomrat = get_option('date_format');
+    $date_format = get_option('date_format');
 }
+$date_format = str_replace( 'y', 'Y', $date_format );
+$date_format_js = str_replace( 'd', 'dd', $date_format );
+$date_format_js = str_replace( 'j', 'd', $date_format_js );
+$date_format_js = str_replace( 'l', 'dddd', $date_format_js );
+$date_format_js = str_replace( 'D', 'ddd', $date_format_js );
+$date_format_js = str_replace( 'm', 'mm', $date_format_js );
+$date_format_js = str_replace( 'n', 'm', $date_format_js );
+$date_format_js = str_replace( 'F', 'mmmm', $date_format_js );
+$date_format_js = str_replace( 'M', 'mmm', $date_format_js );
+$date_format_js = str_replace( 'y', 'yy', $date_format_js );
+$date_format_js = str_replace( 'Y', 'yyyy', $date_format_js );
+$date_format_js = str_replace( 'S', '', $date_format_js );
+$date_format_js = str_replace( 's', '', $date_format_js );
 
-$date_fomrat = str_replace( 'd', 'dd', $date_fomrat );
-$date_fomrat = str_replace( 'j', 'd', $date_fomrat );
-$date_fomrat = str_replace( 'l', 'dddd', $date_fomrat );
-$date_fomrat = str_replace( 'D', 'ddd', $date_fomrat );
-$date_fomrat = str_replace( 'm', 'mm', $date_fomrat );
-$date_fomrat = str_replace( 'n', 'm', $date_fomrat );
-$date_fomrat = str_replace( 'F', 'mmmm', $date_fomrat );
-$date_fomrat = str_replace( 'M', 'mmm', $date_fomrat );
-$date_fomrat = str_replace( 'y', 'yy', $date_fomrat );
-$date_fomrat = str_replace( 'Y', 'yyyy', $date_fomrat );
-$date_fomrat = str_replace( 'S', '', $date_fomrat );
-$date_fomrat = str_replace( 's', '', $date_fomrat );
-
-$start = date('m/d/Y');
-$end = date('m/d/Y',  strtotime(' +' . get_option( 'wbk_filter_default_days_number', '14' ) .  ' day'));
-$data_default = json_encode( $field->get_filter_value() );
+$data_default = $field->get_filter_value();
 
 ?>
 
-<input  type="hidden"  id="<?php echo esc_attr( $slug ); ?>" name="<?php echo esc_attr( $field->get_name() ); ?>" class="plugion_input plugion_input_date_range plugion_filter_input" type="text" data-dateformat="<?php echo $date_fomrat ?>" data-default="<?php echo $data_default;?>"
- data-start="" data-end="" data-setter="wbk_date_range" data-getter="wbk_date_range" data-validation="date_range" data-required="<?php echo $field->get_required();?>" data-rangedefault="<?php echo esc_attr( get_option( 'wbk_filter_default_days_number', '14' ) ); ?>">
-<label for="<?php echo esc_attr( $slug ); ?>" class="plugion_input_label"><?php echo esc_attr( $field->get_title() ); ?></label>
-<div class="plugion_input_container_small">
-    <input id="<?php echo esc_attr( $slug ) . '_date_range_start'  ?>" class="plugion_input_date_range_start plugion_input_text" required>
-    <label for="<?php echo esc_attr( $slug ) . '_date_range_start' ?>" class="plugion_input_text_label"><?php echo plugion_translate_string( 'Start' ) ?></label>
-</div>
-<div class="plugion_input_container_small">
-    <input id="<?php echo esc_attr( $slug ) . '_date_range_end'  ?>" class="plugion_input_date_range_end plugion_input_text" required>
-    <label for="<?php echo esc_attr( $slug ) . '_date_range_end' ?>" class="plugion_input_text_label"><?php echo plugion_translate_string( 'End' ) ?></label>
-</div>
-<div style="clear: both"></div>
+<li>
+    <div class="custom-select-wb"> 
+        <input name="<?php echo esc_attr( $slug ); ?>" data-formated-date="<?php echo esc_attr( date( 'm/d/Y', $data_default[0] ) ); ?>"  value="<?php echo esc_attr( date($date_format, $data_default[0] ) ); ?>" data-dateformat="<?php echo esc_attr( $date_format_js ); ?>" class="plugion_input_date_range_start plugion_input_text plugion_filter_daterange plugion_filter_input" placeholder="Start date">
+    </div>
+</li>
+<li>
+    <div class="custom-select-wb">
+        <input name="<?php echo esc_attr( $slug ); ?>" data-formated-date="<?php echo esc_attr( date( 'm/d/Y', $data_default[1] ) ); ?>"  value="<?php echo esc_attr( date($date_format, $data_default[1] ) ); ?>" data-dateformat="<?php echo esc_attr( $date_format_js ); ?>" class="plugion_input_date_range_end plugion_input_text plugion_filter_daterange plugion_filter_input" placeholder="End date">
+    </div>
+</li>

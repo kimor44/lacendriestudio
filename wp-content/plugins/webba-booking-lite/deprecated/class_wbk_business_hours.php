@@ -399,29 +399,29 @@ class WBK_Business_Hours {
 	public function getDayNameTranslated( $n ) {
 		switch ( $n) {
 			case 1:
-				return __( 'Monday', 'wbk' );
+				return __( 'Monday', 'webba-booking-lite' );
 				break;
 			case 2:
-				return __( 'Tuesday', 'wbk' );
+				return __( 'Tuesday', 'webba-booking-lite' );
 				break;
 			case 3:
-				return __( 'Wednesday', 'wbk' );
+				return __( 'Wednesday', 'webba-booking-lite' );
 				break;
 			case 4:
-				return __( 'Thursday', 'wbk' );
+				return __( 'Thursday', 'webba-booking-lite' );
 				break;
 			case 5:
-				return __( 'Friday', 'wbk' );
+				return __( 'Friday', 'webba-booking-lite' );
 				break;
 			case 6:
-				return __( 'Saturday', 'wbk' );
+				return __( 'Saturday', 'webba-booking-lite' );
 				break;
 			case 7:
-				return __( 'Sunday', 'wbk' );;
+				return __( 'Sunday', 'webba-booking-lite' );;
 				break;
 
 			default:
-				return __( 'Monday', 'wbk' );;
+				return __( 'Monday', 'webba-booking-lite' );;
 				break;
 		}
 	}

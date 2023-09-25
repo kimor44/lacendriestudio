@@ -41,7 +41,7 @@ class WBK_PE_Business_Hours extends Plugion_Custom_Field{
             }
             $days_with_intersections = array_unique( $days_with_intersections );
             if( count( $days_with_intersections ) > 0 ){
-                return[ false, __( 'Please, remove time range intersections.', 'wbk' ) ];
+                return[ false, __( 'Please, remove time range intersections.', 'webba-booking-lite' ) ];
             }
         }
         return[ true, json_encode( $value ) ];

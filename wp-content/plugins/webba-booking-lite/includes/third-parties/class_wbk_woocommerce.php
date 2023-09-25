@@ -167,10 +167,18 @@ function wbk_display_booking_data_text_cart( $item_data, $cart_item )
         return $item_data;
     }
     $payment_details = WBK_Price_Processor::get_payment_items( $booking_ids, 0 );
+    $booking_order_text = get_option( 'wbk_woo_cart_title', '' );
+    
+    if ( $booking_order_text != '' ) {
+        $order_text = WBK_Placeholder_Processor::process_placeholders( $booking_order_text, $booking_ids );
+    } else {
+        $order_text = implode( ',', $payment_details['item_names'] );
+    }
+    
     $meta_key = wbk_get_translation_string( 'wbk_product_meta_key', 'wbk_product_meta_key', 'Appointments' );
     $item_data[] = array(
         'key'     => $meta_key,
-        'value'   => implode( ',', $payment_details['item_names'] ),
+        'value'   => $order_text,
         'display' => '',
     );
     date_default_timezone_set( 'UTC' );
@@ -215,9 +223,16 @@ function wbk_add_booking_text_to_order_items(
     date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
     $booking_ids = explode( ',', wc_clean( $values['wbk_appointment_ids'] ) );
     $payment_details = WBK_Price_Processor::get_payment_items( $booking_ids, 0 );
-    $item_names = implode( ',', $payment_details['item_names'] );
+    $booking_order_text = get_option( 'wbk_woo_cart_title', '' );
+    
+    if ( $booking_order_text != '' ) {
+        $order_text = WBK_Placeholder_Processor::process_placeholders( $booking_order_text, $booking_ids );
+    } else {
+        $order_text = implode( ',', $payment_details['item_names'] );
+    }
+    
     $meta_key = wbk_get_translation_string( 'wbk_product_meta_key', 'wbk_product_meta_key', 'Appointments' );
-    $item->add_meta_data( $meta_key, $item_names );
+    $item->add_meta_data( $meta_key, $order_text );
     $item->add_meta_data( 'IDs', $values['wbk_appointment_ids'] );
     date_default_timezone_set( 'UTC' );
 }
@@ -290,7 +305,7 @@ class WBK_WooCommerce
     {
         return json_encode( array(
             'status'  => 0,
-            'details' => __( 'Payment method not supported', 'wbk' ),
+            'details' => __( 'Payment method not supported', 'webba-booking-lite' ),
         ) );
     }
     
@@ -317,14 +332,14 @@ function wbk_woocommerce_coupon_options_usage_restriction( $coupon_id, $coupon )
     wbk_woocommerce_wp_multi_select( array(
         'id'      => 'webba_services',
         'name'    => 'webba_services[]',
-        'label'   => __( 'Webba Booking services', 'wbk' ),
+        'label'   => __( 'Webba Booking services', 'webba-booking-lite' ),
         'options' => $options,
     ) );
     $options = WBK_Model_Utils::get_pricing_rules( true );
     wbk_woocommerce_wp_multi_select( array(
         'id'      => 'webba_pricing_rules',
         'name'    => 'webba_pricing_rules[]',
-        'label'   => __( 'Webba Booking pricing rules', 'wbk' ),
+        'label'   => __( 'Webba Booking pricing rules', 'webba-booking-lite' ),
         'options' => $options,
     ) );
 }

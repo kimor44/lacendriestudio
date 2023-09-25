@@ -4,7 +4,7 @@ $category_ids = $data[0];
 ?>
 <label class="wbk-input-label wbk-category-input-label"><?php echo WBK_Validator::kses( get_option( 'wbk_category_label', 'Select category' ) ); ?> </label>
 <select class="wbk-select wbk-input" id="wbk-category-id">
-    <option value="0" selected="selected"><?php echo __( 'select...', 'wbk' ); ?></option>
+    <option value="0" selected="selected"><?php echo __( 'select...', 'webba-booking-lite' ); ?></option>
 <?php
 foreach ( $category_ids as $category_id => $category_name ){
     $arr_services = WBK_Model_Utils::get_services_in_category( $category_id );

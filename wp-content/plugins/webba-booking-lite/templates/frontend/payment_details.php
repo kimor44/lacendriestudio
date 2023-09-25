@@ -16,7 +16,7 @@ foreach( $data['item_names'] as $item_name ){
 }
 /*
 if( is_numeric( $data['amount_of_discount'] ) && $data['amount_of_discount'] > 0 ){
-    $html .= '<div class="wbk-col-9-12 wbk-amount-label">' . esc_html( get_option( 'wbk_payment_discount_item', __( 'Discount', 'wbk' ) ) ) . '</div>';
+    $html .= '<div class="wbk-col-9-12 wbk-amount-label">' . esc_html( get_option( 'wbk_payment_discount_item', __( 'Discount', 'webba-booking-lite' ) ) ) . '</div>';
     $html .= '<div class="wbk-col-3-12 wbk-amount-label wbk-align-right">'. WBK_Format_Utils::format_price( $data['amount_of_discount'] ) .'</div>';
     $html .= '<div class="wbk-clear"></div>';
 }
@@ -25,8 +25,9 @@ $html .= '<div class="wbk-col-9-12 wbk-amount-label">' . esc_html( get_option( '
 $html .= '<div class="wbk-col-3-12 wbk-amount-label wbk-align-right">'. WBK_Format_Utils::format_price( $data['subtotal'] ) .'</div>';
 $html .= '<div class="wbk-clear"></div>';
 
-if( is_numeric( $data['tax_to_pay'] ) && $data['tax_to_pay'] > 0 ){     
-    $html .= '<div class="wbk-col-9-12 wbk-amount-label">' . esc_html( get_option( 'wbk_tax_label', __( 'Tax', 'wbk' ) )  ) . '</div>';
+if( is_numeric( $data['tax_to_pay'] ) && $data['tax_to_pay'] > 0 ){
+     
+    $html .= '<div class="wbk-col-9-12 wbk-amount-label">' . esc_html( get_option( 'wbk_tax_label', __( 'Tax', 'webba-booking-lite' ) )  ) . '</div>';
     $html .= '<div class="wbk-col-3-12 wbk-amount-label wbk-align-right">'. WBK_Format_Utils::format_price( $data['tax_to_pay'] ) .'</div>';
     $html .= '<div class="wbk-clear"></div>';
 }

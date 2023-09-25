@@ -14,13 +14,16 @@ class WBK_Booking_Factory
         if ( !WBK_Validator::check_email( $data['email'] ) ) {
             return array( false, 'Incorrect email' );
         }
-        if ( get_option( 'wbk_phone_required', '3' ) ) {
+        if ( get_option( 'wbk_phone_required', '3' ) != '' ) {
             if ( !WBK_Validator::check_string_size( $data['phone'], 3, 128 ) ) {
                 return array( false, 'Incorrect phone' );
             }
         }
         if ( !WBK_Validator::check_integer( $data['time'], 1438426800, 1754046000 ) ) {
             return array( false, 'Incorrect time' );
+        }
+        if ( !WBK_Validator::check_integer( $data['quantity'], 1, 1754046000 ) ) {
+            return array( false, 'Incorrect quantity' );
         }
         if ( !WBK_Validator::check_integer( $data['service_id'], 1, 9999999999 ) ) {
             return array( false, 'Incorrect service id' );
@@ -176,11 +179,17 @@ class WBK_Booking_Factory
                 }
             }
             
+            if ( $event != 'on_manual_booking' ) {
+                $amount = WBK_Price_Processor::calculate_single_booking_price( $booking_id, $booking_ids );
+                WBK_Model_Utils::set_amount_for_booking( $booking_id, $amount['price'], json_encode( $amount['price_details'] ) );
+            }
+            
+            
             if ( get_option( 'wbk_appointments_delete_not_paid_mode', 'disabled' ) == 'on_booking' ) {
                 $expiration_time = get_option( 'wbk_appointments_expiration_time', '60' );
                 if ( is_numeric( $expiration_time ) && intval( $expiration_time ) >= 5 ) {
                     
-                    if ( $service->get_price() == 0 ) {
+                    if ( $service->get_price() == 0 || $amount['price'] == 0 ) {
                         $expiration_value = 0;
                     } else {
                         $expiration_value = time() + $expiration_time * 60;
@@ -196,8 +205,6 @@ class WBK_Booking_Factory
                 $data['expiration_time'] = $expiration_value;
             }
             
-            $amount = WBK_Price_Processor::calculate_single_booking_price( $booking_id, $booking_ids );
-            WBK_Model_Utils::set_amount_for_booking( $booking_id, $amount['price'], json_encode( $amount['price_details'] ) );
             // *** GG ADD
             if ( get_option( 'wbk_gg_when_add', 'onbooking' ) == 'onbooking' ) {
             }
@@ -225,16 +232,17 @@ class WBK_Booking_Factory
                 if ( !$booking->is_loaded() ) {
                     continue;
                 }
+                // single send
                 $noifications = new WBK_Email_Notifications( $booking->get_service(), $notification_booking_id, $booking->get( 'service_category' ) );
                 $noifications->send( 'book' );
                 // sending invoice
                 if ( get_option( 'wbk_email_customer_send_invoice', 'disabled' ) == 'onbooking' ) {
-                    if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' && get_option( 'wbk_email_customer_book_multiple_mode', 'foreach' ) == 'foreach' || get_option( 'wbk_multi_booking', 'disabled' ) == 'disabled' ) {
+                    if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'enabled' ) {
                         $noifications->sendSingleInvoice();
                     }
                 }
                 // secondary names notifications
-                if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' && get_option( 'wbk_email_customer_book_multiple_mode', 'foreach' ) == 'foreach' || get_option( 'wbk_multi_booking', 'disabled' ) == 'disabled' ) {
+                if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'enabled' ) {
                     if ( isset( $secondary_data ) ) {
                         if ( is_array( $secondary_data ) ) {
                             $noifications->sendToSecondary( $secondary_data );
@@ -253,7 +261,7 @@ class WBK_Booking_Factory
                 SORT_NUMERIC,
                 $booking_ids
             );
-            if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' && get_option( 'wbk_email_customer_book_multiple_mode', 'foreach' ) == 'one' ) {
+            if ( get_option( 'wbk_multi_booking', 'disabled' ) == 'enabled' ) {
                 if ( isset( $secondary_data ) ) {
                     if ( is_array( $secondary_data ) ) {
                         $noifications->sendMultipleToSecondary( $booking_ids, $secondary_data );
@@ -266,7 +274,7 @@ class WBK_Booking_Factory
                 
                 if ( $booking->is_loaded() ) {
                     
-                    if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' && get_option( 'wbk_email_customer_book_multiple_mode', 'one' ) == 'one' ) {
+                    if ( get_option( 'wbk_multi_booking', 'disabled' ) == 'enabled' ) {
                         $noifications = new WBK_Email_Notifications( $booking->get_service(), $booking_ids[0] );
                         $noifications->sendMultipleCustomerNotification( $booking_ids );
                         if ( get_option( 'wbk_email_customer_send_invoice', 'disabled' ) == 'onbooking' ) {
@@ -275,7 +283,7 @@ class WBK_Booking_Factory
                     }
                     
                     
-                    if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' && get_option( 'wbk_email_admin_book_multiple_mode', 'one' ) == 'one' ) {
+                    if ( get_option( 'wbk_multi_booking', 'disabled' ) == 'enabled' ) {
                         $noifications = new WBK_Email_Notifications( $booking->get_service(), $booking_ids[0] );
                         $noifications->sendMultipleAdminNotification( $booking_ids );
                     }
@@ -307,13 +315,13 @@ class WBK_Booking_Factory
         $noifications = new WBK_Email_Notifications( $booking->get_service(), $booking_id );
         $send_single_bookigng_email = true;
         
-        if ( $by == 'Service administrator (dashboard)' || get_option( 'wbk_multi_booking' ) == 'disabled' || get_option( 'wbk_email_customer_cancel_multiple_mode', 'foreach' ) == 'foreach' ) {
+        if ( $by == 'Service administrator (dashboard)' || get_option( 'wbk_multi_booking' ) != 'enabled' ) {
             $noifications->prepareOnCancelCustomer();
             $noifications->sendOnCancelCustomer();
         }
         
         
-        if ( $by == 'Service administrator (dashboard)' || get_option( 'wbk_multi_booking' ) == 'disabled' || get_option( 'wbk_email_admin_cancel_multiple_mode', 'foreach' ) == 'foreach' ) {
+        if ( $by == 'Service administrator (dashboard)' || get_option( 'wbk_multi_booking' ) != 'enabled' ) {
             $noifications->prepareOnCancel();
             $noifications->sendOnCancel();
         }
@@ -348,15 +356,6 @@ class WBK_Booking_Factory
                 $booking->save();
                 $valid = true;
                 $service_id = $booking->get( 'service_id' );
-                
-                if ( !WBK_Validator::check_email_loop( get_option( 'wbk_email_customer_approve_message', '' ) ) ) {
-                    $noifications = new WBK_Email_Notifications( $service_id, $booking_id );
-                    $noifications->sendOnApprove();
-                    if ( get_option( 'wbk_email_customer_send_invoice', 'disabled' ) == 'onapproval' ) {
-                        $noifications->sendSingleInvoice();
-                    }
-                }
-                
                 $expiration_mode = get_option( 'wbk_appointments_delete_not_paid_mode', 'disabled' );
                 if ( $expiration_mode == 'on_approve' ) {
                     WBK_Db_Utils::setAppointmentsExpiration( $booking_id );
@@ -372,34 +371,7 @@ class WBK_Booking_Factory
         
         }
         if ( $valid ) {
-            if ( WBK_Validator::check_email_loop( get_option( 'wbk_email_customer_approve_message', '' ) ) ) {
-                
-                if ( get_option( 'wbk_email_customer_approve_status', '' ) == 'true' ) {
-                    $appointment = new WBK_Appointment_deprecated();
-                    if ( $appointment->setId( $booking_ids[0] ) ) {
-                        
-                        if ( $appointment->load() ) {
-                            $service = WBK_Db_Utils::initServiceById( $appointment->getService() );
-                            
-                            if ( $service != FALSE ) {
-                                $recipient = $appointment->getEmail();
-                                $subject = get_option( 'wbk_email_customer_approve_subject', '' );
-                                $message = get_option( 'wbk_email_customer_approve_message', '' );
-                                $notifications = new WBK_Email_Notifications( null, null );
-                                $notifications->sendMultipleNotification(
-                                    $booking_ids,
-                                    $message,
-                                    $subject,
-                                    $recipient
-                                );
-                            }
-                        
-                        }
-                    
-                    }
-                }
-            
-            }
+            WBK_Email_Processor::send( $booking_ids, 'approval' );
         }
         date_default_timezone_set( 'UTC' );
         return $i;
@@ -409,6 +381,21 @@ class WBK_Booking_Factory
     {
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
         $coupon_id = null;
+        $booking_ids_t = $booking_ids;
+        $booking_ids = array();
+        foreach ( $booking_ids_t as $booking_id ) {
+            $booking = new WBK_Booking( $booking_id );
+            if ( !$booking->is_loaded() ) {
+                continue;
+            }
+            $service = new WBK_Service( $booking->get_service() );
+            if ( !$service->is_loaded() ) {
+                continue;
+            }
+            if ( $service->get_payment_methods() != '' ) {
+                $booking_ids[] = $booking_id;
+            }
+        }
         if ( count( $booking_ids ) > 0 ) {
         }
         if ( count( $booking_ids ) > 0 ) {
@@ -423,6 +410,7 @@ class WBK_Booking_Factory
                     if ( $update_status == 'disabled' ) {
                         $update_status = 'woocommerce';
                     }
+                    // send approval sms here
                     $booking->set( 'prev_status', $booking->get( 'status' ) );
                     $booking->set( 'status', $update_status );
                 } else {
@@ -440,6 +428,17 @@ class WBK_Booking_Factory
                         $status_assigned = true;
                     }
                     
+                    if ( !$status_assigned ) {
+                        
+                        if ( $booking->get( 'status' ) == 'pending' ) {
+                            $booking->set( 'status', 'paid' );
+                            $booking->set( 'prev_status', 'pending' );
+                        } elseif ( $booking->get( 'status' ) == 'approved' ) {
+                            $booking->set( 'status', 'paid_approved' );
+                            $booking->set( 'prev_status', 'approved' );
+                        }
+                    
+                    }
                     if ( !$status_assigned ) {
                         
                         if ( $booking->get( 'status' ) == 'pending' ) {
@@ -475,12 +474,7 @@ class WBK_Booking_Factory
             $coupon->save();
         }
         
-        if ( get_option( 'wbk_zoom_when_add', 'onbooking' ) == 'onpaymentorapproval' ) {
-            foreach ( $booking_ids as $booking_id ) {
-                $wbk_zoom = new WBK_Zoom();
-                $wbk_zoom->add_meeting( $booking_id );
-            }
-        }
+        // send invoice (email notification)
         $curent_invoice = get_option( 'wbk_email_current_invoice_number', '1' );
         $curent_invoice++;
         update_option( 'wbk_email_current_invoice_number', $curent_invoice );
@@ -492,8 +486,6 @@ class WBK_Booking_Factory
     
     public function update( $booking_ids )
     {
-        // check if single booking updated
-        // multiple booking update is planned in upcomming releases
         
         if ( is_numeric( $booking_ids ) ) {
             global  $wpdb ;
@@ -508,8 +500,10 @@ class WBK_Booking_Factory
             if ( $prev_status == 'pending' || $prev_status == 'paid' ) {
                 
                 if ( $current_status == 'approved' || $current_status == 'paid_approved' ) {
+                    if ( get_option( 'wbk_email_customer_approve_status', '' ) == 'true' ) {
+                        WBK_Email_Processor::send( array( $booking_id ), 'approval' );
+                    }
                     $noifications = new WBK_Email_Notifications( $service_id, $booking_id );
-                    $noifications->sendOnApprove();
                     
                     if ( get_option( 'wbk_email_customer_send_invoice', 'disabled' ) == 'onapproval' ) {
                         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
@@ -548,6 +542,7 @@ class WBK_Booking_Factory
             date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
             WBK_Db_Utils::updateAppointmentDataAtGGCelendar( $booking_id );
             date_default_timezone_set( 'UTC' );
+            WBK_Model_Utils::set_booking_end( $booking_id );
             Plugion()->set_value(
                 get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
                 'appointment_prev_status',

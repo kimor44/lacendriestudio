@@ -3,10 +3,7 @@ namespace Plugion;
 if ( !defined( 'ABSPATH' ) ) exit;
 /*
  * This file is part of Webba Booking plugin
-
-
-
- */
+*/
 
 
 if (!defined('ABSPATH') ) {
@@ -97,15 +94,13 @@ class Controller {
         }
         if ( !is_null( $row ) ) {
 
-            if( Plugion()->tables->get_element_at( $table )->current_user_can_duplicate() && Plugion()->tables->get_element_at( $table )->get_duplicatable() ) {
-                $block_loader = '<div class="plugion_block_loader hide_element"></div>';
-                $block_icon = '<div class="plugion_block_icon plugion_duplicate_btn" title="duplicate"></div>';
-                $formated_row_values = [ $row['id'] . $block_loader . $block_icon ];
-            } else {
-                $block_loader = apply_filters( 'plugion_row_controls', '', $table, $row['id'] );
-                $formated_row_values = [ $row['id'] . $block_loader ];
+            $formated_row_values = [ ['display' => '<input type="checkbox" class="custom-checkbox-wb" checkbox-select-row>', '@data-order' => $row['id']] ];
 
+            if (  get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments' == $table ) {
+                date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+                $formated_row_values[] = ['display' => date('F j, Y', $row['time']) . '<br />' . date('g:i a', $row['time']), '@data-order' => $row['time']];
             }
+
             foreach ( Plugion()->tables->get_element_at( $table )->get_data( 'fields_to_view' ) as $field_slug => $field ) {
                 if ( !$field->get_in_row() ) {
                     continue;
@@ -127,7 +122,7 @@ class Controller {
             $row_options['canedit'] = Plugion()->tables->get_element_at( $table )->current_user_can_update();
 
             $row_to_filter = (object) $row;
-            $formated_row_values = apply_filters( 'plugion_formated_row_values', $formated_row_values, $row_to_filter );
+            $formated_row_values = apply_filters( 'plugion_formated_row_values', $formated_row_values, $row_to_filter, $table );
 
             $response = new \WP_REST_Response( [ 'row_data' => $formated_row_values, 'row_options' => $row_options, 'db_row_data' => $row  ] );
             $response->set_status( 200 );
@@ -176,8 +171,11 @@ class Controller {
 
             return $response;
         }
-
-
+      
+        foreach($data as $key => $value ){
+            $data->$key = stripslashes( htmlspecialchars_decode( $value, ENT_QUOTES  ) );
+        }
+         
         $response = new \WP_REST_Response( $data );
         $response->set_status( 200 );
 
@@ -191,7 +189,7 @@ class Controller {
      */
     public function get_rows( $request ) {
         $table = trim( sanitize_text_field( $request['table'] ) );
-        $filters = $request['filters'];
+        $filters = ! empty( $request['filters'] ) ? $request['filters'] : [];
         $data = null;
         if ( false === Plugion()->tables->get_element_at( $table ) ) {
             $response = new \WP_REST_Response( $data );
@@ -210,7 +208,6 @@ class Controller {
             return $response;
         }
         foreach ( Plugion()->tables->get_element_at( $table )->get_data( 'rows' ) as $row ) {
-
             Plugion()->renderer->render_table_row( $row, $table );
         }
         $table_content .= ob_get_clean() . '</tbody>';
@@ -251,6 +248,7 @@ class Controller {
 
         return $response;
     }
+
     /**
      * check if current user can view the rows
      * @param  WP_REST_Request $request rest request object
@@ -351,6 +349,7 @@ class Controller {
             $row = Plugion()->tables->get_element_at( $table )->get_row( $row_id, ARRAY_A );
             unset($row['id']);
             $row['name'] = 'Duplicate of ' . $row['name'];
+            $duration = $row['duration'];
             $fields = Plugion()->tables->get_element_at( $table )->fields->get_elements();
             $field_types = array();
             foreach( $fields as $key => $field ){
@@ -387,15 +386,12 @@ class Controller {
         }
         if ( !is_null( $row ) ) {
 
-            if( Plugion()->tables->get_element_at( $table )->current_user_can_duplicate() && Plugion()->tables->get_element_at( $table )->get_duplicatable() )
-            {
-                $block_loader = '<div class="plugion_block_loader hide_element"></div>';
-                $block_icon = '<div class="plugion_block_icon plugion_duplicate_btn" title="duplicate"></div>';
-                $formated_row_values = [ $row['id'] . $block_loader . $block_icon ];
-            } else {
-                $formated_row_values = [ $row['id'] ];
+            $formated_row_values = [ ['display' => '<input type="checkbox" class="custom-checkbox-wb" checkbox-select-row>', '@data-order' => $row['id']] ];
+            if ( get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments' == $table ) {
+                date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+                $formated_row_values[] = ['display' => date('F j, Y', $row['time']) . '<br />' . date('g:i a', $row['time']), '@data-order' => $row['time']];
+                $row['duration'] = $duration;
             }
-
             foreach ( Plugion()->tables->get_element_at( $table )->get_data( 'fields_to_view' ) as $field_slug => $field ) {
 
                 if ( !$field->get_in_row() ) {
@@ -415,11 +411,10 @@ class Controller {
                 $formated_row_values[] = apply_filters( 'plugion_formated_row_value', $field_value, [ $field, $field_slug, $value, $row ]  );
 
             }
-            //$row_options['canedit'] = Plugion()->tables->get_element_at( $table )->current_user_can_update();
             $row_options['canedit'] = Plugion()->tables->get_element_at( $table )->current_user_can_add();
 
             $row_to_filter = (object) $row;
-            $formated_row_values = apply_filters( 'plugion_formated_row_values', $formated_row_values, $row_to_filter );
+            $formated_row_values = apply_filters( 'plugion_formated_row_values', $formated_row_values, $row_to_filter, $table );
 
             $response = new \WP_REST_Response( [ 'row_data' => $formated_row_values, 'row_options' => $row_options, 'db_row_data' => $row  ] );
             $response->set_status( 200 );
@@ -431,8 +426,6 @@ class Controller {
 
         return $response;
     }
-
-
 }
 
 ?>

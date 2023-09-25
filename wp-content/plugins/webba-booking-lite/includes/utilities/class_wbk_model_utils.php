@@ -151,9 +151,9 @@ class WBK_Model_Utils
     public static function get_gg_calendar_modes()
     {
         $result = array(
-            'One-way'        => __( 'One-way (export)', 'wbk' ),
-            'One-way-import' => __( 'One-way (import)', 'wbk' ),
-            'Two-ways'       => __( 'Two-ways', 'wbk' ),
+            'One-way'        => __( 'One-way (export)', 'webba-booking-lite' ),
+            'One-way-import' => __( 'One-way (import)', 'webba-booking-lite' ),
+            'Two-ways'       => __( 'Two-ways', 'webba-booking-lite' ),
         );
         return $result;
     }
@@ -212,21 +212,21 @@ class WBK_Model_Utils
             );
         }
         return array(
-            'service_id'     => __( 'Service', 'wbk' ),
-            'created_on'     => __( 'Created on', 'wbk' ),
-            'day'            => __( 'Date', 'wbk' ),
-            'time'           => __( 'Time', 'wbk' ),
-            'quantity'       => __( 'Places booked', 'wbk' ),
-            'name'           => __( 'Customer name', 'wbk' ),
-            'email'          => __( 'Customer email', 'wbk' ),
-            'phone'          => __( 'Phone', 'wbk' ),
-            'description'    => __( 'Customer comment', 'wbk' ),
-            'extra'          => __( 'Custom fields', 'wbk' ),
-            'status'         => __( 'Status', 'wbk' ),
-            'payment_method' => __( 'Payment method', 'wbk' ),
-            'moment_price'   => __( 'Price', 'wbk' ),
-            'coupon'         => __( 'Coupon', 'wbk' ),
-            'ip'             => __( 'User IP', 'wbk' ),
+            'service_id'     => __( 'Service', 'webba-booking-lite' ),
+            'created_on'     => __( 'Created on', 'webba-booking-lite' ),
+            'day'            => __( 'Date', 'webba-booking-lite' ),
+            'time'           => __( 'Time', 'webba-booking-lite' ),
+            'quantity'       => __( 'Places booked', 'webba-booking-lite' ),
+            'name'           => __( 'Customer name', 'webba-booking-lite' ),
+            'email'          => __( 'Customer email', 'webba-booking-lite' ),
+            'phone'          => __( 'Phone', 'webba-booking-lite' ),
+            'description'    => __( 'Customer comment', 'webba-booking-lite' ),
+            'extra'          => __( 'Custom fields', 'webba-booking-lite' ),
+            'status'         => __( 'Status', 'webba-booking-lite' ),
+            'payment_method' => __( 'Payment method', 'webba-booking-lite' ),
+            'moment_price'   => __( 'Price', 'webba-booking-lite' ),
+            'coupon'         => __( 'Coupon', 'webba-booking-lite' ),
+            'ip'             => __( 'User IP', 'webba-booking-lite' ),
         );
     }
     
@@ -237,14 +237,14 @@ class WBK_Model_Utils
     static function get_booking_status_list()
     {
         $result = array(
-            'pending'                 => __( 'Awaiting approval', 'wbk' ),
-            'approved'                => __( 'Approved', 'wbk' ),
-            'paid'                    => __( 'Paid (awaiting approval)', 'wbk' ),
-            'paid_approved'           => __( 'Paid (approved)', 'wbk' ),
-            'arrived'                 => __( 'Arrived', 'wbk' ),
-            'woocommerce'             => __( 'Managed by WooCommerce', 'wbk' ),
-            'added_by_admin_not_paid' => __( 'Added by the administrator (not paid)', 'wbk' ),
-            'added_by_admin_paid'     => __( 'Added by the administrator (paid)', 'wbk' ),
+            'pending'                 => __( 'Awaiting approval', 'webba-booking-lite' ),
+            'approved'                => __( 'Approved', 'webba-booking-lite' ),
+            'paid'                    => __( 'Paid (awaiting approval)', 'webba-booking-lite' ),
+            'paid_approved'           => __( 'Paid (approved)', 'webba-booking-lite' ),
+            'arrived'                 => __( 'Arrived', 'webba-booking-lite' ),
+            'woocommerce'             => __( 'Managed by WooCommerce', 'webba-booking-lite' ),
+            'added_by_admin_not_paid' => __( 'Added by the administrator (not paid)', 'webba-booking-lite' ),
+            'added_by_admin_paid'     => __( 'Added by the administrator (paid)', 'webba-booking-lite' ),
         );
         return $result;
     }
@@ -359,6 +359,13 @@ class WBK_Model_Utils
         return $result;
     }
     
+    public static function get_booking_ids_by_day( $day )
+    {
+        global  $wpdb ;
+        $result = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where day=%d", $day ) );
+        return $result;
+    }
+    
     public static function get_booking_ids_by_day_service_email( $day, $service_id, $email )
     {
         global  $wpdb ;
@@ -421,6 +428,21 @@ class WBK_Model_Utils
             $end,
             $service_id
         ) );
+        return $result;
+    }
+    
+    /**
+     * Get the IDs of bookings created at a specific date range
+     * @param int $start An unix timestamp integer indica5tng the earliest second (inclusive)
+     * @param int $end   An unix timestamp integer indica5tng the latest second (not inclusive)
+     * 
+     * @return array The booking IDs reletaed to the specific bookings, sorted by creation time from
+     *               from earliest to latest. empty if no matching results.
+     */
+    public static function get_booking_by_date_range( $start, $end )
+    {
+        global  $wpdb ;
+        $result = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where created_on >= %d AND created_on < %d ORDER BY created_on", $start, $end ) );
         return $result;
     }
     
@@ -612,21 +634,21 @@ class WBK_Model_Utils
             );
         }
         return array(
-            'service_id'     => __( 'Service', 'wbk' ),
-            'created_on'     => __( 'Created on', 'wbk' ),
-            'day'            => __( 'Date', 'wbk' ),
-            'time'           => __( 'Time', 'wbk' ),
-            'quantity'       => __( 'Places booked', 'wbk' ),
-            'name'           => __( 'Customer name', 'wbk' ),
-            'email'          => __( 'Customer email', 'wbk' ),
-            'phone'          => __( 'Phone', 'wbk' ),
-            'description'    => __( 'Customer comment', 'wbk' ),
-            'extra'          => __( 'Custom fields', 'wbk' ),
-            'status'         => __( 'Status', 'wbk' ),
-            'payment_method' => __( 'Payment method', 'wbk' ),
-            'moment_price'   => __( 'Price', 'wbk' ),
-            'coupon'         => __( 'Coupon', 'wbk' ),
-            'ip'             => __( 'User IP', 'wbk' ),
+            'service_id'     => __( 'Service', 'webba-booking-lite' ),
+            'created_on'     => __( 'Created on', 'webba-booking-lite' ),
+            'day'            => __( 'Date', 'webba-booking-lite' ),
+            'time'           => __( 'Time', 'webba-booking-lite' ),
+            'quantity'       => __( 'Places booked', 'webba-booking-lite' ),
+            'name'           => __( 'Customer name', 'webba-booking-lite' ),
+            'email'          => __( 'Customer email', 'webba-booking-lite' ),
+            'phone'          => __( 'Phone', 'webba-booking-lite' ),
+            'description'    => __( 'Customer comment', 'webba-booking-lite' ),
+            'extra'          => __( 'Custom fields', 'webba-booking-lite' ),
+            'status'         => __( 'Status', 'webba-booking-lite' ),
+            'payment_method' => __( 'Payment method', 'webba-booking-lite' ),
+            'moment_price'   => __( 'Price', 'webba-booking-lite' ),
+            'coupon'         => __( 'Coupon', 'webba-booking-lite' ),
+            'ip'             => __( 'User IP', 'webba-booking-lite' ),
         );
     }
     
@@ -726,7 +748,7 @@ class WBK_Model_Utils
                 
                 if ( $mode == 'dropdown' && $day_status == 2 ) {
                     $added_dates++;
-                    $arr_enabled[] = $day_to_render . '-HM-' . wp_date( $date_format, $day_to_render, new DateTimeZone( date_default_timezone_get() ) ) . ' ' . get_option( 'wbk_daily_limit_reached_message', __( 'Daily booking limit is reached, please select another date', 'wbk' ) ) . '-HM-wbk_dropdown_limit_reached';
+                    $arr_enabled[] = $day_to_render . '-HM-' . wp_date( $date_format, $day_to_render, new DateTimeZone( date_default_timezone_get() ) ) . ' ' . get_option( 'wbk_daily_limit_reached_message', __( 'Daily booking limit is reached, please select another date', 'webba-booking-lite' ) ) . '-HM-wbk_dropdown_limit_reached';
                 }
                 
                 $day_to_render = strtotime( 'tomorrow', $day_to_render );
@@ -759,7 +781,7 @@ class WBK_Model_Utils
                         
                         if ( $mode == 'dropdown' ) {
                             $added_dates++;
-                            $arr_enabled[] = $day_to_render . '-HM-' . wp_date( $date_format, $day_to_render, new DateTimeZone( date_default_timezone_get() ) ) . ' ' . get_option( 'wbk_daily_limit_reached_message', __( 'Daily booking limit is reached, please select another date', 'wbk' ) ) . '-HM-wbk_dropdown_limit_reached';
+                            $arr_enabled[] = $day_to_render . '-HM-' . wp_date( $date_format, $day_to_render, new DateTimeZone( date_default_timezone_get() ) ) . ' ' . get_option( 'wbk_daily_limit_reached_message', __( 'Daily booking limit is reached, please select another date', 'webba-booking-lite' ) ) . '-HM-wbk_dropdown_limit_reached';
                         }
                         
                         $day_to_render = strtotime( 'tomorrow', $day_to_render );
@@ -823,7 +845,7 @@ class WBK_Model_Utils
             } else {
                 
                 if ( $range[0] == $range[1] ) {
-                    $limit_value = strtotime( trim( $range[0] ) );
+                    $limit_value = date( 'Y,n,j', strtotime( trim( $range[0] ) ) ) . '-' . date( 'Y,n,j', strtotime( trim( $range[1] ) ) );
                 } else {
                     $limit_value = date( 'Y,n,j', strtotime( trim( $range[0] ) ) ) . '-' . date( 'Y,n,j', strtotime( trim( $range[1] ) ) );
                 }
@@ -986,6 +1008,34 @@ class WBK_Model_Utils
         return $result;
     }
     
+    static function get_payment_methods_for_bookings_intersected( $booking_ids )
+    {
+        $services_ids = array();
+        foreach ( $booking_ids as $booking_id ) {
+            $booking = new WBK_Booking( $booking_id );
+            if ( !$booking->is_loaded() ) {
+                continue;
+            }
+            $services_ids[] = $booking->get_service();
+        }
+        $db_prefix = get_option( 'wbk_db_prefix', '' );
+        $payment_methods_result = array();
+        foreach ( $services_ids as $service_id ) {
+            $service = new WBK_Service( $service_id );
+            $payment_methods_service = json_decode( $service->get( 'payment_methods' ) );
+            if ( !is_null( $payment_methods_service ) && is_array( $payment_methods_service ) ) {
+                
+                if ( count( $payment_methods_result ) == 0 ) {
+                    $payment_methods_result = $payment_methods_service;
+                } else {
+                    $payment_methods_result = array_intersect( $payment_methods_result, $payment_methods_service );
+                }
+            
+            }
+        }
+        return $payment_methods_result;
+    }
+    
     static function get_payment_methods_for_bookings( $booking_ids )
     {
         $services_ids = array();
@@ -1028,13 +1078,13 @@ class WBK_Model_Utils
     public static function get_payment_fields()
     {
         return array(
-            'name'        => __( 'Cardholder name', 'wbk' ),
-            'city'        => __( 'City', 'wbk' ),
-            'country'     => __( 'Country', 'wbk' ),
-            'line1'       => __( 'Address line 1', 'wbk' ),
-            'line2'       => __( 'Address line 1', 'wbk' ),
-            'postal_code' => __( 'Postal code', 'wbk' ),
-            'state'       => __( 'State', 'wbk' ),
+            'name'        => __( 'Cardholder name', 'webba-booking-lite' ),
+            'city'        => __( 'City', 'webba-booking-lite' ),
+            'country'     => __( 'Country', 'webba-booking-lite' ),
+            'line1'       => __( 'Address line 1', 'webba-booking-lite' ),
+            'line2'       => __( 'Address line 1', 'webba-booking-lite' ),
+            'postal_code' => __( 'Postal code', 'webba-booking-lite' ),
+            'state'       => __( 'State', 'webba-booking-lite' ),
         );
     }
     
@@ -1059,6 +1109,107 @@ class WBK_Model_Utils
         global  $wpdb ;
         $count = $wpdb->get_var( $wpdb->prepare( " SELECT COUNT(*) FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE  day = %d", $day ) );
         return $count;
+    }
+    
+    static function get_booking_payment_methods( $booking_id )
+    {
+        $booking = new WBK_Booking( $booking_id );
+        if ( !$booking->is_loaded() ) {
+            return false;
+        }
+        if ( $booking->get_status() == 'paid' || $booking->get_status() == 'woocommerce' || $booking->get_status() == 'paid_approved' ) {
+            return false;
+        }
+        $service = new WBK_Service( $booking->get_service() );
+        if ( !$service->is_loaded() ) {
+            return false;
+        }
+        if ( $service->get_payment_methods() == '' ) {
+            return false;
+        }
+        if ( $service->get_payment_methods() != '' ) {
+            
+            if ( get_option( 'wbk_appointments_allow_payments', '' ) == '' ) {
+                return json_decode( $service->get_payment_methods() );
+            } else {
+                
+                if ( $booking->get_status() == 'approved' ) {
+                    return json_decode( $service->get_payment_methods() );
+                } else {
+                    return false;
+                }
+            
+            }
+        
+        }
+    }
+    
+    public static function get_booking_by_date_revenue( $start, $end, $type = "" )
+    {
+        global  $wpdb ;
+        $type_condition = "1 = 1";
+        
+        if ( $type ) {
+            $types = explode( ",", $type );
+            $type_conditions = [];
+            foreach ( $types as $type ) {
+                $type_conditions[] = "status='" . esc_sql( trim( $type ) ) . "'";
+            }
+            $type_condition = " ( " . implode( " OR ", $type_conditions ) . " ) ";
+        }
+        
+        $sql = $wpdb->prepare( "SELECT GROUP_CONCAT(id SEPARATOR ',') as ids, {{date}} FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where time >= %d AND time < %d AND {$type_condition} GROUP BY created_date ", $start, $end );
+        $result = $wpdb->get_results( str_replace( "{{date}}", "from_unixtime(time, '%Y-%m-%d') as created_date", $sql ) );
+        
+        if ( !empty($result) ) {
+            $sorted = [];
+            foreach ( $result as $res ) {
+                $sorted[$res->created_date] = (int) $res->ids;
+            }
+            return $sorted;
+        }
+        
+        return [];
+    }
+    
+    public static function get_booking_by_date_range_type(
+        $start,
+        $end,
+        $type = "",
+        $return = 'fields'
+    )
+    {
+        global  $wpdb ;
+        $type_condition = "1 = 1";
+        
+        if ( $type ) {
+            $types = explode( ",", $type );
+            $type_conditions = [];
+            foreach ( $types as $type ) {
+                $type_conditions[] = "status='" . esc_sql( trim( $type ) ) . "'";
+            }
+            $type_condition = " ( " . implode( " OR ", $type_conditions ) . " ) ";
+        }
+        
+        
+        if ( $return == 'fields' ) {
+            $sql = $wpdb->prepare( "SELECT COUNT(id) as count, {{date}} FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where time >= %d AND time < %d AND {$type_condition} GROUP BY created_date ", $start, $end );
+            $result = $wpdb->get_results( str_replace( "{{date}}", "from_unixtime(time, '%Y-%m-%d') as created_date", $sql ) );
+            
+            if ( !empty($result) ) {
+                $sorted = [];
+                foreach ( $result as $res ) {
+                    $sorted[$res->created_date] = (int) $res->count;
+                }
+                return $sorted;
+            }
+        
+        } else {
+            $sql = $wpdb->prepare( "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where time >= %d AND time < %d AND {$type_condition}", $start, $end );
+            return $wpdb->get_col( $sql );
+        }
+        
+        return [];
     }
 
 }

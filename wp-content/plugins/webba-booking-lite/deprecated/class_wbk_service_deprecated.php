@@ -55,7 +55,7 @@ class WBK_Service_deprecated extends WBK_Entity {
 			$this->email = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect email', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect email', 'webba-booking-lite' ) );
 			return false;
 		}
 
@@ -72,7 +72,7 @@ class WBK_Service_deprecated extends WBK_Entity {
 			$this->duration = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect duration', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect duration', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -91,7 +91,7 @@ class WBK_Service_deprecated extends WBK_Entity {
 			$this->multiple_limit = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect multiple limit', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect multiple limit', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -105,7 +105,7 @@ class WBK_Service_deprecated extends WBK_Entity {
 			$this->multiple_low_limit = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect multiple low limit', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect multiple low limit', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -123,7 +123,7 @@ class WBK_Service_deprecated extends WBK_Entity {
 			$this->prepare_time = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect prepare_time', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect prepare_time', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -139,7 +139,7 @@ class WBK_Service_deprecated extends WBK_Entity {
 			$this->step = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect step', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect step', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -186,7 +186,7 @@ class WBK_Service_deprecated extends WBK_Entity {
 			$this->quantity = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect quantity', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect quantity', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -201,7 +201,7 @@ class WBK_Service_deprecated extends WBK_Entity {
 			$this->min_quantity = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect min_quantity', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect min_quantity', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -216,7 +216,7 @@ class WBK_Service_deprecated extends WBK_Entity {
 			$this->priority = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect priority', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect priority', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -230,7 +230,7 @@ class WBK_Service_deprecated extends WBK_Entity {
 			$this->price = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect price', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect price', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -251,7 +251,7 @@ class WBK_Service_deprecated extends WBK_Entity {
 
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect interval', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect interval', 'webba-booking-lite' ) );
 			return false;
 		}
 

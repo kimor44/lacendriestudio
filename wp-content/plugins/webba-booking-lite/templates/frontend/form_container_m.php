@@ -1,6 +1,8 @@
 <?php
 if ( !defined( 'ABSPATH' ) ) exit;
 
+ 
+
 $get_processing = WBK_Renderer::load_template( 'frontend/get_parameters_processing', array(), false );
 if( $get_processing != '' ){
 	echo $get_processing;
@@ -81,7 +83,7 @@ $start_btn_class = '';
 			</div>
 		</div>
         <div class="wbk-frontend-row">
-            <input type="button" disabled="disabled" class="<?php echo $start_btn_class;?> wbk-button wbk-width-100 wbk-mt-10-mb-10" id="wbk-confirm-services" value="<?php echo __( 'Start booking', 'wbk' ); ?>">
+            <input type="button" disabled="disabled" class="<?php echo $start_btn_class;?> wbk-button wbk-width-100 wbk-mt-10-mb-10" id="wbk-confirm-services" value="<?php echo __( 'Start booking', 'webba-booking-lite' ); ?>">
         </div>
 		<div class="wbk-frontend-row wbk_date_container" id="wbk-date-container">
 		</div>

@@ -6,5 +6,5 @@ class WBK_Service_Category extends WBK_Model_Object{
 		parent::__construct( $id );
 
 	}
-
+    
 }

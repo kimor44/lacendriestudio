@@ -102,25 +102,25 @@ class WBK_Date_Time_Utils
         date_default_timezone_set( 'UTC' );
         // prepare title
         if ( $day == 'monday' ) {
-            $day_name = __( 'Monday', 'wbk' );
+            $day_name = __( 'Monday', 'webba-booking-lite' );
         }
         if ( $day == 'tuesday' ) {
-            $day_name = __( 'Tuesday', 'wbk' );
+            $day_name = __( 'Tuesday', 'webba-booking-lite' );
         }
         if ( $day == 'wednesday' ) {
-            $day_name = __( 'Wednesday', 'wbk' );
+            $day_name = __( 'Wednesday', 'webba-booking-lite' );
         }
         if ( $day == 'thursday' ) {
-            $day_name = __( 'Thursday', 'wbk' );
+            $day_name = __( 'Thursday', 'webba-booking-lite' );
         }
         if ( $day == 'friday' ) {
-            $day_name = __( 'Friday', 'wbk' );
+            $day_name = __( 'Friday', 'webba-booking-lite' );
         }
         if ( $day == 'saturday' ) {
-            $day_name = __( 'Saturday', 'wbk' );
+            $day_name = __( 'Saturday', 'webba-booking-lite' );
         }
         if ( $day == 'sunday' ) {
-            $day_name = __( 'Sunday', 'wbk' );
+            $day_name = __( 'Sunday', 'webba-booking-lite' );
         }
         $html = '<b>' . $day_name . '</b>';
         $interval_count = $business_hours->getIntervalCount( $day );
@@ -427,7 +427,7 @@ class WBK_Date_Time_Utils
             
             
             if ( $day_status == 2 ) {
-                $arr_days[] = $day_to_render . '-HM-' . wp_date( $date_format, $day_to_render, new DateTimeZone( date_default_timezone_get() ) ) . ' ' . get_option( 'wbk_daily_limit_reached_message', __( 'Daily booking limit is reached, please select another date', 'wbk' ) ) . '-HM-wbk_dropdown_limit_reached';
+                $arr_days[] = $day_to_render . '-HM-' . wp_date( $date_format, $day_to_render, new DateTimeZone( date_default_timezone_get() ) ) . ' ' . get_option( 'wbk_daily_limit_reached_message', __( 'Daily booking limit is reached, please select another date', 'webba-booking-lite' ) ) . '-HM-wbk_dropdown_limit_reached';
             } else {
                 $arr_days[] = $day_to_render . '-HM-' . wp_date( $date_format, $day_to_render, new DateTimeZone( date_default_timezone_get() ) ) . '-HM-wbk_dropdown_regular_item';
             }

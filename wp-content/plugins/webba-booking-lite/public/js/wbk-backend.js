@@ -213,6 +213,8 @@ jQuery(function ($) {
         var btn = jQuery(this);
         var form_data = new FormData();
         const tab = jQuery('.appearance-tabs-wb').find('.active-wb');
+        jQuery('.wbk_load_service_id').val(0);
+        jQuery('.wbk_load_service_id').trigger('change');
 
         if (tab.attr('data-name') == 'mass_add_bookings') {
             var error_status = true;
@@ -320,6 +322,8 @@ jQuery(function ($) {
         form_data.append('nonce', wbk_dashboardl10n.wbkb_nonce);
 
         var error_status = 0;
+
+        
 
         var action;
         if (tab.find('.schedule-tools-action-lock').is(':checked')) {
@@ -434,58 +438,28 @@ jQuery(function ($) {
         wbk_update_appearance_preview(jQuery(this));
     });
     wbk_update_appearance_preview(jQuery('#wbk_appearance_field_4'));
-    jQuery('.button-wb-appearance-save').click(function () {
-        var appearance_data = [];
-        var btn = jQuery(this);
-        wbk_change_button_status(btn, 'loading');
-        jQuery('.input-wb[type=text], .input-wb[type=number]').each(
-            function () {
-                var classes = jQuery(this).attr('data-class').split(',');
-                for (i = 0; i < classes.length; i++) {
-                    var appearance_item = {
-                        class: classes[i],
-                        property: jQuery(this).attr('data-property'),
-                        value: jQuery(this).val(),
-                        id: jQuery(this).attr('id'),
-                    };
-                    appearance_data.push(appearance_item);
-                }
-            }
-        );
-        var form_data = new FormData();
-        var name = jQuery.trim(jQuery('[name="wbk-name"]').val());
-        form_data.append('appearance_data', JSON.stringify(appearance_data));
-        form_data.append('action', 'wbk_save_appearance');
-        form_data.append('nonce', wbk_dashboardl10n.wbkb_nonce);
-        jQuery.ajax({
-            url: wbk_dashboardl10n.ajaxurl,
-            type: 'POST',
-            data: form_data,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                wbk_change_button_status(btn, 'regular');
-                // wbk_show_backend_notification(
-                //    "Appearance settings saved. Please, don't forget to clear the cache in your browser."
-                // )
-            },
-        });
-    });
 });
 
 function wbk_update_appearance_preview(elem) {
-    if (elem.attr('data-class') == null) {
+     
+    if ('undefined' === typeof elem.attr('data-class')) {
         return;
     }
     var target_classes = elem.attr('data-class').split(',');
     for (i = 0; i < target_classes.length; i++) {
-        var target_property = elem.attr('data-property');
+        var target_property = elem.attr('data-property').split(',');
+
         var target_value = elem.val();
-        if (target_property == 'border-radius') {
-            target_value = target_value + 'px';
+
+        for (k = 0; k < target_property.length; k++) {
+            if (target_property[k] == 'border-radius') {
+                target_value = target_value + 'px';
+            }
+            jQuery('.' + target_classes[i]).css(
+                target_property[k],
+                target_value
+            );
         }
-        jQuery('.' + target_classes[i]).css(target_property, target_value);
     }
 }
 
@@ -503,7 +477,7 @@ function wbk_change_button_status(elem, status) {
 }
 
 function wbk_show_backend_notification(message, element = null) {
-    var top = (jQuery('.notification-bar-wb').length + 1) * 60 + 'px';
+    var top = (jQuery('.notification-bar-wb').length + 1) * 10 + 'px';
     var message_html =
         '<div style="top:' +
         top +
@@ -533,7 +507,13 @@ function wbk_init_backend_tab_menu() {
     jQuery('[data-js="appearance-menu-wb"]').each(function () {
         var jQueryappearance_menu_li = jQuery(this).find('li');
         jQueryappearance_menu_li.click(function () {
+             
             var appearance_menu_li_name = jQuery(this).attr('data-name');
+            if (appearance_menu_li_name == 'service_schedule') {
+                jQuery('.schedule_tools_start_btn').addClass('wbk_hidden');
+            } else {
+                jQuery('.schedule_tools_start_btn').removeClass('wbk_hidden');
+            }
             jQueryappearance_menu_li.removeClass('active-wb');
             jQuery(this).addClass('active-wb');
             jQuery(

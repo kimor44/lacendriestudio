@@ -12,13 +12,10 @@ final class WBK_Options_Processor {
 
     private function __construct() {
     }
-    public function add_option( $slug, $type, $title, $description, $section, $default_value, $extra = null, $page = 'wbk-options', $group = 'wbk_options',  $dependency = null ){
+
+    public function add_option( $slug, $type, $title, $section, $args = array(), $subsection = 'basic', $page = 'wbk-options', $group = 'wbk_options' ) {
 
         switch ( $type ) {
-            case 'text':
-                $render_callback = 'render_text';
-                $validation_callback = 'validate_text';
-                break;
             case 'text_alfa_numeric':
                 $render_callback = 'render_text';
                 $validation_callback = 'validate_text_alfa_numeric';
@@ -60,13 +57,27 @@ final class WBK_Options_Processor {
                 $validation_callback = 'validate_text';
                 break;
         }
+
+        $default_args = array(
+            'default'       => '',
+            'extra'         => array(),
+            'dependency'    => array(),
+            'description'   => '',
+            'popup'         => '',
+            'subsection'   => $subsection,
+            'checkbox_value'=> 'enabled',
+            'placeholder'   => ''
+        );
+ 
+        $args = array_merge( $default_args, $args );
+   
         add_settings_field(
             $slug,
             $title,
             array( $this, $render_callback ),
             $page,
             $section,
-            array( $slug, $default_value, $description, $extra,  $dependency )
+            $args
         );
         register_setting(
             $group,
@@ -106,7 +117,8 @@ final class WBK_Options_Processor {
         return '';
     }
     public function render_text( $args ){
-        WBK_Renderer::load_template( 'options/text_field', $args );
+        $html = WBK_Renderer::load_template( 'options/text_field', $args, false );
+        echo apply_filters( 'wbk_options_text_field', $html, $args );
     }
     public function render_pass( $args ){
         WBK_Renderer::load_template( 'options/pass_field', $args );
@@ -144,6 +156,18 @@ final class WBK_Options_Processor {
         return self::$inst;
     }
 
+    /**
+     * Reset default option values
+     */
+    public static function reset_defaults(){
+        global $wp_settings_fields;
+        $settings_fields = $wp_settings_fields['wbk-options'];
+        foreach ( $settings_fields as $section => $fields ) { 
+            foreach( $fields as $field ){
+                update_option( $field['id'], $field['args']['default']  );          
+            }
+        }
+    }
 
 }
 

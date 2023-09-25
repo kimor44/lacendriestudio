@@ -859,12 +859,12 @@ class WBK_Db_Utils
     static function getAppointmentStatusList( $condition = null )
     {
         $result = array(
-            'pending'       => array( __( 'Awaiting approval', 'wbk' ), '' ),
-            'approved'      => array( __( 'Approved', 'wbk' ), '' ),
-            'paid'          => array( __( 'Paid (awaiting approval)', 'wbk' ), '' ),
-            'paid_approved' => array( __( 'Paid (approved)', 'wbk' ), '' ),
-            'arrived'       => array( __( 'Arrived', 'wbk' ), '' ),
-            'woocommerce'   => array( __( 'Managed by WooCommerce', 'wbk' ), '' ),
+            'pending'       => array( __( 'Awaiting approval', 'webba-booking-lite' ), '' ),
+            'approved'      => array( __( 'Approved', 'webba-booking-lite' ), '' ),
+            'paid'          => array( __( 'Paid (awaiting approval)', 'webba-booking-lite' ), '' ),
+            'paid_approved' => array( __( 'Paid (approved)', 'webba-booking-lite' ), '' ),
+            'arrived'       => array( __( 'Arrived', 'webba-booking-lite' ), '' ),
+            'woocommerce'   => array( __( 'Managed by WooCommerce', 'webba-booking-lite' ), '' ),
         );
         return $result;
     }
@@ -873,9 +873,9 @@ class WBK_Db_Utils
     static function getGGCalendarModeList( $condition = null )
     {
         $result = array(
-            'One-way'        => array( __( 'One-way (export)', 'wbk' ), '' ),
-            'One-way-import' => array( __( 'One-way (import)', 'wbk' ), '' ),
-            'Two-ways'       => array( __( 'Two-ways', 'wbk' ), '' ),
+            'One-way'        => array( __( 'One-way (export)', 'webba-booking-lite' ), '' ),
+            'One-way-import' => array( __( 'One-way (import)', 'webba-booking-lite' ), '' ),
+            'Two-ways'       => array( __( 'Two-ways', 'webba-booking-lite' ), '' ),
         );
         return $result;
     }
@@ -892,7 +892,7 @@ class WBK_Db_Utils
         
         if ( $count > 0 ) {
             self::deleteAppointmentDataAtGGCelendar( $appointment_id );
-            self::copyAppointmentToCancelled( $appointment_id, __( 'Customer', 'wbk' ) );
+            self::copyAppointmentToCancelled( $appointment_id, __( 'Customer', 'webba-booking-lite' ) );
         }
         
         $deleted_count = $wpdb->delete( get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments', array(
@@ -943,14 +943,18 @@ class WBK_Db_Utils
         if ( !is_numeric( $expiration_time ) ) {
             return;
         }
-        if ( intval( $expiration_time ) < 5 ) {
+        if ( intval( $expiration_time ) < 1 ) {
+            return;
+        }
+        $booking = new WBK_Booking( $appointment_id );
+        if ( !$booking->is_loaded() ) {
             return;
         }
         $expiration_value = time() + $expiration_time * 60;
         $service_id = self::getServiceIdByAppointmentId( $appointment_id );
         $service = self::initServiceById( $service_id );
         if ( $service != FALSE ) {
-            if ( $service->getPrice() == 0 ) {
+            if ( $service->getPrice() == 0 || $booking->get_price() == 0 ) {
                 $expiration_value = 0;
             }
         }
@@ -1003,10 +1007,10 @@ class WBK_Db_Utils
                         if ( $lang != '' ) {
                             switch_to_locale( $lang );
                         }
-                        $noifications->prepareOnCancelCustomer();
+                        $noifications->prepareOnCancelCustomer( 'auto' );
                         $noifications->prepareOnCancel();
                         self::deleteAppointmentDataAtGGCelendar( $app_id );
-                        self::copyAppointmentToCancelled( $app_id, __( 'Auto', 'wbk' ) );
+                        self::copyAppointmentToCancelled( $app_id, __( 'Auto', 'webba-booking-lite' ) );
                         $wpdb->query( $wpdb->prepare( "DELETE FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where ( payment_id = '' or payment_id IS NULL ) and  ( ( payment_method <> 'Pay on arrival' and payment_method <> 'Bank transfer' ) or payment_method IS NULL ) and ( status='cancelled' ) and  expiration_time <> 0 and expiration_time < %d and id=" . $app_id, $time ) );
                         $noifications->sendOnCancelCustomer();
                         $noifications->sendOnCancel();
@@ -1025,10 +1029,10 @@ class WBK_Db_Utils
                         if ( $lang != '' ) {
                             switch_to_locale( $lang );
                         }
-                        $noifications->prepareOnCancelCustomer();
+                        $noifications->prepareOnCancelCustomer( 'auto' );
                         $noifications->prepareOnCancel();
                         self::deleteAppointmentDataAtGGCelendar( $app_id );
-                        self::copyAppointmentToCancelled( $app_id, __( 'Auto', 'wbk' ) );
+                        self::copyAppointmentToCancelled( $app_id, __( 'Auto', 'webba-booking-lite' ) );
                         $wpdb->query( $wpdb->prepare( "DELETE FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where  ( status='cancelled' ) and ( ( payment_method <> 'Pay on arrival' and payment_method <> 'Bank transfer' ) or payment_method IS NULL ) and expiration_time <> 0 and expiration_time < %d and id=" . $app_id, $time ) );
                         $noifications->sendOnCancelCustomer();
                         $noifications->sendOnCancel();
@@ -1051,7 +1055,7 @@ class WBK_Db_Utils
                     $valid_ids[] = $appointment_id;
                 }
                 self::deleteAppointmentDataAtGGCelendar( $appointment_id );
-                self::copyAppointmentToCancelled( $appointment_id, __( 'Auto', 'wbk' ) );
+                self::copyAppointmentToCancelled( $appointment_id, __( 'Auto', 'webba-booking-lite' ) );
             }
             if ( count( $valid_ids ) > 0 ) {
                 foreach ( $valid_ids as $app_id ) {
@@ -1063,7 +1067,7 @@ class WBK_Db_Utils
                     $service_id = self::getServiceIdByAppointmentId( $app_id );
                     $noifications = new WBK_Email_Notifications( $service_id, $appointment_id );
                     date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-                    $noifications->prepareOnCancelCustomer();
+                    $noifications->prepareOnCancelCustomer( 'auto' );
                     $noifications->prepareOnCancel();
                     $wpdb->query( $wpdb->prepare( "DELETE FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where  ( status='pending' )   and created_on  < %d and id  = " . $app_id, $old_point ) );
                     $noifications->sendOnCancelCustomer();
@@ -1368,7 +1372,7 @@ class WBK_Db_Utils
         if ( $cancel_link_text == '' ) {
             $cancel_link_text = sanitize_text_field( $wbk_wording['email_landing_anchor2'] );
         }
-        $gg_add_link_text = get_option( 'wbk_email_landing_text_gg_event_add', __( 'Click here to add this event to your Google Calendar.', 'wbk' ) );
+        $gg_add_link_text = get_option( 'wbk_email_landing_text_gg_event_add', __( 'Click here to add this event to your Google Calendar.', 'webba-booking-lite' ) );
         if ( $gg_add_link_text == '' ) {
             $gg_add_link_text = sanitize_text_field( $wbk_wording['wbk_email_landing_text_gg_event_add'] );
         }
@@ -1409,8 +1413,8 @@ class WBK_Db_Utils
         // begin admin management links
         $admin_cancel_link = '';
         $admin_approve_link = '';
-        $admin_cancel_link_text = get_option( 'wbk_email_landing_text_cancel_admin', __( 'Click here to cancel this booking.', 'wbk' ) );
-        $admin_approve_link_text = get_option( 'wbk_email_landing_text_approve_admin', __( 'Click here to approve this booking.', 'wbk' ) );
+        $admin_cancel_link_text = get_option( 'wbk_email_landing_text_cancel_admin', __( 'Click here to cancel this booking.', 'webba-booking-lite' ) );
+        $admin_approve_link_text = get_option( 'wbk_email_landing_text_approve_admin', __( 'Click here to approve this booking.', 'webba-booking-lite' ) );
         if ( get_option( 'wbk_allow_manage_by_link', 'no' ) == 'yes' ) {
             
             if ( $payment_link_url != '' ) {
@@ -1450,7 +1454,7 @@ class WBK_Db_Utils
             
             if ( is_array( $payment_methods ) && count( $payment_methods ) > 0 ) {
                 $booking = new WBK_Booking( $appointment->getId() );
-                $total = floatval( $booking->get_price() ) * floatval( $booking->get_quantity() );
+                $total = $booking->get_price() * $booking->get_quantity();
                 $service_fee = WBK_Price_Processor::get_servcie_fees( array( $booking->get_id() ) );
                 if ( get_option( 'wbk_do_not_tax_deposit', '' ) != 'true' ) {
                     $total += $service_fee[0];
@@ -1716,6 +1720,8 @@ class WBK_Db_Utils
             }
         }
         
+        $message = stripslashes( $message );
+        $message = str_replace( '&#039;', '\'', $message );
         return $message;
     }
     
@@ -1998,149 +2004,6 @@ class WBK_Db_Utils
         $ini += strlen( $start );
         $len = strpos( $string, $end, $ini ) - $ini;
         return substr( $string, $ini, $len );
-    }
-    
-    static function prepareThankYouMessage(
-        $appointment_ids,
-        $service_id,
-        $thanks_message,
-        $skipped = null
-    )
-    {
-        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-        
-        if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' ) {
-            $looped = self::get_string_between( $thanks_message, '[appointment_loop_start]', '[appointment_loop_end]' );
-            $looped_html = '';
-            $token_arr = array();
-            // get total price
-            $total = 0;
-            $app_price_total = 0;
-            foreach ( $appointment_ids as $appointment_id ) {
-                $appointment = new WBK_Appointment_deprecated();
-                
-                if ( !$appointment->setId( $appointment_id ) ) {
-                    date_default_timezone_set( 'UTC' );
-                    return;
-                }
-                
-                
-                if ( !$appointment->load() ) {
-                    date_default_timezone_set( 'UTC' );
-                    return;
-                }
-                
-                $booking = new WBK_Booking( $appointment_id );
-                
-                if ( $booking->get_name() == '' ) {
-                    date_default_timezone_set( 'UTC' );
-                    return;
-                }
-                
-                $app_price_total += WBK_Db_Utils::getAppointmentMomentPrice( $appointment->getId() );
-                $service = new WBK_Service_deprecated();
-                if ( !$service->setId( $appointment->getService() ) ) {
-                    return $thanks_message;
-                }
-                if ( !$service->load() ) {
-                    return $thanks_message;
-                }
-                $total += floatval( $booking->get_price() ) * floatval( $booking->get_quantity() );
-                $looped_html .= WBK_Db_Utils::message_placeholder_processing( $looped, $appointment, $service );
-                $token_arr[] = self::getTokenByAppointmentId( $appointment_id );
-            }
-            $service_fee = WBK_Price_Processor::get_servcie_fees( $appointment_ids );
-            if ( get_option( 'wbk_do_not_tax_deposit', '' ) != 'true' ) {
-                $total += $service_fee[0];
-            }
-            
-            if ( count( $token_arr ) > 0 ) {
-                $multi_token = implode( '-', $token_arr );
-            } else {
-                $multi_token = null;
-            }
-            
-            $price_format = get_option( 'wbk_payment_price_format', '$#price' );
-            $tax_rule = get_option( 'wbk_tax_for_messages', 'paypal' );
-            if ( $tax_rule == 'paypal' ) {
-                $tax = get_option( 'wbk_paypal_tax', 0 );
-            }
-            if ( $tax_rule == 'stripe' ) {
-                $tax = get_option( 'wbk_stripe_tax', 0 );
-            }
-            if ( $tax_rule == 'none' ) {
-                $tax = 0;
-            }
-            
-            if ( is_numeric( $tax ) && $tax > 0 ) {
-                $tax_amount = $total / 100 * $tax;
-                $total = $total + $tax_amount;
-            }
-            
-            if ( get_option( 'wbk_do_not_tax_deposit', '' ) == 'true' ) {
-                $total += $service_fee[0];
-            }
-            $total_price = str_replace( '#price', number_format(
-                $total,
-                get_option( 'wbk_price_fractional', '2' ),
-                get_option( 'wbk_price_separator', '.' ),
-                ''
-            ), $price_format );
-            $search_tag = '[appointment_loop_start]' . $looped . '[appointment_loop_end]';
-            $thanks_message = str_replace( $search_tag, $looped_html, $thanks_message );
-            $thanks_message = str_replace( '#selected_count', count( $appointment_ids ), $thanks_message );
-            if ( !is_null( $skipped ) ) {
-                $thanks_message = str_replace( '#failed_count', $skipped, $thanks_message );
-            }
-            $thanks_message = WBK_Db_Utils::message_placeholder_processing(
-                $thanks_message,
-                $appointment,
-                $service,
-                $total_price,
-                null,
-                0,
-                $multi_token,
-                $app_price_total
-            );
-        } elseif ( get_option( 'wbk_multi_booking', 'disabled' ) == 'disabled' ) {
-            
-            if ( count( $appointment_ids ) == 0 ) {
-                date_default_timezone_set( 'UTC' );
-                return $thanks_message;
-            }
-            
-            $appointment = new WBK_Appointment_deprecated();
-            
-            if ( !$appointment->setId( $appointment_ids[0] ) ) {
-                date_default_timezone_set( 'UTC' );
-                return $thanks_message;
-            }
-            
-            
-            if ( !$appointment->load() ) {
-                date_default_timezone_set( 'UTC' );
-                return $thanks_message;
-            }
-            
-            $service = new WBK_Service_deprecated();
-            
-            if ( !$service->setId( $service_id ) ) {
-                date_default_timezone_set( 'UTC' );
-                return $thanks_message;
-            }
-            
-            
-            if ( !$service->load() ) {
-                date_default_timezone_set( 'UTC' );
-                return $thanks_message;
-            }
-            
-            $thanks_message = WBK_Db_Utils::message_placeholder_processing( $thanks_message, $appointment, $service );
-        }
-        
-        $thanks_message = self::replaceRanges( $thanks_message, $appointment_ids );
-        date_default_timezone_set( 'UTC' );
-        return $thanks_message;
     }
     
     static function backend_customer_name_processing( $appointment_id, $customer_name )
@@ -2928,13 +2791,13 @@ class WBK_Db_Utils
     static function getPaymentFields()
     {
         return array(
-            'name'        => __( 'Cardholder name', 'wbk' ),
-            'city'        => __( 'City', 'wbk' ),
-            'country'     => __( 'Country', 'wbk' ),
-            'line1'       => __( 'Address line 1', 'wbk' ),
-            'line2'       => __( 'Address line 1', 'wbk' ),
-            'postal_code' => __( 'Postal code', 'wbk' ),
-            'state'       => __( 'State', 'wbk' ),
+            'name'        => __( 'Cardholder name', 'webba-booking-lite' ),
+            'city'        => __( 'City', 'webba-booking-lite' ),
+            'country'     => __( 'Country', 'webba-booking-lite' ),
+            'line1'       => __( 'Address line 1', 'webba-booking-lite' ),
+            'line2'       => __( 'Address line 1', 'webba-booking-lite' ),
+            'postal_code' => __( 'Postal code', 'webba-booking-lite' ),
+            'state'       => __( 'State', 'webba-booking-lite' ),
         );
     }
     
@@ -2965,21 +2828,21 @@ class WBK_Db_Utils
             );
         }
         return array(
-            'service_id'     => __( 'Service', 'wbk' ),
-            'created_on'     => __( 'Created on', 'wbk' ),
-            'day'            => __( 'Date', 'wbk' ),
-            'time'           => __( 'Time', 'wbk' ),
-            'quantity'       => __( 'Places booked', 'wbk' ),
-            'name'           => __( 'Customer name', 'wbk' ),
-            'email'          => __( 'Customer email', 'wbk' ),
-            'phone'          => __( 'Phone', 'wbk' ),
-            'description'    => __( 'Customer comment', 'wbk' ),
-            'extra'          => __( 'Custom fields', 'wbk' ),
-            'status'         => __( 'Status', 'wbk' ),
-            'payment_method' => __( 'Payment method', 'wbk' ),
-            'moment_price'   => __( 'Price', 'wbk' ),
-            'coupon'         => __( 'Coupon', 'wbk' ),
-            'ip'             => __( 'User IP', 'wbk' ),
+            'service_id'     => __( 'Service', 'webba-booking-lite' ),
+            'created_on'     => __( 'Created on', 'webba-booking-lite' ),
+            'day'            => __( 'Date', 'webba-booking-lite' ),
+            'time'           => __( 'Time', 'webba-booking-lite' ),
+            'quantity'       => __( 'Places booked', 'webba-booking-lite' ),
+            'name'           => __( 'Customer name', 'webba-booking-lite' ),
+            'email'          => __( 'Customer email', 'webba-booking-lite' ),
+            'phone'          => __( 'Phone', 'webba-booking-lite' ),
+            'description'    => __( 'Customer comment', 'webba-booking-lite' ),
+            'extra'          => __( 'Custom fields', 'webba-booking-lite' ),
+            'status'         => __( 'Status', 'webba-booking-lite' ),
+            'payment_method' => __( 'Payment method', 'webba-booking-lite' ),
+            'moment_price'   => __( 'Price', 'webba-booking-lite' ),
+            'coupon'         => __( 'Coupon', 'webba-booking-lite' ),
+            'ip'             => __( 'User IP', 'webba-booking-lite' ),
         );
     }
     

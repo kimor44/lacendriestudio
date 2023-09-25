@@ -29,31 +29,31 @@ for ( $i = 1;  $i <= 7;  $i++ ) {
  <?php
         switch ( $i ) {
         case 1:
-            $day_name_translated = __( 'Monday', 'wbk' );
+            $day_name_translated = __( 'Monday', 'webba-booking-lite' );
             $day_name = 'monday';
             break;
         case 2:
-            $day_name_translated = __( 'Tuesday', 'wbk' );
+            $day_name_translated = __( 'Tuesday', 'webba-booking-lite' );
             $day_name = 'tuesday';
             break;
         case 3:
-            $day_name_translated = __( 'Wednesday', 'wbk' );
+            $day_name_translated = __( 'Wednesday', 'webba-booking-lite' );
             $day_name = 'wednesday';
             break;
         case 4:
-            $day_name_translated = __( 'Thursday', 'wbk' );
+            $day_name_translated = __( 'Thursday', 'webba-booking-lite' );
             $day_name = 'thursday';
             break;
         case 5:
-            $day_name_translated = __( 'Friday', 'wbk' );
+            $day_name_translated = __( 'Friday', 'webba-booking-lite' );
             $day_name = 'friday';
             break;
         case 6:
-            $day_name_translated = __( 'Saturday', 'wbk' );
+            $day_name_translated = __( 'Saturday', 'webba-booking-lite' );
             $day_name = 'saturday';
             break;
         case 7:
-            $day_name_translated = __( 'Sunday', 'wbk' );
+            $day_name_translated = __( 'Sunday', 'webba-booking-lite' );
             $day_name = 'sunday';
             break;
     }
@@ -67,9 +67,12 @@ for ( $i = 1;  $i <= 7;  $i++ ) {
             foreach ($intervals as $interval) {
                 $start = $interval->start;
                 $end =   $interval->end;
+                if( get_option('wbk_show_suitable_hours', 'yes' == 'yes' ) ){
+                    $start = 0;
+                }
                 for ( $time = $start; $time <= $end - $service->get_duration()  * 60 ; $time += $hours_step ) {
 ?>
-                    <option value="<?php echo esc_attr( $time ); ?>"><?php echo esc_html( __( 'from', 'wbk' ) ) . ' ' . wp_date ( $time_format, $time, new DateTimeZone( 'UTC' ) ); ?></option>
+                    <option value="<?php echo esc_attr( $time ); ?>"><?php echo esc_html( __( 'from', 'webba-booking-lite' ) ) . ' ' . wp_date ( $time_format, $time, new DateTimeZone( 'UTC' ) ); ?></option>
 <?php
             }
         }
@@ -91,6 +94,6 @@ for ( $i = 1;  $i <= 7;  $i++ ) {
 }
 ?>
 <div class="wbk-clear"></div>
-<input type="button" class="wbk-button" id="wbk-search_time_btn" value="<?php echo esc_html( __( 'Search time slots', 'wbk' ) ); ?>">
+<input type="button" class="wbk-button" id="wbk-search_time_btn" value="<?php echo esc_html( __( 'Search time slots', 'webba-booking-lite' ) ); ?>">
 <?php
 ?>

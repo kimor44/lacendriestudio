@@ -7,7 +7,7 @@ class WBK_Schedule_Processor
 {
     protected  $locked_days ;
     protected  $unlocked_days ;
-    protected  $locked_timeslots ;
+    protected  $locked_time_slots ;
     protected  $gg_breakers ;
     protected  $ext_breakers ;
     protected  $breakers ;
@@ -97,7 +97,11 @@ class WBK_Schedule_Processor
             $calculate_night_hours = true;
         }
         
-        $night_houts_addon = intval( get_option( 'wbk_night_hours', '0' ) ) * 60 * 60;
+        $night_houts_addon = get_option( 'wbk_night_hours', '0' );
+        if ( trim( $night_houts_addon ) == '' ) {
+            $night_houts_addon = 0;
+        }
+        $night_houts_addon = $night_houts_addon * 60 * 60;
         if ( !WBK_Validator::check_integer( $night_houts_addon, 1, 64800 ) ) {
             $night_houts_addon = 0;
         }
@@ -231,7 +235,12 @@ class WBK_Schedule_Processor
             }
             $start = WBK_Time_Math_Utils::adjust_times( $day, $interval->start, get_option( 'wbk_timezone', 'UTC' ) );
             $end = WBK_Time_Math_Utils::adjust_times( $day, $interval->end, get_option( 'wbk_timezone', 'UTC' ) );
-            for ( $time = $start ;  $time < $end ;  $time += $step ) {
+            for ( $time = $start ;  $time < $end ;  $time = WBK_Time_Math_Utils::adjust_times(
+                $time,
+                $step,
+                get_option( 'wbk_timezone', 'UTC' ),
+                true
+            ) ) {
                 if ( $wbk_disallow_after != '0' ) {
                     if ( $time > time() + get_option( 'wbk_disallow_after' ) * 60 * 60 ) {
                         continue;
@@ -469,6 +478,13 @@ class WBK_Schedule_Processor
                     }
                     
                     $available = $service->get_quantity( $timeslots[$i]->getStart() ) - $booked_count - $connected_quantity - $same_service_quantity - $gg_count - $ext_count + $current_quantity;
+                    if ( $service->get_quantity() > 0 ) {
+                        if ( get_option( 'wbk_appointments_auto_lock_group', 'lock' ) == 'lock' ) {
+                            if ( $connected_quantity > 0 ) {
+                                $available = 0;
+                            }
+                        }
+                    }
                     
                     if ( $max_per_time != '' && is_numeric( $max_per_time ) ) {
                         $remain = $max_per_time - $total_quantity;
@@ -524,59 +540,40 @@ class WBK_Schedule_Processor
                 $timezone_to_use_end = $timezone_to_use;
             }
             
+            $timezone = $timezone_to_use;
             $timeslot_time_string = get_option( 'wbk_timeslot_time_string', 'start' );
+            $current_offset = $offset * -60 - $timezone->getOffset( $date );
             
             if ( $timeslot_time_string == 'start' ) {
                 $time = wp_date( $time_format, $timeslots[$i]->getStart(), $timezone_to_use );
-                
-                if ( get_option( 'wbk_show_local_time', 'disabled' ) == 'enabled' || get_option( 'wbk_show_local_time', 'disabled' ) == 'enabled_only' ) {
-                    $timezone = $timezone_to_use;
-                    $current_offset = $offset * -60 - $timezone->getOffset( $date );
-                    $local_start = $timeslots[$i]->getStart() + $current_offset;
-                    $local_start = wp_date( $time_format, $local_start, $timezone_to_use );
-                    $local_start_date = $timeslots[$i]->getStart() + $current_offset;
-                    $local_start_date = wp_date( $date_format, $local_start_date, $timezone_to_use );
-                    $local_time_str = get_option( 'wbk_local_time_format', 'Your local time:<br>#ds<br>#ts' );
-                    $local_time_str = str_replace( '#ts', $local_start, $local_time_str );
-                    $local_time_str = str_replace( '#ds', $local_start_date, $local_time_str );
-                } else {
-                    $local_time_str = '';
-                }
-            
+                $local_start = $timeslots[$i]->getStart() + $current_offset;
+                $local_time = wp_date( $time_format, $local_start, $timezone_to_use );
             }
             
             $end_minus_gap = $timeslots[$i]->getEnd() - $service->get_interval_between() * 60;
             
             if ( $timeslot_time_string == 'start_end' ) {
-                $time = wp_date( $time_format, $timeslots[$i]->getStart(), $timezone_to_use ) . ' - ' . wp_date( $time_format, $end_minus_gap, $timezone_to_use_end );
-                
-                if ( get_option( 'wbk_show_local_time', 'disabled' ) == 'enabled' || get_option( 'wbk_show_local_time', 'disabled' ) == 'enabled_only' ) {
-                    $timezone = new DateTimeZone( get_option( 'wbk_timezone', 'UTC' ) );
-                    $current_offset = $offset * -60 - $timezone->getOffset( $date );
-                    $local_start = $timeslots[$i]->getStart() + $current_offset;
-                    $local_start = wp_date( $time_format, $local_start, $timezone_to_use );
-                    $local_end = $timeslots[$i]->getStart() + $service->get_duration() * 60 + $current_offset;
-                    $local_end = wp_date( $time_format, $local_end, $timezone_to_use_end );
-                    $local_start_date = $timeslots[$i]->getStart() + $current_offset;
-                    $local_start_date = wp_date( $date_format, $local_start_date, $timezone_to_use );
-                    $local_time_str = get_option( 'wbk_local_time_format', 'Your local time:<br>#ds<br>#ts - #te' );
-                    $local_time_str = str_replace( '#ts', $local_start, $local_time_str );
-                    $local_time_str = str_replace( '#te', $local_end, $local_time_str );
-                    $local_time_str = str_replace( '#ds', $local_start_date, $local_time_str );
-                } else {
-                    $local_time_str = '';
-                }
-            
+                $time = wp_date( $time_format, $timeslots[$i]->getStart(), $timezone_to_use ) . '-' . wp_date( $time_format, $end_minus_gap, $timezone_to_use_end );
+                $local_start = $timeslots[$i]->getStart() + $current_offset;
+                $local_start = wp_date( $time_format, $local_start, $timezone_to_use );
+                $local_end = $timeslots[$i]->getStart() + $service->get_duration() * 60 + $current_offset;
+                $local_end = wp_date( $time_format, $local_end, $timezone_to_use_end );
+                $local_time = $local_start . '-' . $local_end;
             }
             
+            $formated_date = wp_date( $date_format, $timeslots[$i]->getStart(), $timezone_to_use );
+            $formated_date_local = wp_date( $date_format, $timeslots[$i]->getStart(), $timezone_to_use );
+            $timeslots[$i]->set_offset( $current_offset );
             $timeslots[$i]->set_formated_time( $time );
-            $timeslots[$i]->set_formated_time_local( $local_time_str );
+            $timeslots[$i]->set_formated_time_local( $local_time );
+            $timeslots[$i]->set_formated_date( $formated_date );
+            $timeslots[$i]->set_formated_date_local( $formated_date_local );
             $timeslot_time_string_backend = get_option( 'wbk_date_format_time_slot_schedule', 'start' );
             
             if ( $timeslot_time_string_backend == 'start' ) {
                 $time = wp_date( $time_format, $timeslots[$i]->getStart(), $timezone_to_use );
             } else {
-                $time = wp_date( $time_format, $timeslots[$i]->getStart(), $timezone_to_use ) . ' - ' . wp_date( $time_format, $end_minus_gap, $timezone_to_use );
+                $time = "<span class='start-time'>" . wp_date( $time_format, $timeslots[$i]->getStart(), $timezone_to_use ) . "</span>" . '-' . "<span class='end-time'>" . wp_date( $time_format, $end_minus_gap, $timezone_to_use ) . "</span>";
             }
             
             $timeslots[$i]->set_formated_time_backend( $time );
@@ -609,10 +606,21 @@ class WBK_Schedule_Processor
         return $timeslots;
     }
     
-    // get day status working / weekend
-    // 1 - working, 0 - weekend, 2 - limit reached
+    // get day status working / not working
+    // 1 - working, 0 - weekend or out of availability date range, 2 - limit reached
     public function get_day_status( $day, $service_id )
     {
+        $service = new WBK_Service( $service_id );
+        
+        if ( !is_null( $service->get_availability_range() ) && is_array( $service->get_availability_range() ) && count( $service->get_availability_range() ) == 2 ) {
+            $availability_range = $service->get_availability_range();
+            $range_start = strtotime( trim( $availability_range[0] ) );
+            $range_end = strtotime( trim( $availability_range[1] ) );
+            if ( $day < $range_start || $day > $range_end ) {
+                return 0;
+            }
+        }
+        
         // check Lock day if at least one time slot is booked
         $whole_day_checkin = get_option( 'wbk_appointments_lock_day_if_timeslot_booked', '' );
         if ( is_array( $whole_day_checkin ) ) {

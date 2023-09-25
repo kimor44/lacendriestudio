@@ -6,9 +6,9 @@ if( count( $booking_ids ) == 0 ){
     $valid = FALSE;
 } else {
     if( $adding_result > 0 ){
-            $title = get_option( 'wbk_gg_calendar_add_event_success', __( 'Booking data added to Google Calendar.', 'wbk' ) );
+            $title = get_option( 'wbk_gg_calendar_add_event_success', __( 'Booking data added to Google Calendar.', 'webba-booking-lite' ) );
     } else {
-        $title = get_option( 'wbk_gg_calendar_add_event_canceled', __( 'Booking data not added to Google Calendar.', 'wbk' ) );
+        $title = get_option( 'wbk_gg_calendar_add_event_canceled', __( 'Booking data not added to Google Calendar.', 'webba-booking-lite' ) );
     }
     $content = '';
     $valid = TRUE;

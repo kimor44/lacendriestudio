@@ -7,24 +7,22 @@ if( isset( $_GET['schedule-tools'] ) && $_GET['schedule-tools'] == 'true' ){
 }
 
 date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-
-WBK_Renderer::load_template( 'backend/schedule_booking_dialog', array(), true );
 ?>
- 
+
 <div class="wrap">
-	 	</h2>
 	<?php
     	$html = '<div class="wbk-schedule-row">';
-        $html .= '<p class="wbk-section-title">' . esc_html( __( 'Click to open schedule tools:', 'wbk' ) ) . '</p>';
-        $html .= '<a href="'. get_admin_url() . 'admin.php?page=wbk-schedule&schedule-tools=true">' . __( 'Schedule tools', 'wbk' ) . '</a>';
+        $html .= '<p class="wbk-section-title">' . esc_html( __( 'Click to open schedule tools:', 'webba-booking-lite' ) ) . '</p>';
+        $html .= '<a href="'. get_admin_url() . 'admin.php?page=wbk-schedule&schedule-tools=true">' . __( 'Schedule tools', 'webba-booking-lite' ) . '</a>';
         $html .= '</div>';
 
 		$html .= '<div class="wbk-schedule-row">';
+        $select_options = '';
 	 	$arr_ids = WBK_Model_Utils::get_service_ids();
  		if ( count( $arr_ids ) < 1 ) {
- 			$html .= esc_html( _( 'Create at least one service. ', 'wbk' ) );
+ 			$html .= esc_html( __( 'Create at least one service. ', 'webba-booking-lite' ) );
  		} else {
-			$html .= '<p class="wbk-section-title">' . esc_html( __( 'Click to display the service schedule:', 'wbk' ) ) . '</p>';
+			$html .= '<p class="wbk-section-title">' . esc_html( __( 'Click to display the service schedule:', 'webba-booking-lite' ) ) . '</p>';
 	 		foreach ( $arr_ids as $id ) {
 				if ( !current_user_can('manage_options') ) {
 					if ( !WBK_Validator::check_access_to_service( $id ) ) {
@@ -33,18 +31,14 @@ WBK_Renderer::load_template( 'backend/schedule_booking_dialog', array(), true );
 				}
 	 			$service = new WBK_Service( $id );
 				$service_label = $service->get_name();
-				if( get_option( 'wbk_backend_show_category_name', 'disabled' ) == 'enabled' ){
-					$category_names = WBK_Model_Utils::get_category_names_by_service( $service->get_id() );
-					if( $category_names != '' ){
-						$service_label .= ' (' . $category_names . ')';
-					}
-				}
+				 
 	 			$html .= '<a class="button ml5" id="load_schedule_'. esc_attr( $id ) .'" >' . esc_html( $service_label ) . '</a>';
+                $select_options .= '<option value="'. esc_attr( $id ) .'">' . esc_html( $service_label ) . '</option>';
 	 		}
 	 	}
 		$html .= '</div>';
 
-		echo $html;
+		//echo $html;
 
 	?>
 	<div id="days_container">
@@ -52,6 +46,26 @@ WBK_Renderer::load_template( 'backend/schedule_booking_dialog', array(), true );
 	<?php do_action('wbk_backend_schedule_days_container'); ?>
 	<div id="control_container">
 	</div>
+    <a class="button-wb" style="float: right; margin-right: 20px;display: block; clear: both;"  href="<?php echo get_admin_url() . 'admin.php?page=wbk-schedule&tools=true' ?>" data-name="sidebar-schedule-tools" data-js="open-sidebar-wb"><?php echo __( 'Schedule Tools', 'wbk' ); ?></a>
+
+    <div class="schedules-calendar-block-wb">
+        <div class="schedules-calendar-services-wb">
+            <div class="label-wb">Choose services</div>
+            <div class="fields-part-wb">
+                <div class="custom-multiple-select-wb">
+                    <select data-placeholder="Choose a service..." class="schedule-chosen-select" multiple>
+                        <option value=""></option>
+                        <?php echo $select_options; ?>
+                    </select>					
+                </div><!-- /.custom-select-wb -->
+				<div class="btn-link"><a class="wbk-deselect-all"><?php _e( "Deselect all services", 'wbk' ); ?></a></div>
+            </div><!-- /.fields-part-wb -->
+        </div>
+
+        <div class="schedules-calendar-wrapper-wb table-area-wb">
+            <div id="schedules-calendar-wb"></div>
+        </div>
+    </div>
 </div>
 <?php
 date_default_timezone_set( 'UTC' );

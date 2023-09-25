@@ -1,7 +1,7 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 class WBK_Service extends WBK_Model_Object{
-    public function __construct( $id ) {
+    public function __construct( $id = null ) {
         $this->table_name =  get_option('wbk_db_prefix', '' ) . 'wbk_services';
 		parent::__construct( $id );
 
@@ -40,6 +40,7 @@ class WBK_Service extends WBK_Model_Object{
      */
     public function get_duration(){
         if( !isset( $this->fields['duration'] ) ){
+      
             return null;
         }
         return $this->fields['duration'];
@@ -158,6 +159,18 @@ class WBK_Service extends WBK_Model_Object{
         return false;
     }
     /**
+     * get on approval template
+     * @return int id of the on changed template
+     */
+    public function get_on_approval_template(){
+        if( !is_null( $this->fields['approval_template'] ) ){
+            return $this->fields['approval_template'];
+
+        }
+        return false;
+    }
+
+    /**
      * get the service fee
      * @return flot service fee
      */
@@ -197,6 +210,13 @@ class WBK_Service extends WBK_Model_Object{
     public function get_form(){
         if( !is_null( $this->fields['form'] ) ){
             return $this->fields['form'];
+        }
+        return '';
+    }
+
+    public function get_payment_methods(){
+        if( !is_null( $this->fields['payment_methods'] ) ){
+            return $this->fields['payment_methods'];
         }
         return '';
     }

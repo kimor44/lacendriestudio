@@ -4,11 +4,16 @@ $payment_details = $data[0];
 $booking_ids = $data[1];
 ?>
 <div class="wbk_mt_25 wbk-clear-block"></div>
-<hr class="wbk-form-separator"><div id="card-element"></div>
-
 <?php
+if( !wbk_is5() ){
+?>
+<hr class="wbk-form-separator">
+<?php
+}
 $approve_btn = esc_html( get_option( 'wbk_payment_approve_text', '' ) );
 ?>
+
+<div id="card-element"></div>
 <div id="card-errors"></div>
 
 <?php
@@ -283,7 +288,7 @@ foreach( $additional_fields as $key  ) {
             'ZW' => 'Zimbabwe'
         );
 ?>
-        <select name="wbk-<?php echo esc_attr( $key ); ?>"  data-field="<?php echo esc_attr( $key ); ?>" class="wbk-text wbk-input wbk-stripe-additional-field" id="wbk-<?php echo esc_attr( $key ); ?>" autocomplete="false">
+        <select name="wbk-<?php echo esc_attr( $key ); ?>"  data-field="<?php echo esc_attr( $key ); ?>" class="wbk-text wbk-input wbk-stripe-additional-field wbk-select" id="wbk-<?php echo esc_attr( $key ); ?>" autocomplete="false">
 <?php
         foreach( $countries as $key => $value ){
 ?>
@@ -295,5 +300,14 @@ foreach( $additional_fields as $key  ) {
 <?php
     }
 }
+if( !wbk_is5() ){
 ?>
 <input type="button" disabled data-amount="<?php echo esc_attr( round( $safe_value ) ); ?>" data-app-id="<?php echo esc_attr( implode( ',', $booking_ids ) ); ?>" class="wbk-button wbk-width-100 wbk-mt-10-mb-10 wbk-stripe-approval-button"  value="<?php echo esc_attr( $approve_btn );?>" >
+<?php 
+} else{
+?>
+<input type="hidden" class="wbk-input wbk_stripe_payment_method_id" name="payment_method_id">
+<input type="hidden" class="wbk-input wbk_stripe_payment_intent_id" name="payment_intent_id">
+
+<?php
+}

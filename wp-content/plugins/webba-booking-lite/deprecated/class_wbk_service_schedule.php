@@ -120,7 +120,7 @@ class WBK_Service_Schedule
                         $available = $available . '+' . $appointment->getQuantity();
                     }
                     
-                    $available_lablel = get_option( 'wbk_time_slot_available_text', __( 'available', 'wbk' ) );
+                    $available_lablel = get_option( 'wbk_time_slot_available_text', __( 'available', 'webba-booking-lite' ) );
                     
                     if ( $available_lablel == '' ) {
                         global  $wbk_wording ;
@@ -150,7 +150,7 @@ class WBK_Service_Schedule
     {
         $time_format = WBK_Date_Time_Utils::get_time_format();
         $result = array();
-        $result[] = array( __( 'Select time slot', 'wbk' ), 0 );
+        $result[] = array( __( 'Select time slot', 'webba-booking-lite' ), 0 );
         foreach ( $this->timeslots as $timeslot ) {
             
             if ( get_option( 'wbk_date_format_time_slot_schedule', 'start' ) == 'start' ) {
@@ -179,7 +179,7 @@ class WBK_Service_Schedule
                         }
                     
                     }
-                    $available_lablel = get_option( 'wbk_time_slot_available_text', __( 'available', 'wbk' ) );
+                    $available_lablel = get_option( 'wbk_time_slot_available_text', __( 'available', 'webba-booking-lite' ) );
                     
                     if ( $available_lablel == '' ) {
                         global  $wbk_wording ;

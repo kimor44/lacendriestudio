@@ -4,7 +4,7 @@ $service_id = $data[0];
 $service = new WBK_Service( $service_id );
 if( get_option( 'wbk_show_service_description', 'disabled' ) == 'enabled' ){
     $service_description = WBK_Validator::kses( $service->get_description() );
-    $service_description = apply_filters( 'wpml_translate_single_string', $service->get_description( false ), 'wbk', 'Service description id ' . $service->get_id() );
+    $service_description = apply_filters( 'wpml_translate_single_string', $service->get_description( false ), 'webba-booking-lite', 'Service description id ' . $service->get_id() );
     if( function_exists('pll__' ) ){
         $service_description =  pll__( $service_description );
     }
