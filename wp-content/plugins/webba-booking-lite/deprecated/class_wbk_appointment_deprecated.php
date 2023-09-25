@@ -91,7 +91,7 @@ class WBK_Appointment_deprecated extends WBK_Entity {
 			$this->service_id = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect service', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect service', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -107,7 +107,7 @@ class WBK_Appointment_deprecated extends WBK_Entity {
 			$this->email = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect email', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect email', 'webba-booking-lite' ) );
 			return false;
 		}
 
@@ -124,7 +124,7 @@ class WBK_Appointment_deprecated extends WBK_Entity {
 			$this->duration = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect duration', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect duration', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -139,7 +139,7 @@ class WBK_Appointment_deprecated extends WBK_Entity {
 			$this->quantity = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect quantity', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect quantity', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -154,7 +154,7 @@ class WBK_Appointment_deprecated extends WBK_Entity {
 			$this->time_offset = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect time offset', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect time offset', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -169,7 +169,7 @@ class WBK_Appointment_deprecated extends WBK_Entity {
 			$this->time = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect time', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect time', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -192,7 +192,7 @@ class WBK_Appointment_deprecated extends WBK_Entity {
 			$this->day = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect day', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect day', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -207,7 +207,7 @@ class WBK_Appointment_deprecated extends WBK_Entity {
 			$this->attachment = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect attachment', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect attachment', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -272,7 +272,7 @@ class WBK_Appointment_deprecated extends WBK_Entity {
 			$this->phone = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect phone', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect phone', 'webba-booking-lite' ) );
 			return false;
 		}
 	}

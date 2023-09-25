@@ -8,9 +8,12 @@ class WBK_Time_Slot	 {
 	public $status;
 	public $formated_time;
 	public $formated_time_local;
+    public $formated_date;
+    public $formated_date_local;
 	public $formated_time_backend;
 	public $free_places;
 	public $min_quantity;
+	public $offset;
 
 	public function __construct( $start, $end ) {
 		$this->start = absint( $start );
@@ -57,16 +60,36 @@ class WBK_Time_Slot	 {
 		}
 		return FALSE;
 	}
+
 	public function set( $start, $end ){
 		$this->start = $start;
 		$this->end = $end;
 	}
+
 	public function get_formated_time(){
 		return $this->formated_time;
 	}
+
 	public function set_formated_time( $input ){
 		$this->formated_time = $input;
 	}
+
+    public function set_formated_date( $input ){
+		$this->formated_date = $input;
+	}
+
+    public function get_formated_date(){
+		return $this->formated_date;
+	}
+
+    public function set_formated_date_local( $input ){
+		$this->formated_date_local = $input;
+	}
+
+    public function get_formated_date_local(){
+		return $this->formated_date_local;
+	}
+
 	public function get_formated_time_local(){
 		return $this->formated_time_local;
 	}
@@ -88,6 +111,12 @@ class WBK_Time_Slot	 {
 	public function set_min_quantity( $input ){
 		$this->min_quantity = $input;
 	}
+	public function set_offset( $input ){
+		$this->offset = $input;
+	}
+	public function get_offset(){
+		return $this->offset;
+    }
 	public function get_min_quantity(){
 		return $this->min_quantity;
 	}

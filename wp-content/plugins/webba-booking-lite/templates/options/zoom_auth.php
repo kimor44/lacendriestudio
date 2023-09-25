@@ -1,21 +1,23 @@
 <?php
 if ( !defined( 'ABSPATH' ) ) exit;
 
-$slug = $data[0];
-$default_value = $data[1];
-$description = $data[2];
+$slug = $data['id'];
+$args = $data['args'];
+$value = get_option( $slug, $args['default'] );
+$description = $args['description'];
+
 
 $redirect_url =  get_site_url() . '/?wbk_zoom_auth=true';  
 
-if( isset( $data[4] ) ){
-    $dependency = json_encode( $data[4] );
+if( ! empty( $args['dependency'] ) ){
+    $dependency = ' data-dependency = \'' . json_encode( $args['dependency'] ) . '\'';
 } else {
-    $dependency = json_encode( array() );
+    $dependency = '';
 }
-$value = get_option( $slug, $default_value );
 ?>
-<div class='wbk_option_block' data-dependency="<?php echo esc_attr( $dependency ); ?>">
-    <input type="hidden" class="wbk_middle_field" id="<?php echo esc_attr( $slug ); ?>" name="<?php echo esc_attr( $slug ); ?>" value="<?php echo esc_attr( $value ); ?>">
+<div class="field-block-wb"<?php echo $dependency; ?>>
+    <input data-setmsg="<?php echo esc_attr( 'Please, set up Client ID and Client secret');  ?>" type="hidden" class="wbk_middle_field" id="<?php echo esc_attr( $slug ); ?>" name="<?php echo esc_attr( $slug ); ?>" value="<?php echo esc_attr( $value ); ?>">
+    <div class="wbk_option_zoom_msg_holder">
     <?php
         if( get_option( 'wbk_zoom_client_id', '' ) == '' || get_option( 'wbk_zoom_client_id', '' ) == '' ){
             echo esc_html( 'Please, set up Client ID and Client secret');
@@ -24,9 +26,10 @@ $value = get_option( $slug, $default_value );
                 $url = 'https://zoom.us/oauth/authorize?response_type=code&client_id=' . get_option( 'wbk_zoom_client_id', '' ) . '&redirect_uri=' . $redirect_url;
                 echo '<a class="wbk_zoom_authorize"  rel="noopener" href="' . $url . '">Authorize</a>';
             } else{
-                echo '<span style="color:green;" class="wbk_zoom_authorized_label">' . esc_html( 'Authorized', 'wbk' ) . '</span><br>' . '<a class="wbk_zoom_remove_auth" href="#">Remove authorization</a>';
+                echo '<span style="color:green;" class="wbk_zoom_authorized_label">' . esc_html( 'Authorized', 'webba-booking-lite' ) . '</span><br>' . '<a class="wbk_zoom_remove_auth" href="#">Remove authorization</a>';
             }
         }
     ?>
+    </div>
     <p class="description"><?php echo $description; ?></p>
 </div>

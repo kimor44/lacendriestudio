@@ -26,9 +26,18 @@ $date_fomrat = str_replace( 'y', 'yy', $date_fomrat );
 $date_fomrat = str_replace( 'Y', 'yyyy', $date_fomrat );
 $date_fomrat = str_replace( 'S', '', $date_fomrat );
 $date_fomrat = str_replace( 's', '', $date_fomrat );
+$extra = $field->get_extra_data();
 ?>
 
-<div class="plugion_input_container">
+<div class="label-wb">
+    <label for="<?php echo esc_attr( $slug ); ?>"><?php echo esc_attr( $field->get_title() ); ?></label>
+    <?php if ( ! empty( $extra['tooltip'] )  ) { ?>
+        <div class="help-popover-wb" data-js="help-popover-wb">
+            <span class="help-icon-wb" data-js="help-icon-wb">?</span>
+            <div class="help-popover-box-wb" data-js="help-popover-box-wb"><?php echo $extra['tooltip']; ?></div>
+        </div>
+    <?php } ?>
+</div>
+<div class="field-wrapper-wb">
     <input  id="<?php echo esc_attr( $slug ) ?>" name="<?php echo $field->get_name(); ?>" class="plugion_input plugion_input_date plugion_input_text plugion_property_input" type="text" data-default="<?php echo $field->get_default_value();?>" data-dateformat="<?php echo $date_fomrat ?>"  data-setter="date" data-getter="date" data-validation="date" required data-required="<?php echo $field->get_required(); ?>">
-    <label for="<?php echo esc_attr( $slug ) ?>" class="plugion_input_text_label"><?php echo $field->get_title() ?></label>
 </div>

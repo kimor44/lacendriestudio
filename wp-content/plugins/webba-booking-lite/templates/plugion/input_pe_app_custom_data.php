@@ -3,6 +3,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 $field = $data[0];
 $slug = $data[1];
+$extra = $field->get_extra_data();
 
 ?>
 <textarea  id="<?php echo $slug ?>" data-getter="wbk_app_custom_data" data-setter="wbk_app_custom_data"  name="<?php echo $field->get_name(); ?>" data-default="<?php echo $field->get_default_value(); ?>" class="plugion_hidden plugion_property_input" type="text" required data-validation="textarea" data-required="<?php echo $field->get_required(); ?>"></textarea>
@@ -30,12 +31,20 @@ $slug = $data[1];
             }
 ?>
              <div class="<?php echo $container_class; ?>">
-                <div class="plugion_input_container">
-                    <input  id="<?php echo esc_attr( $slug ) . '_' . esc_attr( $id ); ?>" name="<?php echo $field->get_name(); ?>"  data-title="<?php echo esc_attr( $title ) ?>" data-field-id="<?php echo trim( esc_attr( $id ) ) ?>"  class="plugion_input plugion_input_text plugion_simple_text_input wbk_custom_data_item" type="text" required>
-                    <label for="<?php echo esc_attr( $slug ) . '_' . esc_attr( $id );  ?>" class="plugion_input_text_label"><?php echo $title; ?></label>
-                </div>
+                 <div class="label-wb">
+                    <label for="<?php echo esc_attr( $slug ) . '_' . esc_attr( $id );  ?>"><?php echo esc_html( $title ); ?></label>
+                    <?php if ( ! empty( $extra['tooltip'] )  ) { ?>
+                        <div class="help-popover-wb" data-js="help-popover-wb">
+                            <span class="help-icon-wb" data-js="help-icon-wb">?</span>
+                            <div class="help-popover-box-wb" data-js="help-popover-box-wb"><?php echo $extra['tooltip']; ?></div>
+                        </div>
+                    <?php } ?>
+                 </div>
+                 <div class="field-wrapper-wb">
+                     <input  id="<?php echo esc_attr( $slug ) . '_' . esc_attr( $id ); ?>" name="<?php echo $field->get_name(); ?>"  data-title="<?php echo esc_attr( $title ) ?>" data-field-id="<?php echo trim( esc_attr( $id ) ) ?>"  class="plugion_input plugion_input_text plugion_simple_text_input wbk_custom_data_item" type="text" required>
+                 </div>
             </div>
-<?php
+            <?php
         }
     }
 ?>

@@ -11,7 +11,6 @@ if( !$service->is_loaded() ){
 }
  
 if ( $service->get_quantity() > 1 ) {
-
  
     $sp = new WBK_Schedule_Processor();
     if( is_array( $time ) ){    

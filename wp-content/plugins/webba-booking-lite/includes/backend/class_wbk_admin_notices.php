@@ -26,15 +26,6 @@ class WBK_Admin_Notices
         return;
     }
     
-    public static function emailLandingUpdate()
-    {
-        if ( get_option( 'wbk_email_landing', '' ) == '' ) {
-            return '<div class="notice notice-warning is-dismissible"><p>Webba Booking: Please setup the <strong>Notifications landing page</strong> setting in the Email Notifications tab.
-					</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>';
-        }
-        return;
-    }
-    
     public static function updateNotice()
     {
         return '';
@@ -71,24 +62,14 @@ class WBK_Admin_Notices
     
     public static function booking_form_label()
     {
-        
-        if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' ) {
-            $parts = explode( '[split]', get_option( 'wbk_form_label', '[split]' ) );
-            
-            if ( count( $parts ) == 2 ) {
-                $string_to_check = $parts[1];
-            } else {
-                $string_to_check = $parts[0];
-            }
-            
-            if ( strpos( $string_to_check, '#total_amount' ) !== false ) {
-                return '<div class="notice notice-warning is-dismissible"><p>Webba Booking: the format of the option <strong>Booking form label</strong> for the multi-service booking has been changed. The placholder #total_amount should be used before [split].<br>
-				</p><p>Example: #total_amount[split]#service.</p>
-				<p>If you are not using a multi-service, please ignore this message.</p>
-				<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>';
-            }
-        }
+        return '';
+    }
     
+    public static function setup_required()
+    {
+        if ( get_option( 'wbk_sms_setup_required', '' ) == 'true' || get_option( 'wbk_payments_setup_required', '' ) == 'true' || get_option( 'wbk_google_setup_required', '' ) == 'true' ) {
+            WBK_Renderer::load_template( 'backend/after_setup_notice', null );
+        }
     }
 
 }

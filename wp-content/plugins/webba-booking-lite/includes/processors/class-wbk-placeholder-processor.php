@@ -7,14 +7,14 @@ class WBK_Placeholder_Processor {
     public static function process_placeholders( $message, $bookings ){
         
         if( is_numeric( $bookings ) ){
-             
             $booking = new WBK_Booking( $bookings );
             if( !$booking->is_loaded() ){
                 return $message;
             }
-            $message = self::message_placeholder_processing_old( $message, $booking->get_id(), $booking->get_service() );
+            $payment_details = WBK_Price_Processor::get_payment_items( array( $bookings ), get_option( 'wbk_general_tax', '0'), null, false );
+            $message = self::message_placeholder_processing_old( $message, $booking->get_id(), $booking->get_service(), $payment_details );
+            
         } elseif ( is_array( $bookings ) ){
-           
             $price_format = get_option( 'wbk_payment_price_format', '$#price' );
             $total_amount = WBK_Price_Processor::get_total_tax_fees( $bookings );
             $total_amount =  str_replace( '#price', number_format( $total_amount,  get_option( 'wbk_price_fractional', '2' ), get_option( 'wbk_price_separator', '.' ), ''  ), $price_format );
@@ -40,7 +40,6 @@ class WBK_Placeholder_Processor {
                     $token_arr_admin[] = $booking->get('admin_token');
                     $looped_html .= self::message_placeholder_processing_old( $looped, $booking_id, $booking->get_service() );
                     
-
                 }
             } else {
                 return $message;
@@ -56,8 +55,7 @@ class WBK_Placeholder_Processor {
             
             $time_range = wp_date( $time_format, $start, $timezone_to_use ) . ' - ' . wp_date( $time_format, $end, $timezone_to_use );            
             $message = str_replace( '#time_range', $time_range, $message);
-          
-            
+            $message = str_replace( '#selected_count', count( $bookings ), $message );
           
             $token = '';
             $admin_token = '';
@@ -71,22 +69,11 @@ class WBK_Placeholder_Processor {
             if( !$booking->is_loaded() ){
                 return $message;
             }
-
-            $tax_rule = get_option( 'wbk_tax_for_messages', 'paypal' );
-			if( $tax_rule == 'paypal' ){
-				$tax = get_option( 'wbk_paypal_tax', 0 );
-			}
-			if( $tax_rule == 'stripe' ){
-				$tax = get_option( 'wbk_stripe_tax', 0 );
-			}
-			if( $tax_rule == 'none' ){
-				$tax = 0;
-			}
-            $payment_details = WBK_Price_Processor::get_payment_items( $bookings, $tax, null );
-
+ 
+            $payment_details = WBK_Price_Processor::get_payment_items( $bookings, get_option( 'wbk_general_tax', '0'), null, false );
             $message = self::message_placeholder_processing_old( $message, $booking_id, $booking->get_service(), $payment_details, $token, $admin_token );
         }
-        return $message;
+        return stripslashes( $message );
 
     }
 
@@ -114,7 +101,15 @@ class WBK_Placeholder_Processor {
         }
 
         $service_ids = array_unique( $service_ids );
-         
+        
+        if( $category_id == 0 ){
+            $category = '';
+        } else {
+            
+        }
+
+        $html = '';
+
         foreach( $service_ids as $service_id ){
 
             $form_label = $repeatable_part;
@@ -211,9 +206,12 @@ class WBK_Placeholder_Processor {
             if( is_array( $time ) ){
                 $form_label = str_replace( '#selected_count', count( $time ), $form_label );
             }
-            $html .= '<div class="wbk-details-sub-title">' . $form_label . ' </div>';
-            $html .= '<hr class="wbk-form-separator">';
-
+            if( get_option ('wbk_mode', 'webba5' ) !=  'webba5' ){
+                $html .= '<div class="wbk-details-sub-title">' . $form_label . ' </div>';
+            
+            } else {
+                $html = $form_label;
+            }
         }
         return $html;
 
@@ -234,11 +232,14 @@ class WBK_Placeholder_Processor {
     public static function message_placeholder_processing_old( $message, $booking_id, $service_id, $payment_details = null, $multi_token = null, $multi_token_admin = null ){
         $booking = new WBK_Booking( $booking_id );
         if( !$booking->is_loaded() ){
+             
             return;
         }
         $service = new WBK_Service( $service_id );
         if( !$service->is_loaded() ){
+            
             return;
+            
         }
         $current_category = $booking->get('service_category');
         $timezone_to_use = WBK_Date_Time_Utils::convert_default_time_zone_to_utc( $booking->get_start() );
@@ -271,7 +272,7 @@ class WBK_Placeholder_Processor {
 		$payment_link_url = get_option( 'wbk_email_landing', '' );
 		$payment_link_text = get_option( 'wbk_email_landing_text',  '' );
 		$cancel_link_text = get_option( 'wbk_email_landing_text_cancel', '' );
- 		$gg_add_link_text = get_option( 'wbk_email_landing_text_gg_event_add', __( 'Click here to add this event to your Google Calendar.', 'wbk' ) );
+ 		$gg_add_link_text = get_option( 'wbk_email_landing_text_gg_event_add', __( 'Click here to add this event to your Google Calendar.', 'webba-booking-lite' ) );
 
 		$payment_link = '';
 		$cancel_link = '';
@@ -289,20 +290,20 @@ class WBK_Placeholder_Processor {
 			}
 			if( $token != false ){
 				if( $payment_token != '' ){
-					$payment_link = '<a target="_blank" target="_blank" href="' . esc_url( $payment_link_url ) . '?order_payment=' . esc_url( $payment_token ) . '">' . trim( esc_html( $payment_link_text ) ) . '</a>';
+					$payment_link = '<a target="_blank" target="_blank" href="' . esc_url( $payment_link_url ) . '?order_payment=' . esc_html( $payment_token ) . '">' . trim( esc_html( $payment_link_text ) ) . '</a>';
 				} else {
 					$payment_link = '';
 				}
-			    $cancel_link = '<a target="_blank" target="_blank" href="' . esc_url( $payment_link_url )  . '?cancelation=' . esc_url( $token ) . '">' . trim( esc_html( $cancel_link_text ) ) . '</a>';
-			    $gg_add_link = '<a target="_blank" target="_blank" href="' . esc_url( $payment_link_url )  . '?ggeventadd=' . esc_url( $token ) . '">' . trim( esc_html( $gg_add_link_text ) ) . '</a>';
+			    $cancel_link = '<a target="_blank" target="_blank" href="' . esc_url( $payment_link_url )  . '?cancelation=' . esc_html( $token ) . '">' . trim( esc_html( $cancel_link_text ) ) . '</a>';
+			    $gg_add_link = '<a target="_blank" target="_blank" href="' . esc_url( $payment_link_url )  . '?ggeventadd=' . esc_html( $token ) . '">' . trim( esc_html( $gg_add_link_text ) ) . '</a>';
 			 }
 		}
 		// end landing for payment
 		// begin admin management links
 		$admin_cancel_link = '';
 		$admin_approve_link = '';
-		$admin_cancel_link_text = get_option( 'wbk_email_landing_text_cancel_admin', __( 'Click here to cancel this booking.', 'wbk' ) );
-		$admin_approve_link_text =  get_option( 'wbk_email_landing_text_approve_admin', __( 'Click here to approve this booking.', 'wbk' ) );
+		$admin_cancel_link_text = get_option( 'wbk_email_landing_text_cancel_admin', __( 'Click here to cancel this booking.', 'webba-booking-lite' ) );
+		$admin_approve_link_text =  get_option( 'wbk_email_landing_text_approve_admin', __( 'Click here to approve this booking.', 'webba-booking-lite' ) );
 		if( get_option( 'wbk_allow_manage_by_link', 'no' ) == 'yes' ){
 			if( $payment_link_url != '' ){
 				if( $multi_token_admin == null ){
@@ -311,8 +312,8 @@ class WBK_Placeholder_Processor {
 					$token = $multi_token_admin;
 				}
 				if( $token != false ){
-					$admin_cancel_link = '<a target="_blank" target="_blank" href="' . esc_url( $payment_link_url ) . '?admin_cancel=' . esc_url( $token ) . '">' . trim( esc_html( $admin_cancel_link_text ) ) . '</a>';
-				    $admin_approve_link = '<a target="_blank" target="_blank" href="' . esc_url( $payment_link_url ). '?admin_approve=' . esc_url( $token ) . '">' . trim( esc_html( $admin_approve_link_text ) ) . '</a>';
+					$admin_cancel_link = '<a target="_blank" target="_blank" href="' . esc_url( $payment_link_url ) . '?admin_cancel=' . esc_html( $token ) . '">' . trim( esc_html( $admin_cancel_link_text ) ) . '</a>';
+				    $admin_approve_link = '<a target="_blank" target="_blank" href="' . esc_url( $payment_link_url ). '?admin_approve=' . esc_html( $token ) . '">' . trim( esc_html( $admin_approve_link_text ) ) . '</a>';
 				}
 			}
 		}
@@ -397,7 +398,7 @@ class WBK_Placeholder_Processor {
 				}
 			}
 		}
-
+        
 		$message = str_replace( '#attachment', $attachment, $message );
 		$message = str_replace( '#coupon', $coupon_name, $message );
 		$message = str_replace( '#service_description', $service->get('description'), $message );
@@ -444,7 +445,6 @@ class WBK_Placeholder_Processor {
 		$time_range = wp_date( $time_format, $booking->get_start() + $correction,  $timezone_to_use ) . ' - ' . wp_date( $time_format, $booking->get_start() + $correction + $service->get_duration() * 60, $timezone_to_use );
         
        
- 
         $message = str_replace( '#time_range', $time_range , $message );
   
 

@@ -1,3178 +1,2057 @@
 <?php
-
 // Webba Booking options page class
 // check if accessed directly
-if ( !defined( 'ABSPATH' ) ) {
-    exit;
-}
-class WBK_Backend_Options
-{
-    public function __construct()
-    {
-        //set component-specific properties
-        // init settings
-        add_action( 'admin_init', array( $this, 'initSettings' ) );
-        // init scripts
-        add_action( 'admin_enqueue_scripts', array( $this, 'enqueueScripts' ), 20 );
-        // mce plugin
-        add_filter( 'mce_buttons', array( $this, 'wbk_mce_add_button' ) );
-        add_filter( 'mce_external_plugins', array( $this, 'wbk_mce_add_javascript' ) );
-        add_filter( 'wp_default_editor', 'wbk_default_editor' );
-        add_filter( 'tiny_mce_before_init', array( $this, 'customizeEditor' ), 1000 );
-    }
-    
-    public function customizeEditor( $in )
-    {
-        
-        if ( isset( $_GET['page'] ) && $_GET['page'] == 'wbk-options' ) {
-            $in['forced_root_block'] = false;
-            $in['remove_linebreaks'] = false;
-            $in['remove_redundant_brs'] = false;
-            $in['wpautop'] = false;
-            $opts = '*[*]';
-            $in['valid_elements'] = $opts;
-            $in['extended_valid_elements'] = $opts;
-        }
-        
-        return $in;
-    }
-    
-    public function wbk_mce_add_button( $buttons )
-    {
-        
-        if ( isset( $_GET['page'] ) && $_GET['page'] == 'wbk-options' ) {
-            $buttons[] = 'wbk_service_name_button';
-            $buttons[] = 'wbk_category_names_button';
-            $buttons[] = 'wbk_customer_name_button';
-            $buttons[] = 'wbk_appointment_day_button';
-            $buttons[] = 'wbk_appointment_time_button';
-            $buttons[] = 'wbk_appointment_local_day_button';
-            $buttons[] = 'wbk_appointment_local_time_button';
-            $buttons[] = 'wbk_appointment_id_button';
-            $buttons[] = 'wbk_customer_phone_button';
-            $buttons[] = 'wbk_customer_email_button';
-            $buttons[] = 'wbk_customer_comment_button';
-            $buttons[] = 'wbk_customer_custom_button';
-            $buttons[] = 'wbk_items_count';
-            $buttons[] = 'wbk_total_amount';
-            $buttons[] = 'wbk_payment_link';
-            $buttons[] = 'wbk_cancel_link';
-            $buttons[] = 'wbk_tomorrow_agenda';
-            $buttons[] = 'wbk_group_customer';
-            $buttons[] = 'wbk_multiple_loop';
-            $buttons[] = 'wbk_admin_cancel_link';
-            $buttons[] = 'wbk_admin_approve_link';
-            $buttons[] = 'wbk_customer_ggcl_link';
-            $buttons[] = 'wbk_time_range';
-        }
-        
-        return $buttons;
-    }
-    
-    public function wbk_mce_add_javascript( $plugin_array )
-    {
-        if ( isset( $_GET['page'] ) && $_GET['page'] == 'wbk-options' ) {
-            if ( !isset( $plugin_array['wbk_tinynce'] ) ) {
-                $plugin_array['wbk_tinynce'] = WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-tinymce.js';
-            }
-        }
-        return $plugin_array;
-    }
-    
-    // init wp settings api objects for options page
-    public function initSettings()
-    {
-        // General settings section
-        add_settings_section(
-            'wbk_general_settings_section',
-            __( 'General', 'wbk' ),
-            array( $this, 'wbk_general_settings_section_callback' ),
-            'wbk-options'
-        );
-        // Booking rules (ex appointments) section
-        add_settings_section(
-            'wbk_appointments_settings_section',
-            __( 'Booking rules', 'wbk' ),
-            array( $this, 'wbk_appointments_settings_section_callback' ),
-            'wbk-options'
-        );
-        // User interface (ex. mode) section
-        add_settings_section(
-            'wbk_mode_settings_section',
-            __( 'User interface', 'wbk' ),
-            array( $this, 'wbk_mode_settings_section_callback' ),
-            'wbk-options'
-        );
-        // Email notifications section
-        add_settings_section(
-            'wbk_email_settings_section',
-            __( 'Email notifications', 'wbk' ),
-            array( $this, 'wbk_email_settings_section_callback' ),
-            'wbk-options'
-        );
-        // translation settings section
-        add_settings_section(
-            'wbk_translation_settings_section',
-            __( 'Wording / Translation', 'wbk' ),
-            array( $this, 'wbk_translation_settings_section_callback' ),
-            'wbk-options'
-        );
-        add_settings_section(
-            'wbk_interface_settings_section',
-            __( 'Backend interface', 'wbk' ),
-            array( $this, 'wbk_backend_interface_settings_section_callback' ),
-            'wbk-options'
-        );
-        wbk_opt()->add_option(
-            'wbk_start_of_week',
-            'select',
-            __( 'Week starts on', 'wbk' ),
-            '',
-            'wbk_general_settings_section',
-            'monday',
-            array(
-            'sunday'    => __( 'Sunday', 'wbk' ),
-            'monday'    => __( 'Monday', 'wbk' ),
-            'wordpress' => __( 'Wordpress default', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_date_format',
-            'text',
-            __( 'Date format', 'wbk' ),
-            __( 'Set <a href="https://wordpress.org/support/article/formatting-date-and-time/"   rel="noopener" target="_blank" >format</a> or leave empty to use Wordpress Date Format. ', 'wbk' ),
-            'wbk_general_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_time_format',
-            'text',
-            __( 'Time format', 'wbk' ),
-            __( 'Set <a href="https://wordpress.org/support/article/formatting-date-and-time/"   rel="noopener" target="_blank" >format</a> or leave empty to use Wordpress Time Format. ', 'wbk' ),
-            'wbk_general_settings_section',
-            ''
-        );
-        $arr_timezones = array_combine( timezone_identifiers_list(), timezone_identifiers_list() );
-        wbk_opt()->add_option(
-            'wbk_timezone',
-            'select',
-            __( 'Timezone', 'wbk' ),
-            '',
-            'wbk_general_settings_section',
-            '',
-            $arr_timezones
-        );
-        wbk_opt()->add_option(
-            'wbk_mode',
-            'select',
-            __( 'Mode', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'extended',
-            array(
-            'extended' => __( 'Extended', 'wbk' ),
-            'simple'   => __( 'Basic', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_show_suitable_hours',
-            'select',
-            __( 'Show suitable hours', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'yes',
-            array(
-            'yes' => __( 'Yes', 'wbk' ),
-            'no'  => __( 'No', 'wbk' ),
-        ),
-            'wbk-options',
-            'wbk_options',
-            array(
-            'wbk_mode' => 'extended',
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_multi_booking',
-            'select',
-            __( 'Multiple bookings in one session', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'disabled',
-            array(
-            'disabled'     => __( 'Disabled', 'wbk' ),
-            'enabled'      => __( 'Enabled (top bar checkout button)', 'wbk' ),
-            'enabled_slot' => __( 'Enabled (time slot checkout button)', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_phone_mask',
-            'select',
-            __( 'Phone number masked input', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'monday',
-            array(
-            'enabled'             => __( 'jQuery Masked Input Plugin', 'wbk' ),
-            'enabled_mask_plugin' => __( 'jQuery Mask Plugin', 'wbk' ),
-            'disabled'            => __( 'Disabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_phone_format',
-            'text',
-            __( 'Phone format', 'wbk' ),
-            __( 'jQuery Masked Input Plugin format example: (999) 999-9999. "9" represents numeric symbol. ', 'wbk' ) . '<br />' . __( 'jQuery Mask Plugin format example: (000) 000-0000. "0" represents numeric symbol. ', 'wbk' ) . '<a href="https://igorescobar.github.io/jQuery-Mask-Plugin/" rel="noopener" target="_blank">' . __( 'More information', 'wbk' ) . '</a>',
-            'wbk_mode_settings_section',
-            ''
-        );
-        $value = sanitize_text_field( get_option( 'wbk_phone_required', '3' ) );
-        wbk_opt()->add_option(
-            'wbk_phone_required',
-            'select',
-            __( 'Phone field is mandatory', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            '',
-            array(
-            '3' => __( 'Yes', 'wbk' ),
-            '0' => __( 'No', 'wbk' ),
-        )
-        );
-        // booked slots
-        wbk_opt()->add_option(
-            'wbk_show_booked_slots',
-            'select',
-            __( 'Show booked timeslots', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        // auto lock slots
-        wbk_opt()->add_option(
-            'wbk_appointments_auto_lock',
-            'select',
-            __( 'Autolock bookings', 'wbk' ),
-            __( 'Enable this option for auto lock time slots of different services on booking (connection between services).', 'wbk' ),
-            'wbk_appointments_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        // auto lock mode
-        wbk_opt()->add_option(
-            'wbk_appointments_auto_lock_mode',
-            'select',
-            __( 'Perform autolock on', 'wbk' ),
-            '',
-            'wbk_appointments_settings_section',
-            'all',
-            array(
-            'all'        => __( 'All services', 'wbk' ),
-            'categories' => __( 'Services in the same categories', 'wbk' ),
-        ),
-            'wbk-options',
-            'wbk_options',
-            array(
-            'wbk_appointments_auto_lock' => 'enabled',
-        )
-        );
-        // auto lock group
-        wbk_opt()->add_option(
-            'wbk_appointments_auto_lock_group',
-            'select',
-            __( 'Autolock for group booking services', 'wbk' ),
-            '',
-            'wbk_appointments_settings_section',
-            'lock',
-            array(
-            'lock'   => __( 'Lock time slot', 'wbk' ),
-            'reduce' => __( 'Reduce count of available places', 'wbk' ),
-        ),
-            'wbk-options',
-            'wbk_options',
-            array(
-            'wbk_appointments_auto_lock' => 'enabled',
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_auto_lock_allow_unlock',
-            'select',
-            __( 'Allow unlock manually', 'wbk' ),
-            '',
-            'wbk_appointments_settings_section',
-            'allow',
-            array(
-            'allow'    => __( 'Allow', 'wbk' ),
-            'disallow' => __( 'Disallow', 'wbk' ),
-        ),
-            'wbk-options',
-            'wbk_options',
-            array(
-            'wbk_appointments_auto_lock' => 'enabled',
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_default_status',
-            'select',
-            __( 'Default booking status', 'wbk' ),
-            '',
-            'wbk_appointments_settings_section',
-            'approved',
-            array(
-            'approved' => __( 'Approved', 'wbk' ),
-            'pending'  => __( 'Awaiting approval', 'wbk' ),
-        )
-        );
-        // appointment allow payments for
-        wbk_opt()->add_option(
-            'wbk_appointments_allow_payments',
-            'select',
-            __( 'Allow payments only for approved bookings', 'wbk' ),
-            __( 'Enable this option if you want to allow online payments for the approved appointments <b>ONLY</b>.', 'wbk' ),
-            'wbk_appointments_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_allow_coupons',
-            'select',
-            __( 'Coupons', 'wbk' ),
-            '',
-            'wbk_appointments_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_delete_not_paid_mode',
-            'select',
-            __( 'Delete not paid bookings', 'wbk' ),
-            __( 'Enable this option to delete expired (not paid) appointments', 'wbk' ) . '<br />' . __( '*Expiration feature affect only on booking made at the front-end', 'wbk' ) . '<br />' . __( '*Expiration feature will not affect on bookings in the process of payment, except if a customer canceled payment at PayPal side', 'wbk' ),
-            'wbk_appointments_settings_section',
-            'disabled',
-            array(
-            'disabled'   => __( 'Disabled', 'wbk' ),
-            'on_booking' => __( 'Set expiration time on booking', 'wbk' ),
-            'on_approve' => __( 'Set expiration time on approve', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_delete_payment_started',
-            'select',
-            __( 'Delete not paid bookings with started but not finished transaction', 'wbk' ),
-            __( 'IMPORTANT: if you choose "Delete appointments with started transaction", expired appointments will be deleted even if a customer started (and not finished) the payment (initialized transaction).', 'wbk' ),
-            'wbk_appointments_settings_section',
-            'skip',
-            array(
-            'skip'   => __( 'Do not delete appointments with started transaction', 'wbk' ),
-            'delete' => __( 'Delete appointments with started transaction', 'wbk' ),
-        ),
-            'wbk-options',
-            'wbk_options',
-            array(
-            'wbk_appointments_delete_not_paid_mode' => 'on_booking|on_approve',
-        )
-        );
-        // appointment expiration
-        wbk_opt()->add_option(
-            'wbk_appointments_expiration_time',
-            'text',
-            __( 'Time to pay', 'wbk' ),
-            __( 'Expiration time in minutes.', 'wbk' ),
-            'wbk_appointments_settings_section',
-            '60',
-            null,
-            'wbk-options',
-            'wbk_options',
-            array(
-            'wbk_appointments_delete_not_paid_mode' => 'on_booking|on_approve',
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_cancellation_buffer',
-            'text',
-            __( 'Cancellation buffer (minutes)', 'wbk' ),
-            __( 'Buffer time: minimum time to allow a cancellation before the appointment / reservation.', 'wbk' ),
-            'wbk_appointments_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_allow_cancel_paid',
-            'select',
-            __( 'Allow cancellation of paid bookings', 'wbk' ),
-            __( 'Enable this option if you want to allow CUSTOMERS to cancel paid appointments.', 'wbk' ),
-            'wbk_appointments_settings_section',
-            'disallow',
-            array(
-            'allow'    => __( 'Allow', 'wbk' ),
-            'disallow' => __( 'Disallow', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_only_one_per_slot',
-            'select',
-            __( 'Allow only one booking per slot from an email', 'wbk' ),
-            __( 'Enable this option to allow only one appointment per time slot from one email.', 'wbk' ),
-            'wbk_appointments_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_only_one_per_day',
-            'select',
-            __( 'Allow only one booking per day from an email', 'wbk' ),
-            __( 'Enable this option to allow only one appointment per day from one email.', 'wbk' ),
-            'wbk_appointments_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_hide_from_on_booking',
-            'select',
-            __( 'Hide the form after booking', 'wbk' ),
-            __( 'Enable this option to hide all sections of the booking form when booking is done.', 'wbk' ),
-            'wbk_mode_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_only_one_per_service',
-            'select',
-            __( 'Allow only one booking per service from an email', 'wbk' ),
-            __( 'Enable this option to allow only one appointment per service from one email.', 'wbk' ),
-            'wbk_appointments_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_expiration_time_pending',
-            'text',
-            __( 'Delete pending bookings', 'wbk' ),
-            __( 'Automatically delete bookings with the "Awaiting approval" status after X minutes.', 'wbk' ) . '<br>' . __( 'Set 0 to not delete automatically', 'wbk' ),
-            'wbk_appointments_settings_section',
-            '0'
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_autolock_avail_limit',
-            'text',
-            __( 'Maximum number of bookings at a specific time', 'wbk' ),
-            __( 'Maximum number of bookings at given time for the entire system (all services)', 'wbk' ),
-            'wbk_appointments_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_limit_by_day',
-            'text',
-            __( 'Maximum number of bookings on a specific day', 'wbk' ),
-            __( 'Maximum number of bookings of all services at one day', 'wbk' ) . '<br />' . __( 'Leave empty to not set limit', 'wbk' ),
-            'wbk_appointments_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_continuous',
-            'select_multiple',
-            __( 'Continuous bookings', 'wbk' ),
-            __( 'Select the services for which this rule is applied', 'wbk' ),
-            'wbk_mode_settings_section',
-            '',
-            WBK_Model_Utils::get_services()
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_lock_timeslot_if_parital_booked',
-            'select_multiple',
-            __( 'Lock timeslot if at least one place is booked', 'wbk' ),
-            __( 'Select the services for which this rule is applied', 'wbk' ) . '<br>' . __( 'Note: this option is used by front-end booking', 'wbk' ),
-            'wbk_appointments_settings_section',
-            '',
-            WBK_Model_Utils::get_services()
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_lock_day_if_timeslot_booked',
-            'select_multiple',
-            __( 'Lock whole day if at least one timeslot is booked', 'wbk' ),
-            __( 'Select the services for which this rule is applied', 'wbk' ) . '<br>' . __( 'Note: if autolock is enabled, appointments of the connected services are taken into amount.', 'wbk' ),
-            'wbk_appointments_settings_section',
-            '',
-            WBK_Model_Utils::get_services()
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_lock_one_before_and_one_after',
-            'select_multiple',
-            __( 'Lock one timeslot before and after booking', 'wbk' ),
-            __( 'Select the services for which this rule is applied', 'wbk' ) . '<br>' . __( 'Note: if autolock is enabled, bookings of the connected services are taken into amount.', 'wbk' ),
-            'wbk_appointments_settings_section',
-            '',
-            WBK_Model_Utils::get_services()
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_special_hours',
-            'textarea',
-            __( 'Special business hours', 'wbk' ),
-            __( 'Set this option to override the business hours of certain services on specific dates.', 'wbk' ) . '<br />' . __( 'Example 1:', 'wbk' ) . '<br />' . __( '1 21-02-2023 15:00-18:00', 'wbk' ) . '<br />' . __( 'Service with the id equals 1 is available on 21-02-2023 at 15:00-18:00', 'wbk' ) . '<br />' . __( 'Example 2:', 'wbk' ) . '<br />' . __( '21-02-2023 15:00-18:00', 'wbk' ) . '<br />' . __( 'All services are available on 21-02-2023 at 15:00-18:00', 'wbk' ),
-            'wbk_appointments_settings_section',
-            ''
-        );
-        // shortcode checking
-        wbk_opt()->add_option(
-            'wbk_check_short_code',
-            'select',
-            __( 'Load CSS & JS only on the booking page', 'wbk' ),
-            'Enable this option to check if the page has shortcode before booking form initialized.',
-            'wbk_general_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        // show cancel button
-        wbk_opt()->add_option(
-            'wbk_show_cancel_button',
-            'select',
-            __( 'Show cancel button', 'wbk' ),
-            'Enable this option to show cancel button on the steps of the booking process.',
-            'wbk_mode_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        // disable day on all booked
-        wbk_opt()->add_option(
-            'wbk_disable_day_on_all_booked',
-            'select',
-            __( 'Disable booked dates in calendar', 'wbk' ),
-            'Disable date in the calendar if no free time slots found.',
-            'wbk_mode_settings_section',
-            'disabled',
-            array(
-            'disabled'     => __( 'No', 'wbk' ),
-            'enabled'      => __( 'Yes', 'wbk' ),
-            'enabled_plus' => __( 'Yes (including bookings from neighboring services.)', 'wbk' ),
-        )
-        );
-        // holydays
-        wbk_opt()->add_option(
-            'wbk_holydays',
-            'text',
-            __( 'Holidays', 'wbk' ),
-            __( 'Please set this option as a comma-separated list of dates (no spaces). Use the same date format as set in the Backend interface tab.' . '<br />' . 'This option should be used to set only holidays. Do not use it to set weekends (there is a Business hours parameter of services for this purpose)', 'wbk' ),
-            'wbk_general_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_recurring_holidays',
-            'checkbox',
-            __( 'Recurring holidays', 'wbk' ),
-            __( 'Check if you\'d like to make holidays recurring yearly', 'wbk' ),
-            'wbk_general_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_email_customer_book_multiple_mode',
-            'select',
-            __( 'Multiple booking notification mode (customer)', 'wbk' ),
-            '',
-            'wbk_email_settings_section',
-            'foreach',
-            array(
-            'foreach' => __( 'Send Email for each booked time slot', 'wbk' ),
-            'one'     => __( 'Send one Email for all booked time slots', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_email_admin_book_multiple_mode',
-            'select',
-            __( 'Multiple booking notification mode (admin)', 'wbk' ),
-            __( 'IMPORTANT NOTICE: using "Send one Email for all booked time slots" with multi-service booking mode is recommended only if all services has the same e-mail.', 'wbk' ),
-            'wbk_email_settings_section',
-            'foreach',
-            array(
-            'foreach' => __( 'Send Email for each booked time slot', 'wbk' ),
-            'one'     => __( 'Send one Email for all booked time slots', 'wbk' ),
-        )
-        );
-        add_settings_field(
-            'wbk_email_customer_book_status',
-            __( 'Send customer an email (on booking)', 'wbk' ),
-            array( $this, 'render_email_customer_book_status' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_book_status', array( $this, 'validate_email_customer_book_status' ) );
-        add_settings_field(
-            'wbk_email_customer_book_subject',
-            __( 'Subject of an email to a customer (on booking)', 'wbk' ),
-            array( $this, 'render_email_customer_book_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_book_subject', array( $this, 'validate_email_customer_book_subject' ) );
-        add_settings_field(
-            'wbk_email_customer_book_message',
-            __( 'Message to a customer (on booking)', 'wbk' ),
-            array( $this, 'render_email_customer_book_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_book_message', array( $this, 'validate_email_customer_book_message' ) );
-        add_settings_field(
-            'wbk_email_customer_manual_book_subject',
-            __( 'Subject of an email to a customer (on manual booking)', 'wbk' ),
-            array( $this, 'render_email_customer_manual_book_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_manual_book_subject', array( $this, 'validate_email_customer_manual_book_subject' ) );
-        add_settings_field(
-            'wbk_email_customer_manual_book_message',
-            __( 'Message to a customer (on manual booking)', 'wbk' ),
-            array( $this, 'render_email_customer_manual_book_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_manual_book_message', array( $this, 'validate_email_customer_manual_book_message' ) );
-        add_settings_field(
-            'wbk_email_customer_approve_status',
-            __( 'Send customer an email (on approval)', 'wbk' ),
-            array( $this, 'render_email_customer_approve_status' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_approve_status', array( $this, 'validate_email_customer_approve_status' ) );
-        add_settings_field(
-            'wbk_email_customer_approve_subject',
-            __( 'Subject of an email to a customer (on approval)', 'wbk' ),
-            array( $this, 'render_email_customer_approve_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_approve_subject', array( $this, 'validate_email_customer_approve_subject' ) );
-        add_settings_field(
-            'wbk_email_customer_approve_message',
-            __( 'Message to a customer (on approval)', 'wbk' ),
-            array( $this, 'render_email_customer_approve_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_approve_message', array( $this, 'validate_email_customer_approve_message' ) );
-        wbk_opt()->add_option(
-            'wbk_email_customer_approve_copy_status',
-            'checkbox',
-            __( 'Send copy of approval notification to administrator', 'wbk' ),
-            __( 'Check if you\'d like to send copy of approval notification to administrator' . '<br />' . 'Please, note: copy of notification will be sent if appointment is approved by the approval link.', 'wbk' ),
-            'wbk_email_settings_section',
-            ''
-        );
-        // *** BEGIN  apppointment cancellation email (admin)
-        add_settings_field(
-            'wbk_email_adimn_appointment_cancel_status',
-            __( 'Send administrator an email (on cancellation)', 'wbk' ),
-            array( $this, 'render_email_admin_appointment_cancel_status' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_adimn_appointment_cancel_status', array( $this, 'validate_email_admin_appointment_cancel_status' ) );
-        wbk_opt()->add_option(
-            'wbk_email_admin_cancel_multiple_mode',
-            'select',
-            __( 'Multiple booking cancellation notification mode (admin)', 'wbk' ),
-            '',
-            'wbk_email_settings_section',
-            'foreach',
-            array(
-            'foreach' => __( 'Send Email for each booked time slot', 'wbk' ),
-            'one'     => __( 'Send one Email for all booked time slots', 'wbk' ),
-        )
-        );
-        add_settings_field(
-            'wbk_email_adimn_appointment_cancel_subject',
-            __( 'Subject of an email to administrator (on cancellation)', 'wbk' ),
-            array( $this, 'render_email_admin_appointment_cancel_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_adimn_appointment_cancel_subject', array( $this, 'validate_email_admin_appointment_cancel_subject' ) );
-        add_settings_field(
-            'wbk_email_adimn_appointment_cancel_message',
-            __( 'Message to administrator (on cancellation)', 'wbk' ),
-            array( $this, 'render_email_admin_appointment_cancel_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_adimn_appointment_cancel_message', array( $this, 'validate_email_admin_appointment_cancel_message' ) );
-        // *** END  apppointment cancellation email (admin)
-        // *** BEGIN appointment cancellation email (customer)
-        add_settings_field(
-            'wbk_email_customer_appointment_cancel_status',
-            __( 'Send customer an email (on cancellation)', 'wbk' ),
-            array( $this, 'render_email_customer_appointment_cancel_status' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_appointment_cancel_status', array( $this, 'validate_email_customer_appointment_cancel_status' ) );
-        wbk_opt()->add_option(
-            'wbk_email_customer_cancel_multiple_mode',
-            'select',
-            __( 'Multiple booking cancellation notification mode (customer)', 'wbk' ),
-            '',
-            'wbk_email_settings_section',
-            'foreach',
-            array(
-            'foreach' => __( 'Send Email for each cancelled time slot', 'wbk' ),
-            'one'     => __( 'Send one Email for all cancelled time slots', 'wbk' ),
-        )
-        );
-        add_settings_field(
-            'wbk_email_customer_appointment_cancel_subject',
-            __( 'Subject of an email to customer (on cancellation)', 'wbk' ),
-            array( $this, 'render_email_customer_appointment_cancel_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_appointment_cancel_subject', array( $this, 'validate_email_customer_appointment_cancel_subject' ) );
-        add_settings_field(
-            'wbk_email_customer_appointment_cancel_message',
-            __( 'Message to customer (on cancellation by administrator)', 'wbk' ),
-            array( $this, 'render_email_customer_appointment_cancel_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_appointment_cancel_message', array( $this, 'validate_email_customer_appointment_cancel_message' ) );
-        add_settings_field(
-            'wbk_email_customer_bycustomer_appointment_cancel_message',
-            __( 'Message to customer (on cancellation by customer)', 'wbk' ),
-            array( $this, 'render_email_customer_bycustomer_appointment_cancel_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_bycustomer_appointment_cancel_message', array( $this, 'validate_email_customer_bycustomer_appointment_cancel_message' ) );
-        add_settings_field(
-            'wbk_email_secondary_book_status',
-            __( 'Send an email to other customers from the group (if provided)', 'wbk' ),
-            array( $this, 'render_email_secondary_book_status' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_secondary_book_status', array( $this, 'validate_email_secondary_book_status' ) );
-        add_settings_field(
-            'wbk_email_secondary_book_subject',
-            __( 'Subject of an email to a customers from the group', 'wbk' ),
-            array( $this, 'render_email_secondary_book_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_secondary_book_subject', array( $this, 'validate_email_secondary_book_subject' ) );
-        add_settings_field(
-            'wbk_email_secondary_book_message',
-            __( 'Message to a customers from the group', 'wbk' ),
-            array( $this, 'render_email_secondary_book_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_secondary_book_message', array( $this, 'validate_email_secondary_book_message' ) );
-        add_settings_field(
-            'wbk_email_admin_book_status',
-            __( 'Send administrator an email (on booking)', 'wbk' ),
-            array( $this, 'render_email_admin_book_status' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_admin_book_status', array( $this, 'validate_email_admin_book_status' ) );
-        add_settings_field(
-            'wbk_email_admin_book_subject',
-            __( 'Subject of an email to an administrator (on booking)', 'wbk' ),
-            array( $this, 'render_email_admin_book_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_admin_book_subject', array( $this, 'validate_email_admin_book_subject' ) );
-        add_settings_field(
-            'wbk_email_admin_book_message',
-            __( 'Message to an administrator (on booking)', 'wbk' ),
-            array( $this, 'render_email_admin_book_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_admin_book_message', array( $this, 'validate_email_admin_book_message' ) );
-        add_settings_field(
-            'wbk_email_admin_paymentrcvd_status',
-            __( 'Send administrator an email (on payment received)', 'wbk' ),
-            array( $this, 'render_email_admin_paymentrecvd_status' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_admin_paymentrcvd_status', array( $this, 'validate_email_admin_paymentrcvd_status' ) );
-        add_settings_field(
-            'wbk_email_admin_paymentrcvd_subject',
-            __( 'Subject of an email to an administrator (on payment received)', 'wbk' ),
-            array( $this, 'render_email_admin_paymentrcvd_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_admin_paymentrcvd_subject', array( $this, 'validate_email_admin_paymentrcvd_subject' ) );
-        add_settings_field(
-            'wbk_email_admin_paymentrcvd_message',
-            __( 'Message to an administrator (on payment received)', 'wbk' ),
-            array( $this, 'render_email_admin_paymentrcvd_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_admin_paymentrcvd_message', array( $this, 'validate_email_admin_paymentrcvd_message' ) );
-        add_settings_field(
-            'wbk_email_customer_paymentrcvd_status',
-            __( 'Send customer an email (on payment received)', 'wbk' ),
-            array( $this, 'render_email_customer_paymentrecvd_status' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_paymentrcvd_status', array( $this, 'validate_email_customer_paymentrcvd_status' ) );
-        add_settings_field(
-            'wbk_email_customer_paymentrcvd_subject',
-            __( 'Subject of an email to to a customer (on payment received)', 'wbk' ),
-            array( $this, 'render_email_customer_paymentrcvd_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_paymentrcvd_subject', array( $this, 'validate_email_customer_paymentrcvd_subject' ) );
-        add_settings_field(
-            'wbk_email_customer_paymentrcvd_message',
-            __( 'Message to a customer (on payment received)', 'wbk' ),
-            array( $this, 'render_email_customer_paymentrcvd_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_paymentrcvd_message', array( $this, 'validate_email_customer_paymentrcvd_message' ) );
-        add_settings_field(
-            'wbk_email_customer_arrived_status',
-            __( 'Send notification when status is changed to Arrived', 'wbk' ),
-            array( $this, 'render_email_customer_arrived_status' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_arrived_status', array( $this, 'validate_email_customer_arrived_status' ) );
-        add_settings_field(
-            'wbk_email_customer_arrived_subject',
-            __( 'Subject of an email to a customer (on status changed to arrived)', 'wbk' ),
-            array( $this, 'render_email_customer_arrived_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_arrived_subject', array( $this, 'validate_email_customer_arrived_subject' ) );
-        add_settings_field(
-            'wbk_email_customer_arrived_message',
-            __( 'Message to a customer (on status is changed to arrived)', 'wbk' ),
-            array( $this, 'render_email_customer_arrived_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_arrived_message', array( $this, 'validate_email_customer_arrived_message' ) );
-        add_settings_field(
-            'wbk_email_admin_daily_status',
-            __( 'Send administrator reminders', 'wbk' ),
-            array( $this, 'render_email_admin_daily_status' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_admin_daily_status', array( $this, 'validate_email_admin_daily_status' ) );
-        //
-        add_settings_field(
-            'wbk_email_admin_daily_subject',
-            __( 'Subject of administrator reminders', 'wbk' ),
-            array( $this, 'render_email_admin_daily_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_admin_daily_subject', array( $this, 'validate_email_admin_daily_subject' ) );
-        add_settings_field(
-            'wbk_email_admin_daily_message',
-            __( 'Administrator reminders message', 'wbk' ),
-            array( $this, 'render_email_admin_daily_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_admin_daily_message', array( $this, 'validate_email_admin_daily_message' ) );
-        // customer daily
-        add_settings_field(
-            'wbk_email_customer_daily_status',
-            __( 'Send customer reminders', 'wbk' ),
-            array( $this, 'render_email_customer_daily_status' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_daily_status', array( $this, 'validate_email_customer_daily_status' ) );
-        wbk_opt()->add_option(
-            'wbk_email_reminder_days',
-            'text',
-            __( 'Send reminders to customers in X days', 'wbk' ),
-            __( 'Number of days: ' . '<br />' . 'Today: 0; ' . 'Tomorrow: 1; ' . 'Day after tomorrow: 2; ' . 'etc.', 'wbk' ),
-            'wbk_email_settings_section',
-            '1'
-        );
-        add_settings_field(
-            'wbk_email_customer_daily_subject',
-            __( 'Subject of customer reminders', 'wbk' ),
-            array( $this, 'render_email_customer_daily_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_daily_subject', array( $this, 'validate_email_customer_daily_subject' ) );
-        add_settings_field(
-            'wbk_email_customer_daily_message',
-            __( 'Customer reminders message', 'wbk' ),
-            array( $this, 'render_email_customer_daily_message' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_daily_message', array( $this, 'validate_email_customer_daily_message' ) );
-        // customer daily end
-        $format = WBK_Date_Time_Utils::get_time_format();
-        date_default_timezone_set( 'UTC' );
-        $data_time = [];
-        $data_keys = [];
-        for ( $i = 0 ;  $i < 86400 ;  $i += 600 ) {
-            array_push( $data_time, wp_date( $format, $i, new DateTimeZone( date_default_timezone_get() ) ) );
-            array_push( $data_keys, $i );
-        }
-        $data_time = array_combine( $data_keys, $data_time );
-        wbk_opt()->add_option(
-            'wbk_email_admin_daily_time',
-            'select',
-            __( 'Reminder sending time', 'wbk' ),
-            __( 'Current local time: ', 'wbk' ) . wp_date( $format, time(), new DateTimeZone( get_option( 'wbk_timezone', 'UTC' ) ) ),
-            'wbk_general_settings_section',
-            'disabled',
-            $data_time
-        );
-        wbk_opt()->add_option(
-            'wbk_email_reminders_only_for_approved',
-            'checkbox',
-            __( 'Send reminders only for approved appointments', 'wbk' ),
-            __( 'Check if you\'d like to send reminders only for approved appointments.', 'wbk' ),
-            'wbk_email_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_email_customer_send_invoice',
-            'select',
-            __( 'Send invoice to customer', 'wbk' ),
-            __( 'Use this option to control the dispatch of the invoice in parallel with the notification.', 'wbk' ),
-            'wbk_email_settings_section',
-            'disabled',
-            array(
-            'disabled'   => __( 'Do not send invoice', 'wbk' ),
-            'onbooking'  => __( 'Send invoice on booking', 'wbk' ),
-            'onapproval' => __( 'Send invoice on approval', 'wbk' ),
-            'onpayment'  => __( 'Send invoice on payment complete', 'wbk' ),
-        )
-        );
-        add_settings_field(
-            'wbk_email_customer_invoice_subject',
-            __( 'Invoice email subject', 'wbk' ),
-            array( $this, 'render_email_customer_invoice_subject' ),
-            'wbk-options',
-            'wbk_email_settings_section',
-            array()
-        );
-        register_setting( 'wbk_options', 'wbk_email_customer_invoice_subject', array( $this, 'validate_email_customer_invoice_subject' ) );
-        wbk_opt()->add_option(
-            'wbk_email_current_invoice_number',
-            'text',
-            __( 'Current invoice number', 'wbk' ),
-            __( 'Set the initial number of invoice. Placeholder for notifications: #invoice_number' . '<br />' . 'Each time a customer pay with PayPal or Stripe, the value of this option will be increased by one.', 'wbk' ),
-            'wbk_email_settings_section',
-            '1'
-        );
-        wbk_opt()->add_option(
-            'wbk_email_on_update_booking_subject',
-            'text',
-            __( 'Notification subject (when booking changes)', 'wbk' ),
-            '',
-            'wbk_email_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_email_send_invoice_copy',
-            'checkbox',
-            __( 'Send copies of invoices to the administrator', 'wbk' ),
-            __( 'Check if you\'d like to send copies of invoices to administrator', 'wbk' ),
-            'wbk_email_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_email_override_replyto',
-            'checkbox',
-            __( 'Override default reply-to headers with booking-related data', 'wbk' ),
-            __( 'Check to override', 'wbk' ),
-            'wbk_email_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_from_name',
-            'text',
-            __( 'From: name', 'wbk' ),
-            '',
-            'wbk_email_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_from_email',
-            'text',
-            __( 'From: email', 'wbk' ),
-            '',
-            'wbk_email_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_super_admin_email',
-            'text',
-            __( 'Send copies of service notifications to addresses', 'wbk' ),
-            '',
-            'wbk_email_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_email_landing',
-            'text',
-            __( 'Notifications landing page', 'wbk' ),
-            __( 'This page will be used as a landing for payment or cancellation. Page should contain [webba_email_landing] or [webba_booking] shortcode.', 'wbk' ),
-            'wbk_email_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_multi_booking_max',
-            'text',
-            __( 'Maximum number of bookings in one session', 'wbk' ),
-            __( 'Default value can be overriden in the service settings', 'wbk' ),
-            'wbk_mode_settings_section',
-            '',
-            null,
-            'wbk-options',
-            'wbk_options',
-            array(
-            'wbk_multi_booking' => 'enabled|enabled_slot',
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_skip_timeslot_select',
-            'select',
-            __( 'Skip timeslot selection', 'wbk' ),
-            __( 'Skip time slot selection if only one time slot is available.' . '<br />' . 'IMPORTANT: enable this option only with Basic mode and multiple booking disabled.' . '<br />' . 'Make sure your service schedule includes ONLY ONE time slot available on a day.', 'wbk' ),
-            'wbk_mode_settings_section',
-            'disabled',
-            array(
-            'disabled' => __( 'Disabled', 'wbk' ),
-            'enabled'  => __( 'Enabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_places_selection_mode',
-            'select',
-            __( 'Multiple seat selection mode', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'normal',
-            array(
-            'normal'            => __( 'Let users select count', 'wbk' ),
-            'normal_no_default' => __( 'Let users select count (no default value)', 'wbk' ),
-            '1'                 => __( 'Allow select only one place', 'wbk' ),
-            'max'               => __( 'Allow select only maximum places', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_show_service_description',
-            'select',
-            __( 'Show service description', 'wbk' ),
-            __( 'Enable this option to show service description below the service select on the frontend.' ),
-            'wbk_mode_settings_section',
-            'disabled',
-            array(
-            'disabled' => __( 'Disabled', 'wbk' ),
-            'enabled'  => __( 'Enabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_range_selection',
-            'select',
-            __( 'Range selection', 'wbk' ),
-            __( 'Enable this option to allow range selection in multiple booking mode', 'wbk' ),
-            'wbk_mode_settings_section',
-            'disabled',
-            array(
-            'disabled' => __( 'Disabled', 'wbk' ),
-            'enabled'  => __( 'Enabled', 'wbk' ),
-        ),
-            'wbk-options',
-            'wbk_options',
-            array(
-            'wbk_multi_booking' => 'enabled|enabled_slot',
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_date_input',
-            'select',
-            __( 'Date input', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'popup',
-            array(
-            'popup'    => __( 'Popup', 'wbk' ),
-            'classic'  => __( 'Classic', 'wbk' ),
-            'dropdown' => __( 'Dropdown', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_date_input_dropdown_count',
-            'text',
-            __( 'Number of dates in the dropdown input', 'wbk' ),
-            __( 'Used only for dropdown date select.', 'wbk' ),
-            'wbk_mode_settings_section',
-            '30',
-            'null',
-            'wbk-options',
-            'wbk_options',
-            array(
-            'wbk_date_input' => 'dropdown',
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_avaiability_popup_calendar',
-            'text',
-            __( 'Number of dates in the calendar', 'wbk' ),
-            __( 'IMPORTANT: this option is used for single-service booking only', 'wbk' ),
-            'wbk_mode_settings_section',
-            '360'
-        );
-        wbk_opt()->add_option(
-            'wbk_auto_select_first_date',
-            'select',
-            __( 'Automatically select first available date', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'disabled',
-            array(
-            'disabled' => __( 'Disabled', 'wbk' ),
-            'enabled'  => __( 'Enabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_timeslot_time_string',
-            'select',
-            __( 'Timeslot time format', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'start',
-            array(
-            'start'     => __( 'Start', 'wbk' ),
-            'start_end' => __( 'Start', 'wbk' ) . ' - ' . __( 'end', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_timeslot_format',
-            'select',
-            __( 'Timeslot format', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'detailed',
-            array(
-            'detailed'  => __( 'Show details and BOOK button', 'wbk' ),
-            'time_only' => __( 'Show only time button', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_show_local_time',
-            'select',
-            __( 'Show the user\'s local time in a timeslot', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'disabled',
-            array(
-            'disabled'     => __( 'Disabled', 'wbk' ),
-            'enabled'      => __( 'Enabled', 'wbk' ),
-            'enabled_only' => __( 'Enabled (show only local time)', 'wbk' ),
-        )
-        );
-        // csv delimiter
-        wbk_opt()->add_option(
-            'wbk_csv_delimiter',
-            'select',
-            __( 'CSV delimiter', 'wbk' ),
-            __( 'If your date format does not include comma, use a comma in this option.<br>Otherwise use semicolon.', 'wbk' ),
-            'wbk_general_settings_section',
-            'comma',
-            array(
-            'comma'     => __( 'Comma', 'wbk' ),
-            'semicolon' => __( 'Semicolon', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_jquery_nc',
-            'select',
-            __( 'jQuery no-conflict mode', 'wbk' ),
-            __( 'If date picker does not work, enabling this option may be a possible solution.', 'wbk' ),
-            'wbk_general_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_pickadate_load',
-            'select',
-            __( 'Load Pickadate javascript', 'wbk' ),
-            __( 'Set "no" if there are plugins in your WordPress that are using the pickadate date picker.', 'wbk' ),
-            'wbk_general_settings_section',
-            'yes',
-            array(
-            'yes' => __( 'Yes', 'wbk' ),
-            'no'  => __( 'No', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_allow_manage_by_link',
-            'select',
-            __( 'Allow cancellation or approval by link', 'wbk' ),
-            __( 'Set "yes" to allow administrator to cancel or approve appointment with the link sent in notification.', 'wbk' ),
-            'wbk_mode_settings_section',
-            'no',
-            array(
-            'yes' => __( 'Yes', 'wbk' ),
-            'no'  => __( 'No', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_tax_for_messages',
-            'select',
-            __( 'Tax used for the #total_amount placeholder', 'wbk' ),
-            __( 'This option is used when calculating the total amount with #total_amount placeholders in email and interface messages', 'wbk' ),
-            'wbk_general_settings_section',
-            'paypal',
-            array(
-            'paypal' => __( 'PayPal tax option', 'wbk' ),
-            'stripe' => __( 'Stripe tax option', 'wbk' ),
-            'none'   => __( 'Do not include tax', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_do_not_tax_deposit',
-            'checkbox',
-            __( 'Do not tax the deposit (service fee)', 'wbk' ),
-            __( 'If enabled, deposit part of the amount will be not taxed.<br>Important notice: do not use subtotal and tax placeholders when this option is enabled.<br>', 'wbk' ),
-            'wbk_general_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_price_fractional',
-            'text',
-            __( 'Number of digits in the fractional part of the price', 'wbk' ),
-            __( 'Examples: 1 - 25.1, 2 - 25.10', 'wbk' ),
-            'wbk_general_settings_section',
-            '2'
-        );
-        wbk_opt()->add_option(
-            'wbk_price_separator',
-            'text',
-            __( 'Price fraction separator', 'wbk' ),
-            __( 'Examples: . - 25.50, , - 25,50', 'wbk' ),
-            'wbk_general_settings_section',
-            '.'
-        );
-        wbk_opt()->add_option(
-            'wbk_scroll_container',
-            'text',
-            __( 'Scroll container', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'html, body'
-        );
-        wbk_opt()->add_option(
-            'wbk_scroll_value',
-            'text',
-            __( 'Scroll value', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            '120'
-        );
-        wbk_opt()->add_option(
-            'wbk_general_dynamic_placeholders',
-            'text',
-            __( 'List of dynamic placeholders', 'wbk' ),
-            __( 'Specify a comma-separated list of placeholders that should be removed from the string unless they have been replaced with values. This option is useful if you are using different custom fields for services and as a result some custom field placeholders are not replaced.', 'wbk' ),
-            'wbk_general_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_load_js_in_footer',
-            'checkbox',
-            __( 'Load javascript files in footer', 'wbk' ),
-            'Enabling this option may increase page loading time in some cases.',
-            'wbk_general_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_service_label',
-            'text',
-            __( 'Select service label', 'wbk' ),
-            __( 'Service frontend label', 'wbk' ),
-            'wbk_translation_settings_section',
-            __( 'Select a service', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_category_label',
-            'text',
-            __( 'Select category label', 'wbk' ),
-            __( 'Category frontend label', 'wbk' ),
-            'wbk_translation_settings_section',
-            __( 'Select category', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_date_extended_label',
-            'text',
-            __( 'Select date label (extended mode)', 'wbk' ),
-            __( 'Date frontend label', 'wbk' ),
-            'wbk_translation_settings_section',
-            __( 'Book an appointment on or after', 'wbk' ),
-            array(
-            'no_html' => true,
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_date_basic_label',
-            'text',
-            __( 'Select date label (basic mode)', 'wbk' ),
-            __( 'Date frontend label', 'wbk' ),
-            'wbk_translation_settings_section',
-            __( 'Book an appointment on', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_date_service_placeholder',
-            'text_alfa_numeric',
-            __( 'Service dropdown placeholder', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'select...', 'wbk' ),
-            array(
-            'no_html' => true,
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_date_input_placeholder',
-            'text_alfa_numeric',
-            __( 'Select date input placeholder', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'date', 'wbk' ),
-            array(
-            'no_html' => true,
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_hours_label',
-            'text',
-            __( 'Select hours label', 'wbk' ),
-            __( 'Hours frontend label', 'wbk' ),
-            'wbk_translation_settings_section',
-            __( 'Suitable hours', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_slots_label',
-            'text',
-            __( 'Select timeslots label', 'wbk' ),
-            __( 'Timeslots frontend label', 'wbk' ),
-            'wbk_translation_settings_section',
-            __( 'Available timeslots', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_form_label',
-            'text',
-            __( 'Booking form label', 'wbk' ),
-            __( 'Message before the booking form', 'wbk' ) . '<br />' . __( 'Available placeholders', 'wbk' ) . ': #service (service name), #date (appointment date), #time (appointment time), #dt (appointment date and time).' . '<br />' . '#drt (appointment date and time with new line), #dre (appointment date and time range with new line), #price (service price for a single timeslot), #total_amount (price for selected timeslot(s) + tax), #selected_count (total count of timeslots), #local (local time), #dlocal (local date)' . '<br />' . '#sd (single day in multiple selection mode), #dnl (dates with new line)' . '<br />' . __( 'For the multi-service mode use [split] placeholder to split the string in 2 parts: static and repeatable', 'wbk' ) . '<br />' . '#range (time range in multiple selection mode), #lrange (local time range in multiple selection mode)',
-            'wbk_translation_settings_section',
-            __( 'You are booking #service on #date at #time <br>Please, fill in a form:', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_book_items_quantity_label',
-            'text',
-            __( 'Booking items count label', 'wbk' ),
-            __( 'Booking items count frontend label', 'wbk' ) . '<br />' . __( 'Available placeholders: ', 'wbk' ) . '#service',
-            'wbk_translation_settings_section',
-            __( 'Booking items count', 'wbk' )
-        );
-        // booked slot
-        wbk_opt()->add_option(
-            'wbk_booked_text',
-            'text',
-            __( 'Booked timeslot text', 'wbk' ),
-            __( 'Text on booked timeslot. Available placeholders: #username, #time.', 'wbk' ) . '<br />' . __( 'Since version 3.3.61 you can use general placeholders in this option. More information: ', 'wbk' ) . '<a href="https://webba-booking.com/documentation/placeholders/" rel="noopener" target="_blank" >' . __( 'Placeholders', 'wbk' ) . '</a>.',
-            'wbk_translation_settings_section',
-            __( 'Booked', 'wbk' )
-        );
-        // format of local time (in timeslots)
-        // added since 3.1.1
-        wbk_opt()->add_option(
-            'wbk_local_time_format',
-            'text',
-            __( 'Local time format', 'wbk' ),
-            __( 'Available placeholders', 'wbk' ) . ':  #ts (start local time), #te (end local time), #ds (local date).',
-            'wbk_translation_settings_section',
-            __( 'Your local time', 'wbk' ) . ':<br>#ds<br>#ts'
-        );
-        wbk_opt()->add_option(
-            'wbk_server_time_format',
-            'text',
-            __( 'Text before the time in timeslot', 'wbk' ),
-            __( 'Available placeholders', 'wbk' ) . ':  #ts (start local time), #te (end local time), #ds (local date).',
-            'wbk_translation_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_server_time_format2',
-            'text',
-            __( 'Text after the time in timeslot', 'wbk' ),
-            __( 'Available placeholders', 'wbk' ) . ':  #ts (start local time), #te (end local time), #ds (local date).',
-            'wbk_translation_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_time_slot_available_text',
-            'text',
-            __( 'Availability label', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'available', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_book_text_timeslot',
-            'text_alfa_numeric',
-            __( 'Book button text (timeslot)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Book', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_deselect_text_timeslot',
-            'text',
-            __( 'Deselect text (timeslot)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_book_text_form',
-            'text',
-            __( 'Book button text (form)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Book', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_name_label',
-            'text',
-            __( 'Name label (booking form)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Name', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_email_label',
-            'text',
-            __( 'Email label (booking form)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Email', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_phone_label',
-            'text',
-            __( 'Phone label (booking form)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Phone', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_comment_label',
-            'text',
-            __( 'Comment label (booking form)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Comment', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_book_thanks_message',
-            'editor',
-            __( 'Booking done message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Thanks for booking appointment', 'wbk' ),
-            '',
-            'wbk-options',
-            'wbk_options'
-        );
-        wbk_opt()->add_option(
-            'wbk_book_not_found_message',
-            'text',
-            __( 'Timeslots not found message', 'wbk' ),
-            __( 'Timeslots not found message', 'wbk' ),
-            'wbk_translation_settings_section',
-            __( 'Unfortunately we were unable to meet your search criteria. Please change the criteria and try again.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_payment_pay_with_paypal_btn_text',
-            'text_alfa_numeric',
-            __( 'PayPal payment button text', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Pay now with PayPal', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_payment_details_title',
-            'text_alfa_numeric',
-            __( 'Payment details title', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Payment details', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_payment_item_name',
-            'text',
-            __( 'Payment item name', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            '#service_name on #appointment_day at #appointment_time'
-        );
-        wbk_opt()->add_option(
-            'wbk_payment_price_format',
-            'text',
-            __( 'Price format', 'wbk' ),
-            __( 'Required placeholder: #price.', 'wbk' ),
-            'wbk_translation_settings_section',
-            '$#price'
-        );
-        wbk_opt()->add_option(
-            'wbk_payment_subtotal_title',
-            'text',
-            __( 'Subtotal title', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Subtotal', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_payment_total_title',
-            'text',
-            __( 'Total title', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Total', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_nothing_to_pay_message',
-            'text',
-            __( 'Message if no booking available for payment found', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'There are no bookings available for payment.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_show_locked_as_booked',
-            'select',
-            __( 'Show locked timeslots as booked', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'no',
-            array(
-            'yes' => __( 'Yes', 'wbk' ),
-            'no'  => __( 'No', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_allow_attachemnt',
-            'select',
-            __( 'Allow attachments', 'wbk' ),
-            __( 'Enable this option to allow users attach files in the booking form.<br>File input field needs to be included in the custom form. More information here: <a href="https://webba-booking.com/documentation/set-up-frontend-booking-process/using-custom-fields-in-the-booking-form/" target="_blank" rel="noopener noreferrer">Using custom fields in the booking form
-</a>', 'wbk' ),
-            'wbk_general_settings_section',
-            'no',
-            array(
-            'yes' => __( 'Yes', 'wbk' ),
-            'no'  => __( 'No', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_delete_attachemnt',
-            'select',
-            __( 'Automatically delete attachments', 'wbk' ),
-            __( 'It is highly recommended that you set this option to Yes to delete the attachment as soon as the notification is sent.', 'wbk' ),
-            'wbk_general_settings_section',
-            'yes',
-            array(
-            'yes' => __( 'Yes', 'wbk' ),
-            'no'  => __( 'No', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_order_service_by',
-            'select',
-            __( 'Order service by', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            'a-z',
-            array(
-            'a-z'        => __( 'A-Z', 'wbk' ),
-            'priority'   => __( 'Priority (descending)', 'wbk' ),
-            'priority_a' => __( 'Priority (ascending)', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_night_hours',
-            'text',
-            __( 'Show night hours timeslots in previous day', 'wbk' ),
-            __( 'The number of hours after midnight.', 'wbk' ),
-            'wbk_mode_settings_section',
-            '0'
-        );
-        wbk_opt()->add_option(
-            'wbk_allow_cross_midnight',
-            'checkbox',
-            __( 'Allow timeslots to cross midnight', 'wbk' ),
-            '',
-            'wbk_appointments_settings_section',
-            ''
-        );
-        /*
-        		mixed with single servie option
-        		wbk_opt()->add_option( 'wbk_multi_serv_date_limit', 'text', __( 'Number of dates in the calendar for multiple-services mode', 'wbk' ),
-        				__( 'IMPORTANT: this option is used for multiple-services booking only', 'wbk' ), 'wbk_mode_settings_section', '360'  );
-        */
-        wbk_opt()->add_option(
-            'wbk_disallow_after',
-            'text',
-            __( 'Block timeslots after X hours from the current time', 'wbk' ),
-            __( 'Set 0 to not disable time slots', 'wbk' ),
-            'wbk_appointments_settings_section',
-            '0'
-        );
-        wbk_opt()->add_option(
-            'wbk_gdrp',
-            'select',
-            __( 'EU GDPR Compliance', 'wbk' ),
-            '',
-            'wbk_appointments_settings_section',
-            'disabled',
-            array(
-            'disabled' => __( 'Disabled', 'wbk' ),
-            'enabled'  => __( 'Enabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_allow_ongoing_time_slot',
-            'select',
-            __( 'Allow to book the ongoing timeslot', 'wbk' ),
-            '',
-            'wbk_appointments_settings_section',
-            'disabled',
-            array(
-            'allow'    => __( 'Allow', 'wbk' ),
-            'disallow' => __( 'Disallow', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_days_in_extended_mode',
-            'select',
-            __( 'Default number of days shown in extended mode', 'wbk' ),
-            '',
-            'wbk_mode_settings_section',
-            '3',
-            array(
-            '1'        => '1',
-            '2'        => '2',
-            'default'  => '3',
-            '4'        => '4',
-            '5'        => '5',
-            '6'        => '6',
-            '7'        => '7',
-            '8'        => '8',
-            '9'        => '9',
-            '10'       => '10',
-            'lowlimit' => __( 'Use Low limit value of service', 'wbk' ),
-            'uplimit'  => __( 'Use Up limit value of services', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_show_details_prev_booking',
-            'select',
-            __( 'Show details of previous bookings in a timeslot', 'wbk' ),
-            __( 'This option applies to services with a multiple places per time slot', 'wbk' ),
-            'wbk_mode_settings_section',
-            'disabled',
-            array(
-            'disabled' => __( 'Disabled', 'wbk' ),
-            'enabled'  => __( 'Enabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_mode_overlapping_availabiliy',
-            'checkbox',
-            __( 'Consider the availability of overlapping time intervals', 'wbk' ),
-            '',
-            'wbk_appointments_settings_section',
-            'true'
-        );
-        wbk_opt()->add_option(
-            'wbk_set_arrived_after',
-            'text',
-            __( 'Set the status to "Arrived" X minutes after the end of the booking', 'wbk' ),
-            __( 'Leave empty to not update the status', 'wbk' ),
-            'wbk_appointments_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_payment_approve_text',
-            'text_alfa_numeric',
-            __( 'Approve payment', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Approve payment', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_payment_result_title',
-            'text',
-            __( 'Payment result title', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Payment status', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_payment_success_message',
-            'text',
-            __( 'Payment result success message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Payment completed.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_payment_cancel_message',
-            'text',
-            __( 'Payment result cancel message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Payment canceled.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_cancel_button_text',
-            'text_alfa_numeric',
-            __( 'Booking cancel button text', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Cancel booking', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_checkout_button_text',
-            'text',
-            __( 'Checkout button text', 'wbk' ),
-            __( 'Available placeholders: ', 'wbk' ) . '#selected_count, #total_count, #low_limit',
-            'wbk_translation_settings_section',
-            __( 'Checkout', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_appointment_information',
-            'text',
-            __( 'Appointment information', 'wbk' ),
-            __( 'Appointment information on payment and cancellation forms.', 'wbk' ) . '<br />' . __( 'Displayed when customers pay for booking or cancel the booking with the link sent in e-mail notification.', 'wbk' ) . '<br />' . __( 'Available placeholders', 'wbk' ) . ': #name (customer name), #id (appointment id), #service (service name), #date (appointment date), #time (appointment time), #dt (appointment date and time), #start_end (appointment time in start-end fornmat).',
-            'wbk_translation_settings_section',
-            __( 'Appointment on #dt', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_booking_cancel_email_label',
-            'text',
-            __( 'Email input label on cancel booking', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Please, enter your email to confirm cancellation', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_booking_canceled_message',
-            'text',
-            __( 'Booking canceled message (cutomer)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Your appointment booking has been canceled.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_booking_canceled_message_admin',
-            'text',
-            __( 'Booking canceled message (admin)', 'wbk' ),
-            __( 'Available placeholders:', 'wbk' ) . ' #count',
-            'wbk_translation_settings_section',
-            __( 'Appointment canceled #count', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_booking_approved_message_admin',
-            'text',
-            __( 'Booking approved message (admin)', 'wbk' ),
-            __( 'Available placeholders:', 'wbk' ) . ' #count',
-            'wbk_translation_settings_section',
-            __( 'Appointment approved #count', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_booking_cancel_error_message',
-            'text',
-            __( 'Error message on cancel booking', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Unable to cancel booking, please check the email you\'ve entered.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_booking_couldnt_be_canceled',
-            'text',
-            __( 'Warning message on cancel booking (reason: paid booking)', 'wbk' ),
-            __( 'Displayed when customer tries to cancel paid booking.', 'wbk' ),
-            'wbk_translation_settings_section',
-            __( 'Paid booking can\'t be canceled.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_booking_couldnt_be_canceled2',
-            'text',
-            __( 'Warning message on cancel booking (buffer)', 'wbk' ),
-            __( 'Displayed when a customer tries to cancel an appointment/reservation within less than the time allowed to do so.', 'wbk' ),
-            'wbk_translation_settings_section',
-            __( 'Sorry, you can not cancel because you have exceeded the time allowed to do so.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_email_landing_text',
-            'text',
-            __( 'Text of the payment link (customer)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Click here to pay for your booking.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_email_landing_text_cancel',
-            'text',
-            __( 'Text of the cancellation link (customer)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Click here to cancel your booking.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_email_landing_text_cancel_admin',
-            'text',
-            __( 'Text of the cancellation link (administrator)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Click here to cancel this booking.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_email_landing_text_approve_admin',
-            'text',
-            __( 'Text of the approval link (administrator)', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Click here to approve this booking.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_email_landing_text_gg_event_add',
-            'text',
-            __( 'Text of the link for adding to customer\'s Google Calendar', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Click here to add this event to your Google Calendar.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_add_gg_button_text',
-            'text',
-            __( 'Add to customer\'s Google Calendar button text', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Add to my Google Calendar', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_gg_calendar_add_event_success',
-            'text',
-            __( 'Google calendar event adding success message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Appointment data added to Google Calendar.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_gg_calendar_add_event_canceled',
-            'text',
-            __( 'Google calendar event adding error message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Appointment data not added to Google Calendar.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_email_landing_text_invalid_token',
-            'text',
-            __( 'Appointment token error message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Appointment booking doesn\'t exist.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_gg_calendar_event_title',
-            'text',
-            __( 'Google calendar event / iCal summary (administrator)', 'wbk' ),
-            __( 'Available placeholders:', 'wbk' ) . ' #customer_name, #customer_phone, #customer_email, #customer_comment, #items_count, #appointment_id, #customer_custom, #total_amount, #service_name, #status' . '<br />' . __( 'Placeholder for custom field:', 'wbk' ) . ' #field_ + custom field id. Example: #field_custom-field-1',
-            'wbk_translation_settings_section',
-            __( '#customer_name', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_gg_calendar_event_description',
-            'text',
-            __( 'Google calendar event / iCal description (administrator)', 'wbk' ),
-            __( 'Available placeholders:', 'wbk' ) . ' ' . '#customer_name, #customer_phone, #customer_email, #customer_comment, #items_count, #appointment_id, #customer_custom, #total_amount, #service_name, #status' . '<br />' . __( 'Placeholder for custom field:', 'wbk' ) . ' #field_ + custom field id. Example: #field_custom-field-1' . '<br />' . __( 'Add {n} for new line (only for Google Calendar events)', 'wbk' ),
-            'wbk_translation_settings_section',
-            __( '#customer_name #customer_phone', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_gg_calendar_event_title_customer',
-            'text',
-            __( 'Google calendar event / iCal summary (customer)', 'wbk' ),
-            __( 'Available placeholders:', 'wbk' ) . '#customer_name, #customer_phone, #customer_email, #customer_comment, #items_count, #appointment_id, #customer_custom, #total_amount, #service_name' . '<br />' . __( 'Placeholder for custom field:', 'wbk' ) . ' #field_ + custom field id. Example: #field_custom-field-1',
-            'wbk_translation_settings_section',
-            __( '#service_name', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_gg_calendar_event_description_customer',
-            'text',
-            __( 'Google calendar event / iCal description (customer)', 'wbk' ),
-            __( 'Available placeholders:', 'wbk' ) . '#customer_name, #customer_phone, #customer_email, #customer_comment, #items_count, #appointment_id, #customer_custom, #total_amount, #service_name' . '<br />' . __( 'Placeholder for custom field:', 'wbk' ) . ' #field_ + custom field id. Example: #field_custom-field-1',
-            'wbk_translation_settings_section',
-            __( 'Your appointment id is #appointment_id', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_stripe_button_text',
-            'text_alfa_numeric',
-            __( 'Stripe button text', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Pay with credit card', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_stripe_card_element_error_message',
-            'text',
-            __( 'Stripe card element error message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'incorrect input', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_stripe_api_error_message',
-            'text',
-            __( 'Stripe API error message', 'wbk' ),
-            __( 'Available placeholders', 'wbk' ) . ': ' . '#response',
-            'wbk_translation_settings_section',
-            __( 'Payment failed: #response', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_pay_on_arrival_button_text',
-            'text_alfa_numeric',
-            __( 'Pay on arrival button text', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Pay on arrival', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_pay_on_arrival_message',
-            'text',
-            __( 'Message for Pay on arrival payment method', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_bank_transfer_button_text',
-            'text_alfa_numeric',
-            __( 'Bank transfer button text', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Pay by bank transfer', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_bank_transfer_message',
-            'text',
-            __( 'Message for Bank transfer payment method', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_coupon_field_placeholder',
-            'text_alfa_numeric',
-            __( 'Coupon code field placeholder', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Coupon code', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_coupon_applied',
-            'text',
-            __( 'Coupon success message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Coupon applied', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_coupon_not_applied',
-            'text',
-            __( 'Coupon failed message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Coupon not applied', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_payment_discount_item',
-            'text',
-            __( 'Discount in payment calculation', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Discount', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_product_meta_key',
-            'text',
-            __( 'Meta key for WooCommerce product', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Appointments', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_woo_button_text',
-            'text_alfa_numeric',
-            __( 'WooCommerce button text', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Add to cart', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_woo_error_add_to_cart',
-            'text',
-            __( 'Add to cart error message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Booking not added to card', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_day_label',
-            'text',
-            __( 'Date label above the timeslots', 'wbk' ),
-            __( 'Available placeholders', 'wbk' ) . ': #date, #local_date',
-            'wbk_translation_settings_section',
-            '#date'
-        );
-        wbk_opt()->add_option(
-            'wbk_validation_error_message',
-            'text',
-            __( 'Field validation error message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_daily_limit_reached_message',
-            'text',
-            __( 'Daily limit reached message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Daily booking limit is reached, please select another date.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_limit_by_email_reached_message',
-            'text',
-            __( 'Limit by email reached message', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'You have reached your booking limit.', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_service_fee_description',
-            'text',
-            __( 'Description of the service fee', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_tax_label',
-            'text',
-            __( 'Tax label', 'wbk' ),
-            '',
-            'wbk_translation_settings_section',
-            __( 'Tax', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_no_dates_label',
-            'text',
-            __( 'No available dates message', 'wbk' ),
-            __( 'Used with the dropdown date input', 'wbk' ),
-            'wbk_translation_settings_section',
-            __( 'Sorry, no free dates', 'wbk' )
-        );
-        wbk_opt()->add_option(
-            'wbk_customer_name_output',
-            'text',
-            __( 'Customer name in the backend', 'wbk' ),
-            __( 'Use this option if you need show custom fields near customer name in the appointments table and in the schedules.', 'wbk' ) . '<br />' . __( 'Example: #name #field_lastname', 'wbk' ) . '<br />' . __( 'The example above show how to show customer\'s name and last name. The last name is stored in the custom field with id "lastname" in this example.', 'wbk' ) . '<br />' . __( 'Note, it\'s necessary to include #name placeholder into the value of this option.', 'wbk' ),
-            'wbk_interface_settings_section',
-            '#name'
-        );
-        // date format backend
-        wbk_opt()->add_option(
-            'wbk_date_format_backend',
-            'select',
-            __( 'Date format (backend)', 'wbk' ),
-            __( 'Used in the "Appointments" page controls. d - day, m - month, y - year.', 'wbk' ),
-            'wbk_interface_settings_section',
-            'm/d/y',
-            array(
-            'm/d/y' => __( 'm/d/y', 'wbk' ),
-            'y/m/d' => __( 'y/m/d', 'wbk' ),
-            'y-m-d' => __( 'y-m-d', 'wbk' ),
-            'd.m.y' => __( 'd.m.y', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_appointments_table_columns',
-            'select_multiple',
-            __( 'Columns of Appointment table', 'wbk' ),
-            '',
-            'wbk_interface_settings_section',
-            WBK_Model_Utils::get_bookings_page_columns(),
-            WBK_Model_Utils::get_bookings_page_columns()
-        );
-        wbk_opt()->add_option(
-            'wbk_date_format_time_slot_schedule',
-            'select',
-            __( 'Format of timeslots in the Schedule page', 'wbk' ),
-            '',
-            'wbk_interface_settings_section',
-            'start',
-            array(
-            'start'     => __( 'Start', 'wbk' ),
-            'start-end' => __( 'Start - End', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_backend_select_services_onload',
-            'select',
-            __( 'Select all services on the Appointments page automatically', 'wbk' ),
-            '',
-            'wbk_interface_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_custom_fields_columns',
-            'text',
-            __( 'Custom field columns', 'wbk' ),
-            __( 'Comma-separated list of IDs of custom fields.', 'wbk' ) . '<br />' . __( 'Use square brackets to set column headers.', 'wbk' ) . '<br />' . __( 'Example: custom-field1[Title 1],custom-field2[Title 2]', 'wbk' ),
-            'wbk_interface_settings_section',
-            ''
-        );
-        wbk_opt()->add_option(
-            'wbk_backend_show_category_name',
-            'select',
-            __( 'Show category name after service name', 'wbk' ),
-            '',
-            'wbk_interface_settings_section',
-            'disabled',
-            array(
-            'enabled'  => __( 'Enabled', 'wbk' ),
-            'disabled' => __( 'Disabled', 'wbk' ),
-        )
-        );
-        wbk_opt()->add_option(
-            'wbk_filter_default_days_number',
-            'text',
-            __( 'The default number of days to display on the appointment page', 'wbk' ),
-            __( 'Tip: set lower value for better performance.', 'wbk' ),
-            'wbk_interface_settings_section',
-            '14'
-        );
-        wbk_opt()->add_option(
-            'wbk_backend_add_buttons_in_editor',
-            'checkbox',
-            __( 'Add shortcode buttons to the editor', 'wbk' ),
-            '',
-            'wbk_interface_settings_section',
-            'true'
-        );
-        wbk_opt()->add_option(
-            'wbk_disable_nice_select',
-            'checkbox',
-            __( 'Disable Nice Select', 'wbk' ),
-            '',
-            'wbk_interface_settings_section',
-            ''
-        );
-        // backend interface section init end  ********************************************************************
-        date_default_timezone_set( 'UTC' );
-        $all_times = array();
-        $format = WBK_Date_Time_Utils::get_time_format();
-        for ( $i = 0 ;  $i < 86400 ;  $i += 600 ) {
-            $all_times[$i] = wp_date( $format, $i, new DateTimeZone( date_default_timezone_get() ) );
-        }
-        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-        $time_description = __( 'Current local time:', 'wbk' ) . ' ' . date( $format );
-        date_default_timezone_set( 'UTC' );
-        do_action( 'wbk_options_after' );
-    }
-    
-    public function wbk_settings_section_callback()
-    {
-    }
-    
-    // init styles and scripts
-    public function enqueueScripts()
-    {
-        if ( isset( $_GET['page'] ) && $_GET['page'] == 'wbk-options' ) {
-        }
-    }
-    
-    // general settings section callback
-    public function wbk_general_settings_section_callback( $arg )
-    {
-    }
-    
-    // schedule settings section callback
-    public function wbk_schedule_settings_section_callback( $arg )
-    {
-    }
-    
-    // email settings section callback
-    public function wbk_email_settings_section_callback( $arg )
-    {
-    }
-    
-    // appearance  settings section callback
-    public function wbk_mode_settings_section_callback( $arg )
-    {
-    }
-    
-    // appearance  settings section callback
-    public function wbk_translation_settings_section_callback( $arg )
-    {
-    }
-    
-    // backend interface settings section callback
-    public function wbk_backend_interface_settings_section_callback( $arg )
-    {
-    }
-    
-    // paypal settings section callback
-    public function wbk_paypal_settings_section_callback( $arg )
-    {
-    }
-    
-    // stripe settings section callback
-    public function wbk_stripe_settings_section_callback( $arg )
-    {
-    }
-    
-    // google
-    // google calendar settings section callback
-    public function wbk_gg_calendar_settings_section_callback( $arg )
-    {
-    }
-    
-    // woo settings section callback
-    public function wbk_woo_settings_section_callback( $arg )
-    {
-    }
-    
-    // zoom setting section callback
-    public function wbk_zoom_settings_section_callback( $arg )
-    {
-    }
-    
-    // appointments settings section callback
-    public function wbk_appointments_settings_section_callback( $arg )
-    {
-    }
-    
-    public function render_email_admin_paymentrecvd_status()
-    {
-        $value = get_option( 'wbk_email_admin_paymentrcvd_status' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_admin_paymentrcvd_status" name="wbk_email_admin_paymentrcvd_status" value="true" >';
-        $html .= '<label for="wbk_email_admin_paymentrcvd_status">' . __( 'Check if you\'d like to send administrator an email when payment received', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    public function validate_email_admin_paymentrcvd_status( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_admin_paymentrcvd_status',
-                'wbk_email_admin_paymentrcvd_status_error',
-                __( 'Email status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    public function render_email_admin_paymentrcvd_subject()
-    {
-        $value = get_option( 'wbk_email_admin_paymentrcvd_subject' );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_admin_paymentrcvd_subject" name="wbk_email_admin_paymentrcvd_subject" value="' . $value . '" >';
-        $html .= '<p class="description"><a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'wbk' ) . '</a></p>';
-        echo  $html ;
-    }
-    
-    public function validate_email_admin_paymentrcvd_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        return $input;
-    }
-    
-    public function render_email_admin_paymentrcvd_message()
-    {
-        $value = get_option( 'wbk_email_admin_paymentrcvd_message' );
-        $mcesettings = array();
-        $mcesettings['valid_elements'] = '*[*]';
-        $mcesettings['extended_valid_elements'] = '*[*]';
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-            'tinymce'       => $mcesettings,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_admin_paymentrcvd_message', $args );
-        echo  '</div>' ;
-    }
-    
-    public function validate_email_admin_paymentrcvd_message( $input )
-    {
-        return $input;
-    }
-    
-    public function render_email_customer_paymentrecvd_status()
-    {
-        $value = get_option( 'wbk_email_customer_paymentrcvd_status' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_customer_paymentrcvd_status" name="wbk_email_customer_paymentrcvd_status" value="true" >';
-        $html .= '<label for="wbk_email_customer_paymentrcvd_status">' . __( 'Check if you\'d like to send customer an email when payment received', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    public function validate_email_customer_paymentrcvd_status( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_customer_paymentrcvd_status',
-                'wbk_email_customer_paymentrcvd_status_error',
-                __( 'Email status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    public function render_email_customer_paymentrcvd_subject()
-    {
-        $value = get_option( 'wbk_email_customer_paymentrcvd_subject' );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_customer_paymentrcvd_subject" name="wbk_email_customer_paymentrcvd_subject" value="' . $value . '" >';
-        $html .= '<p class="description"><a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'wbk' ) . '</a></p>';
-        echo  $html ;
-    }
-    
-    public function validate_email_customer_paymentrcvd_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        return $input;
-    }
-    
-    public function render_email_customer_arrived_subject()
-    {
-        $value = get_option( 'wbk_email_customer_arrived_subject' );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_customer_arrived_subject" name="wbk_email_customer_arrived_subject" value="' . $value . '" >';
-        $html .= '<p class="description"><a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'wbk' ) . '</a></p>';
-        echo  $html ;
-    }
-    
-    public function validate_email_customer_arrived_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        return $input;
-    }
-    
-    public function render_email_customer_arrived_message()
-    {
-        $value = get_option( 'wbk_email_customer_arrived_message' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_customer_arrived_message', $args );
-        echo  '</div>' ;
-    }
-    
-    public function validate_email_customer_arrived_message( $input )
-    {
-        return $input;
-    }
-    
-    public function render_email_customer_paymentrcvd_message()
-    {
-        $value = get_option( 'wbk_email_customer_paymentrcvd_message' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_customer_paymentrcvd_message', $args );
-        echo  '</div>' ;
-    }
-    
-    public function validate_email_customer_paymentrcvd_message( $input )
-    {
-        return $input;
-    }
-    
-    // render email to customer (on booking)
-    public function render_email_customer_book_status()
-    {
-        $value = get_option( 'wbk_email_customer_book_status' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_customer_book_status" name="wbk_email_customer_book_status" value="true" >';
-        $html .= '<label for="wbk_email_customer_book_status">' . __( 'Check if you\'d like to send customer an email on booking', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    // validate email to customer (on booking)
-    public function validate_email_customer_book_status( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_customer_book_status',
-                'wbk_email_customer_book_status_error',
-                __( 'Email status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    // render email to customer (on approve)
-    public function render_email_customer_approve_status()
-    {
-        $value = get_option( 'wbk_email_customer_approve_status' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_customer_approve_status" name="wbk_email_customer_approve_status" value="true" >';
-        $html .= '<label for="wbk_email_customer_approve_status">' . __( 'Check if you\'d like to send customer an email on approval', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    // validate email to customer (on approve)
-    public function validate_email_customer_approve_status( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_customer_approve_status',
-                'wbk_email_customer_approve_status_error',
-                __( 'Email (on approval) status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    //****** start admin cacnelation block
-    // render email to admin (on cancel)
-    public function render_email_admin_appointment_cancel_status()
-    {
-        $value = get_option( 'wbk_email_adimn_appointment_cancel_status' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_adimn_appointment_cancel_status" name="wbk_email_adimn_appointment_cancel_status" value="true" >';
-        $html .= '<label for="wbk_email_adimn_appointment_cancel_status">' . __( 'Check if you\'d like to send administrator an email on appointment cancellation', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    // validate email to customer (on cancel)
-    public function validate_email_admin_appointment_cancel_status( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_adimn_appointment_cancel_status',
-                'wbk_email_adimn_appointment_cancel_status',
-                __( 'Email (on cancellation) status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    // render admin email subject (on cancellation)
-    public function render_email_admin_appointment_cancel_subject()
-    {
-        $value = get_option( 'wbk_email_adimn_appointment_cancel_subject', __( 'Appointment canceled', 'wbk' ) );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_adimn_appointment_cancel_subject" name="wbk_email_adimn_appointment_cancel_subject" value="' . $value . '" >';
-        $html .= '<p class="description"><a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'wbk' ) . '</a></p>';
-        echo  $html ;
-    }
-    
-    // validate admin email subject (on cancellation)
-    public function validate_email_admin_appointment_cancel_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        return $input;
-    }
-    
-    // render email to admin message (cancellation)
-    public function render_email_admin_appointment_cancel_message()
-    {
-        $value = get_option( 'wbk_email_adimn_appointment_cancel_message', '<p>#customer_name canceled the appointment with #service_name on #appointment_day at #appointment_time</p>' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_adimn_appointment_cancel_message', $args );
-        echo  '</div>' ;
-    }
-    
-    // validate email toadmin message (cancellation)
-    public function validate_email_admin_appointment_cancel_message( $input )
-    {
-        return $input;
-    }
-    
-    //****** end admin cacnelation block
-    //****** start customer cacnelation block
-    // render email to customer (on cancel)
-    public function render_email_customer_appointment_cancel_status()
-    {
-        $value = get_option( 'wbk_email_customer_appointment_cancel_status' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_customer_appointment_cancel_status" name="wbk_email_customer_appointment_cancel_status" value="true" >';
-        $html .= '<label for="wbk_email_customer_appointment_cancel_status">' . __( 'Check if you\'d like to send customer an email on appointment cancellation', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    // validate email to customer (on cancel)
-    public function validate_email_customer_appointment_cancel_status( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_customer_appointment_cancel_status',
-                'wbk_email_customer_appointment_cancel_status',
-                __( 'Email (on cancellation) status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    // render customer email subject (on cancellation)
-    public function render_email_customer_appointment_cancel_subject()
-    {
-        $value = get_option( 'wbk_email_customer_appointment_cancel_subject', __( 'Your appointment canceled', 'wbk' ) );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_customer_appointment_cancel_subject" name="wbk_email_customer_appointment_cancel_subject" value="' . $value . '" >';
-        $html .= '<p class="description"><a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'wbk' ) . '</a></p>';
-        echo  $html ;
-    }
-    
-    // validate customer email subject (on cancellation)
-    public function validate_email_customer_appointment_cancel_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        return $input;
-    }
-    
-    // render email to customer message (cancellation)
-    public function render_email_customer_appointment_cancel_message()
-    {
-        $value = get_option( 'wbk_email_customer_appointment_cancel_message', '<p>Your appointment with #service_name on #appointment_day at #appointment_time has been canceled</p>' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_customer_appointment_cancel_message', $args );
-        echo  '</div>' ;
-    }
-    
-    public function validate_email_customer_appointment_cancel_message( $input )
-    {
-        return $input;
-    }
-    
-    public function render_email_customer_bycustomer_appointment_cancel_message()
-    {
-        $value = get_option( 'wbk_email_customer_bycustomer_appointment_cancel_message', '<p>Your appointment with #service_name on #appointment_day at #appointment_time has been canceled</p>' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_customer_bycustomer_appointment_cancel_message', $args );
-        echo  '</div>' ;
-    }
-    
-    public function validate_email_customer_bycustomer_appointment_cancel_message( $input )
-    {
-        return $input;
-    }
-    
-    public function render_email_customer_book_message()
-    {
-        $value = get_option( 'wbk_email_customer_book_message' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_customer_book_message', $args );
-        echo  '</div>' ;
-    }
-    
-    // validate email to customer message
-    public function validate_email_customer_book_message( $input )
-    {
-        return $input;
-    }
-    
-    public function render_email_customer_manual_book_message()
-    {
-        $value = get_option( 'wbk_email_customer_manual_book_message' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_customer_manual_book_message', $args );
-        echo  '</div>' ;
-    }
-    
-    public function validate_email_customer_manual_book_message( $input )
-    {
-        return $input;
-    }
-    
-    // render email to customer message (approve)
-    public function render_email_customer_approve_message()
-    {
-        $value = get_option( 'wbk_email_customer_approve_message', '<p>Your appointment bookin on #appointment_day at #appointment_time has been approved.</p>' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_customer_approve_message', $args );
-        echo  '</div>' ;
-    }
-    
-    // validate email to customer message (approve)
-    public function validate_email_customer_approve_message( $input )
-    {
-        return $input;
-    }
-    
-    // render customer email subject (on booking)
-    public function render_email_customer_book_subject()
-    {
-        $value = get_option( 'wbk_email_customer_book_subject' );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_customer_book_subject" name="wbk_email_customer_book_subject" value="' . $value . '" >';
-        $html .= '<p class="description"><a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'wbk' ) . '</a></p>';
-        echo  $html ;
-    }
-    
-    // validate email to customer message (on booking)
-    public function validate_email_customer_book_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        return $input;
-    }
-    
-    public function render_email_customer_manual_book_subject()
-    {
-        $value = get_option( 'wbk_email_customer_manual_book_subject' );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_customer_manual_book_subject" name="wbk_email_customer_manual_book_subject" value="' . $value . '" >';
-        $html .= '<p class="description"><a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'wbk' ) . '</a></p>';
-        echo  $html ;
-    }
-    
-    // validate email to customer message (on booking)
-    public function validate_email_customer_manual_book_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        return $input;
-    }
-    
-    // render customer email subject (on approve)
-    public function render_email_customer_approve_subject()
-    {
-        $value = get_option( 'wbk_email_customer_approve_subject', __( 'Your booking has been approved', 'wbk' ) );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_customer_approve_subject" name="wbk_email_customer_approve_subject" value="' . $value . '" >';
-        $html .= '<p class="description"><a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/#subjectplaceholders">' . __( 'List of available placeholders', 'wbk' ) . '</a></p>';
-        echo  $html ;
-    }
-    
-    // validate email to customer message (on approve)
-    public function validate_email_customer_approve_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        return $input;
-    }
-    
-    // render email to secondary
-    public function render_email_secondary_book_status()
-    {
-        $value = get_option( 'wbk_email_secondary_book_status', '' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_secondary_book_status" name="wbk_email_secondary_book_status" value="true" >';
-        $html .= '<label for="wbk_email_secondary_book_status">' . __( 'Check if you\'d like to send an email to a customers from the group', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    // validate email to secondary
-    public function validate_email_secondary_book_status( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_secondary_book_status',
-                'wbk_email_secondary_book_status_error',
-                __( 'Email status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    // render email to secondary message
-    public function render_email_secondary_book_message()
-    {
-        $value = get_option( 'wbk_email_secondary_book_message' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_secondary_book_message', $args );
-        echo  '</div>' ;
-    }
-    
-    // validate email to secondary message
-    public function validate_email_secondary_book_message( $input )
-    {
-        return $input;
-    }
-    
-    // render secondary email subject
-    public function render_email_secondary_book_subject()
-    {
-        $value = get_option( 'wbk_email_secondary_book_subject' );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_secondary_book_subject" name="wbk_email_secondary_book_subject" value="' . $value . '" >';
-        echo  $html ;
-    }
-    
-    // validate email to secondary message
-    public function validate_email_secondary_book_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        
-        if ( !WBK_Validator::check_string_size( $input, 1, 100 ) ) {
-        } else {
-            return $input;
-        }
-    
-    }
-    
-    // render admin email subject
-    public function render_email_admin_book_subject()
-    {
-        $value = get_option( 'wbk_email_admin_book_subject' );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_admin_book_subject" name="wbk_email_admin_book_subject" value="' . $value . '" >';
-        $html .= '<p class="description"><a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'wbk' ) . '</a></p>';
-        echo  $html ;
-    }
-    
-    // validate email to admin message
-    public function validate_email_admin_book_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        return $input;
-    }
-    
-    // render admin daily subject
-    public function render_email_admin_daily_subject()
-    {
-        $value = get_option( 'wbk_email_admin_daily_subject' );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_admin_daily_subject" name="wbk_email_admin_daily_subject" value="' . $value . '" >';
-        echo  $html ;
-    }
-    
-    // validate email to admin message
-    public function validate_email_admin_daily_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        return $input;
-    }
-    
-    // render customer daily subject
-    public function render_email_customer_daily_subject()
-    {
-        $value = get_option( 'wbk_email_customer_daily_subject' );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_email_customer_daily_subject" name="wbk_email_customer_daily_subject" value="' . $value . '" >';
-        $html .= '<p class="description"><a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'wbk' ) . '</a></p>';
-        echo  $html ;
-    }
-    
-    // validate email to customer message
-    public function validate_email_customer_daily_subject( $input )
-    {
-        $input = sanitize_text_field( $input );
-        return $input;
-    }
-    
-    // render invoice subject //  todo
-    public function render_email_customer_invoice_subject()
-    {
-        $value = get_option( 'wbk_email_customer_invoice_subject', __( 'Invoice', 'wbk' ) );
-        $html = '<input type="text" id="wbk_email_customer_invoice_subject" name="wbk_email_customer_invoice_subject" value="' . esc_attr( $value ) . '" >';
-        $html .= '<p class="description"><a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'wbk' ) . '</a></p>';
-        echo  $html ;
-    }
-    
-    // validate invoice subject
-    public function validate_email_customer_invoice_subject( $input )
-    {
-        return $input;
-    }
-    
-    // render email to admin
-    public function render_email_admin_book_status()
-    {
-        $value = get_option( 'wbk_email_admin_book_status' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_admin_book_status" name="wbk_email_admin_book_status" value="true" >';
-        $html .= '<label for="wbk_email_admin_book_status">' . __( 'Check if you\'d like to send administrator an email', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    // validate email to admin
-    public function validate_email_admin_book_status( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_admin_book_status',
-                'wbk_email_admin_book_status_error',
-                __( 'Email status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    /* START: ICal Generation   */
-    public function render_email_admin_book_status_generate_ical()
-    {
-        $value = get_option( 'wbk_email_admin_book_status_generate_ical' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_admin_book_status_generate_ical" name="wbk_email_admin_book_status_generate_ical" value="true" >';
-        $html .= '<label for="wbk_email_admin_book_status_generate_ical">' . __( 'Check if you\'d like to attach iCal file to the notification', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    public function validate_email_admin_book_status_generate_ical( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_admin_book_status_generate_ical',
-                'wbk_email_admin_book_status_generate_ical_error',
-                __( 'Attach iCal file to the notification status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    public function render_email_customer_book_status_generate_ical()
-    {
-        $value = get_option( 'wbk_email_customer_book_status_generate_ical' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_customer_book_status_generate_ical" name="wbk_email_customer_book_status_generate_ical" value="true" >';
-        $html .= '<label for="wbk_email_customer_book_status_generate_ical">' . __( 'Check if you\'d like to attach iCal file to the notification', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    public function validate_email_customer_book_status_generate_ical( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_customer_book_status_generate_ical',
-                'wbk_email_customer_book_status_generate_ical_error',
-                __( 'Attach iCal file to the notification status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    /* END: ICal Generation   */
-    // render email to admin daily
-    public function render_email_admin_daily_status()
-    {
-        $value = get_option( 'wbk_email_admin_daily_status' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_admin_daily_status" name="wbk_email_admin_daily_status" value="true" >';
-        $html .= '<label for="wbk_email_admin_daily_status">' . __( 'Check if you\'d like to send reminders to administrator', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    // validate email to admin
-    public function validate_email_admin_daily_status( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_admin_daily_status',
-                'wbk_email_admin_daily_status_error',
-                __( 'Email status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    public function render_email_customer_arrived_status()
-    {
-        $value = get_option( 'wbk_email_customer_arrived_status' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_customer_arrived_status" name="wbk_email_customer_arrived_status" value="true" >';
-        $html .= '<label for="wbk_email_customer_arrived_status">' . __( 'Check if you\'d like to send notification to customer when status is changed to Arrived', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    public function validate_email_customer_arrived_status( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_customer_arrived_status',
-                'wbk_email_customer_arrived_status_error',
-                __( 'Email status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    // render email to customer daily
-    public function render_email_customer_daily_status()
-    {
-        $value = get_option( 'wbk_email_customer_daily_status' );
-        $html = '<input type="checkbox" ' . checked( 'true', $value, false ) . ' id="wbk_email_customer_daily_status" name="wbk_email_customer_daily_status" value="true" >';
-        $html .= '<label for="wbk_email_customer_daily_status">' . __( 'Check if you\'d like to send reminders to customer', 'wbk' ) . '</a>';
-        echo  $html ;
-    }
-    
-    // validate email to customer
-    public function validate_email_customer_daily_status( $input )
-    {
-        
-        if ( $input != 'true' && $input != '' ) {
-            $input = '';
-            add_settings_error(
-                'wbk_email_customer_daily_status',
-                'wbk_email_customer_daily_status_error',
-                __( 'Email status updated', 'wbk' ),
-                'updated'
-            );
-        }
-        
-        return $input;
-    }
-    
-    // render email to admin message
-    public function render_email_admin_book_message()
-    {
-        $value = get_option( 'wbk_email_admin_book_message' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_admin_book_message', $args );
-        echo  '</div>' ;
-    }
-    
-    // validate email to admin message
-    public function validate_email_admin_book_message( $input )
-    {
-        return $input;
-    }
-    
-    // render email to admin  daily message
-    public function render_email_admin_daily_message()
-    {
-        $value = get_option( 'wbk_email_admin_daily_message' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_admin_daily_message', $args );
-        echo  '</div>' ;
-    }
-    
-    // validate email to admin daily message
-    public function validate_email_admin_daily_message( $input )
-    {
-        return $input;
-    }
-    
-    // render email to customer  daily message
-    public function render_email_customer_daily_message()
-    {
-        $value = get_option( 'wbk_email_customer_daily_message' );
-        $args = array(
-            'media_buttons' => false,
-            'editor_height' => 300,
-        );
-        echo  '<a class="button wbk_email_editor_toggle">' . __( 'Toggle editor', 'wbk' ) . '</a><div class="wbk_email_editor_wrap" style="display:none;">' ;
-        wp_editor( $value, 'wbk_email_customer_daily_message', $args );
-        echo  '</div>' ;
-    }
-    
-    // validate email to customer daily message
-    public function validate_email_customer_daily_message( $input )
-    {
-        return $input;
-    }
-    
-    // render show locked as booked
-    public function render_show_locked_as_booked()
-    {
-        $value = get_option( 'wbk_show_locked_as_booked', 'no' );
-        $value = sanitize_text_field( $value );
-        $html = '<select id="wbk_show_locked_as_booked" name="wbk_show_locked_as_booked">
-				    <option ' . selected( $value, 'yes', false ) . ' value="yes">' . __( 'Yes', 'wbk' ) . '</option>
-				    <option ' . selected( $value, 'no', false ) . ' value="no">' . __( 'No', 'wbk' ) . '</option>
-   				 </select>';
-        echo  $html ;
-    }
-    
-    public function render_attachment_file_types()
-    {
-        $value = get_option( 'wbk_attachment_file_types', 'image/*' );
-        $value = esc_attr( $value );
-        $html = '<input type="text" id="wbk_attachment_file_types" name="wbk_attachment_file_types" value="' . $value . '" >';
-        $html .= '<p class="description">' . __( 'Example: file_extension. A file extension starting with the STOP character, e.g: .gif, .jpg, .png, .doc', 'wbk' ) . '</p>';
-        $html .= '<p class="description">' . __( 'Example: audio/* all sound files are accepted.', 'wbk' ) . '</p>';
-        $html .= '<p class="description">' . __( 'Example: video/* all video files are accepted.', 'wbk' ) . '</p>';
-        $html .= '<p class="description">' . __( 'Example: image/* all image files are accepted.', 'wbk' ) . '</p>';
-        echo  $html ;
-    }
-    
-    public function validate_attachment_file_types( $input )
-    {
-        return sanitize_text_field( $input );
-    }
+if ( ! defined( 'ABSPATH' ) ) exit;
+class WBK_Backend_Options {
+	public function __construct() {
+		//set component-specific properties
+		// init settings
+		add_action( 'admin_init', array( $this, 'initSettings' ) );
+		// init scripts
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueueScripts'), 20 );
+		// mce plugin
+	 	add_filter( 'mce_buttons',  array( $this, 'wbk_mce_add_button' ) );
+	 	add_filter( 'mce_external_plugins',  array( $this, 'wbk_mce_add_javascript' ) );
+	 	add_filter( 'wp_default_editor', array( $this, 'wbk_default_editor' )  );
+	 	add_filter( 'tiny_mce_before_init', array( $this, 'customizeEditor' ), 1000 );
+		// save options
+		add_action( 'wp_ajax_wbk_save_options', array( $this, 'save_options' ) );
+	}
 
+	public function save_options() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'No permissions' );
+		}
+
+		global $wp_settings_fields;
+
+		parse_str( $_POST['form_data'], $options );
+
+		$settings_fields = $wp_settings_fields['wbk-options'];
+
+		foreach ( $settings_fields[ $options['section'] ] as $field ) {
+			if ( isset( $options[ $field['id'] ] ) ) {
+				update_option( $field['id'], $options[ $field['id'] ] );
+			} else {
+				update_option( $field['id'], '' );
+			}
+		}
+
+		wp_send_json_success();
+	}
+
+	public function customizeEditor( $in ) {
+		if ( $this->is_option_page() ) {
+			$in['forced_root_block'] = false;
+			$in['remove_linebreaks'] = false;
+		 	$in['remove_redundant_brs'] = false;
+	 		$in['wpautop'] = false;
+			$opts = '*[*]';
+		    $in['valid_elements'] = $opts;
+		    $in['extended_valid_elements'] = $opts;
+	 	}
+	 	return $in;
+	}
+	public function wbk_mce_add_button( $buttons ) {
+		if ( $this->is_option_page() ) {
+			$buttons[] = 'wbk_service_name_button';
+			$buttons[] = 'wbk_category_names_button';
+			$buttons[] = 'wbk_customer_name_button';
+			$buttons[] = 'wbk_appointment_day_button';
+			$buttons[] = 'wbk_appointment_time_button';
+			$buttons[] = 'wbk_appointment_local_day_button';
+			$buttons[] = 'wbk_appointment_local_time_button';
+			$buttons[] = 'wbk_appointment_id_button';
+			$buttons[] = 'wbk_customer_phone_button';
+			$buttons[] = 'wbk_customer_email_button';
+			$buttons[] = 'wbk_customer_comment_button';
+			$buttons[] = 'wbk_customer_custom_button';
+			$buttons[] = 'wbk_items_count';
+			$buttons[] = 'wbk_total_amount';
+			$buttons[] = 'wbk_payment_link';
+			$buttons[] = 'wbk_cancel_link';
+			$buttons[] = 'wbk_tomorrow_agenda';
+			$buttons[] = 'wbk_group_customer';
+			$buttons[] = 'wbk_multiple_loop';
+			$buttons[] = 'wbk_admin_cancel_link';
+			$buttons[] = 'wbk_admin_approve_link';
+			$buttons[] = 'wbk_customer_ggcl_link';
+			$buttons[] = 'wbk_time_range';
+		}
+		return $buttons;
+	}
+	public function wbk_mce_add_javascript( $plugin_array ) {
+		if ( $this->is_option_page() && ! isset( $plugin_array['wbk_tinynce'] ) ) {
+			$plugin_array['wbk_tinynce'] =  WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-tinymce.js';
+		}
+		return $plugin_array;
+	}
+	// init wp settings api objects for options page
+	public function initSettings() {
+		// General settings section
+		add_settings_section(
+	        'wbk_general_settings_section',
+	        __( 'General', 'webba-booking-lite' ),
+	        array( $this, 'wbk_general_settings_section_callback'),
+	        'wbk-options',
+			array( 'icon' => 'settings-general-icon' )
+   		);
+		// Booking rules (ex appointments) section
+		add_settings_section(
+			'wbk_appointments_settings_section',
+			__( 'Booking rules', 'webba-booking-lite' ),
+			array( $this, 'wbk_appointments_settings_section_callback'),
+			'wbk-options',
+			array( 'icon' => 'bookins-rules-icon' )
+		);
+		// User interface (ex. mode) section
+		add_settings_section(
+			'wbk_mode_settings_section',
+			__( 'User interface', 'webba-booking-lite' ),
+			array( $this, 'wbk_mode_settings_section_callback'),
+			'wbk-options',
+			array( 'icon' => 'user-interface-icon' )
+		);
+
+		// Email notifications section
+ 		add_settings_section(
+			'wbk_email_settings_section',
+			__( 'Email notifications', 'webba-booking-lite' ),
+			array( $this, 'wbk_email_settings_section_callback'),
+			'wbk-options',
+			array( 'icon' => 'email-notification-icon' )
+		);
+
+		// translation settings section
+		add_settings_section(
+			'wbk_translation_settings_section',
+			__( 'Wording / Translation', 'webba-booking-lite' ),
+			array( $this, 'wbk_translation_settings_section_callback'),
+			'wbk-options',
+			array( 'icon' => 'wording-translation-icon' )
+		);
+		if ( wbk_fs()->is__premium_only() && wbk_fs()->can_use_premium_code() ) {
+			add_settings_section(
+				'wbk_paypal_settings_section',
+				__( 'PayPal', 'webba-booking-lite' ),
+				array( $this, 'wbk_paypal_settings_section_callback'),
+				'wbk-options',
+				array(
+					'icon' => 'paypal-icon',
+					'pro'  => true
+				)
+			);
+			add_settings_section(
+				'wbk_stripe_settings_section',
+				__( 'Stripe', 'webba-booking-lite' ),
+				array( $this, 'wbk_stripe_settings_section_callback'),
+				'wbk-options',
+				array(
+					'icon' => 'stripe-icon',
+					'pro'  => true
+				)
+			);
+			add_settings_section(
+				'wbk_gg_calendar_settings_section',
+				__( 'Google Calendar', 'webba-booking-lite' ),
+				array( $this, 'wbk_gg_calendar_settings_section_callback'),
+				'wbk-options',
+				array(
+					'icon' => 'google-calendar-icon',
+					'pro'  => true
+				)
+			);
+			add_settings_section(
+				'wbk_sms_settings_section',
+				__( 'SMS', 'webba-booking-lite' ),
+				array( $this, 'wbk_sms_settings_section_callback'),
+				'wbk-options',
+				array(
+					'icon' => 'sms-icon',
+					'pro'  => true
+				)
+			);
+			add_settings_section(
+				'wbk_woo_settings_section',
+				__( 'WooCommerce', 'webba-booking-lite' ),
+				array( $this, 'wbk_woo_settings_section_callback'),
+				'wbk-options',
+				array(
+					'icon' => 'woocommerce-icon',
+					'pro'  => true
+				)
+			);
+			add_settings_section(
+				'wbk_zoom_settings_section',
+				__( 'Zoom', 'webba-booking-lite' ),
+				array( $this, 'wbk_zoom_settings_section_callback'),
+				'wbk-options',
+				array(
+					'icon' => 'zoom-icon',
+					'pro'  => true
+				)
+			);
+		}
+		add_settings_section(
+	        'wbk_interface_settings_section',
+	        __( 'Backend interface', 'webba-booking-lite' ),
+	        array( $this, 'wbk_backend_interface_settings_section_callback'),
+	        'wbk-options',
+			array( 'icon' => 'backend-interface-icon' )
+   		);
+ 
+		wbk_opt()->add_option( 'wbk_timezone', 'select', __( 'Timezone', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'extra' => array_combine( timezone_identifiers_list(), timezone_identifiers_list() ),
+                'default' => 'Europe/London',
+                'popup' => __( 'Select your local timezone for both the backend and booking form.', 'webba-booking-lite' )
+
+			)
+		);
+
+        wbk_opt()->add_option( 'wbk_form_layout', 'select', __( 'Form layout', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+			array(
+				'default' => 'default',
+				'extra' => array(
+					'default' => __( 'Default', 'webba-booking-lite' ),
+					'narrow' => __( 'For themes with narrow columns', 'webba-booking-lite' ) 
+                ),
+                'popup' => __( 'Choose between the default layout or the layout optimized for themes with narrow columns.', 'webba-booking-lite' )
+            
+            ) 
+		);
+        
+		wbk_opt()->add_option( 'wbk_show_suitable_hours', 'checkbox', __( 'Show suitable hours', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+			array(
+				'checkbox_value' => 'yes',
+				'dependency' => array( 'wbk_mode' => 'extended' )
+			)
+		);
+
+  
+        wbk_opt()->add_option( 'wbk_multi_booking', 'checkbox', __( 'Multiple bookings in one session', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+            array(
+                'popup' => __( 'Turn on to activate the multiple booking mode that allows booking multiple time slots in the same booking.', 'webba-booking-lite' ),
+                'default' => '',
+                'checkbox_value' => 'enabled'                 
+            )
+        );
+ 
+ 
+		wbk_opt()->add_option( 'wbk_phone_mask', 'select', __( 'Phone number masked input', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+			array(
+				'default' => 'enabled',
+				'extra' => array(
+					'enabled' => __( 'jQuery Masked Input Plugin', 'webba-booking-lite' ),
+					'enabled_mask_plugin' => __( 'jQuery Mask Plugin', 'webba-booking-lite' ),
+					'disabled' => __( 'Disabled', 'webba-booking-lite' ),
+                ),
+                'dependency' => array('wbk_mode' => 'extended|simple')
+			)
+		);
+		wbk_opt()->add_option( 'wbk_phone_format', 'text', __( 'Phone format', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+			array(
+                'default' => '(000)000-0000',
+				'popup' =>  __( 'Customize the format for phone numbers using numeric symbols. You can use "0" to represent numeric placeholders. E.g.: (000) 000-0000. Leave this field blank if you do not wish to use a specific phone format.', 'webba-booking-lite' )  
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_phone_required', 'checkbox', __( 'Phone field is mandatory', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+			array(
+                'popup' =>  __( 'Turn on to make the phone field mandatory.', 'webba-booking-lite' ),
+	            'checkbox_value' => '3',
+                'default' => ''
+               
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option(
+			'wbk_show_booked_slots',
+			'checkbox',
+			__( 'Show booked time slots', 'webba-booking-lite' ),
+			'wbk_mode_settings_section',
+			array( 
+                'popup' =>  __( 'Turn on to show booked time slots as "Booked".', 'webba-booking-lite' ) 
+            ),
+			'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_appointments_auto_lock', 'checkbox', __( 'Autolock bookings', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'popup' => __( 'When one service is booked, it will automatically lock another one, preventing conflicting bookings.', 'webba-booking-lite' )
+			)
+		);
+		wbk_opt()->add_option( 'wbk_appointments_auto_lock_mode', 'select', __( 'Perform autolock on', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+                'popup' => __( 'Choose whether the autolock feature applies to all services or only services within the same category.', 'webba-booking-lite' ),
+				'default' => 'all',
+				'extra' => array(
+					'all' => __( 'All services', 'webba-booking-lite' ),
+					'categories' => __( 'Services in the same category', 'webba-booking-lite' )
+				),
+				'dependency' => array('wbk_appointments_auto_lock' => ':checked')
+			)
+		);
+		wbk_opt()->add_option( 'wbk_appointments_auto_lock_group', 'select', __( 'Autolock for group booking services', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'default' => 'lock',
+                'popup' => __( 'Choose to either "Lock time slot" or "Reduce count of available places" when a group booking is turned on.', 'webba-booking-lite' ),
+				'extra' => array(
+					'lock' => __( 'Lock time slot', 'webba-booking-lite' ),
+					'reduce' => __( 'Reduce count of available places', 'webba-booking-lite' ),
+				),
+				'dependency' => array('wbk_appointments_auto_lock' => ':checked')
+			)
+		);
+		 
+		wbk_opt()->add_option( 'wbk_appointments_default_status', 'select', __( 'Default booking status', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+                'popup' => __( 'Specify the default status assigned to newly created bookings.', 'webba-booking-lite' ),
+				'default' => 'approved',
+				'extra' => array(
+					'approved' => __( 'Approved', 'webba-booking-lite' ),
+					'pending' => __( 'Awaiting approval', 'webba-booking-lite' )
+				)
+			)
+		);
+
+		wbk_opt()->add_option( 'wbk_appointments_allow_payments', 'checkbox', __( 'Allow payments only for approved bookings', 'webba-booking-lite' ),
+                               'wbk_appointments_settings_section',
+                                array(
+                                    'popup' => __( 'Turn on to restrict payment functionality to approved bookings only.', 'webba-booking-lite' ),
+                                ),
+                                'advanced' );
+
+		wbk_opt()->add_option( 'wbk_allow_coupons', 'checkbox', __( 'Coupons', 'webba-booking-lite' ), 'wbk_appointments_settings_section', 
+                                array(
+                                    'popup' => __( 'Turn on to activate the coupon feature in the booking system. Read more about <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/set-up-frontend-booking-process/coupons/">Coupns setup</a>.', 'webba-booking-lite' ),
+                                ), 'advanced' );
+
+		wbk_opt()->add_option( 'wbk_appointments_delete_not_paid_mode', 'select', __( 'Delete unpaid bookings', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'default' => 'on_booking',
+				'extra' => array(
+					'disabled' => __( 'Disabled', 'webba-booking-lite' ),
+					'on_booking' => __( 'Set expiration time on booking', 'webba-booking-lite' ),
+					'on_approve' => __( 'Set expiration time on approve', 'webba-booking-lite' )
+				),
+				'popup' => __( 'Turn on to automatically delete unpaid bookings.', 'webba-booking-lite' ) . '<br />' 
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_appointments_delete_payment_started', 'select', __( 'Delete unpaid bookings with started payment.', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'default' => 'delete',
+				'extra' => array(
+					'skip' => __( 'Do not delete bookings with started transaction', 'webba-booking-lite' ),
+					'delete' => __( 'Delete bookings with started transaction', 'webba-booking-lite' )
+				),
+				'popup' => __( 'Choose whether to automatically remove unpaid bookings that have already initiated the payment process.', 'webba-booking-lite' ),
+				'dependency' => array('wbk_appointments_delete_not_paid_mode' => 'on_booking|on_approve')
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_appointments_expiration_time', 'text', __( 'Time to pay (in minutes)', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'default' => '10',
+                'popup' => __( 'Specify the time given to the customer (in minutes) for completing the payment before the booking is automatically deleted.', 'webba-booking-lite' ),
+				'dependency' => array('wbk_appointments_delete_not_paid_mode' => 'on_booking|on_approve')
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_cancellation_buffer', 'text', __( 'Cancellation buffer (in minutes)', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'popup' => __( 'Set the cutoff time (in minutes) before the scheduled booking when customers cannot cancel or modify their bookings.', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_appointments_allow_cancel_paid', 'select', __( 'Allow cancellation of paid bookings', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'default' => 'disallow',
+				'extra' => array(
+					'allow' => __( 'Allow', 'webba-booking-lite' ),
+					'disallow' => __( 'Disallow', 'webba-booking-lite' )
+				),
+				'popup' => __( 'Turn on to allow customers to cancel their paid bookings.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_appointments_only_one_per_slot', 'checkbox', __( 'Allow only one booking per time slot from an email', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'popup' => __( 'Turn on to restrict customers from making multiple bookings for the same time slot using the same email address.', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_appointments_only_one_per_day', 'checkbox', __( 'Allow only one booking per day from an email', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'popup' => __( 'Turn on to restrict customers from making multiple bookings for the same day using the same email address.', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);		 
+		wbk_opt()->add_option( 'wbk_appointments_only_one_per_service', 'checkbox', __( 'Allow only one booking per service from an email', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'popup' => __( 'Turn on to restrict customers from making multiple bookings for the same service using the same email address.', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_appointments_expiration_time_pending', 'text', __( 'Delete pending bookings (in minutes)', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'default' => '0',
+				'popup' => __( 'Specify the minutes (X) after which "Awaiting Approval" bookings will be automatically deleted. To disable automatic deletion, set the value to 0.', 'webba-booking-lite' ) 
+                 ),
+                'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_appointments_autolock_avail_limit', 'text', __( 'Maximum number of bookings at a specific time', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'popup' => __( 'Set the system-wide maximum number of bookings allowed at any given time for all services. Leave it empty for no restrictions.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_appointments_limit_by_day', 'text', __( 'Maximum number of bookings on a specific day', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'popup' => __( 'Set the limit for the maximum number of bookings across all services in a day. Leave it empty for no restrictions.', 'webba-booking-lite' )  
+            ),
+            'advanced'
+		);
+	 
+		wbk_opt()->add_option( 'wbk_appointments_lock_time slot_if_parital_booked', 'select_multiple', __( 'Lock time slot if at least one place is booked', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'extra' => WBK_Model_Utils::get_services(),
+				'popup' => __( 'Select the services for which a time slot will be automatically locked once at least one place is booked. Note: With autolock turned on, connected service bookings are considered when locking time slots.', 'webba-booking-lite' )  
+						   
+            ),
+            'advanced'            
+		);
+		wbk_opt()->add_option( 'wbk_appointments_lock_day_if_time slot_booked', 'select_multiple', __( 'Lock whole day if at least one time slot is booked', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'extra' => WBK_Model_Utils::get_services(),
+				'popup' => __( '"Select the services for which a whole day will be automatically locked once at least one time slot is booked. 
+Note: With autolock turned on, connected service bookings are considered when locking a day."', 'webba-booking-lite' ) 
+						    
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_appointments_lock_one_before_and_one_after', 'select_multiple', __( 'Lock one time slot before and after booking', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'extra' => WBK_Model_Utils::get_services(),
+				'popup' => __( '"Select the services for which time slots before and after the booking will be automatically locked.
+Note: With autolock turned on, connected service bookings are considered when locking time slots."', 'webba-booking-lite' ) 
+						   
+			),
+            'advanced'
+		);
+
+ 
+
+		wbk_opt()->add_option( 'wbk_appointments_special_hours', 'textarea', __( 'Special business hours', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'popup' => __( 'Modify the business hours of specific services on particular dates.', 'webba-booking-lite' ) . '<br />' .
+						   __( 'Example 1: 1 01/15/2023 15:00-18:00', 'webba-booking-lite' ) . '<br />' .
+						   __( 'This indicates that the service with the ID 1 will be available on 01/15/2023 from 15:00 to 18:00.', 'webba-booking-lite' ) . '<br />' . 
+                           __( 'Example 2: 01/15/2023 15:00-18:00', 'webba-booking-lite' ) . '<br />' . 
+                           __( 'This means that all services will be available on 01/15/2023 from 15:00 to 18:00.', 'webba-booking-lite' )  
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_check_short_code', 'checkbox', __( 'Load CSS & JS only on the booking page', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'popup' => __( 'Turn on to load CSS and JS files only when the booking form shortcode is detected on the page, optimizing performance for non-booking pages.', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		 
+        wbk_opt()->add_option( 'wbk_disable_day_on_all_booked', 'select', __( 'Disable booked dates in calendar', 'webba-booking-lite' ),
+			'wbk_mode_settings_section',
+            array(
+				'default' => 'foreach',
+				'extra' => array(
+					'disabled' => __( 'No', 'webba-booking-lite' ),
+			    	'enabled' => __( 'Yes', 'webba-booking-lite' ),
+                    'popup' => __('Disable date in the calendar if no free time slots found.','webba-booking-lite'),
+                    'enabled_plus' => __( 'Yes (including bookings from neighboring services.)', 'webba-booking-lite' )
+				)
+			)
+		);
+ 
+		wbk_opt()->add_option( 'wbk_holydays', 'text', __( 'Holidays', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'popup' => __( 'Set dates when your business is closed, and no new bookings will be accepted.', 'webba-booking-lite' ),
+                'default' => ''
+			)
+		);
+		wbk_opt()->add_option( 'wbk_recurring_holidays', 'checkbox', __( 'Recurring holidays', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to set holidays as recurring yearly.', 'webba-booking-lite' ),
+                'default' => 'true'
+			)
+		);
+ 
+ 
+		wbk_opt()->add_option( 'wbk_email_customer_book_status', 'checkbox', __( 'Send booking confirmation email (to customer)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'default' => 'true',
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to automatically send a booking confirmation email to the customer after booking.', 'webba-booking-lite' )
+			)
+		);
+
+		if ( wbk_fs()->is__premium_only() && wbk_fs()->can_use_premium_code() ) {
+			wbk_opt()->add_option( 'wbk_email_customer_book_status_generate_ical', 'checkbox', __( 'Attach iCal file to the email', 'webba-booking-lite' ), 'wbk_email_settings_section',
+				array(
+                    'default' => '',
+					'checkbox_value' => 'true',
+					'popup' => __( 'Turn on to attach iCal file to the booking confirmation email sent to customer.', 'webba-booking-lite' ),
+                    'dependency' => array( 'wbk_email_customer_book_status' => ':checked' )
+                    
+				)
+			);
+		}
+		wbk_opt()->add_option( 'wbk_email_customer_book_subject', 'text', __( 'Booking confirmation email subject line (booking done by the customer)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'default' => 'Time reserved',
+				'popup' => __('Customize the subject line for the email sent to the customer after they make a booking', 'webba-booking-lite' )  . '<a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+                'dependency' => array( 'wbk_email_customer_book_status' => ':checked' )
+                
+			
+            )
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_book_message', 'editor',
+                                __( 'Booking confirmation email message (booking done by the customer)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+                                array( 
+                                    'popup' => __( 'Customize the email message sent to the customer after they make a booking. ', 'webba-booking-lite' )  . '<a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+                                    'default' => '<p>Dear #customer_name,</p><p>You have successfully booked #service_name on #appointment_day at #appointment_time.</p>',
+                                    'dependency' => array( 'wbk_email_customer_book_status' => ':checked' )
+                                ));
+
+ 
+		wbk_opt()->add_option( 'wbk_email_customer_manual_book_subject', 'text', __( 'Booking confirmation email subject line (booking done by the admin)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(               
+                'dependency' => array( 'wbk_email_customer_book_status' => ':checked' ),
+				'popup' => 'Customize the subject line for the email sent to the customer after a booking is made by an admin. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+			)
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_manual_book_message', 'editor', __( 'Booking confirmation email message (booking done by the admin)', 'webba-booking-lite' ),
+                                'wbk_email_settings_section', array( 
+                                    'popup' => 'Customize the email message sent to the customer after a booking is made by an admin. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+                                    'dependency' => array( 'wbk_email_customer_book_status' => ':checked' )                                     
+                                ));
+		wbk_opt()->add_option( 'wbk_email_customer_approve_status', 'checkbox', __( 'Send booking approval email (to customer)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to automatically send a notification email to the customer once their booking request is approved. ', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_approve_subject', 'text', __( 'Booking approval email subject line', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'default' => __( 'Your booking has been approved', 'webba-booking-lite' ),
+				'popup' => 'Customize the subject line for the booking approval email. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/#subjectplaceholders">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+                'dependency' => array( 'wbk_email_customer_approve_status' => ':checked' )
+			
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_approve_message', 'editor', __( 'Booking approval email message', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'default' => '<p>Your booking on #appointment_day at #appointment_time has been approved.</p>',
+                'popup' => 'Customize the email message for the booking approval email. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/#subjectplaceholders">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+                'dependency' => array( 'wbk_email_customer_approve_status' => ':checked' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_approve_copy_status', 'checkbox', __( 'Send admin a copy of booking approval email', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on if you want to send a copy of the booking approval email to the admin. Please note that the copy will be sent only if the booking is approved via the approval link.', 'webba-booking-lite' ),
+                'dependency' => array( 'wbk_email_customer_approve_status' => ':checked' )
+			
+                ),
+            'advanced'
+    	);
+		wbk_opt()->add_option( 'wbk_email_adimn_appointment_cancel_status', 'checkbox', __( 'Send booking cancelation email (to admin)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to automatically send a booking cancelation email to the admin after a booking is canceled.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_adimn_appointment_cancel_subject', 'text', __( 'Booking cancelation email subject line', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'default' => __( 'Booking canceled', 'webba-booking-lite' ),
+				'popup' => 'Customize the subject line for the booking cancelation email sent to the admin. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+                'dependency' => array( 'wbk_email_adimn_appointment_cancel_status' => ':checked' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_adimn_appointment_cancel_message', 'editor', __( 'Booking cancelation email message', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'default' => '<p>#customer_name canceled the appointment with #service_name on #appointment_day at #appointment_time</p>',
+                'dependency' => array( 'wbk_email_adimn_appointment_cancel_status' => ':checked' ),
+                'popup' => 'Customize the email message for the booking cancelation email sent to the admin. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+			),
+            'advanced'
+		);
+
+
+
+		wbk_opt()->add_option( 'wbk_email_customer_appointment_cancel_status', 'checkbox', __( 'Send booking cancelation email (to customer)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to automatically send a booking cancelation email to the customer after a booking is canceled.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		 
+		wbk_opt()->add_option( 'wbk_email_customer_appointment_cancel_subject', 'text', __( 'Booking cancelation email subject line', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array( 'wbk_email_customer_appointment_cancel_status' => ':checked' ),
+				'default' => __( 'Your appointment canceled', 'webba-booking-lite' ),
+				'popup' => 'Customize the subject line for the booking cancelation email sent to the customer. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+			
+                ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_appointment_cancel_message', 'editor', __( 'Booking cancelation email message (cancelation done by the admin)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array( 'wbk_email_customer_appointment_cancel_status' => ':checked' ),
+				'default' => '<p>Your appointment with #service_name on #appointment_day at #appointment_time has been canceled</p>',
+                'popup' => 'Customize the email message for the booking cancelation email sent to the customer when the cancellation is initiated by the admin. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+			
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_bycustomer_appointment_cancel_message', 'editor', __( 'Booking cancelation email message  (cancelation done by the customer)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array( 'wbk_email_customer_appointment_cancel_status' => ':checked' ),
+				'default' => '<p>Your appointment with #service_name on #appointment_day at #appointment_time has been canceled</p>',
+                'popup' => 'Customize the email message for the booking cancelation email sent to the customer when the cancellation is initiated by the customer. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+	
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_secondary_book_status', 'checkbox', __( 'Send booking cancelation email (to other customers in the group booking)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to automatically send a booking cancelation email to all the customers added to the group booking.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_secondary_book_subject', 'text', __( 'Booking cancelation email subject line', 'webba-booking-lite' ),
+                               'wbk_email_settings_section',
+                                array( 
+                                    'checkbox_value' => 'true',
+                                    'popup' => 'Customize the email message for the booking cancelation email sent to the customers in the group booking. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+	                                'dependency' => array( 'wbk_email_secondary_book_status' => ':checked' ) ),
+                                'advanced' );
+		wbk_opt()->add_option( 'wbk_email_secondary_book_message', 'editor', __( 'Booking cancelation email message', 'webba-booking-lite' ), 
+                               'wbk_email_settings_section',
+                                array( 'checkbox_value' => 'true', 
+                                        'popup' => 'Customize the email message for the booking cancelation email sent to the customers in the group booking. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+	                                    'dependency' => array( 'wbk_email_secondary_book_status' => ':checked',
+                                         ) ),
+                                'advanced' );
+		
+        
+        wbk_opt()->add_option( 'wbk_email_admin_book_status', 'checkbox', __( 'Send booking confirmation email (to admin)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+                'default' => 'true',
+				'popup' => __( 'Turn on to automatically send a booking confirmation email to the admin.', 'webba-booking-lite' )
+			)
+		);
+		if ( wbk_fs()->is__premium_only() && wbk_fs()->can_use_premium_code() ) {
+			wbk_opt()->add_option( 'wbk_email_admin_book_status_generate_ical', 'checkbox', __( 'Attach iCal file to the email', 'webba-booking-lite' ), 'wbk_email_settings_section',
+				array(
+                    'dependency' => array( 'wbk_email_admin_book_status' => ':checked' ),
+					'checkbox_value' => 'true',
+					'popup' => __( 'Turn on to attach iCal file to the booking confirmation email sent to the admin.', 'webba-booking-lite' )
+				)
+			);
+		}
+		wbk_opt()->add_option( 'wbk_email_admin_book_subject', 'text', __( 'Booking confirmation mail subject line', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'default' => __( 'New booking of #service_name', 'webba-booking-lite' ),
+                'dependency' => array( 'wbk_email_admin_book_status' => ':checked' ),
+				'popup' => 'Customize the subject line for the email sent to the admin after a booking has been made. List of available placeholders. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+			)
+		);
+       
+		wbk_opt()->add_option( 'wbk_email_admin_book_message', 'editor', __( 'Booking confirmation email message', 'webba-booking-lite' ), 
+                               'wbk_email_settings_section', 
+                                array(
+                                    'default' => '<p>Details of booking:</p><p>Date: #appointment_day<br/>Time: #appointment_time<br/>Customer name: #customer_name<br/>Customer phone: #customer_phone<br/>Customer email: #customer_email<br/>Customer comment: #customer_comment</p><p></p>',
+                                    'dependency' => array( 'wbk_email_admin_book_status' => ':checked' ),
+                                    'popup' => 'Customize the email message sent to the admin after a booking has been made. List of available placeholders. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+
+                                ) );
+		                    
+       
+        wbk_opt()->add_option( 'wbk_email_admin_paymentrcvd_status', 'checkbox', __( 'Send payment received email (to admin)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to automatically send an email notification to the administrator when a payment for a booking is received. ', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+
+		wbk_opt()->add_option( 'wbk_email_admin_paymentrcvd_subject', 'text', __( 'Payment received email subject line', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array( 'wbk_email_admin_paymentrcvd_status' => ':checked' ),
+                'defaul' => 'Payment from #customer_name received',
+                'popup' => 'Customize the subject line for the payment received email sent to the admin. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+			),
+            'advanced'
+		);
+        
+		wbk_opt()->add_option( 'wbk_email_admin_paymentrcvd_message', 'editor', __( 'Payment received email message', 'webba-booking-lite' ), 
+                               'wbk_email_settings_section',
+                                array(  
+                                    'popup' => 'Customize the email message for the payment received email sent to the admin. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+	
+                                    'dependency' => array( 'wbk_email_admin_paymentrcvd_status' => ':checked' ) ),
+                                'advanced' );
+
+		wbk_opt()->add_option( 'wbk_email_customer_paymentrcvd_status', 'checkbox', __( 'Send payment received email (to customer)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+                'default' =>  'Payment from #customer_name for booking of #service_name on #appointment_day at #appointment_time received. <br>Total amount: #total_amount',
+				'popup' => __( 'Turn on to automatically send an email notification to the customer when a payment for a booking is received. ', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_paymentrcvd_subject', 'text', __( 'Payment received email subject line', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array( 'wbk_email_customer_paymentrcvd_status' => ':checked' ),
+                'default' => 'Your payment received',
+				'popup' => 'Customize the subject line for the payment received email sent to the customer. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+			
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_paymentrcvd_message', 'editor', __( 'Payment received email message', 'webba-booking-lite' ), 
+                               'wbk_email_settings_section',
+                                array(
+                                    'default' => 'Payment from #customer_name for booking of #service_name on #appointment_day at #appointment_time received. <br>Total amount: #total_amount',
+                                    'dependency' => array( 'wbk_email_customer_paymentrcvd_status' => ':checked' ),
+                                    'popup' => 'Customize the email message for the payment received email sent to the customer. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+			
+                                ),
+                                'advanced' );
+
+		wbk_opt()->add_option( 'wbk_email_customer_arrived_status', 'checkbox', __( 'Send status "Arrived" email (to customer)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to automatically send an email notification to the customer when the status of their booking is changed to "Arrived."', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_arrived_subject', 'text', __( 'Status "Arrived" email subject line', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array( 'wbk_email_customer_arrived_status' => ':checked' ),
+				'popup' => 'Customize the subject line for the status "Arrived" email sent to the customer. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_arrived_message', 'editor', __( 'Status "Arrived" email message', 'webba-booking-lite' ),
+                               'wbk_email_settings_section',
+                                array(
+                                    'popup' => 'Customize the email message for the status "Arrived" email sent to the customer. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+                                    'dependency' => array( 'wbk_email_customer_arrived_status' => ':checked' ) ),
+                               'advanced' );
+
+ 
+		wbk_opt()->add_option( 'wbk_email_admin_daily_status', 'checkbox', __( 'Send reminder email (to admin)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to send admin automatic email reminders for upcoming bookings.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+
+		wbk_opt()->add_option( 'wbk_email_admin_daily_subject', 'text', __( 'Reminder email subject line', 'webba-booking-lite' ), 
+                               'wbk_email_settings_section',
+                                array( 
+                                    'popup' => 'Customize the subject line for reminder email sent to the admin. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+                                    'dependency' => array( 'wbk_email_admin_daily_status' => ':checked' ), ),
+                                'advanced' );
+
+		wbk_opt()->add_option( 'wbk_email_admin_daily_message', 'editor', __( 'Reminder email message', 'webba-booking-lite' ),
+                               'wbk_email_settings_section',
+                                array( 
+                                    'popup' => 'Customize the email message for reminder email sent to the admin. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+                                    'dependency' => array( 'wbk_email_admin_daily_status' => ':checked' ) ),
+                                'advanced' );
+
+		wbk_opt()->add_option( 'wbk_email_customer_daily_status', 'checkbox', __( 'Send reminder email (to customer)', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to send customers automatic email reminders for their upcoming bookings.', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_reminder_days', 'text', __( 'Send reminders to customers in X days', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array( 'wbk_email_customer_daily_status' => ':checked' ),
+				'default' => '1',
+				'popup' => __( 'Select the timing for the reminder notification. For instance, set the value to 0 for the day of booking, 1 for one day before the booking, 2 for two days before, and so on.', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_daily_subject', 'text', __( 'Reminder email subject line ', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array( 'wbk_email_customer_daily_status' => ':checked' ),
+				'popup' => 'Customize the subject line for reminder email sent to the customer. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_daily_message', 'editor', __( 'Reminder email message', 'webba-booking-lite' ), 
+                               'wbk_email_settings_section',
+                                array( 
+                                    'popup' => 'Customize the email message for reminder email sent to the customer. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>',
+                                    'dependency' => array( 'wbk_email_customer_daily_status' => ':checked' ) ),
+                               'advanced' );
+
+		$format = WBK_Date_Time_Utils::get_time_format();
+		date_default_timezone_set( 'UTC' );
+		$data_time = [];
+		$data_keys = [];
+		for( $i = 0; $i < 86400; $i += 600 ) {
+			$data_time[] = wp_date( $format, $i, new DateTimeZone( date_default_timezone_get() ) );
+			$data_keys[] = $i;
+		}
+		$data_time = array_combine( $data_keys, $data_time );
+		wbk_opt()->add_option( 'wbk_email_admin_daily_time', 'select', __( 'Reminder sending time', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'default' => '43200',
+				'extra' => $data_time,
+				'popup' => __( 'Set the preferred hour for email reminders sent to customers and admins, based on your local timezone.', 'webba-booking-lite' )  
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_reminders_only_for_approved', 'checkbox', __( 'Send reminders only for approved bookings.', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array( 'wbk_email_customer_daily_status' => ':checked' ),
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to send reminder email notifications only for approved bookings.', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_send_invoice', 'select', __( 'Send invoice to a customer (HTML format) ', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'default' => 'disabled',
+				'extra' => array(
+					'disabled' => __( 'Do not send invoice', 'webba-booking-lite' ),
+					'onbooking' => __( 'Send invoice on booking', 'webba-booking-lite' ),
+					'onapproval' => __( 'Send invoice on approval', 'webba-booking-lite' ),
+					'onpayment' => __( 'Send invoice on payment complete', 'webba-booking-lite' )
+				),
+				'popup' => __( 'Choose whether you would like to send an invoice to the customer and specify when the invoice email should be sent.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_customer_invoice_subject', 'text', __( 'Invoice email subject line', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array('wbk_email_customer_send_invoice' => 'onbooking|onapproval|onpayment'),
+				'default' => __( 'Invoice', 'webba-booking-lite' ),
+				'popup' => 'Customize the subject line for invoice email. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_current_invoice_number', 'text', __( 'Current invoice number', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array('wbk_email_customer_send_invoice' => 'onbooking|onapproval|onpayment'),
+				'default' => '1',
+				'popup' => __( 'Set the starting number for your invoices. Use the placeholder #invoice_number in your notifications. Each time a customer makes a payment, the value of this option will be increased by one.' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_send_invoice_copy', 'checkbox', __( 'Send admin a copy of invoice email', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+                'dependency' => array('wbk_email_customer_send_invoice' => 'onbooking|onapproval|onpayment'),
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on if you want to send a copy of the invoice email to the admin.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_on_update_booking_subject', 'text', __( 'Notification subject (when booking changes)', 'webba-booking-lite' ),
+                               'wbk_email_settings_section', array(
+                                    'popup' => __( 'Customize the subject line for booking changes notification email.', 'webba-booking-lite' )                                
+                               ),
+                               'advanced' );
+
+		wbk_opt()->add_option( 'wbk_email_override_replyto', 'checkbox', __( 'Override default reply-to headers with booking-related data', 'webba-booking-lite' ), 'wbk_email_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'When Enabled:Customer Notifications: The reply-to email address is set to the email specified in the service settings.
+Admin Notifications: The reply-to email address is set to the customer\'s email address. When Disabled: The \'From: email\' value is used as the reply-to address for notifications.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_from_name', 'text', __( 'From: name', 'webba-booking-lite' ), 'wbk_email_settings_section', array(
+            'popup' => __( 'Enter the name that will be displayed as the sender in the email notifications.', 'webba-booking-lite' )
+
+        ) );
+		wbk_opt()->add_option( 'wbk_from_email', 'text', __( 'From: email', 'webba-booking-lite' ), 'wbk_email_settings_section', array(
+            'popup' => __( 'Enter the email that will be displayed as the sender in the email notifications.', 'webba-booking-lite' )
+        ) );
+		wbk_opt()->add_option( 'wbk_super_admin_email', 'text', __( 'Send copies of admin email notifications to addresses', 'webba-booking-lite' ), 'wbk_email_settings_section', array(
+                                    'popup' => __( 'Enter the email addresses where you want to receive copies of admin notifications. Separate multiple email addresses with comma.', 'webba-booking-lite' )
+                                ), 'advanced' );
+		wbk_opt()->add_option( 'wbk_email_landing', 'text', __( 'Notifications landing page', 'webba-booking-lite' ), 'wbk_email_settings_section', 
+			array(
+				'popup' => __( 'Specify the landing page URL for payment or cancelation. This page should include the [webbabooking] shortcode.', 'webba-booking-lite' )
+            ), 'advanced'
+		);
+		 
+	  
+		wbk_opt()->add_option( 'wbk_date_input_dropdown_count', 'text', __( 'Number of dates in the dropdown input', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+			array(
+				'default' => '30',
+				'popup' => __( 'Used only for dropdown date select', 'webba-booking-lite' ),
+				'dependency' => array( 'wbk_date_input' => 'dropdown' )
+			)
+		);
+		wbk_opt()->add_option( 'wbk_avaiability_popup_calendar', 'text', __( 'Number of dates in the calendar', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+			array(
+				'default' => '360',
+				'popup' => __( 'Specify the number of dates displayed in the calendar.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+
+        wbk_opt()->add_option( 'wbk_time slot_time_string', 'select', __( 'Time slot format', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+			array(
+                'popup' => __( 'Choose between displaying only the start time or both the start and end times in the time slots.', 'webba-booking-lite' ),
+				'default' => 'start',
+				'extra' => array(
+					'start' => __( 'Start', 'webba-booking-lite' ),
+					'start_end' => __( 'Start', 'webba-booking-lite' ) . ' - ' . __( 'end', 'webba-booking-lite' )
+				)
+			)
+		);
+	  
+		wbk_opt()->add_option( 'wbk_csv_delimiter', 'select', __( 'CSV delimiter', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'default' => 'Semicolon',
+                 'popup' => __( 'If your date format includes a comma, use a semicolon. Otherwise, select the comma.', 'webba-booking-lite' ),
+				'extra' => array(
+					'comma' => __( 'Comma', 'webba-booking-lite' ),
+					'semicolon' => __( 'Semicolon', 'webba-booking-lite' ) 
+                    
+				)
+            ),'advanced'
+		);
+		 
+		wbk_opt()->add_option( 'wbk_pickadate_load', 'checkbox', __( 'Load Pickadate javascript', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'checkbox_value' => 'yes',
+				'default' => 'yes',
+				'popup' => __( 'Turn off if other plugins in your WordPress installation are using the pickadate date picker.', 'webba-booking-lite' )
+            ), 'advanced'
+		);
+ 
+	 
+        wbk_opt()->add_option( 'wbk_general_tax', 'text', __( 'Tax', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'popup' => __( 'Tax used for online payments.', 'webba-booking-lite' ),
+               
+                'default' => '0'
+			)
+		);
+
+		wbk_opt()->add_option( 'wbk_do_not_tax_deposit', 'checkbox', __( 'Do not tax the deposit (service fee)', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Turn on to avoid adding tax to the deposit. Important note: when this is turned on, do not use subtotal and tax placeholders.', 'webba-booking-lite' )
+            ),'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_price_fractional', 'text', __( 'Fractional digits in price', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'default' => '2',
+				'popup' => __( 'Write the number of decimal places to show for prices. E.g. Write 1 for prices to appear as 25.1 or 2 for prices to appear as 25.10.', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_price_separator', 'text', __( 'Fraction separator in prices', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'default' => '.',
+				'popup' => __('Choose the symbol or character to separate decimals in prices. E.g. Use either a period (.) or a comma (,).', 'webba-booking-lite')
+			)
+		);
+		 
+		wbk_opt()->add_option( 'wbk_general_dynamic_placeholders', 'text', __( 'List of dynamic placeholders', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+                'default' => '',
+				'popup' => __( 'Enter a comma-separated list of placeholders to remove from the string if they are not replaced with values. This is useful if you are using different custom fields for services and as a result some custom field placeholders are not replaced.','webba-booking-lite')
+            ),'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_load_js_in_footer', 'checkbox', __( 'Load javascript files in the footer', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'checkbox_value' => 'true',
+				'popup' => __( 'Enabling this option may increase page loading time in some cases.', 'webba-booking-lite' )
+            ),
+            'avanced'
+		);
+		wbk_opt()->add_option( 'wbk_service_label', 'text', __( 'Service label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Select a service', 'webba-booking-lite' ),
+				'popup' => __('Service label on the booking form.','webba-booking-lite')
+			)
+		);
+		wbk_opt()->add_option( 'wbk_category_label', 'text', __( 'Category label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Select category', 'webba-booking-lite' ),
+				'popup' => __('Category label on the booking form.','webba-booking-lite')
+			)
+		);
+		wbk_opt()->add_option( 'wbk_date_basic_label', 'text', __( 'Date label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Book an appointment on', 'webba-booking-lite' ),
+				'popup' => __('Date label on the booking form.','webba-booking-lite')
+			)
+		);
+
+		wbk_opt()->add_option( 'wbk_date_input_placeholder', 'text_alfa_numeric', __( 'Select date input placeholder', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'date', 'webba-booking-lite' ),
+                'popup' => __('Select date input placeholder on the booking form.','webba-booking-lite')
+			)
+		);
+	  
+		wbk_opt()->add_option( 'wbk_form_label', 'text', __( 'Booking form title', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => '',
+				'popup' => __( 'Text above the booking form. List of available placeholders.', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+
+		wbk_opt()->add_option( 'wbk_booked_text', 'text', __( 'Booked time slot text', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Booked', 'webba-booking-lite' ),
+				'popup' => __( 'Text on a booked time slot.','webba-booking-lite' ) 
+                
+			),
+            'advanced'
+		);
+	    
+		wbk_opt()->add_option( 'wbk_name_label', 'text', __( 'Name label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Name', 'webba-booking-lite' ),
+                'popup' => __( 'Name label on the booking form.', 'webba-booking-lite') 
+			)
+		);
+		wbk_opt()->add_option( 'wbk_email_label', 'text', __( 'Email label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Email', 'webba-booking-lite' ),
+                'popup' => __( 'Email label on the booking form.', 'webba-booking-lite') 
+			)
+		);
+		wbk_opt()->add_option( 'wbk_phone_label', 'text', __( 'Phone label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Phone', 'webba-booking-lite' ),
+                'popup' => __( 'Phone label on the booking form.', 'webba-booking-lite') 
+            )
+        
+		);
+		wbk_opt()->add_option( 'wbk_comment_label', 'text', __( 'Comment label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Comment', 'webba-booking-lite' ),
+                'popup' => __( 'Comment label on the booking form.', 'webba-booking-lite') 
+			)
+		);
+        
+        wbk_opt()->add_option( 'wbk_book_items_quantity_label', 'text', __( 'Quantity label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'How many people per time slot?', 'webba-booking-lite' ),
+				'popup' => __( 'Quantity label on the booking form for group bookings. Available placeholders: #service', 'webba-booking-lite' ) 
+			)
+		);
+
+		wbk_opt()->add_option( 'wbk_book_thanks_message', 'editor', __( 'Thank you message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' =>  '',
+                'popup' => __( 'Customize the thank you message displayed after a booking is made. Leave it empty to use the default formatted thank you message.', 'webba-booking-lite')
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_book_not_found_message', 'text', __( 'Time slots not found message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Unfortunately we were unable to meet your search criteria. Please change the criteria and try again.', 'webba-booking-lite' ),
+				'popup' => __( 'Message displayed when no time slots are found for the selected service and date.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_payment_pay_with_paypal_btn_text', 'text_alfa_numeric', __( 'PayPal option label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Pay now with PayPal', 'webba-booking-lite' ),
+                'popup' => __( 'Label for PayPal payment method', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+
+      
+        wbk_opt()->add_option( 'wbk_stripe_button_text', 'text_alfa_numeric', __( 'Credit card option label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Pay with credit card', 'webba-booking-lite' ),
+                'popup' => __( 'Label for Stripe payment method', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_stripe_card_element_error_message', 'text', __( 'Stripe card element error message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'incorrect input', 'webba-booking-lite' ),
+                'popup' => __( 'Error message that appears if an issue occurs with the Stripe payment method. To show this message go to Stripe -> Advanced Settings and turn on "override Stripe card element error messages".', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_stripe_api_error_message', 'text', __( 'Stripe API error message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Payment failed: #response', 'webba-booking-lite' ),
+				'popup' => __( 'Stripe API error message during payment processing. Placeholders: #response.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_pay_on_arrival_button_text', 'text_alfa_numeric', __( 'Pay on arrival option label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Pay on arrival', 'webba-booking-lite' ),
+                'popup' => __( 'Label for Pay on arrival payment method.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+
+		wbk_opt()->add_option( 'wbk_pay_on_arrival_message',
+                 'text', __( 'Message for Pay on arrival payment method', 'webba-booking-lite' ), 
+                 'wbk_translation_settings_section',
+                  array(
+                     'default' => __( 'Pay on arrival', 'webba-booking-lite' ),
+                     'popup' => __( 'Message for Pay on arrival payment method.', 'webba-booking-lite' )
+                  ),
+                  'advanced'
+                
+        );
+		wbk_opt()->add_option( 'wbk_bank_transfer_button_text', 'text_alfa_numeric', __( 'Bank transfer option label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Pay by bank transfer', 'webba-booking-lite' ),
+                'popup' => __( 'Label for Bank transfer payment method.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+
+		wbk_opt()->add_option( 'wbk_bank_transfer_message', 'text', __( 'Message for Bank transfer payment method', 'webba-booking-lite' ),
+                               'wbk_translation_settings_section',
+                                array( 'default' => __( 'Pay by the bank transfer.', 'webba-booking-lite' ),
+                                       'popup' => __( 'Message for Bank transfer payment method.', 'webba-booking-lite' )
+                                ),
+                                'advanced' );
+
+		wbk_opt()->add_option( 'wbk_coupon_field_placeholder', 'text_alfa_numeric', __( 'Coupon code field placeholder', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Coupon code', 'webba-booking-lite' ),
+                'popup' => __( 'Placeholder shown in the coupon field', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+
+        /*
+		wbk_opt()->add_option( 'wbk_coupon_applied', 'text_alfa_numeric', __( 'Coupon success message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Coupon applied', 'webba-booking-lite' ),
+                'popup' => __( 'Message shown when  shown in the coupon field', 'webba-booking-lite' )
+			)
+		);
+		wbk_opt()->add_option( 'wbk_coupon_not_applied', 'text', __( 'Coupon failed message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Coupon not applied', 'webba-booking-lite' )
+			)
+		);
+        */
+		
+		wbk_opt()->add_option( 'wbk_product_meta_key', 'text', __( 'Meta key for WooCommerce product', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Booking', 'webba-booking-lite' ),
+                'popup' => __('Label for services in WooCommerce.', 'webba-booking-lite')
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_woo_button_text', 'text_alfa_numeric', __( 'WooCommerce option label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Add to cart', 'webba-booking-lite' ),
+                 'popup' => __('User in the cart item', 'webba-booking-lite')
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_woo_error_add_to_cart', 'text', __( 'Add to cart error message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Booking not added to card', 'webba-booking-lite' ),
+                'popup' => __( 'Error message that appears if an issue occurs with adding a booking to WooCommerce cart.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+  
+
+
+		wbk_opt()->add_option( 'wbk_payment_details_title', 'text_alfa_numeric', __( 'Payment details title', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Payment details', 'webba-booking-lite' ),
+                'popup' => __('Message above the payment details.', 'webba-booking-lite')
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_payment_item_name', 'text', __( 'Payment item text', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => '#service_name on #appointment_day at #appointment_time',
+                'popup' => '<a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_payment_price_format', 'text', __( 'Price format', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+                'default' => '$#price',
+				'popup' => __( 'Price format on the booking form. Required placeholder: #price. E.g.: $#price.', 'webba-booking-lite' )
+            )
+		);
+		wbk_opt()->add_option( 'wbk_payment_subtotal_title', 'text', __( 'Subtotal title', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Subtotal', 'webba-booking-lite' ),
+                'popup' => __( 'Label for the subtotal amount in payment details', 'webba-booking-lite' )    
+			),
+            'advanced'
+		);
+        wbk_opt()->add_option( 'wbk_tax_label', 'text', __( 'Tax label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Tax', 'webba-booking-lite' ),
+                'popup' => __( 'Label for the tax in payment details', 'webba-booking-lite' )                
+            ),
+            'advanced'
+		);
+    	wbk_opt()->add_option( 'wbk_service_fee_description', 'text', __( 'Service fee label', 'webba-booking-lite' ), 'wbk_translation_settings_section',array(
+				'default' => __( 'Service fee', 'webba-booking-lite' ),
+                'popup' => __( 'Label for the service fee in payment details', 'webba-booking-lite' )                
+            ),
+            'advanced' );
+
+        wbk_opt()->add_option( 'wbk_payment_discount_item', 'text', __( 'Discount label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Discount', 'webba-booking-lite' ),
+                'popup' => __('Label for the discount', 'wbk ')
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_payment_total_title', 'text', __( 'Total title', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Total', 'webba-booking-lite' ),
+                'popup' => __( 'Label for the total amount in payment details', 'webba-booking-lite' )    
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_nothing_to_pay_message', 'text', __( 'No bookings for payment message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'There are no bookings available for payment.', 'webba-booking-lite' ),
+                'popup' => __( 'Message shown when there are no bookings available for payment', 'webba-booking-lite' )
+			),
+            'advanced'
+		);	
+
+        // continue here
+		wbk_opt()->add_option( 'wbk_show_locked_as_booked', 'checkbox', __( 'Show locked time slots as booked', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+			array(
+                'popup' => __( 'Turn on to show locked time slots as "Booked".', 'webba-booking-lite' ),
+				'checkbox_value' => 'yes'
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_allow_attachemnt', 'checkbox', __( 'Allow attachments', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'checkbox_value' => 'yes',           
+				'popup' => __( 'Turn on to allow users to attach files in the booking form. Please include the file input field in the custom form. For more information, see <a href="https://webba-booking.com/documentation/set-up-frontend-booking-process/using-custom-fields-in-the-booking-form/" target="_blank" rel="noopener noreferrer">Custom fields</a>.','webba-booking-lite')
+                ),
+                'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_delete_attachemnt', 'checkbox', __( 'Automatically delete attachments', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'checkbox_value' => 'yes',
+                'default' => 'yes',
+				'popup' => __( 'Highly Recommended: Turn this on to automatically delete the attachment as soon as the notification is sent.', 'webba-booking-lite')
+            ),
+            'advanced'
+		);
+
+        wbk_opt()->add_option( 'wbk_disable_security', 'checkbox', __( 'Disable advanced security checks', 'webba-booking-lite' ), 'wbk_general_settings_section',
+			array(
+				'checkbox_value' => 'true',
+                'default' => '',
+				'popup' => __( 'IMPORTANT: turn on this option ONLY if you experience troubles with caching and can\'t setup caching exceptions for booking page.', 'webba-booking-lite')
+            ),
+            'advanced'
+		);
+
+
+ 
+
+		wbk_opt()->add_option( 'wbk_order_service_by', 'select', __( 'Order service by', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+			array(
+                'popup' => __( 'Choose between alphabetical order (A - Z) or order by priority for displaying services on the booking form.', 'webba-booking-lite'),
+				'default' => 'a-z',
+				'extra' => array(
+					'a-z' => __( 'A-Z', 'webba-booking-lite' ),
+					'priority'  => __( 'Priority (descending)', 'webba-booking-lite' ),
+					'priority_a'  => __( 'Priority (ascending)', 'webba-booking-lite' )
+				)
+            ) 
+		);
+		wbk_opt()->add_option( 'wbk_night_hours', 'text', __( 'Show night hours time slots in previous day', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+			array(
+				'default' => '0',
+				'popup' => __( 'Specify the number of hours after midnight to display on the next day\'s calendar.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_allow_cross_midnight', 'checkbox', __( 'Allow time slots to cross midnight', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'checkbox_value' => 'true',
+                'popup' => __( 'Turn on to allow time slots that extend beyond midnight.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_disallow_after', 'text', __( 'Block time slots after X hours from the current time', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'default' => '0',
+				'popup' => __( 'Set 0 to not disable time slots', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_gdrp', 'checkbox', __( 'EU GDPR Compliance', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+                                array( 
+                                    'popup' => __( 'Turn on to align the booking system with GDPR guidelines, providing enhanced data protection and privacy for customer information.', 'webba-booking-lite' )
+                                ) );
+		wbk_opt()->add_option( 'wbk_allow_ongoing_time_slot', 'checkbox', __( 'Disallow booking of the current time slot', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+                'default' => 'disallow',
+				'checkbox_value' => 'disallow',
+                'popup' => __( 'Turn on to prevent customers from making bookings for the current time slot.', 'webba-booking-lite' )
+      
+			)
+		);
+	 
+		wbk_opt()->add_option( 'wbk_mode_overlapping_availabiliy', 'checkbox', __( 'Consider the availability of overlapping time intervals', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+                'default' => 'true',
+				'checkbox_value' => 'true',
+                'popup' => __( 'Turn on this option to control the availability of time slots for the same service when they overlap. When turned on, the system will automatically adjust the availability to avoid double booking.', 'webba-booking-lite' )
+            ), 'advanced'
+
+		);
+		wbk_opt()->add_option( 'wbk_set_arrived_after', 'text', __( 'Set the status to "Arrived" X minutes after the end of the booking', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+			array(
+				'popup' => __( 'Specify the number of minutes after the end of the booking when the status should be automatically changed to "Arrived." Leave the field empty to keep the status unchanged.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+ 
+ 
+		wbk_opt()->add_option( 'wbk_payment_cancel_message', 'text', __( 'PayPal payment cancelation message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Payment canceled.', 'webba-booking-lite' ),
+                'popup' => __('Message shown when payment with PayPal is canceled', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+ 
+        wbk_opt()->add_option( 'wbk_booking_cancel_email_label', 'text_alfa_numeric', __( 'Cancellation form label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Please, enter your email to confirm cancelation', 'webba-booking-lite' ),
+                'popup' => __( 'Text of the cancelation form label', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+
+		wbk_opt()->add_option( 'wbk_cancel_button_text', 'text_alfa_numeric', __( 'Cancellation button text', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Cancel booking', 'webba-booking-lite' ),
+                'popup' => __( 'Text of the cancelation button', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		 
+		wbk_opt()->add_option( 'wbk_appointment_information', 'text', __( 'Booking details', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Booking on #dt', 'webba-booking-lite' ),
+				'popup' => __( '"Message shown when customers pay for a booking or cancel their booking using the link sent in the email notification.
+Available placeholders: #name (customer name), #id (appointment id), #service (service name), #date (appointment date), #time (appointment time), #dt (appointment date and time), #start_end (appointment time in start-end format)."', 'webba-booking-lite' ) 
+						    
+			),
+            'advanced'
+		);
+    
+		wbk_opt()->add_option( 'wbk_booking_cancel_error_message', 'text', __( 'Cancellation error message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Unable to cancel booking, please check the email you\'ve entered.', 'webba-booking-lite' ),
+                'popup' => __( 'Message shown when an error occurs on cancelation', 'webba-booking-lite')
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_booking_couldnt_be_canceled', 'text', __( 'Warning message on cancel booking (reason: paid booking)', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Paid booking can\'t be canceled.', 'webba-booking-lite' ),
+				'popup' => __( 'Displayed when customer tries to cancel paid booking.', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_booking_couldnt_be_canceled2', 'text', __( 'Warning message on cancel booking (buffer)', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Sorry, you can not cancel because you have exceeded the time allowed to do so.', 'webba-booking-lite' ),
+				'popup' => __( 'Message shown when a customer tries to cancel a booking within a time frame that does not allow cancellations. Buffer time is set in Booking rules -> Cancellation buffer (in minutes)', 'webba-booking-lite' )
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_landing_text', 'text', __( 'Text of the payment link sent to a customer', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Click here to pay for your booking.', 'webba-booking-lite' ),
+                'popup' => __('Text of the payment link sent to a customer in the email notification.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_landing_text_cancel', 'text', __( 'Text of the cancelation link sent to a customer', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Click here to cancel your booking.', 'webba-booking-lite' ),
+                'popup' => __('Text of the booking cancelation link sent to a customer in the email notification.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_landing_text_cancel_admin', 'text', __( 'Text of the cancellation link sent to an admin', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Click here to cancel this booking.', 'webba-booking-lite' ),
+                'popup' => __('Text of the booking cancelation link sent to the admin in the email notification.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_landing_text_approve_admin', 'text', __( 'Text of the approval link sent to an admin)', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Click here to approve this booking.', 'webba-booking-lite' ),
+                'popup' => __('Text of the booking approval link sent to the admin in the email notification.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_landing_text_gg_event_add', 'text', __( 'Text of the link for adding event to customer\'s Google Calendar', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Click here to add this event to your Google Calendar.', 'webba-booking-lite' ),
+                'popup' => __('Text of the link to add a booking to Google Calendar. Sent to a customer in the email notification.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_add_gg_button_text', 'text', __( 'Add to customer\'s Google Calendar button text', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Add to my Google Calendar', 'webba-booking-lite' ),
+                'popup' => __('Text of the link included in the email notification', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_gg_calendar_add_event_success', 'text', __( 'Google calendar event adding success message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Booking data added to Google Calendar.', 'webba-booking-lite' ),
+                'popup' => __( 'Message shown when booking is added to the Google Calendar.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_gg_calendar_add_event_canceled', 'text', __( 'Google calendar event adding error message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Appointment data not added to Google Calendar.', 'webba-booking-lite' ),
+                'popup' => __( 'Message shown when there was an issue with adding a booking to the Google Calendar.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_email_landing_text_invalid_token', 'text', __( 'Booking token error message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Booking doesn\'t exist.', 'webba-booking-lite' ),
+                'popup' => __( 'Message shown when booking link (cancelation, approval, payment) is invalid in the email notification.', 'webba-booking-lite')
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_gg_calendar_event_title', 'text', __( 'Google calendar event / iCal summary (for admin)', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => '#customer_name',
+				'popup' => __( 'Available placeholders:', 'webba-booking-lite' ) . ' #customer_name, #customer_phone, #customer_email, #customer_comment, #items_count, #appointment_id, #customer_custom, #total_amount, #service_name, #status' . '<br />' .
+						   __( 'Placeholder for custom field:', 'webba-booking-lite' ) . ' #field_ + custom field id. Example: #field_custom-field-1'
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_gg_calendar_event_description', 'text', __( 'Google calendar event / iCal description (for admin)', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => '#customer_name #customer_phone',
+				'popup' => '<a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>' 
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_gg_calendar_event_title_customer', 'text', __( 'Google calendar event / iCal summary (for customer)', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => '#service_name',
+                'popup' => '<a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>' 
+
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_gg_calendar_event_description_customer', 'text', __( 'Google calendar event / iCal description (for customer)', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Your appointment id is #appointment_id', 'webba-booking-lite' ),
+		        'popup' => '<a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>' 
+			),
+            'advanced'
+		);
+		// cotinue here
+	 
+		wbk_opt()->add_option( 'wbk_daily_limit_reached_message', 'text', __( 'Daily limit message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Daily booking limit is reached, please select another date.', 'webba-booking-lite' ),
+                'popup' => __( 'Message shown when daily booking limit reached. Adjust the daily booking limits in the Settings -> Booking Rules.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_limit_by_email_reached_message', 'text', __( 'User limit message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'You have reached your booking limit.', 'webba-booking-lite' ),
+                'popup' => __( 'Message shown when user limit is reached. Adjust the user booking limits in the Settings -> Booking Rules.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+		 
+ 
+
+		if ( wbk_fs()->is__premium_only() && wbk_fs()->can_use_premium_code() ) {
+			wbk_opt()->add_option( 'wbk_paypal_mode', 'select', __( 'PayPal mode', 'webba-booking-lite' ), 'wbk_paypal_settings_section',
+				array(
+					'default' => 'live',
+                    'popup' => __( 'Select "Sandbox" to test the integration, and "Live" for actual payment processing.', 'webba-booking-lite' ),
+					'extra' => array(
+						'sandbox' => __( 'Sandbox', 'webba-booking-lite' ),
+						'live' => __( 'Live', 'webba-booking-lite' )
+					)
+				)
+			);
+			wbk_opt()->add_option( 'wbk_paypal_sandbox_clientid', 'text', __( 'PayPal Sandbox ClientID', 'webba-booking-lite' ), 'wbk_paypal_settings_section',
+				array(
+					'popup' => 'Enter the Client ID provided by PayPal for the Sandbox mode integration. <a href="https://www.paypal.com/us/cshelp/article/how-do-i-create-rest-api-credentials-ts1949" rel="noopener" target="_blank">Read more on how to set up PayPal integration.</a>'
+			
+                        )
+			);
+			wbk_opt()->add_option( 'wbk_paypal_sandbox_secret', 'pass', __( 'PayPal Sandbox Secret', 'webba-booking-lite' ), 'wbk_paypal_settings_section',
+				array(
+					'popup' => 'Enter the Client ID provided by PayPal for the Sandbox mode integration. <a href="https://www.paypal.com/us/cshelp/article/how-do-i-create-rest-api-credentials-ts1949" rel="noopener" target="_blank">Read more on how to set up PayPal integration.</a>'
+			
+                    )
+			);
+			wbk_opt()->add_option( 'wbk_paypal_live_clientid', 'text', __( 'PayPal Live ClientID', 'webba-booking-lite' ), 'wbk_paypal_settings_section',
+				array(
+						'popup' => 'Enter the Client ID provided by PayPal for the Sandbox mode integration. <a href="https://www.paypal.com/us/cshelp/article/how-do-i-create-rest-api-credentials-ts1949" rel="noopener" target="_blank">Read more on how to set up PayPal integration.</a>'
+			
+                    )
+			);
+			wbk_opt()->add_option( 'wbk_paypal_live_secret', 'pass', __( 'PayPal Live Secret', 'webba-booking-lite' ), 'wbk_paypal_settings_section',
+				array(
+						'popup' => 'Enter the Client ID provided by PayPal for the Sandbox mode integration. <a href="https://www.paypal.com/us/cshelp/article/how-do-i-create-rest-api-credentials-ts1949" rel="noopener" target="_blank">Read more on how to set up PayPal integration.</a>'
+			
+                    )
+			);
+			wbk_opt()->add_option( 'wbk_paypal_currency', 'select', __( 'PayPal currency', 'webba-booking-lite' ), 'wbk_paypal_settings_section',
+				array(
+                    'popup' => __('Select the currency to use for PayPal payments.', 'webba-booking-lite' ),
+					'default' => 'USD',
+					'extra' => array(
+						'AUD' => __( 'Australian Dollar', 'webba-booking-lite' ),
+						'BRL' => __( 'Brazilian Real', 'webba-booking-lite' ),
+						'CAD' => __( 'Canadian Dollar', 'webba-booking-lite' ),
+						'CZK' => __( 'Czech Koruna', 'webba-booking-lite' ),
+						'DKK' => __( 'Danish Krone', 'webba-booking-lite' ),
+						'EUR' => __( 'Euro', 'webba-booking-lite' ),
+						'HKD' => __( 'Hong Kong Dollar', 'webba-booking-lite' ),
+						'HUF' => __( 'Hungarian Forint', 'webba-booking-lite' ),
+						'ILS' => __( 'Israeli New Sheqel', 'webba-booking-lite' ),
+						'JPY' => __( 'Japanese Yen', 'webba-booking-lite' ),
+						'MYR' => __( 'Malaysian Ringgit', 'webba-booking-lite' ),
+						'MXN' => __( 'Mexican Peso', 'webba-booking-lite' ),
+						'NOK' => __( 'Norwegian Krone', 'webba-booking-lite' ),
+						'NZD' => __( 'New Zealand Dollar', 'webba-booking-lite' ),
+						'PHP' => __( 'Philippine Peso', 'webba-booking-lite' ),
+						'PLN' => __( 'Polish Zloty', 'webba-booking-lite' ),
+						'GBP' => __( 'Pound Sterling', 'webba-booking-lite' ),
+						'SGD' => __( 'Singapore Dollar', 'webba-booking-lite' ),
+						'SEK' => __( 'Swedish Krona', 'webba-booking-lite' ),
+						'CHF' => __( 'Swiss Franc', 'webba-booking-lite' ),
+						'TWD' => __( 'Taiwan New Dollar', 'webba-booking-lite' ),
+						'THB' => __( 'Thai Baht', 'webba-booking-lite' ),
+						'USD' => __( 'U.S. Dollar', 'webba-booking-lite' )
+					)
+				)
+			);
+			 
+			wbk_opt()->add_option( 'wbk_paypal_hide_address', 'checkbox', __( 'Hide address', 'webba-booking-lite' ), 'wbk_paypal_settings_section',
+				array(
+					'popup' => __( 'Turn on to hide address on PayPal checkout.', 'webba-booking-lite' ),
+                    'checkbox_value' => 'enabled'
+                ),
+                'advanced'
+			);
+		 	wbk_opt()->add_option( 'wbk_paypal_redirect_url', 'this_domain_url', __( 'Redirect to page when payment is successful', 'webba-booking-lite' ), 'wbk_paypal_settings_section',
+				array(
+					'popup' => __( 'Enter the URL where customers should be redirected after a successful payment. If left empty, customers will stay on the booking form page after completing the payment.', 'webba-booking-lite' )
+                ),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_paypal_multiplier', 'text', __( 'Currency multiplier', 'webba-booking-lite' ), 'wbk_paypal_settings_section',
+				array(
+					'popup' => __( 'Add the currency multiplier to update the price before it is sent to PayPal. It is helpful when your service price is set in a currency not supported by PayPal, and you need to convert it to a PayPal-supported currency before checkout. If you do not require currency conversion, leave this field empty.', 'webba-booking-lite' ) 
+						 
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_zoom_link_text', 'text', __( 'Text of the Zoom meeting URL', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+				array(
+					'default' => __( 'Click here to open your meeting in Zoom', 'webba-booking-lite' ),
+                    'popup' => __( 'Text displayed as the link to the Zoom meeting.', 'webba-booking-lite' ) 
+                ),
+                'advanced'
+			);
+		}
+
+		if ( wbk_fs()->is__premium_only() && wbk_fs()->can_use_premium_code() ) {
+			wbk_opt()->add_option( 'wbk_stripe_publishable_key', 'text', __( 'Publishable key', 'webba-booking-lite' ), 'wbk_stripe_settings_section',
+				array(
+					'popup' => 'Enter the publishable API key provided by Stripe for your integration. <a href="https://stripe.com/docs/keys" rel="noopener" target="_blank">Read more on how to set up Stripe integration.</a>'
+				)
+			);
+			wbk_opt()->add_option( 'wbk_stripe_secret_key', 'pass', __( 'Secret key', 'webba-booking-lite' ), 'wbk_stripe_settings_section',
+				array(
+					'popup' => 'Enter the publishable API key provided by Stripe for your integration. <a href="https://stripe.com/docs/keys" rel="noopener" target="_blank">Read more on how to set up Stripe integration.</a>'
+				)
+			);
+			wbk_opt()->add_option( 'wbk_stripe_currency', 'select', __( 'Stripe currency', 'webba-booking-lite' ), 'wbk_stripe_settings_section',
+				array(
+					'default' => 'USD',
+                    'popup' => __( 'Select the currency to use for Stripe payments.', 'webba-booking-lite'),
+                    
+					'extra' => array_combine( WBK_Stripe::getCurrencies(), WBK_Stripe::getCurrencies() )
+				)
+			);
+			wbk_opt()->add_option( 'wbk_load_stripe_js', 'select', __( 'Load Stripe javascript', 'webba-booking-lite' ), 'wbk_stripe_settings_section',
+				array(
+					'default' => 'yes',
+                    'popup' => __('Select how the Stripe Javascript needs to be loaded', 'webba-booking-lite'),
+					'extra' => array(
+						'yes' => __( 'Yes', 'webba-booking-lite' ),
+						'no' => __( 'No', 'webba-booking-lite' ),
+						'shortcode' => __( 'Only on the booking page (not recommended)', 'webba-booking-lite' )
+                    )
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_load_stripe_api', 'select', __( 'Load Stripe API', 'webba-booking-lite' ), 'wbk_stripe_settings_section',
+				array(
+					'default' => 'yes',
+					'extra' => array(
+						'yes' => __( 'Yes, load version 7.26.0', 'webba-booking-lite' ),
+						'old' => __( 'Yes, load version 6.21.1 (not recommended)', 'webba-booking-lite' ),
+						'no' => __( 'No', 'webba-booking-lite' )
+					),
+					'popup' => __( 'Select how to load Stripe API. Set \'no\' or 6.21.1 only if there is a conflict with another plugin that uses Stripe.', 'webba-booking-lite' )
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_stripe_hide_postal', 'checkbox', __( 'Hide the postal code field', 'webba-booking-lite' ), 'wbk_stripe_settings_section',
+				array(
+					'checkbox_value' => 'true',
+                    'popup' => __( 'Turn on to hide the postal code field in the Stripe checkout.', 'webba-booking-lite' )
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_stripe_card_input_mode', 'checkbox', __( 'Override Stripe card element error messages', 'webba-booking-lite' ), 'wbk_stripe_settings_section',
+				array(
+					'checkbox_value' => 'yes',
+                    'popup' => __( 'Turn on to override the default error message displayed for Stripe card elements. To customize the error message, navigate to Wording/Translation -> Advanced Settings and modify the "Stripe card element error message" according to your preferences.', 'webba-booking-lite' )
+				),
+                'advanced'
+			);
+		 
+			wbk_opt()->add_option( 'wbk_stripe_additional_fields', 'select_multiple', __( 'Additional payment information', 'webba-booking-lite' ), 'wbk_stripe_settings_section',
+				array(
+					'default' => '',
+					'extra' => WBK_Db_Utils::getPaymentFields(),
+					'popup' => __('Select the additional fields that you wish to include in the Stripe payment process.', 'webba-booking-lite')
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_stripe_redirect_url', 'text', __( 'Redirect to page when payment is successful', 'webba-booking-lite' ), 'wbk_stripe_settings_section',
+				array(
+					'popup' => __( 'Enter the URL where customers should be redirected after successful payment. If left empty, customers will stay on the booking form page after completing the payment.', 'webba-booking-lite' )
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_stripe_mob_font_size', 'text', __( 'Font size for card element on mobile devices', 'webba-booking-lite' ), 'wbk_stripe_settings_section',
+				array(
+					'popup' => __( 'Set the card element font size on mobile devices. Leave empty for the default input field font size.', 'webba-booking-lite' )
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_stripe_status_after_payment', 'select', __( 'Set status after booking is paid with Stripe to', 'webba-booking-lite' ), 'wbk_stripe_settings_section',
+				array(
+					'default' => 'based',
+                    'popup' => __( 'Choose how to update the status after booking is paid with Stripe. To keep the current status unchanged, select "Based on status before payment". ', 'webba-booking-lite' ),
+					'extra' => array(
+						'based' => __( 'Based on status before payment', 'webba-booking-lite'),
+						'paid' =>  __( 'Paid (awaiting approval)', 'webba-booking-lite' ),
+						'paid_approved' => __( 'Paid (approved)', 'webba-booking-lite' )
+					)
+				),
+                'advanced'
+			);
+		}
+
+		if ( wbk_fs()->is__premium_only() && wbk_fs()->can_use_premium_code() ) {
+			wbk_opt()->add_option( 'wbk_gg_clientid', 'text', __( 'Google API Client ID', 'webba-booking-lite' ),
+                                   'wbk_gg_calendar_settings_section',
+                                    array( 
+                                        'popup' => __( 'Enter the Google API Client ID. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/google-calendar/">Read more on how to set up Google Calendar integration.</a>.', 'webba-booking-lite' ), 
+                                        
+                                    ) );
+
+			wbk_opt()->add_option( 'wbk_gg_secret', 'pass', __( 'Google API Client Secret', 'webba-booking-lite' ), 'wbk_gg_calendar_settings_section',
+                                    array( 
+                                        'popup' => __( 'Enter the Google API Client Secret. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/google-calendar/">Read more on how to set up Google Calendar integration.</a>.', 'webba-booking-lite' ), 
+                                    )
+                                 );
+ 
+			 
+			wbk_opt()->add_option( 'wbk_gg_created_by', 'text', __( '"Created by" property for the events', 'webba-booking-lite' ), 'wbk_gg_calendar_settings_section',
+				array(
+					'default' => 'webba_booking',
+					'popup' => __( 'Do not change this option if you do not plan to use the same Google calendars on different websites with Webba Booking.', 'webba-booking-lite' )
+                ),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_gg_customers_time_zone', 'select', __( 'Customer\'s time zone', 'webba-booking-lite' ), 'wbk_gg_calendar_settings_section',
+				array(
+					'default' => 'webba',
+                    'popup' => __('Choose the time zone to be used for events added to the customer\'s calendar.', 'webba-booking-lite'),
+					'extra' => array(
+						'webba' => __( 'Use Webba Booking time zone', 'webba-booking-lite' ),
+						'customer' => __( 'Use customer\'s calendar time zone', 'webba-booking-lite' )
+                    )
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_gg_when_add', 'select', __( 'Admin calendar event creation', 'webba-booking-lite' ), 'wbk_gg_calendar_settings_section',
+				array(
+					'default' => 'onbooking',
+                    'popup' => __('Specify when the event should be added to the admin\'s calendar when creating bookings. ', 'webba-booking-lite'),
+					'extra' => array(
+						'onbooking' => __( 'On booking', 'webba-booking-lite' ),
+						'onpaymentorapproval' => __( 'On payment or approval', 'webba-booking-lite' )
+					)
+                ),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_gg_2way_group', 'select', __( 'Group services synchronization', 'webba-booking-lite' ), 'wbk_gg_calendar_settings_section',
+				array(
+					'default' => 'lock',
+                    'popup' => __( 'Choose how group services are integrated with the events in Google calendar.', 'webba-booking-lite'),
+					'extra' => array(
+						'lock' => __( 'Lock time slot', 'webba-booking-lite' ),
+						'reduce' => __( 'Reduce count of available places', 'webba-booking-lite' )
+					)
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_gg_ignore_free', 'checkbox', __( 'Ignore free events', 'webba-booking-lite' ), 'wbk_gg_calendar_settings_section',
+				array(
+					'checkbox_value' => 'yes',
+                    'popup' => __( 'Turn on if free Google Calendar events should not be considered in 2-ways synchronization.', 'webba-booking-lite'),
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_ignore_webba_events', 'checkbox', __( 'Ignore events added by Webba Booking', 'webba-booking-lite' ), 'wbk_gg_calendar_settings_section',
+				array(
+					'checkbox_value' => 'yes',
+                    'popup' => __( 'Turn on if Webba Booking events should not be considered in 2-ways synchronization.', 'webba-booking-lite'),
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_gg_group_service_export', 'select', __( 'Export for group services', 'webba-booking-lite' ), 'wbk_gg_calendar_settings_section',
+				array(
+					'default' => 'event_foreach_appointment',
+                    'popup' => __( 'Select the method of exporting group services.', 'webba-booking-lite'),
+					'extra' => array(
+						'one_event' => __( 'Add one event', 'webba-booking-lite' ),
+						'event_foreach_appointment' => __( 'Add event for each appointment', 'webba-booking-lite' )
+					)
+				),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_gg_send_alerts_to_admin', 'checkbox', __( 'Send an alert email to administrator if any issue occurred with the integration', 'webba-booking-lite' ), 'wbk_gg_calendar_settings_section',
+				array(
+					'checkbox_value' => 'yes',
+                    'popup' => __('Turn on to alert admin about issues with integration. Notification is sent to the email set in the service settings.','webba-booking-lite')
+                ),
+                'advanced'
+			);
+			if (version_compare(PHP_VERSION, '7.4.0') >= 0) {
+				$version_list = array( '2.9.1' => '2.9.1' );
+			} else {
+				$version_list = array( '2.5' => '2.5' );
+			}
+			if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
+				$version_list = array( '2.9.1' => '2.9.1', '2.13.0' => '2.13.0' );
+			}
+			wbk_opt()->add_option( 'wbk_gg_client_version', 'select', __( 'Version of Google Client API', 'webba-booking-lite' ), 'wbk_gg_calendar_settings_section',
+				array(
+					'default' => '2.9.1',
+					'extra' => $version_list,
+                    'popup' =>  __( 'Modify this setting only if you have other plugins in your WordPress that utilize a different version of the Google API and conflicts have arisen.', 'webba-booking-lite' )
+                ),
+                'advanced'
+			);
+		}
+
+		if ( wbk_fs()->is__premium_only() && wbk_fs()->can_use_premium_code() ) {
+			wbk_opt()->add_option( 'wbk_woo_product_id', 'text', __( 'WooCommerce product ID', 'webba-booking-lite' ), 'wbk_woo_settings_section',
+				array(                    
+					'popup' => __( 'Product ID. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/payment/steps-to-setup-the-integration-of-woocommerce-with-webba/">Read more</a>
+ .', 'webba-booking-lite' )
+				)
+			);
+		
+            wbk_opt()->add_option( 'wbk_woo_check_coupons_inwebba', 'checkbox', __( 'Validate WooCommerce coupons as Webba Coupons', 'webba-booking-lite' ), 
+                                   'wbk_woo_settings_section',
+                                    array( 'popup' => __( 'Enable this option if you need to validate wooCommerce coupons as Webba coupons.', 'webba-booking-lite' ) ),
+                                    'advanced' );
+
+			wbk_opt()->add_option( 'wbk_woo_update_status', 'select', __( 'Status of the booking paid with WooCommerce', 'webba-booking-lite' ), 'wbk_woo_settings_section',
+				array(
+                    'popup' => __( 'Choose the desired status update after a booking has been paid through WooCommerce.', 'webba-booking-lite' ),
+					'default' => 'disabled',
+					'extra' => array(
+						'disabled' => __( 'Disabled (do not update status)', 'webba-booking-lite' ),
+						'approved' => __( 'Approved', 'webba-booking-lite' ),
+						'paid' => __( 'Paid (awaiting approval)', 'webba-booking-lite' ),
+						'paid_approved' => __( 'Paid (approved)', 'webba-booking-lite' )
+					)
+				)
+			);
+			wbk_opt()->add_option( 'wbk_woo_prefil_fields', 'checkbox', __( 'Prefill fields in WooCommerce checkout with the data used in the booking form', 'webba-booking-lite' ), 'wbk_woo_settings_section',
+				array(  
+                    'default' => 'true',
+					'checkbox_value' => 'true',
+                    'popup' => __( 'Turn on to prefill fields in the WooCommerce checkout with the data entered in the Webba booking form.', 'webba-booking-lite' )
+                ),
+                'advanced'
+			);
+		}
+
+		if ( wbk_fs()->is__premium_only() && wbk_fs()->can_use_premium_code() ) {
+             
+
+			wbk_opt()->add_option( 'wbk_zoom_client_id', 'text', __( 'Client ID', 'webba-booking-lite' ), 
+                                   'wbk_zoom_settings_section',
+                                    array( 'popup' =>  'Enter the Zoom Client ID. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/integrations/integration-with-zoom/">Read more on how to set up Zoom integration.</a>')
+
+                                    );
+			wbk_opt()->add_option( 'wbk_zoom_client_secret', 'pass', __( 'Client secret', 'webba-booking-lite' ), 
+                                   'wbk_zoom_settings_section',
+                                    array( 'popup' =>  'Enter the Zoom Client secret. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/integrations/integration-with-zoom/">Read more on how to set up Zoom integration.</a>')
+
+                                );
+			wbk_opt()->add_option( 'wbk_zoom_auth_stat', 'zoom_auth', __( 'Authorization', 'webba-booking-lite' ), 'wbk_zoom_settings_section' );
+			wbk_opt()->add_option( 'wbk_zoom_when_add', 'select', __( 'Zoom meeting creation', 'webba-booking-lite' ), 'wbk_zoom_settings_section',
+				array(
+                    'popup' => __('Select when to create the meeting in Zoom - on booking or on payment or booking approval.', 'webba-booking-lite'),
+					'default' => 'onbooking',
+					'extra' => array(
+						'onbooking' => __( 'On booking', 'webba-booking-lite' ), 
+						'onpaymentorapproval' => __( 'On payment or approval', 'webba-booking-lite' )
+                    )
+                    ),
+                    'advanced'
+			);
+		}
+
+		wbk_opt()->add_option( 'wbk_customer_name_output', 'text', __( 'Customer name in the backend', 'webba-booking-lite' ), 'wbk_interface_settings_section',
+			array(
+				'default' => '#name',
+				'popup' => __( 'Use this option to display custom fields alongside the customer name in the appointments table and schedules. For instance, you can show the customer\'s name and last name by using the placeholder #name #field_lastname. In this example, the last name is stored in a custom field with the ID "lastname". Remember to include the #name placeholder in the value of this option for it to work correctly.', 'webba-booking-lite' ) 
+						 
+            ),
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_date_format_backend', 'select', __( 'Date format (backend)', 'webba-booking-lite' ), 'wbk_interface_settings_section',
+			array(
+				'default' => 'M d, Y',
+				'extra' => array(
+					'm/d/y' => __( 'm/d/y', 'webba-booking-lite' ),
+					'y/m/d' => __( 'y/m/d', 'webba-booking-lite' ),
+					'y-m-d' => __( 'y-m-d', 'webba-booking-lite' ),					 
+					'M d, Y' => __( 'M d, Y', 'webba-booking-lite' ),
+                    'd/m/y' => __( 'd/m/y', 'webba-booking-lite' )
+				),
+				'popup' => __( 'Select how the date will be displayed on the Appointments page in the admin area.', 'webba-booking-lite' )
+			)
+		);
+		 
+		wbk_opt()->add_option( 'wbk_date_format_time_slot_schedule', 'select', __( 'Time slots format on the schedule page', 'webba-booking-lite' ), 'wbk_interface_settings_section',
+			array(
+                'popup' => __('Select how to display time slots on the Schedule page.', 'webba-booking-lite'), 
+				'default' => 'start',
+				'extra' => array(
+					'start' => __( 'Start', 'webba-booking-lite' ),
+					'start-end' => __( 'Start - End', 'webba-booking-lite' )
+				)
+                ),
+                'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_custom_fields_columns', 'text', __( 'Custom field columns', 'webba-booking-lite' ), 'wbk_interface_settings_section',
+			array(
+				'popup' => __( 'Enter a comma-separated list of custom field IDs. To set custom column headers, use square brackets with the desired titles. For example: custom-field1[Title 1],custom-field2[Title 2].', 'webba-booking-lite' ) 
+						   
+            ), 
+            'advanced'
+		);
+		wbk_opt()->add_option( 'wbk_filter_default_days_number', 'text', __( 'Default number of days on Bookings page', 'webba-booking-lite' ), 'wbk_interface_settings_section',
+			array(
+				'default' => '30',
+				'popup' => __( 'Set the default number of days to be displayed on the appointment page. To improve performance, consider using a lower value.', 'webba-booking-lite' )
+			)
+		);
+		  
+		if ( wbk_fs()->is__premium_only() && wbk_fs()->can_use_premium_code() ) {
+			wbk_opt()->add_option( 'wbk_twilio_account_sid', 'text', __( 'Twilio ACCOUNT SID', 'webba-booking-lite' ), 
+                                   'wbk_sms_settings_section',
+                                    array( 'popup' =>  'Enter the Twilio ACCOUNT SID. <a rel="noopener" target="_blank" href="https://support.twilio.com/hc/en-us/articles/14726256820123-What-is-a-Twilio-Account-SID-and-where-can-I-find-it-">Read more.</a>')
+                                  );
+
+			wbk_opt()->add_option( 'wbk_twilio_auth_token', 'pass', __( 'Twilio AUTH TOKEN', 'webba-booking-lite' ), 'wbk_sms_settings_section',
+                                    array( 'popup' =>  'Enter the Twilio AUTH TOKEN. <a rel="noopener" target="_blank" href="https://support.twilio.com/hc/en-us/articles/223136027-Auth-Tokens-and-How-to-Change-Them">Read more.</a>')
+                                );
+
+            
+			wbk_opt()->add_option( 'wbk_twilio_phone_number', 'text', __( 'Twilio phone number or Messaging Service SID', 'webba-booking-lite' ), 'wbk_sms_settings_section',
+				array(
+					'popup' => __( 'The phone number must start with a + sign.', 'webba-booking-lite' )
+				)
+			);
+			wbk_opt()->add_option( 'wbk_sms_send_on_booking', 'checkbox', __( 'Send SMS after customer makes a booking', 'webba-booking-lite' ), 'wbk_sms_settings_section',
+				array(
+					'checkbox_value' => 'true',
+                    'popup' => __( 'Turn on to send booking SMS notifications to customers when they make a booking.', 'webba-booking-lite' )
+				)
+			);
+			wbk_opt()->add_option( 'wbk_sms_send_on_manual_booking', 'checkbox', __( 'Send SMS after admin adds a booking', 'webba-booking-lite' ), 'wbk_sms_settings_section',
+				array(
+					'checkbox_value' => 'true',
+                    'dependency' => array( 'wbk_sms_send_on_booking' => ':checked' ),
+                    'popup' => __( 'Turn on to send booking SMS notifications to customers when the booking was done by an admin.', 'webba-booking-lite' )
+				)
+			);
+			wbk_opt()->add_option( 'wbk_sms_message_on_booking', 'textarea', __( 'Booking SMS:', 'webba-booking-lite' ), 'wbk_sms_settings_section',
+				array(
+                    'dependency' => array( 'wbk_sms_send_on_booking' => ':checked' ),
+					'default' => __( 'Dear #customer_name, You have successfully booked #service_name on #appointment_day at #appointment_time.', 'webba-booking-lite' ),
+					'popup' => 'Customize the booking SMS message. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+				)
+			);
+			wbk_opt()->add_option( 'wbk_sms_send_reminder', 'checkbox', __( 'Send booking reminder SMS', 'webba-booking-lite' ), 'wbk_sms_settings_section',
+				array(
+					'checkbox_value' => 'true',
+                    'popup' => __('Turn on to send booking reminder SMS notifications to customers.', 'webba-booking-lite' )
+                ),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_sms_reminder_days', 'text', __( 'Send reminder to customer X days before booking', 'webba-booking-lite' ), 'wbk_sms_settings_section',
+				array(
+                    'dependency' => array( 'wbk_sms_send_reminder' => ':checked' ),
+					'default' => '1',
+					'popup' => __( 'Select the timing for the booking reminder SMS. For instance, set the value to 0 for the day of booking, 1 for one day before the booking, 2 for two days before, and so on.', 'webba-booking-lite' )
+                ),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_sms_message_reminder', 'textarea', __( 'Reminder message', 'webba-booking-lite' ), 'wbk_sms_settings_section',
+				array(
+                    'dependency' => array( 'wbk_sms_send_reminder' => ':checked' ),
+					'default' => __( 'Dea #customer_name, we would like to remind that you have booked the #service_name tomorrow at #appointment_time.', 'webba-booking-lite' ),
+					'popup' => 'Customize the booking reminder SMS message. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+                ),
+                'advanced'
+			);
+			wbk_opt()->add_option( 'wbk_sms_send_on_approval', 'checkbox', __( 'Send booking approval SMS', 'webba-booking-lite' ), 'wbk_sms_settings_section',
+				array(
+					'checkbox_value' => 'true',
+                    'popup' => __('Turn on to send booking approval SMS notifications to customers once their booking has been approved.', 'webba-booking-lite' )
+				)
+			);
+
+			wbk_opt()->add_option( 'wbk_sms_message_on_approval', 'textarea', __( 'Booking approval SMS:', 'webba-booking-lite' ), 'wbk_sms_settings_section',
+				array(
+                    'dependency' => array( 'wbk_sms_send_on_approval' => ':checked' ),
+					'default' => __( 'Dear #customer_name, your booking on #appointment_day at #appointment_time has been approved.', 'webba-booking-lite' ),
+					'popup' => 'Customize the booking approval SMS message. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
+				)
+			);
+		}
+        if( get_option( 'wbk_price_separator' ) === false ){
+            wbk_opt()->reset_defaults();
+        }
+
+		do_action('wbk_options_after');
+	}
+
+	public function wbk_default_editor(){
+		return 'tinymce';
+	}
+
+	// init styles and scripts
+	public function enqueueScripts() {
+ 		if ( $this->is_option_page() ) {
+    	}
+	}
+
+    // general settings section callback
+	public function wbk_general_settings_section_callback( $arg ) {
+	}
+    // schedule settings section callback
+	public function wbk_schedule_settings_section_callback( $arg ) {
+	}
+    // email settings section callback
+	public function wbk_email_settings_section_callback( $arg ) {
+	}
+    // appearance  settings section callback
+	public function wbk_mode_settings_section_callback( $arg ) {
+	}
+	// appearance  settings section callback
+	public function wbk_translation_settings_section_callback( $arg ) {
+	}
+	// backend interface settings section callback
+	public function wbk_backend_interface_settings_section_callback( $arg ) {
+	}
+	// paypal settings section callback
+	public function wbk_paypal_settings_section_callback( $arg ) {
+	}
+	// stripe settings section callback
+	public function wbk_stripe_settings_section_callback( $arg ) {
+	}
+	// google calendar settings section callback
+	public function wbk_gg_calendar_settings_section_callback( $arg ) {
+	}
+	// sms settings section callback
+	public function wbk_sms_settings_section_callback( $arg ) {
+	}
+	// woo settings section callback
+	public function wbk_woo_settings_section_callback( $arg ) {
+	}
+	// zoom setting section callback
+	public function wbk_zoom_settings_section_callback( $arg ) {
+	}
+	// appointments settings section callback
+	public function wbk_appointments_settings_section_callback( $arg ){
+	}
+
+	public function is_option_page() {
+		return isset( $_GET[ 'page' ] ) && $_GET[ 'page' ] == 'wbk-options';
+	}
 }
-function wbk_default_editor( $param )
-{
-    return 'tinymce';
-}
+?>

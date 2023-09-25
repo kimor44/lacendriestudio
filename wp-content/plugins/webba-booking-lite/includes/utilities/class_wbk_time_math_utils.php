@@ -20,18 +20,36 @@ class WBK_Time_Math_Utils {
 		}
 		return false;
 	}
-	public static function adjust_times( $time_1, $time_2, $time_zone ){
-		
-		$offset_1 = date( 'Z', $time_1 );
-		$offset_2 = date( 'Z', $time_1 + $time_2 );
+	public static function adjust_times( $time_1, $time_2, $time_zone, $ignore_rule = false ){
+    $dst_mode = date( 'I', strtotime( 'today midnight', $time_1) );
+     
+    if( $dst_mode == '1' ){
+        $offset_1 = date( 'Z', $time_1 );
+        $offset_2 = date( 'Z', $time_1 + $time_2 );
+        $difference = $offset_1 - $offset_2;
+       
+        $result =  $time_1 + $time_2 + $difference;
 
-		$difference = $offset_1 - $offset_2;
-	 
-		$result =  $time_1 + $time_2 + $difference;
-		 
-		return $result;
+    } else {
+     
+        $result = $time_1 + $time_2;
+        $offset_1 = date( 'Z', $time_1 );
+        $offset_2 = date( 'Z', $time_1 + $time_2 );
+        $difference = $offset_1 - $offset_2;
+        
+        if( $ignore_rule == true && $difference < 0 ){
+             
+            $difference = 0;
+        }
+      
+        $result = $time_1 + $time_2 + $difference;
+    }
 
-	}
+    
+    return $result;
+}
+
+
 	public static function get_offset_difference_with_midnight( $time ){
 		$prev_time_zone = date_default_timezone_get();
 		date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );

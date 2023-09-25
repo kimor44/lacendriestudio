@@ -15,7 +15,7 @@ class WBK_PE_Time extends Plugion_Custom_Field{
     }
     public function validate( $input, $value, $slug, $field ) {
         if( !Plugion\Validator::check_integer( $value, 0, 2147483647 ) ){
-            return[ false,  __( 'Ttime entered incorrectly', 'wbk' ), $field->get_title()  ];
+            return[ false,  __( 'Ttime entered incorrectly', 'webba-booking-lite' ), $field->get_title()  ];
         }
         return [ true, $value ];
     }

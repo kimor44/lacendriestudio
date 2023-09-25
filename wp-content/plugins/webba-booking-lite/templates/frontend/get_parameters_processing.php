@@ -3,11 +3,37 @@ if ( !defined( 'ABSPATH' ) ) exit;
 date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
 $html = '';
 if( isset( $_GET['ggeventadd'] ) ){
-	$ggeventadd = $_GET['ggeventadd'];
-	$ggeventadd = WBK_Validator::get_param_sanitize( $ggeventadd );
-	$booking_ids = WBK_Model_Utils::get_booking_ids_by_group_token( $ggeventadd );
-	$booking_ids = array_unique( $booking_ids );
-	$html = WBK_Renderer::load_template( 'frontend/add_to_gg_customer_init', array( $booking_ids ), false );
+    $token =  $_GET['ggeventadd'];
+	$token = WBK_Validator::get_param_sanitize( $token );
+	$booking_ids = WBK_Model_Utils::get_booking_ids_by_group_token( $token );
+    $booking_ids = array_unique( $booking_ids );
+    if( count( $booking_id ) == 0 ){
+        $message = get_option( 'wbk_email_landing_text_invalid_token', 'Booking not found' );
+    }
+    $title = array();
+    foreach( $booking_ids as $booking_id ){
+        $booking = new WBK_Booking( $booking_id );
+        if( !$booking->is_loaded() ){
+            continue;
+        }
+        $title_this = get_option( 'wbk_appointment_information', '' );
+        $title[] = WBK_Placeholder_Processor::process_placeholders( $title_this, $booking_id );
+    }
+    if( count( $title ) == 0 ){
+        $message = get_option( 'wbk_email_landing_text_invalid_token', 'Booking not found' );
+    } else {
+        $message = implode( '<br>',  $title );
+        $google = new WBK_Google();
+        if( $google->init( null ) !== TRUE ){
+            $valid = false;
+        }
+        $auth_url = $google->get_auth_url();
+        $link_text = get_option( 'wbk_add_gg_button_text', 'Add to my Google Calendar' );
+        $message .= '<input type="button" class="button-w mt-30-w wbk-addgg-link" data-link="'. esc_url( $auth_url ) . '" value="' . esc_html( $link_text ). '"	>';
+    }
+ 
+    WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( null, stripslashes( $message ) ) );
+    return;
 }
 
 if( isset( $_GET['code'] ) ){
@@ -16,15 +42,22 @@ if( isset( $_GET['code'] ) ){
 		$token = WBK_Validator::get_param_sanitize( $_SESSION['wbk_ggeventaddtoken'] );
 		$booking_ids = WBK_Model_Utils::get_booking_ids_by_group_token( $token );
 		$booking_ids = array_unique( $booking_ids );
-		$adding_result = WBK_Google::add_booking_to_customer_calendar( $booking_ids, $code );
-		$html = WBK_Renderer::load_template( 'frontend/add_to_gg_customer_confirm', array( $booking_ids, $adding_result ), false );
+    	$adding_result = WBK_Google::add_booking_to_customer_calendar( $booking_ids, $code );
+        if( $adding_result > 0 ){
+            $title = get_option( 'wbk_gg_calendar_add_event_success', __( 'Booking data added to Google Calendar.', 'wbk' ) );
+        } else {
+            $title = get_option( 'wbk_gg_calendar_add_event_canceled', __( 'Booking data not added to Google Calendar.', 'wbk' ) );
+        }
+		WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( null, stripslashes( $title ) ) );
+        return;
+ 
 	}
 }
 
 if( isset( $_GET['paypal_status'] ) && is_numeric( $_GET['paypal_status'] ) ){
 	$paypal_status = intval( $_GET['paypal_status'] );
 	if( $paypal_status >= 1 && $paypal_status <= 5 ){
-		$html = WBK_Renderer::load_template( 'frontend/paypal_result_status', array( $paypal_status ), false );
+        $html = WBK_Renderer::load_template( 'frontend_v5/paypal_result_status', array( $paypal_status ), false );
 	}
 }
  
@@ -38,8 +71,11 @@ if( get_option( 'wbk_allow_manage_by_link', 'no' ) == 'yes' ){
 		$i = $bf->set_as_approved( $booking_ids );
  
 		if( $i > 0 ){
-			$html = WBK_Renderer::load_template( 'frontend/link_approval_result', array( $i ), false );
+            $message =  __( 'Bookings approved: ', 'webba-booking-lite' ) . $i;                           
+            WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( null, $message ) );
+            return;			 
 		}
+        return;
 	}
 }
 
@@ -92,8 +128,12 @@ if( get_option( 'wbk_allow_manage_by_link', 'no' ) == 'yes' ){
 			$i++;
 		}
 		if( $i > 0 ){
-			$html = WBK_Renderer::load_template( 'frontend/link_cancellation_result', array( $i ), false );
+            $message = __( 'Bookings canceled: ', 'webba-booking-lite' ) . $i;
+            WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( null, $message ) );
+            return;
+           
 		}
+        return;
 	}
 }
 
@@ -104,10 +144,9 @@ if( isset( $_GET['cancelation'] ) ){
 	$booking_ids_not_filtered = WBK_Model_Utils::get_booking_ids_by_group_token( $cancelation );
 	$booking_ids = array();
 	$tokens = array();
-	if( count( $booking_ids_not_filtered ) == 0  ){
-		$valid = false;
-		echo WBK_Renderer::load_template( 'frontend/message_container', array( __( 'Bookings not found.', 'wbk' ) ), false );
-	 
+	if( count( $booking_ids_not_filtered ) == 0  ){	 
+		WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( null, __( 'Bookings not found.', 'webba-booking-lite' ) ) );
+        return;
 	} else {
 		$title_all = array();
 		$valid_items = 0;
@@ -147,52 +186,150 @@ if( isset( $_GET['cancelation'] ) ){
 			$tokens[] = $booking->get('token');
 		}
 		$title = implode( '<br>', $title_all );
-		$html = WBK_Renderer::load_template( 'frontend/cancellation_form', array( $valid_items, $title, $tokens ), false );
+        
+        if( $valid_items == 0 ){
+            WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( null, get_option( 'wbk_nothing_to_pay_message') ) );
+            return;
+        }
 
+        $templates = array( 'frontend_v5/cancellation_form' => array( $valid_items, $title, $tokens ) );
+        $scenario[] = array(      
+                            'title' => esc_html__( 'Cancellation', 'webba-booking-lite' ),          
+                            'slug' => 'link_cancellation',	
+                            'templates' => $templates,					     					 
+                            'request' => 'wbk_approve_payment'
+                        );
+        $scenario[] = array(                
+                            'slug' => 'final_screen',								     					 
+                            'request' => 'wbk_cancel_appointment'
+                        );
+        WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( $scenario ), true );
+        return;
+
+       
 	}
 }
 
 if( isset( $_GET['order_payment'] ) ){
-
+  
 	$order_payment =  $_GET['order_payment'];
  	$order_payment = WBK_Validator::get_param_sanitize( $order_payment );
  	$booking_ids = WBK_Model_Utils::get_booking_ids_by_group_token( $order_payment );
-
-	if( count( $booking_ids ) == 0 ){
-		$valid = false;
-	} else {
-		$title = array();
-		$found_valid_bookings = 0;
+    
+    $found_valid_bookings = 0;
+    if( count( $booking_ids ) > 0 ) {
+		$title = array();		 
 		foreach( $booking_ids as $booking_id ){
 			$booking = new WBK_Booking( $booking_id );
 			if( !$booking->is_loaded() ){
 				continue;
 			}
 			$valid = true;
-			$service_id = $booking->get_service();
-			$service = new WBK_Service( $service_id );
-
 			if( $booking->get('status') != 'paid' && $booking->get('status') != 'paid_approved' && $booking->get('status') != 'woocommerce' ){
 				$title_this = get_option( 'wbk_appointment_information', '' );
 				$title_this = WBK_Placeholder_Processor::process_placeholders( $title_this, array( $booking_id ) );
 				$title[] = $title_this;
 				$found_valid_bookings++;
 			}
-
 		}
 		$title = implode( '<br>', $title );
 		if( $found_valid_bookings == 0 ){
 			$title = esc_html( get_option( 'wbk_nothing_to_pay_message', '' ) );
-		} else {
-			$payment_methods_allowed =  WBK_Model_Utils::get_payment_methods_for_bookings( $booking_ids );
-			$html =  WBK_Renderer::load_template( 'frontend/payment_init', array( $payment_methods_allowed, $booking_ids, 'wbk_payment_button_link' ), false );
-
-		}
-
+		}  
 	}
-
+      
+    if( $found_valid_bookings > 0 ){
+        $payment_methods = WBK_Model_Utils::get_payment_methods_for_bookings_intersected( $booking_ids );
+        if( count( $payment_methods ) > 0 ){
+            $payment_details = WBK_Price_Processor::get_payment_items( $booking_ids, get_option( 'wbk_general_tax', '0' ) );
+            $payment_card = WBK_Renderer::load_template( 'frontend_v5/payment_card', array( $payment_details, $booking_ids ), false );
+            if( get_option('wbk_allow_coupons') == 'enabled' ){
+                $coupon_field = WBK_Renderer::load_template( 'frontend_v5/coupon_field', array( $payment_details ), false );
+            } else {
+                $coupon_field = '';
+            }
+            $payment_methods_html =  WBK_Renderer::load_template( 'frontend_v5/payment_methods', array( $payment_methods ), false );     
+            $templates = array( 'frontend_v5/payment_card' =>  array( $payment_details, $booking_ids  ) );
+            if( get_option('wbk_allow_coupons') == 'enabled' ){
+                $templates[ 'frontend_v5/coupon_field' ] = array( $payment_details );
+            }
+            $templates['frontend_v5/payment_methods'] = array( $payment_methods );
+            $result = array( 'thanks_message' => $payment_card . $coupon_field . $payment_methods_html );
+            $scenario[] = array(      
+                            'title' => esc_html__( 'Payment', 'webba-booking-lite' ),          
+                            'slug' => 'link_payment',	
+                            'templates' => $templates,					     					 
+                            'request' => 'wbk_approve_payment'
+                        );
+                            
+            $scenario[] = array(                
+                                'slug' => 'final_screen',								     					 
+                                'request' => 'wbk_approve_payment'
+                            );
+                            
+            WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( $scenario ), true );
+            return;
+ 
+        } 
+    }  
+ 
+    WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( null, get_option( 'wbk_nothing_to_pay_message', '' ) ), true );
+    return;
+ 
 	 
 }
+
+if( isset( $_GET['pp_aprove'] ) && wbk_is5() ){
+    $messsage = '';
+    if ( $_GET['pp_aprove'] == 'true' ){
+        if ( isset( $_GET['paymentId'] ) && isset( $_GET['PayerID'] ) ){
+            $paymentId = $_GET['paymentId'];
+            $PayerID = $_GET['PayerID'];
+            $paypal = new WBK_PayPal();
+            $booking_ids = WBK_Model_Utils::get_booking_ids_by_payment_id( $paymentId );
+            $init_result = $paypal->init( false, $booking_ids );
+            $status = false;
+            if ( $init_result === FALSE ){
+                $status = false;
+                $messsage = 'PayPal error 1';
+ 
+            } else {
+                $execResult = $paypal->execute_payment( $paymentId, $PayerID );
+                if( $execResult === false ){
+                    $messsage = 'PayPal error 2';
+                } else {
+                    $pp_redirect_url = trim( get_option( 'wbk_paypal_redirect_url', '' ) );
+                    if( $pp_redirect_url != '' ){
+                        if( filter_var( $pp_redirect_url, FILTER_VALIDATE_URL ) !== FALSE) {
+                            wp_redirect( $pp_redirect_url );
+                            exit;
+                        }
+                    }
+                    $messsage = WBK_Renderer::load_template( 'frontend_v5/thank_you_message', array( $booking_ids ), false );
+                    
+                }
+            }
+        } else {
+            $messsage = 'PayPal error 4';
+        }
+    } elseif( $_GET['pp_aprove'] == 'false' ) {
+        if( isset( $_GET['cancel_token'] ) ){
+            $cancel_token =  $_GET['cancel_token'];
+            $cancel_token = str_replace('"', '', $cancel_token );
+            $cancel_token = str_replace('<', '', $cancel_token );
+            $cancel_token = str_replace('\'', '', $cancel_token );
+            $cancel_token = str_replace('>', '', $cancel_token );
+            $cancel_token = str_replace('/', '', $cancel_token );
+            $cancel_token = str_replace('\\',  '', $cancel_token );
+            WBK_Db_Utils::clearPaymentIdByToken( $cancel_token );
+
+        }
+        $message = __( 'Payment cancelled', 'webba-booking-lite' );
+    }
+    echo WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( null, $messsage ), false );
+}
+
+
 date_default_timezone_set( 'UTC' );
 echo $html;
 ?>

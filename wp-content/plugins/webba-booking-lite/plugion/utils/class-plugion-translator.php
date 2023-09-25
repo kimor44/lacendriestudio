@@ -29,7 +29,7 @@ class Plugion_Translator {
         load_textdomain( 'plugion', __DIR__  . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . 'plugion-' . get_user_locale() . '.mo' );
     }
 
-    public function localize_script(){
+    public function localize_script( $slug ){
         $translation_array = [
             'rest_url' =>  esc_url_raw( parse_url( rest_url(), PHP_URL_PATH )  ),
             'nonce' => wp_create_nonce( 'wp_rest' ),
@@ -54,11 +54,12 @@ class Plugion_Translator {
             'previous' => $this->translate_string( 'Previous' ),
             'activate_ascending' =>  $this->translate_string( ': activate to sort column ascending' ),
             'activate_descending'  =>  $this->translate_string( ': activate to sort column descending' ),
-            'select_option' => $this->translate_string( 'select option' ),
+            'select_option' => $this->translate_string( 'Select option' ),
+            'no_time' => $this->translate_string( 'No Time Slots available' ),
             'ajax_url' => admin_url( 'admin-ajax.php')
         ];
-
-        wp_localize_script( 'plugion', 'plugionl10n', $translation_array );
+       
+        wp_localize_script( $slug, 'plugionl10n', $translation_array );
     }
 
     public function initialize_default(){
@@ -137,8 +138,8 @@ function plugion_set_strings_translations( $strings ){
 function plugion_restore_default_translation(){
     Plugion_Translator::get_instance()->initialize_default();
 }
-function plugion_localize_script(){
-    Plugion_Translator::get_instance()->localize_script();
+function plugion_localize_script( $slug = 'plugion' ){
+    Plugion_Translator::get_instance()->localize_script( $slug );
 }
 
 

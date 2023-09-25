@@ -260,18 +260,18 @@ body {
     margin-top: 10px;
 }
 
-.appointment-content-w {
+.wizard-content-w {
     flex-grow: 1;
     position: relative;
 }
-.appointment-content-scroll-w {
+.wizard-content-scroll-w {
     padding: 0 25px 0 10px;
     position: relative;
     margin: 0 0 23px 0;
     height: 500px;
     overflow-x: hidden !important;
 }
-.appointment-content-scroll-w[data-scrollbar]:after {
+.wizard-content-scroll-w[data-scrollbar]:after {
     content: '';
     position: absolute;
     left: 0;
@@ -407,12 +407,12 @@ body {
     margin: 0 4px 0 0;
 }
 
-.appointment-content-w .button-block-w {
+.wizard-content-w .button-block-w {
     display: flex;
     justify-content: right;
     padding: 0 25px 0 0;
 }
-.appointment-content-w .button-block-w .button-w {
+.wizard-content-w .button-block-w .button-w {
     margin-left: 30px;
 }
 
@@ -535,7 +535,7 @@ body {
     border-radius: 4px;
 }
 
-.appointment-content-w .custom-select-w.last-w .select-items-w {
+.wizard-content-w .custom-select-w.last-w .select-items-w {
     top: auto;
     bottom: 100%;
 }
@@ -717,23 +717,23 @@ body {
         padding: 0;
         min-height: 0;
     }
-    .appointment-content-scroll-w {
+    .wizard-content-scroll-w {
         margin-bottom: 30px;
         padding: 0 15px 0 15px;
         height: calc(100vh - 380px);
     }
-    .appointment-content-scroll-w:after {
+    .wizard-content-scroll-w:after {
         display: none;
     }
-    .appointment-content-scroll-w[data-scrollbar] {
+    .wizard-content-scroll-w[data-scrollbar] {
         padding: 0 15px 0 15px;
     }
 
-    .appointment-content-w .button-block-w {
+    .wizard-content-w .button-block-w {
         padding: 0 15px 0 15px;
         justify-content: start;
     }
-    .appointment-content-w .button-block-w .button-w {
+    .wizard-content-w .button-block-w .button-w {
         margin-left: 0;
         min-width: 300px;
     }
@@ -748,10 +748,10 @@ body {
 }
 
 @media (max-width: 500px) {
-    .appointment-content-w .button-block-w {
+    .wizard-content-w .button-block-w {
         padding: 0 15px 0 15px;
     }
-    .appointment-content-w .button-w {
+    .wizard-content-w .button-w {
         display: block;
         width: 100%;
     }
@@ -970,11 +970,11 @@ body {
         min-width: 345px;
     }
 
-    .appointment-content-w .two-buttons-w {
+    .wizard-content-w .two-buttons-w {
         justify-content: space-between;
         padding: 0 15px 0 15px;
     }
-    .appointment-content-w .two-buttons-w .button-w {
+    .wizard-content-w .two-buttons-w .button-w {
         min-width: 160px;
         max-width: 160px;
         margin: 0;
@@ -1065,23 +1065,20 @@ body {
     }
 }
 
-.appointment-content-w .first-text-w {
+.wizard-content-w .first-text-w {
     margin: 0 0 30px 0;
 }
 
-.appointment-content-w .input-text-w {
+.wizard-content-w .input-text-w {
     max-width: 345px;
     width: 100%;
 }
 
-.appointment-content-w .checkbox-row-w.one-row-w .checkbox-text-w {
+.wizard-content-w .checkbox-row-w.one-row-w .checkbox-text-w {
     display: block;
     padding: 3px 0 0 0;
 }
-.appointment-content-w
-    .checkbox-row-w.one-row-w
-    .checkbox-text-w
-    .checkbox-title-w {
+.wizard-content-w .checkbox-row-w.one-row-w .checkbox-text-w .checkbox-title-w {
     margin-bottom: 0;
 }
 
@@ -2376,10 +2373,10 @@ body {
 }
 
 @media (max-width: 600px) {
-    .appointment-content-w .first-text-w {
+    .wizard-content-w .first-text-w {
         text-align: center;
     }
-    .appointment-content-w .input-text-w {
+    .wizard-content-w .input-text-w {
         max-width: none;
     }
 
@@ -2600,7 +2597,7 @@ body {
 }
 
 @media (max-width: 950px) {
-    .appointment-content-w .first-text-w.custom-w {
+    .wizard-content-w .first-text-w.custom-w {
         text-align: left;
         margin: 0 0 25px 0;
     }
@@ -2625,7 +2622,7 @@ body {
     color: #8a9393;
 }
 
-.appointment-content-w .time-select-w {
+.wizard-content-w .time-select-w {
     max-width: none;
 }
 
@@ -3078,11 +3075,11 @@ body {
     }
 }
 
-.appointment-content-screen-w {
+.wizard-content-screen-w {
     display: none;
 }
 
-.appointment-content-screen-active-w {
+.wizard-content-screen-active-w {
     display: block;
 }
 
@@ -3259,22 +3256,22 @@ select.wbk-select {
     margin: 20px 20px 20px 20px;
     min-height: 0;
 }
-.appointment-content-scroll-w {
+.wizard-content-scroll-w {
     margin-bottom: 30px;
     padding: 0 15px 0 15px;
 }
-.appointment-content-scroll-w:after {
+.wizard-content-scroll-w:after {
     display: none;
 }
-.appointment-content-scroll-w[data-scrollbar] {
+.wizard-content-scroll-w[data-scrollbar] {
     padding: 0 15px 0 15px;
 }
 
-.appointment-content-w .button-block-w {
+.wizard-content-w .button-block-w {
     padding: 0 15px 0 15px;
     justify-content: start;
 }
-.appointment-content-w .button-block-w .button-w {
+.wizard-content-w .button-block-w .button-w {
     margin-left: 0;
     min-width: 300px;
 }
@@ -3288,10 +3285,10 @@ select.wbk-select {
 }
 
 @media (max-width: 500px) {
-    .appointment-content-w .button-block-w {
+    .wizard-content-w .button-block-w {
         padding: 0 15px 0 15px;
     }
-    .appointment-content-w .button-w {
+    .wizard-content-w .button-w {
         display: block;
         width: 100%;
     }
@@ -3303,11 +3300,11 @@ select.wbk-select {
     min-width: 345px;
 }
 
-.appointment-content-w .two-buttons-w {
+.wizard-content-w .two-buttons-w {
     justify-content: space-between;
     padding: 0 15px 0 15px;
 }
-.appointment-content-w .two-buttons-w .button-w {
+.wizard-content-w .two-buttons-w .button-w {
     min-width: 160px;
     max-width: 160px;
     margin: 0;
@@ -3356,10 +3353,10 @@ select.wbk-select {
 }
 
 @media (max-width: 600px) {
-    .appointment-content-w .first-text-w {
+    .wizard-content-w .first-text-w {
         text-align: center;
     }
-    .appointment-content-w .input-text-w {
+    .wizard-content-w .input-text-w {
         max-width: none;
     }
 
@@ -3368,7 +3365,7 @@ select.wbk-select {
     }
 }
 
-.appointment-content-w .first-text-w.custom-w {
+.wizard-content-w .first-text-w.custom-w {
     text-align: left;
     margin: 0 0 25px 0;
 }

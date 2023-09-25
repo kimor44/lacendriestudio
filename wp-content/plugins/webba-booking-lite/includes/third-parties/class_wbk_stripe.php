@@ -195,6 +195,16 @@ class WBK_Stripe
         return array( 0, __( 'Payment method not supported' ) );
     }
     
+    public function charge_v5(
+        $booking_ids,
+        $payment_details,
+        $method_id,
+        $intent_id = null
+    )
+    {
+        return array( 0, __( 'Payment method not supported' ) );
+    }
+    
     public static function render_initial_form(
         $input,
         $payment_method,

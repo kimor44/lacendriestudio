@@ -13,10 +13,7 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 /*
  * This file is part of Webba Booking plugin
-
-
-
- */
+*/
 
 /**
  * Field class
@@ -212,7 +209,7 @@ class Field {
         $formated_conditions = [];
         $i = 0;
         foreach ( $this->filter_conditions as $condition ) {
-            if ( !is_array(  $this->filter_value ) && '' === trim( $this->filter_value[$i] ) ) {
+            if ( '' === trim( $this->filter_value[$i] ) ) {
                 continue;
             }
             if ( !in_array( $condition, $allowed_conditions, true ) ) {
@@ -229,7 +226,7 @@ class Field {
 
                         break;
                         default:
-                            $formated_conditions[] =  $this->name . ' ' . $condition . ' "' . $format . '"';
+                            $formated_conditions[] =  $this->name . ' ' . $condition . ' ("' . $format . '")';
 
                         break;
                     }
@@ -247,7 +244,7 @@ class Field {
 
                             break;
                         default:
-                            $formated_conditions[] =  $this->name . ' ' . $condition . ' "' . $format . '"';
+                            $formated_conditions[] =  $this->name . ' ' . $condition . ' ("' . $format . '")';
 
                             break;
                     }

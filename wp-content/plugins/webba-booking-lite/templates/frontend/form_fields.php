@@ -56,26 +56,44 @@ $times_by_service = array();
         $cf7_form = do_shortcode( '[contact-form-7 id="' . $form . '"]' );
         $cf7_form = apply_filters( 'wbk_after_cf7_rendered', $cf7_form );
 
-        $cf7_form = str_replace('<p>', '', $cf7_form );
-        $cf7_form = str_replace('</p>', '', $cf7_form );
-        $cf7_form = str_replace('<label', '<label class="wbk-input-label" ', $cf7_form );
-        $cf7_form = str_replace('type="checkbox"', 'type="checkbox" class="wbk-checkbox" ', $cf7_form );
-        $cf7_form = str_replace('wbk-checkbox', ' wbk-checkbox wbk-checkbox-custom ', $cf7_form );
-        $cf7_form = str_replace('wpcf7-list-item-label', 'wbk-checkbox-label', $cf7_form );
-        $cf7_form = str_replace('wpcf7-list-item', 'wbk-checkbox-span-holder', $cf7_form );
-        $cf7_form = str_replace('wpcf7-list-item-label', 'wbk-checkbox-label', $cf7_form );
-        $cf7_form = str_replace( 'name="wbk-acceptance"',
-                                 'name="wbk-acceptance" value="1" id="wbk-acceptance" aria-invalid="false"><span class="wbk-checkbox-label"></span> <input type="hidden"',
-                                  $cf7_form );
-        $cf7_form = str_replace('type="file"', 'type="file" accept="application/pdf,image/png,image/jpeg,.doc, .docx"', $cf7_form );
-
-        $html .= $cf7_form;
+        if( get_option('wbk_mode') != 'webba5' ) {
+            $cf7_form = str_replace('<p>', '', $cf7_form );
+            $cf7_form = str_replace('</p>', '', $cf7_form );
+            $cf7_form = str_replace('<label', '<label class="wbk-input-label" ', $cf7_form );
+            $cf7_form = str_replace('type="checkbox"', 'type="checkbox" class="wbk-checkbox" ', $cf7_form );
+            $cf7_form = str_replace('wbk-checkbox', ' wbk-checkbox wbk-checkbox-custom ', $cf7_form );
+            $cf7_form = str_replace('wpcf7-list-item-label', 'wbk-checkbox-label', $cf7_form );
+            $cf7_form = str_replace('wpcf7-list-item', 'wbk-checkbox-span-holder', $cf7_form );
+            $cf7_form = str_replace('wpcf7-list-item-label', 'wbk-checkbox-label', $cf7_form );
+            $cf7_form = str_replace( 'name="wbk-acceptance"',
+                                    'name="wbk-acceptance" value="1" id="wbk-acceptance" aria-invalid="false"><span class="wbk-checkbox-label"></span> <input type="hidden"',
+                                    $cf7_form );
+            $cf7_form = str_replace('type="file"', 'type="file" accept="application/pdf,image/png,image/jpeg,.doc, .docx"', $cf7_form );
+            $html .= $cf7_form;
+        } else {
+            $cf7_form = str_replace('<p>', '<div class="field-row-w">', $cf7_form );
+            $cf7_form = str_replace('</p>', '</div>', $cf7_form );
+            $cf7_form = str_replace( 'id="wbk-name"', '', $cf7_form );
+            $cf7_form = str_replace( 'id="wbk-email"', '', $cf7_form );
+            $cf7_form = str_replace( 'id="wbk-phone"', '', $cf7_form );
+            $cf7_form = str_replace( 'id="wbk-comment"', '', $cf7_form );
+           
+            $cf7_form = str_replace( 'name="wbk-name"', 'name="custname"', $cf7_form );
+            $cf7_form = str_replace( 'name="wbk-email"', 'name="email"', $cf7_form );
+            $cf7_form = str_replace( 'name="wbk-phone"', 'name="phone"', $cf7_form );
+            $cf7_form = str_replace( 'name="wbk-comment"', 'name="desc"', $cf7_form );
+            $html .= $cf7_form;
+            
+        }
     }
 
-    $html .= '<input type="button" class="wbk-button wbk-width-100 wbk-mt-10-mb-10" id="wbk-book_appointment" value="' . esc_html( get_option( 'wbk_book_text_form', '') ) . '">';
-    if ( get_option( 'wbk_show_cancel_button', 'disabled' ) == 'enabled' ){
-        $html .= '<input class="wbk-button wbk-width-100 wbk-cancel-button"  value="' . esc_html( get_option( 'wbk_cancel_button_text',  '' ) ) . '" type="button">';
-    }
+    if( get_option('wbk_mode') != 'webba5' ) {
+        $html .= '<input type="button" class="wbk-button wbk-width-100 wbk-mt-10-mb-10" id="wbk-book_appointment" value="' . esc_html( get_option( 'wbk_book_text_form', '') ) . '">';
+        if ( get_option( 'wbk_show_cancel_button', 'disabled' ) == 'enabled' ){
+            $html .= '<input class="wbk-button wbk-width-100 wbk-cancel-button"  value="' . esc_html( get_option( 'wbk_cancel_button_text',  '' ) ) . '" type="button">';
+        }
+        
+    } 
     echo $html;
 
 ?>

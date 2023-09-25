@@ -168,4 +168,11 @@ class WBK_Booking extends WBK_Model_Object{
         }
         return $html;
     }
+
+    public function get_status(){
+         if( !isset( $this->fields['status'] ) ){
+            return 'pending';
+        }
+        return $this->fields['status'];
+    }
 }

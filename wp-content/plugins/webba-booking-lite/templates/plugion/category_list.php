@@ -7,7 +7,7 @@ $categories = WBK_Model_Utils::get_service_categories();
 
 <div class="plugion_input_container">
 <select id="wbk_category_list"  class="plugion_input plugion_input_select plugion_mt_20">
-    <option value="0"><?php echo __('Select category', 'wbk' ) ?></option>
+    <option value="0"><?php echo __('Select category', 'webba-booking-lite' ) ?></option>
 
 <?php
     foreach( $categories as $key => $value ){
@@ -19,5 +19,5 @@ $categories = WBK_Model_Utils::get_service_categories();
     }
  ?>
 </select>
-<label for="wbk_category_list"  class="plugion_input_select_label"><?php echo __( 'Service catetories', 'wbk' ) ?> </label>
+<label for="wbk_category_list"  class="plugion_input_select_label"><?php echo __( 'Service catetories', 'webba-booking-lite' ) ?> </label>
 </div>

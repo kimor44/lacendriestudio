@@ -36,6 +36,7 @@ class WBK_Model_Updater
     
     public static function run_update()
     {
+        /*
         self::update_4_0_0();
         self::update_4_0_49();
         self::update_4_0_62();
@@ -44,8 +45,11 @@ class WBK_Model_Updater
         self::update_4_1_4();
         self::update_4_1_8();
         self::update_4_2_8();
+        */
         self::update_4_3_0_1();
         self::update_4_5_1();
+        self::update_5_0_0();
+        self::update_5_0_0_static();
     }
     
     public static function run_previous_update()
@@ -1422,11 +1426,33 @@ class WBK_Model_Updater
         global  $wpdb ;
         
         if ( self::is_update_required( 'update_4_5_1' ) ) {
-            update_option( 'wbk_payment_item_name', __( '#service_name on #appointment_day at #appointment_time', 'wbk' ) );
+            update_option( 'wbk_payment_item_name', __( '#service_name on #appointment_day at #appointment_time', 'webba-booking-lite' ) );
             update_option( 'wbk_appointment_information', 'Appointment on #appointment_day #appointment_time' );
             self::set_update_as_complete( 'update_4_5_1' );
         }
     
+    }
+    
+    static function update_5_0_0()
+    {
+        if ( self::is_update_required( 'update_4_5_1' ) ) {
+        }
+    }
+    
+    static function update_5_0_0_static()
+    {
+        update_option( 'wbk_mode', 'webba5' );
+        update_option( 'wbk_date_format', get_option( 'date_format' ) );
+        update_option( 'wbk_time_format', get_option( 'time_format' ) );
+        update_option( 'wbk_start_of_week', get_option( 'start_of_week' ) );
+        update_option( 'wbk_appointments_auto_lock_allow_unlock', 'disallow' );
+        update_option( 'wbk_allow_manage_by_link', 'yes' );
+        update_option( 'wbk_email_customer_book_multiple_mode', 'one' );
+        update_option( 'wbk_email_admin_book_multiple_mode', 'one' );
+        update_option( 'wbk_email_admin_cancel_multiple_mode', 'one' );
+        update_option( 'wbk_email_customer_cancel_multiple_mode', 'one' );
+        update_option( 'wbk_email_admin_cancel_multiple_mode', 'one' );
+        update_option( 'wbk_email_admin_cancel_multiple_mode', 'one' );
     }
 
 }

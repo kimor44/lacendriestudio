@@ -17,6 +17,7 @@ for ( $i =  0; $i < count( $timeslots ); $i++ ) {
     if( $timeslot->get_start() < $time_after ){
         continue;
     }
+    
     if( get_option( 'wbk_timeslot_format', 'detailed' ) == 'detailed' ){
         $timeslots_html .= WBK_Renderer::load_template( 'frontend/single_timeslot_detailed', array( $day_to_render, $timeslot, $offset, $service, $timeslots ), false );
 

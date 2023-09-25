@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			$this->id = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect id', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect id', 'webba-booking-lite' ) );
 			return false;
 		}
 	}
@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			$this->name = $value;
 			return true;
 		} else {
-			array_push( $this->error_messages, __( 'incorrect name', 'wbk' ) );
+			array_push( $this->error_messages, __( 'incorrect name', 'webba-booking-lite' ) );
 			return false;
 		}
 	}

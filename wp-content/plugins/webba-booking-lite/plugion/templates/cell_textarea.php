@@ -13,5 +13,5 @@ $value = strip_tags( $value );
 if( strlen( $value ) > 150 ){
     $value = substr($value, 0, 150 ) . ' ...';
 }
-echo $value;
+echo stripslashes( $value );
 ?>

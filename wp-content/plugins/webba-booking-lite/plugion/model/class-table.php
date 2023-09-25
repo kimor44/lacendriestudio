@@ -3,9 +3,6 @@ namespace Plugion;
 if ( !defined( 'ABSPATH' ) ) exit;
 /*
  * This file is part of Webba Booking plugin
-
-
-
  */
 
 
@@ -167,20 +164,51 @@ class Table {
                    $filters[] = $filter;
                 }
             }
+        } else {
+            $appointment_day = [];
+            foreach ( $filters as $key => $filter ) {
+                if ( 'appointment_day' == $filter['name'] ) {
+                    $prev_time_zone = date_default_timezone_get();
+                    date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+                    $appointment_day[] = strtotime( $filter['value'] );
+                    date_default_timezone_set( $prev_time_zone );
+                    unset( $filters[$key] );
+                }
+            }
+            if ( $appointment_day ) {
+                $filters[] = array(
+                    'name' => 'appointment_day',
+                    'value' => $appointment_day
+                );
+            }
         }
         if ( count( $filters ) > 0 ) {
             foreach ( $filters as $filter ) {
                 if ( !isset( $this->data['fields_to_view'] ) ) {
                 //    continue;
                 }
-                $filter_name =  $filter['name'];
+                $filter_name = $filter['name'];
+
                 if( is_array( $filter['value'] ) ){
                     $filter_value = $filter['value'];
                 } else {
-                    $filter_value = array(  $filter['value'] );
+                    $filter_value = array( $filter['value'] );
                 }
+
+                if ( 'appointment_service_categories' == $filter_name ) {
+                    $filter_name = 'appointment_service_id';
+
+                    $service_categories = $wpdb->get_var( $wpdb->prepare( "SELECT category_list FROM " . get_option('wbk_db_prefix', '' ) . "wbk_service_categories WHERE id = %d", $filter_value ) );
+                    $service_categories_ids = json_decode( $service_categories );
+
+                    $filter_value = $service_categories_ids;
+                }
+
                 $filter_value = apply_filters( 'plugion_filter_value', $filter_value, $filter_name );
-                $this->fields->get_element_at( $filter_name )->set_filter_value( $filter_value );
+
+                if ( ! empty( $filter_value ) ) {
+                    $this->fields->get_element_at( $filter_name )->set_filter_value( $filter_value );
+                }
             }
         }
         $conditions_by_fields = [];
@@ -204,8 +232,7 @@ class Table {
             $conditions =  ' WHERE ' . $conditions;
         }
         $sql = 'SELECT ' . implode( ', ', $this->data['fields_to_view_db'] ) . ' from ' . \Plugion_Model_Utils::clean_up_string( $this->get_table_name() ) . $conditions;
-
-
+ 
         $result = apply_filters( 'plugion_rows_value', $wpdb->get_results( $sql ), $this->table_name );
 
         $this->data['rows'] = $result;
@@ -248,7 +275,9 @@ class Table {
 
         $this->data['property_sections_' . $action ] = [];
         $this->data['property_fields_' . $action ] = [];
+ 
         foreach ( $fields as $slug => $field ) {
+           
             $this->data['property_sections_' . $action][] = $field->get_section();
             $this->data['property_fields_' . $action][$slug] = $field;
         }
@@ -790,6 +819,34 @@ class Table {
         $this->default_sort_direction = $default_sort_direction;
 
         return $this;
+    }
+
+    public function get_dependency_by_field( $field ) {
+        if ( is_array( $field->get_dependency() ) ) {
+            $arr_dependency = $field->get_dependency();
+            if ( isset( $arr_dependency['administrator'] ) ) {
+                $user = wp_get_current_user();
+                $role = $user->roles[0];
+                if ( isset( $arr_dependency[ $role ] ) ) {
+                    $arr_dependency = $arr_dependency[ $role ];
+                    $dependency = '[';
+                    foreach ( $arr_dependency as $value ) {
+                        $dependency .= '["' . implode( '","', $value ) . '"]';
+                    }
+                    $dependency .= ']';
+                    return str_replace( '][', '],[', $dependency );
+                }
+            } else {
+                $dependency = '[';
+                foreach ( $arr_dependency as $value ) {
+                    $dependency .= '["' . implode( '","', $value ) . '"]';
+                }
+                $dependency .= ']';
+                return str_replace( '][', '],[', $dependency );
+            }
+        }
+
+        return '';
     }
 
 }

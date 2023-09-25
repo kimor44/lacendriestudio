@@ -11,7 +11,7 @@ if( !is_numeric( $count ) ){
             <div class="wbk-col-12-12">
                 <div class="wbk-input-label">
                     <?php
-                        $message = esc_html( get_option( 'wbk_booking_approved_message_admin', __( 'Bookings approved: #count', 'wbk' ) ) );
+                        $message = esc_html( get_option( 'wbk_booking_approved_message_admin', __( 'Bookings approved: #count', 'webba-booking-lite' ) ) );
                         if( $count > 1 ){
                             $count =  '<span class="wbk_mutiple_counter">: ' .  $count . '</span>';
                          } else {

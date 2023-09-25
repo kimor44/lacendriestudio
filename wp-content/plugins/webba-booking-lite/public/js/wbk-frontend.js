@@ -476,6 +476,7 @@ function wbk_renderSetDate(scroll) {
             if (wbk_is_ios()) {
                 disability_result = response_obj.week_disabilities;
             }
+
             var date_input = WBK_jQuery('#wbk-date').pickadate({
                 min: true,
                 monthsFull: [
@@ -594,9 +595,16 @@ function wbk_renderSetDate(scroll) {
                 var picker = date_input.pickadate('picker');
                 picker.set('select', initial_date);
             }
+
             WBK_jQuery(document).trigger('wbk_picker_initialized', [
                 response_obj,
             ]);
+            if (
+                wbkl10n.auto_select_first_date == 'disabled' &&
+                wbkl10n.date_input == 'classic'
+            ) {
+                WBK_jQuery('#wbk-date').trigger('click');
+            }
         } else {
             if (response_obj.abilities != '') {
                 var options_html =
@@ -752,6 +760,7 @@ function wbk_searchTime() {
             WBK_jQuery('#wbk-slots-container').html('error');
         } else {
             response_obj = WBK_jQuery.parseJSON(response);
+
             if (response_obj.dest == 'form') {
                 WBK_jQuery('#wbk-slots-container').html('');
                 WBK_jQuery('#wbk-booking-form-container').html(
@@ -828,6 +837,7 @@ function wbk_searchTime() {
                 'style',
                 'display:none !important'
             );
+
             WBK_jQuery('#wbk-slots-container').html(response);
             WBK_jQuery('#wbk-slots-container').fadeIn('slow');
 
@@ -914,9 +924,11 @@ function wbk_showMore() {
             WBK_jQuery('#wbk-more-container').html('error');
         } else {
             response_obj = WBK_jQuery.parseJSON(response);
+
             if (response_obj.dest == 'slot') {
                 response = response_obj.data;
             }
+
             WBK_jQuery('#wbk-show_more_container').remove();
             WBK_jQuery(wbkl10n.scroll_container).animate(
                 {

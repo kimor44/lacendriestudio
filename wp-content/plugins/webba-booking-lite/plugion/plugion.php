@@ -111,38 +111,35 @@ final class Plugion {
         wp_enqueue_media();
         wp_enqueue_editor();
 
-        wp_enqueue_script( 'jquery-nice-select', plugins_url( 'vendor/jquery-nice-select/js/jquery.nice-select.js', __FILE__ ), ['jquery'], PLUGION_VERSION );
-        wp_enqueue_style( 'jquery-nice-select-style', plugins_url( 'vendor/jquery-nice-select/css/nice-select.css', __FILE__ ), [], PLUGION_VERSION );
-
-        wp_deregister_script( 'datatables' );
-        wp_dequeue_script( 'datatables-admin' );
-
-        wp_enqueue_script( 'datatables', plugins_url( 'vendor/DataTables/datatables.min.js', __FILE__ ), ['jquery'], PLUGION_VERSION );
         wp_enqueue_style( 'datatables-style', plugins_url( 'vendor/DataTables/datatables.min.css', __FILE__ ), [], PLUGION_VERSION );
-
-        wp_enqueue_script( 'jquery-chosen', plugins_url( 'vendor/chosen/chosen.jquery.min.js', __FILE__ ), ['jquery'], PLUGION_VERSION );
         wp_enqueue_style( 'jquery-chosen-style', plugins_url( 'vendor/chosen/chosen.min.css', __FILE__ ), [], PLUGION_VERSION );
-
-        wp_enqueue_script( 'jquery-effects-core' );
-        wp_enqueue_script( 'jquery-effects-slide' );
-
+        
+        wp_enqueue_script( 'pickadate_picker', plugins_url( 'vendor/pickadatejs/lib/compressed/picker.js', __FILE__ ), [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ], PLUGION_VERSION );
+        wp_enqueue_script( 'pickadate_picker_date', plugins_url( 'vendor/pickadatejs/lib/compressed/picker.date.js', __FILE__ ), [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ], PLUGION_VERSION );
+        wp_enqueue_script( 'pickadate_picker_time', plugins_url( 'vendor/pickadatejs/lib/compressed/picker.time.js', __FILE__ ), [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ], PLUGION_VERSION );
+        
         if( $load_js ){
-            wp_enqueue_script( 'plugion', plugins_url( 'public/plugion.js', __FILE__ ), [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ], PLUGION_VERSION );
+            wp_dequeue_script( 'datatables-admin' );
+            wp_deregister_script( 'datatables' );
+            wp_enqueue_script( 'plugion', plugins_url( 'public/plugion.js', __FILE__ ), [ 'jquery', 'jquery-ui-core', 'jquery-effects-core', 'jquery-effects-slide' ], PLUGION_VERSION );
+            wp_enqueue_script( 'jquery-effects-core' );
+            wp_enqueue_script( 'jquery-effects-slide' );
+            wp_enqueue_script( 'jquery-nice-select', plugins_url( 'vendor/jquery-nice-select/js/jquery.nice-select.js', __FILE__ ), ['jquery'], PLUGION_VERSION );
+            wp_enqueue_script( 'datatables', plugins_url( 'vendor/DataTables/datatables.min.js', __FILE__ ), ['jquery'], PLUGION_VERSION );
+            wp_enqueue_script( 'jquery-chosen', plugins_url( 'vendor/chosen/chosen.jquery.min.js', __FILE__ ), ['jquery'], PLUGION_VERSION );
         }
         if( $load_css ){
             wp_enqueue_style( 'plugion-style', plugins_url( 'public/plugion.css', __FILE__ ), [], PLUGION_VERSION  );
         }
-
-        wp_enqueue_script( 'pickadate_picker', plugins_url( 'vendor/pickadatejs/lib/compressed/picker.js', __FILE__ ), [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ], PLUGION_VERSION );
-        wp_enqueue_script( 'pickadate_picker_date', plugins_url( 'vendor/pickadatejs/lib/compressed/picker.date.js', __FILE__ ), [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ], PLUGION_VERSION );
-        wp_enqueue_script( 'pickadate_picker_time', plugins_url( 'vendor/pickadatejs/lib/compressed/picker.time.js', __FILE__ ), [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ], PLUGION_VERSION );
+        
+        
 
         wp_enqueue_style( 'pickadate_classic', plugins_url( 'vendor/pickadatejs/lib/compressed/themes/classic.css', __FILE__ ), [], PLUGION_VERSION  );
         wp_enqueue_style( 'pickadate_classic_date', plugins_url( 'vendor/pickadatejs/lib/compressed/themes/classic.date.css', __FILE__ ), [], PLUGION_VERSION  );
         wp_enqueue_style( 'pickadate_classic_time', plugins_url( 'vendor/pickadatejs/lib/compressed/themes/classic.time.css', __FILE__ ), [], PLUGION_VERSION  );
 
         $this->assets_initialized = true;
-        plugion_localize_script();
+        plugion_localize_script( 'plugion' );
     }
 
     /**

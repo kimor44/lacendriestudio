@@ -3,6 +3,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 $field = $data[0];
 $value = $data[2];
+
 ?>
 
 <div class="wbk_app_custom_data_value">

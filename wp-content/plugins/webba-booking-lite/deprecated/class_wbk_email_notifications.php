@@ -1,7 +1,5 @@
 <?php
 
-use  Dompdf\Dompdf ;
-use  Dompdf\Options ;
 // webba booking email notifications class and helper functions
 if ( !defined( 'ABSPATH' ) ) {
     exit;
@@ -64,12 +62,12 @@ class WBK_Email_Notifications
         $this->customer_approve_subject = get_option( 'wbk_email_customer_approve_subject', '' );
         $this->customer_approve_message = get_option( 'wbk_email_customer_approve_message', '' );
         $this->admin_cancel_status = get_option( 'wbk_email_adimn_appointment_cancel_status', '' );
-        $this->admin_cancel_subject = get_option( 'wbk_email_adimn_appointment_cancel_subject', __( 'Appointment canceled', 'wbk' ) );
+        $this->admin_cancel_subject = get_option( 'wbk_email_adimn_appointment_cancel_subject', __( 'Appointment canceled', 'webba-booking-lite' ) );
         $this->admin_cancel_message = get_option( 'wbk_email_adimn_appointment_cancel_message', '<p>#customer_name canceled the appointment with #service_name on #appointment_day at #appointment_time</p>' );
         $this->customer_cancel_status = get_option( 'wbk_email_customer_appointment_cancel_status', '' );
-        $this->customer_cancel_subject = get_option( 'wbk_email_customer_appointment_cancel_subject', __( 'Your appointment canceled', 'wbk' ) );
+        $this->customer_cancel_subject = get_option( 'wbk_email_customer_appointment_cancel_subject', __( 'Your appointment canceled', 'webba-booking-lite' ) );
         $this->customer_cancel_message = get_option( 'wbk_email_customer_appointment_cancel_message', '<p>Your appointment with #service_name on #appointment_day at #appointment_time has been canceled</p>' );
-        $this->customer_invoice_subject = get_option( 'wbk_email_customer_invoice_subject', __( 'Invoice', 'wbk' ) );
+        $this->customer_invoice_subject = get_option( 'wbk_email_customer_invoice_subject', __( 'Invoice', 'webba-booking-lite' ) );
         $this->current_category = $current_category;
     }
     
@@ -102,7 +100,7 @@ class WBK_Email_Notifications
                 // email to cutomer
                 if ( $this->customer_book_status != '' ) {
                     
-                    if ( $send_single == TRUE || get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' && get_option( 'wbk_email_customer_book_multiple_mode', 'foreach' ) == 'foreach' || get_option( 'wbk_multi_booking', 'disabled' ) == 'disabled' ) {
+                    if ( $send_single == TRUE || get_option( 'wbk_multi_booking', 'disabled' ) != 'enabled' ) {
                         //	validation
                         if ( !WBK_Validator::check_string_size( $this->customer_email_message, 1, 50000 ) || !WBK_Validator::check_string_size( $this->customer_email_subject, 1, 200 ) || !WBK_Validator::check_email( $this->from_email ) || !WBK_Validator::check_string_size( $this->from_name, 1, 200 ) ) {
                             return;
@@ -140,7 +138,7 @@ class WBK_Email_Notifications
                 // email to admin
                 if ( $this->admin_book_status != '' ) {
                     
-                    if ( $send_single == TRUE || get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' && get_option( 'wbk_email_admin_book_multiple_mode', 'foreach' ) == 'foreach' || get_option( 'wbk_multi_booking', 'disabled' ) == 'disabled' ) {
+                    if ( $send_single == TRUE || get_option( 'wbk_multi_booking', 'disabled' ) != 'enabled' ) {
                         //	validation
                         if ( !WBK_Validator::check_string_size( $this->admin_email_message, 1, 50000 ) || !WBK_Validator::check_string_size( $this->admin_email_subject, 1, 200 ) || !WBK_Validator::check_email( $this->from_email ) || !WBK_Validator::check_string_size( $this->from_name, 1, 200 ) ) {
                             return;
@@ -172,8 +170,20 @@ class WBK_Email_Notifications
                         }
                         
                         /* END: ICal Generation   */
-                        if ( get_option( 'wbk_email_customer_on_booking_pdf_status', '' ) != '' ) {
-                        }
+                        /*
+                        						if ( get_option( 'wbk_email_customer_on_booking_pdf_status', '' ) != '' ) {
+                        							if ( wbk_fs()->is__premium_only() ) {
+                        								if ( wbk_fs()->can_use_premium_code() ) {
+                                                  
+                                                            $html2pdf = new Html2Pdf();
+                        									$html = WBK_Placeholder_Processor::process_placeholders( get_option( 'wbk_email_customer_on_booking_pdf_content', '' ),  $this->appointment_id );
+                        									$filename = __DIR__. time() . '_' .strtolower( wp_generate_password( 12, false ) ) . '.pdf';
+                                                            $html2pdf->writeHTML($html);
+                                                            $html2pdf->output( $filename, 'F' );
+                        									$attachment[] = $filename;
+                        								}
+                        							}
+                        						}*/
                         add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
                         wp_mail(
                             $service->getEmail(),
@@ -236,14 +246,14 @@ class WBK_Email_Notifications
                     $appointment_ids = WBK_Db_Utils::getTomorrowAppointmentsForService( $service_id );
                     $agenda = '<table style="text-align:left;">';
                     $agenda .= '<tr>
-									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Service', 'wbk' ) . '</th>
-									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Time', 'wbk' ) . '</th>
-									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Name', 'wbk' ) . '</th>
-									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Email', 'wbk' ) . '</th>
-									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Phone', 'wbk' ) . '</th>
-   								  	  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Places booked', 'wbk' ) . '</th>
-									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Status', 'wbk' ) . '</th>
-									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Additional information', 'wbk' ) . '</th>
+									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Service', 'webba-booking-lite' ) . '</th>
+									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Time', 'webba-booking-lite' ) . '</th>
+									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Name', 'webba-booking-lite' ) . '</th>
+									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Email', 'webba-booking-lite' ) . '</th>
+									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Phone', 'webba-booking-lite' ) . '</th>
+   								  	  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Places booked', 'webba-booking-lite' ) . '</th>
+									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Status', 'webba-booking-lite' ) . '</th>
+									  <th style="margin:0;background:#ccc;border:1px solid #fff;padding:5px;">' . __( 'Additional information', 'webba-booking-lite' ) . '</th>
 								   </tr>';
                     $app_found = false;
                     $days_before = intval( get_option( 'wbk_email_reminder_days', '1' ) );
@@ -723,8 +733,22 @@ class WBK_Email_Notifications
         
         add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
         /* END: ICal Generation */
-        if ( get_option( 'wbk_email_customer_on_booking_pdf_status', '' ) != '' ) {
-        }
+        /*
+        		if ( get_option( 'wbk_email_customer_on_booking_pdf_status', '' ) != '' ) {
+        			if ( wbk_fs()->is__premium_only() ) {
+        				if ( wbk_fs()->can_use_premium_code() ) {
+                
+                    $html2pdf = new Html2Pdf();
+                    $html = WBK_Placeholder_Processor::process_placeholders( get_option( 'wbk_email_customer_on_booking_pdf_content', '' ),   $appointment_ids  );
+                    $filename = get_temp_dir() . time() . '_' .strtolower( wp_generate_password( 12, false ) ) . '.pdf';
+                    $html2pdf->writeHTML($html);
+                    $html2pdf->output( $filename, 'F' );
+         
+        					$attachment_all[] = $filename;
+        				}
+        			}
+        		}
+        */
         wp_mail(
             $recipient,
             $subject,
@@ -1100,8 +1124,21 @@ class WBK_Email_Notifications
                 return;
             }
             
-            if ( $by_customer == false ) {
-                $message = $this->message_placeholder_processing( $this->customer_cancel_message, $appointment, $service );
+            if ( $by_customer == false || $by_customer == 'auto' ) {
+                
+                if ( $by_customer == 'auto' ) {
+                    $message = get_option( 'wbk_email_customer_automatic_appointment_cancel_message', '' );
+                    
+                    if ( strip_tags( $message ) == '' ) {
+                        $message = $this->message_placeholder_processing( $this->customer_cancel_message, $appointment, $service );
+                    } else {
+                        $message = $this->message_placeholder_processing( $message, $appointment, $service );
+                    }
+                
+                } else {
+                    $message = $this->message_placeholder_processing( $this->customer_cancel_message, $appointment, $service );
+                }
+            
             } else {
                 $message = get_option( 'wbk_email_customer_bycustomer_appointment_cancel_message' );
                 $message = $this->message_placeholder_processing( $message, $appointment, $service );
@@ -1387,8 +1424,11 @@ class WBK_Email_Notifications
         if ( !WBK_Validator::check_string_size( $message, 1, 50000 ) || !WBK_Validator::check_string_size( $subject, 1, 200 ) || !WBK_Validator::check_email( $this->from_email ) || !WBK_Validator::check_string_size( $this->from_name, 1, 200 ) ) {
             return;
         }
+        $prev_zone = date_default_timezone_get();
+        date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
         $message = $this->message_placeholder_processing( $message, $appointment, $service );
         $subject = $this->subject_placeholder_processing( $subject, $appointment, $service );
+        $prev_zone = date_default_timezone_set( $prev_zone );
         $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
         add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
         wp_mail(
@@ -1594,7 +1634,7 @@ class WBK_Email_Notifications
     
     public function send_gg_calendar_issue_alert_to_admin( $error_message = '' )
     {
-        if ( get_option( 'wbk_gg_send_alerts_to_admin', 'no' ) == 'no' ) {
+        if ( get_option( 'wbk_gg_send_alerts_to_admin', 'no' ) != 'yes' ) {
             return;
         }
         $service = new WBK_Service_deprecated();
@@ -1638,22 +1678,10 @@ function wbk_email_processing_send_on_payment( $app_ids )
     // send confitmation about the transaction to admin
     if ( get_option( 'wbk_email_admin_paymentrcvd_status', '' ) != '' ) {
         
-        if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' ) {
-            // case for multiple mode
-            
-            if ( get_option( 'wbk_email_admin_book_multiple_mode', 'one' ) == 'one' ) {
-                date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-                $notifications->sendMultiplePaymentReceived( 'admin', $app_ids );
-                date_default_timezone_set( 'UTC' );
-            } else {
-                foreach ( $app_ids as $app_id ) {
-                    date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-                    $notifications = new WBK_Email_Notifications( $service_id, $app_id );
-                    $notifications->sendSinglePaymentReceived( 'admin' );
-                    date_default_timezone_set( 'UTC' );
-                }
-            }
-        
+        if ( get_option( 'wbk_multi_booking', 'disabled' ) == 'enabled' ) {
+            date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+            $notifications->sendMultiplePaymentReceived( 'admin', $app_ids );
+            date_default_timezone_set( 'UTC' );
         } else {
             date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
             $notifications->sendSinglePaymentReceived( 'admin' );
@@ -1664,22 +1692,11 @@ function wbk_email_processing_send_on_payment( $app_ids )
     // send confitmation about the transaction to customer
     if ( get_option( 'wbk_email_customer_paymentrcvd_status', '' ) != '' ) {
         
-        if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' ) {
+        if ( get_option( 'wbk_multi_booking', 'disabled' ) == 'enabled' ) {
             // case for multiple mode
-            
-            if ( get_option( 'wbk_email_customer_book_multiple_mode', 'one' ) == 'one' ) {
-                date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-                $notifications->sendMultiplePaymentReceived( 'customer', $app_ids );
-                date_default_timezone_set( 'UTC' );
-            } else {
-                foreach ( $app_ids as $app_id ) {
-                    date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-                    $notifications = new WBK_Email_Notifications( $service_id, $app_id );
-                    $notifications->sendSinglePaymentReceived( 'customer' );
-                    date_default_timezone_set( 'UTC' );
-                }
-            }
-        
+            date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+            $notifications->sendMultiplePaymentReceived( 'customer', $app_ids );
+            date_default_timezone_set( 'UTC' );
         } else {
             date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
             $notifications->sendSinglePaymentReceived( 'customer' );
@@ -1690,7 +1707,7 @@ function wbk_email_processing_send_on_payment( $app_ids )
     if ( get_option( 'wbk_email_customer_send_invoice', 'disabled' ) == 'onpayment' ) {
         // mutiple booking disabled or foreach mode is used
         
-        if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'disabled' && get_option( 'wbk_email_customer_book_multiple_mode', 'foreach' ) == 'foreach' || get_option( 'wbk_multi_booking', 'disabled' ) == 'disabled' ) {
+        if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'enabled' ) {
             foreach ( $app_ids as $app_id ) {
                 date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
                 $notifications = new WBK_Email_Notifications( $service_id, $app_id );

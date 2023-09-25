@@ -1,11 +1,5 @@
 <?php
 if ( !defined( 'ABSPATH' ) ) exit;
-/*
- * This file is part of Webba Booking plugin
- * (c) plugion.org <hello@plugion.org>
-
-
- */
 
 $slug = $data[0];
 $pagination = $data[1];
@@ -30,6 +24,9 @@ if ( $table ->current_user_can_add() ) {
 } else {
     $add_button = '';
 }
+// filter add button
+$add_button = apply_filters( 'plugion_table_add_button', $add_button, $slug );
+
 // prepare filter button
 if( count( $table->get_data( 'filters' ) ) > 0 ){
     $filter_button = '<a data-table="' . esc_attr( $slug ) . '" class="plugion_filter_button plugion_button plugion_transparent_dark_button plugion_top_panel_button">' . plugion_translate_string( 'Filters' ) .  '</a>';
@@ -39,10 +36,10 @@ if( count( $table->get_data( 'filters' ) ) > 0 ){
 $filter_button = apply_filters( 'plugion_table_after_default_buttons', $filter_button, $slug );
 
 // prepare table header
-$table_header  = '<table class="plugion_table table_' . esc_attr( $slug ) . '" data-table="' . esc_attr( $slug ) . '" data-pagination="' . esc_attr( $pagination ) . '" data-search="' . esc_attr( $search ) . '"
- data-sort_column="' . esc_attr(  $table->get_default_sort_column() ) . '" data-sort_direction= "' . esc_attr(  $table->get_default_sort_direction() )  . '" ><thead>';
+$table_start  = '<table class="plugion_table table_' . esc_attr( $slug ) . '" data-table="' . esc_attr( $slug ) . '" data-pagination="' . esc_attr( $pagination ) . '" data-search="' . esc_attr( $search ) . '"
+ data-sort_column="' . esc_attr(  $table->get_default_sort_column() ) . '" data-sort_direction= "' . esc_attr(  $table->get_default_sort_direction() )  . '" >';
 
-$table_header .= '<tr class="plugion_table_row_item"><th class="plugion_exportable" data-sorttype="">' . plugion_translate_string( 'ID' ) . '</th>';
+$table_header = '<thead><tr class="plugion_table_row_item"><th class="plugion_exportable" data-sorttype="">' . plugion_translate_string( 'ID' ) . '</th>';
 foreach ( Plugion()->tables->get_element_at( $slug )->get_data( 'fields_to_view' ) as $field_slug => $field ) {
     if ( !$field->get_in_row() ) {
         continue;
@@ -53,7 +50,7 @@ foreach ( Plugion()->tables->get_element_at( $slug )->get_data( 'fields_to_view'
 $table_header .= '</tr></thead>';
 
 // filter table header
-$table_header = apply_filters( 'plugion_table_header', $table_header, $slug );
+$table_header = $table_start . apply_filters( 'plugion_table_header', $table_header, $slug );
 // prepare table content
 $table_content = '<tbody>';
 ob_start();

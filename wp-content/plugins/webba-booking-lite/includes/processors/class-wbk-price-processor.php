@@ -20,7 +20,6 @@ class WBK_Price_Processor {
                 }
                 $bookings = $booking_temp;
             }
-
         }
         $service = new WBK_Service( $booking->get_service() );
         $price_details = array();
@@ -34,7 +33,7 @@ class WBK_Price_Processor {
 
         $sort_array = array();
         $pricing_rules = $service->get_pricing_rules();
-
+         
         $pricing_rules_obj = array();
         foreach(  $pricing_rules as $pricing_rule_id ) {
             $rule = new WBK_Pricing_Rule( $pricing_rule_id );
@@ -53,9 +52,10 @@ class WBK_Price_Processor {
             $multiplier = 1;
             //$rule = new WBK_Pricing_Rule( $pricing_rule_id );
             $apply_rule = false;
-            if( $rule->get_amount() > 0 ){
+             
+            if( $rule->get_amount() >= 0 ){
                 switch ( $rule->get_type() ) {
-                    case 'date_range':
+                    case 'date_range':                         
                         $dates = explode( '-', $rule->get_date_range() );
                         if( is_array( $dates ) && count( $dates ) == 2 ){
                             $start = strtotime( trim( $dates[0] ) );
@@ -157,6 +157,7 @@ class WBK_Price_Processor {
                         break;
                     case 'day_of_week_and_time':
                         $day_time = json_decode( $rule->get_day_time() );
+                         
                         if ( is_object($day_time) ) {
                             $slots = [];
                             $sort_array = [];
@@ -172,7 +173,7 @@ class WBK_Price_Processor {
                         }
                         break;
                     }
-                 if( $apply_rule ){
+                 if( $apply_rule ){                 
                     if( $rule->get_fixed_percent() == 'fixed' || $rule->get_action() == 'replace' ){
                         $amount = $rule->get_amount();
                     } else {
@@ -216,7 +217,7 @@ class WBK_Price_Processor {
             if( $booking->get_name() == '' ){
                 continue;
             }
-            $total += floatval( $booking->get_price() ) * floatval( $booking->get_quantity() );
+            $total += floatval( floatval($booking->get_price() ) ) * floatval( floatval( $booking->get_quantity() ) );
 
         }
 
@@ -224,6 +225,9 @@ class WBK_Price_Processor {
     }
 
     static function get_tax_for_messages(){
+        if( wbk_is5() ){
+            return get_option( 'wbk_general_tax', '0' );
+        }
         $tax_rule = get_option( 'wbk_tax_for_messages', 'paypal' );
         if( $tax_rule == 'paypal' ){
             $tax = get_option( 'wbk_paypal_tax', 0 );
@@ -319,7 +323,7 @@ class WBK_Price_Processor {
                       'tax' => $tax_value );
     }
 
-    static function get_payment_items( $booking_ids, $tax = 0, $coupon = null ){
+    static function get_payment_items( $booking_ids, $tax = 0, $coupon = null, $get_item_names = true ){
         $subtotal = 0;
         $item_names = array();
         $prices 	= array();
@@ -335,7 +339,11 @@ class WBK_Price_Processor {
             if( !$service->is_loaded() ){
                 return -4;
             }
-            $item_names[] = WBK_Placeholder_Processor::process_placeholders( get_option( 'wbk_payment_item_name', '' ), $booking_id );
+            if( $get_item_names ){
+                $item_names[] = WBK_Placeholder_Processor::process_placeholders( get_option( 'wbk_payment_item_name', '' ), $booking_id );
+            } else {
+                $item_names[] = '';
+            }
             $prices[] = $booking->get_price();
             $quantities[] = $booking->get_quantity();
             $services[] = $booking->get_service();
@@ -350,7 +358,7 @@ class WBK_Price_Processor {
                 $amount_of_discount = ( $subtotal / 100 ) * $coupon[2];
             }
             $subtotal -= $amount_of_discount ;
-            $item_names[] = get_option( 'wbk_payment_discount_item', __( 'Discount', 'wbk' ) );
+            $item_names[] = get_option( 'wbk_payment_discount_item', __( 'Discount', 'webba-booking-lite' ) );
             $prices[]  = $amount_of_discount * (- 1 );
             $quantities[] = 1;
             $services[] = 0;
@@ -373,11 +381,10 @@ class WBK_Price_Processor {
         } else {
             $tax_to_pay = ( ( $subtotal ) / 100 ) * $tax;
         }
-        // $total += $service_fee[0];
 
         $total = $subtotal + $tax_to_pay;
         
-        return array( 'item_names' => $item_names,
+        $data = array( 'item_names' => $item_names,
                           'prices' => $prices,
                       'tax_to_pay' => $tax_to_pay,
               'amount_of_discount' => $amount_of_discount,
@@ -386,6 +393,28 @@ class WBK_Price_Processor {
                            'total' => $total,
                              'sku' => $services,
                      'service_fee' => $service_fee );
+       
+        return $data;
+    }
+
+    static function get_payment_items_post_booked( $booking_ids ){
+        if( !is_array( $booking_ids ) || count( $booking_ids ) == 0 ){
+            return 0;
+        }
+        $booking = new WBK_Booking( $booking_ids[0] );
+        $tax = get_option( 'wbk_general_tax', '0' );
+        $coupon_id = $booking->get('coupon');
+        $coupon_result = FALSE;
+        if( !is_null( $coupon_id ) && is_numeric( $coupon_id ) && $coupon_id > 0 ){
+            $coupon = new WBK_Coupon( $coupon_id );
+            if( $coupon->is_loaded() ){
+                $coupon_result = array( $coupon_id, $coupon->get('amount_fixed'), $coupon->get('amount_percentage') );
+            }
+        }
+       
+        
+        return self:: get_payment_items( $booking_ids, $tax, $coupon_result );
+
     }
 
 }

@@ -6,7 +6,6 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 include 'backend/class_wbk_backend_options.php';
 include 'backend/class_wbk_backend_schedule.php';
-require WP_WEBBA_BOOKING__PLUGIN_DIR . '/deprecated/solo-framework/solo-framework.php';
 // define main backend class
 class WBK_Backend
 {
@@ -32,13 +31,6 @@ class WBK_Backend
         );
         $backend_schedule = new WBK_Backend_Schedule();
         $backend_options = new WBK_Backend_Options();
-        $slf = new SoloFramework( 'wbk_settings_data' );
-        
-        if ( isset( $_GET['page'] ) && $_GET['page'] == 'wbk-appearance' ) {
-            slf_register_actions();
-            $slf->loadSectionAssets( 'wbk_extended_appearance_options' );
-        }
-    
     }
     
     public function prefix_plugin_update_message( $data, $response )
@@ -86,7 +78,7 @@ class WBK_Backend
         global  $current_user ;
         
         if ( current_user_can( 'manage_options' ) || WBK_Validator::checkAccessToSchedule() || WBK_Validator::checkAccessToGgCalendarPage() ) {
-            $root_name = __( 'Webba Booking', 'wbk' );
+            $root_name = __( 'Webba Booking', 'webba-booking-lite' );
             $root_name = apply_filters( 'wbk_root_menu_title', $root_name );
             add_menu_page(
                 $root_name,
@@ -98,72 +90,64 @@ class WBK_Backend
             );
             add_submenu_page(
                 'wbk-main',
-                __( 'Appearance', 'wbk' ),
-                __( 'Appearance', 'wbk' ),
+                __( 'Dashboard', 'webba-booking-lite' ),
+                __( 'Dashboard', 'webba-booking-lite' ),
                 'manage_options',
-                'wbk-appearance',
+                'wbk-dashboard',
                 array( 'WBK_Renderer', 'render_backend_page' )
             );
             add_submenu_page(
                 'wbk-main',
-                __( 'Services', 'wbk' ),
-                __( 'Services', 'wbk' ),
+                __( 'Services', 'webba-booking-lite' ),
+                __( 'Services', 'webba-booking-lite' ),
                 'manage_options',
                 'wbk-services',
                 array( 'WBK_Renderer', 'render_backend_page' )
             );
             add_submenu_page(
                 'wbk-main',
-                __( 'Service categories', 'wbk' ),
-                __( 'Service categories', 'wbk' ),
-                'manage_options',
-                'wbk-service-categories',
-                array( 'WBK_Renderer', 'render_backend_page' )
-            );
-            add_submenu_page(
-                'wbk-main',
-                __( 'Appointments', 'wbk' ),
-                __( 'Appointments', 'wbk' ),
+                __( 'Bookings', 'webba-booking-lite' ),
+                __( 'Bookings', 'webba-booking-lite' ),
                 'read',
                 'wbk-appointments',
                 array( 'WBK_Renderer', 'render_backend_page' )
             );
             add_submenu_page(
                 'wbk-main',
-                __( 'Schedule', 'wbk' ),
-                __( 'Schedule', 'wbk' ),
+                __( 'Calendar', 'webba-booking-lite' ),
+                __( 'Calendar', 'webba-booking-lite' ),
                 'read',
                 'wbk-schedule',
                 array( 'WBK_Renderer', 'render_backend_page' )
             );
             add_submenu_page(
                 'wbk-main',
-                __( 'Email templates', 'wbk' ),
-                __( 'Email templates', 'wbk' ),
+                __( 'Appearance', 'webba-booking-lite' ),
+                __( 'Appearance', 'webba-booking-lite' ),
+                'manage_options',
+                'wbk-appearance',
+                array( 'WBK_Renderer', 'render_backend_page' )
+            );
+            add_submenu_page(
+                'wbk-main',
+                __( 'Email templates', 'webba-booking-lite' ),
+                __( 'Email templates', 'webba-booking-lite' ),
                 'manage_options',
                 'wbk-email-templates',
                 array( 'WBK_Renderer', 'render_backend_page' )
             );
             add_submenu_page(
                 'wbk-main',
-                __( 'Coupons', 'wbk' ),
-                __( 'Coupons', 'wbk' ),
-                'read',
-                'wbk-coupons',
-                array( 'WBK_Renderer', 'render_backend_page' )
-            );
-            add_submenu_page(
-                'wbk-main',
-                __( 'Pricing rules', 'wbk' ),
-                __( 'Pricing rules', 'wbk' ),
+                __( 'Pricing rules', 'webba-booking-lite' ),
+                __( 'Pricing rules', 'webba-booking-lite' ),
                 'read',
                 'wbk-pricing-rules',
                 array( 'WBK_Renderer', 'render_backend_page' )
             );
             $hook = add_submenu_page(
                 'wbk-main',
-                __( 'Settings', 'wbk' ),
-                __( 'Settings', 'wbk' ),
+                __( 'SETTINGS', 'webba-booking-lite' ),
+                __( 'SETTINGS', 'webba-booking-lite' ),
                 'manage_options',
                 'wbk-options',
                 array( 'WBK_Renderer', 'render_backend_page' )
@@ -195,11 +179,7 @@ class WBK_Backend
     
     public function admin_notices()
     {
-        echo  WBK_Admin_Notices::labelUpdate() ;
-        echo  WBK_Admin_Notices::appearanceUpdate() ;
-        echo  WBK_Admin_Notices::emailLandingUpdate() ;
-        echo  WBK_Admin_Notices::stripe_fields_update_norice() ;
-        echo  WBK_Admin_Notices::wbk_4_0_update() ;
+        echo  WBK_Admin_Notices::setup_required() ;
         echo  WBK_Admin_Notices::sms_compability() ;
         echo  WBK_Admin_Notices::stripe_conflict() ;
     }

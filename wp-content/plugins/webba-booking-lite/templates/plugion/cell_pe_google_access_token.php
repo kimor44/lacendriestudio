@@ -6,7 +6,6 @@ $slug = $data[1];
 $value = $data[2];
 $row = $data[3];
 $calendar_id = $row['id'];
-$html = '';
 
 if ( wbk_fs()->is__premium_only() ) {
     if ( wbk_fs()->can_use_premium_code() ) {
@@ -15,36 +14,33 @@ if ( wbk_fs()->is__premium_only() ) {
         $client_id =  $credentials[0];
         $client_secret = $credentials[1];
         if( $client_id  == '' || $client_secret == '' ){
-            echo '<span class="wbk_google_auth_error"><img src="'. WP_WEBBA_BOOKING__PLUGIN_URL . '/backend/images/error.png"
-                        alt="error">' . __( 'Authorization failed', 'wbk' ) . '</span>' .
-                '<span class="wbk_google_auth_desc">' . __( 'Google API credentials not set', 'wbk' ) . '</span>';
+            echo '<div class="authorization-message-wb failed-wb">
+                    <div class="message-title-wb">' . __( 'Authorization failed', 'webba-booking-lite' ) . '</div>
+                    <div class="message-subtitle-wb">' . __( 'Google API credentials not set', 'webba-booking-lite' ) . '</div>
+                </div>';
             return;
         }
         $google = new WBK_Google();
         $google->init( $calendar_id );
         $connection_status =  $google->connect();
-        $html = '';
-        $control_html = '<a target="_blank" class="wbk_google_auth_link" href="' .  get_admin_url()  . 'admin.php?page=wbk-gg-calendars&clid=' . $calendar_id . '">' . __( 'Manage authorization', 'wbk' ) .'</a>';
-        if( $connection_status[0] == 1 ){
-            $html .=  '<span class="wbk_google_auth_success"><img src="'. WP_WEBBA_BOOKING__PLUGIN_URL . '/public/images/success.png"
-                        alt="success">' .  __( 'Authorized', 'wbk' ) . '</span>';
-            $html .= '<span class="wbk_google_auth_desc">' . __( 'Calendar name on Google:', 'wbk' );
-            $html .=  ' ' . $connection_status[1] . '</span>';
-            $html .= $control_html;
-        }
-        if( $connection_status[0] == 0 ){
-            $html .= '<span class="wbk_google_auth_warning"><img src="'. WP_WEBBA_BOOKING__PLUGIN_URL . '/public/images/warning.png"
-                        alt="warning">' . __( 'Authorization required', 'wbk' ) . '</span>' .
-                '<span class="wbk_google_auth_desc">' . __( 'Click on the link below to start the authorization process', 'wbk' ) . '</span>' .
-                $control_html;
-            $html .= '<span class="wbk_google_auth_desc">' .  __( 'Details: ', 'wbk' ) . $connection_status[1] . '</span>';
-        }
-        if( $connection_status[0] == 2 ){
-            $html .= '<span class="wbk_google_auth_error"><img src="'. WP_WEBBA_BOOKING__PLUGIN_URL . '/public/images/error.png"
-                        alt="error">' . __( 'Authorization failed', 'wbk' ) . '</span>' .
-                '<span class="wbk_google_auth_desc">' . __( 'Check Google API credentials, calendar ID and try to re-authorize this calendar', 'wbk' ) . '</span>' . $control_html;
-                    $html .= '<span class="wbk_google_auth_desc">' . __( 'Details: ', 'wbk') . $connection_status[1] . '</span>';
+        $control_html = '<a target="_blank" class="wbk_google_auth_link" href="' .  get_admin_url()  . 'admin.php?page=wbk-gg-calendars&clid=' . $calendar_id . '">' . __( 'Manage authorization', 'webba-booking-lite' ) .'</a>';
+        if ( $connection_status[0] == 1 ) {
+            echo '<div class="authorization-message-wb successfull-wb">
+                    <div class="message-title-wb">' .  __( 'Authorized', 'webba-booking-lite' ) . '</div>
+                    <div class="message-subtitle-wb">' .  __( 'Calendar name on Google:', 'webba-booking-lite' ) . ' ' . $connection_status[1] . '. ' . $control_html . '</div>
+                </div>';
+        } elseif ( $connection_status[0] == 0 ) {
+            echo '<div class="authorization-message-wb failed-wb">
+                    <div class="message-title-wb">' . __( 'Authorization required', 'webba-booking-lite' ) . '</div>
+                    <div class="message-subtitle-wb">' . __( 'Click on the link below to start the authorization process', 'webba-booking-lite' ) . '. ' . $control_html . '</div>
+                    <div class="message-subtitle-wb">' .  __( 'Details: ', 'webba-booking-lite' ) . $connection_status[1] . '</div>
+                </div>';
+        } elseif ( $connection_status[0] == 2 ) {
+            echo '<div class="authorization-message-wb failed-wb">
+                    <div class="message-title-wb">' . __( 'Authorization failed', 'webba-booking-lite' ) . '</div>
+                    <div class="message-subtitle-wb">' . __( 'Check Google API credentials, calendar ID and try to re-authorize this calendar', 'webba-booking-lite' ) . '. ' . $control_html . '</div>
+                    <div class="message-subtitle-wb">' .  __( 'Details: ', 'webba-booking-lite' ) . $connection_status[1] . '</div>
+                </div>';
         }
     }
 }
-echo $html;
