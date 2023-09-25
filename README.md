@@ -22,8 +22,8 @@ La cendrie studio is a private rehearsal room where you can book slots for your 
 
 ## Technologies
 
-[![WordPress - 6.1.1](https://img.shields.io/static/v1?label=WordPress&message=6.1.1&color=%2321759B)](https://wordpress.com/fr/)
-[![PHP - 7.4.32](https://img.shields.io/static/v1?label=PHP&message=7.4.32&color=%23777BB4)](https://www.php.net/)
+[![WordPress](https://img.shields.io/badge/dynamic/json?label=WordPress&query=%24.wordpress&url=https%3A%2F%2Flacendriestudio.com%2Fwp-json%2Fcendrie%2Fv1%2Fversions)](https://fr.wordpress.org/)
+[![PHP - 7.4](https://img.shields.io/static/v1?label=PHP&message=7.4.32&color=%23777BB4)](https://www.php.net/)
 [![TailwindCSS - ^3.0.23](https://img.shields.io/static/v1?label=TailwindCSS&message=^3.0.23&color=06B6D4)](https://tailwindcss.com/)
 [![issues - lacendriestudio](https://img.shields.io/github/issues/kimor44/lacendriestudio)](https://github.com/kimor44/lacendriestudio/issues)
 
