@@ -14,7 +14,7 @@
  * pouvez simplement renommer ce fichier en "wp-config.php" et remplir les
  * valeurs.
  *
- * @link https://wordpress.org/documentation/article/editing-wp-config-php/
+ * @link https://fr.wordpress.org/support/article/editing-wp-config-php/
  *
  * @package WordPress
  */
@@ -45,7 +45,7 @@ define('DB_COLLATE', '');
  *
  * Remplacez les valeurs par défaut par des phrases uniques !
  * Vous pouvez générer des phrases aléatoires en utilisant
- * {@link https://api.wordpress.org/secret-key/1.1/salt/ le service de clefs secrètes de WordPress.org}.
+ * {@link https://api.wordpress.org/secret-key/1.1/salt/ le service de clés secrètes de WordPress.org}.
  * Vous pouvez modifier ces phrases à n’importe quel moment, afin d’invalider tous les cookies existants.
  * Cela forcera également tous les utilisateurs à se reconnecter.
  *
@@ -75,7 +75,7 @@ $table_prefix = 'wp_';
  *
  * En passant la valeur suivante à "true", vous activez l’affichage des
  * notifications d’erreurs pendant vos essais.
- * Il est fortemment recommandé que les développeurs d’extensions et
+ * Il est fortement recommandé que les développeurs et développeuses d’extensions et
  * de thèmes se servent de WP_DEBUG dans leur environnement de
  * développement.
  *
