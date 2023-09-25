@@ -121,3 +121,6 @@ function cendrie_replace_content($text_content)
   return $text_content;
 }
 add_filter('the_content', 'cendrie_replace_content');
+
+// including API endpoints
+require_once('includes/api_end_points.php');
