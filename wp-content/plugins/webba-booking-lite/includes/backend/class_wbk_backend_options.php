@@ -919,7 +919,7 @@ Admin Notifications: The reply-to email address is set to the customer\'s email 
             'advanced'
 		);
 
-        wbk_opt()->add_option( 'wbk_time slot_time_string', 'select', __( 'Time slot format', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+        wbk_opt()->add_option( 'wbk_timeslot_time_string', 'select', __( 'Time slot format', 'webba-booking-lite' ), 'wbk_mode_settings_section',
 			array(
                 'popup' => __( 'Choose between displaying only the start time or both the start and end times in the time slots.', 'webba-booking-lite' ),
 				'default' => 'start',
