@@ -1,0 +1,685 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+#screen-meta-links {
+    display: none;
+}
+
+/* Header */
+
+.vi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 24px;
+    padding: 20px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #f5f5f5;
+    transition: .25s;
+}
+
+.vi-header.vi-sticky {
+    box-shadow: 0 5px 10px rgb(0 0 0 / 10%);
+}
+
+.vi-header-left {
+}
+
+.vi-header-right {
+    display: flex;
+}
+
+.vi-header .notice {
+    display: none;
+}
+
+.vi-body {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.vi-footer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    background-color: #fafafa;
+    border-top: 1px solid #f5f5f5;
+}
+
+.wrap h1.vi-heading {
+    font-size: 1.5em;
+    line-height: 26px;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+}
+
+.vi-heading a {
+    text-decoration: none;
+    transition: .25s;
+}
+
+.vi-heading a:hover {
+    text-decoration: underline;
+}
+
+.vi-heading small {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+}
+
+.vi-header-action {
+    margin-left: 16px;
+    text-decoration: none;
+    transition: .25s;
+    line-height: 30px;
+}
+
+.vi-header-action:first-child {
+    margin-left: 0;
+}
+
+.vi-header-action:hover {
+    text-decoration: underline;
+}
+
+/* Body */
+
+.vi .inspector-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    margin-top: -1.5em;
+}
+
+.vi .inspector-header h2 {
+    line-height: 22px;
+    width: 112px;
+    color: #3c434a;
+}
+
+.vi .results-counter {
+    display: inline-block;
+    margin-right: 4px;
+    font-size: 0.8125em;
+    color: #bbb;
+}
+
+.vi #results-spinner {
+    margin-left: -6px;
+}
+
+.vi img.spinner_inline {
+    height: 1em;
+    width: 1em;
+    position: relative;
+    bottom: -4px;
+    margin-left: 6px;
+    margin-right: 2px;   
+}
+
+.vi .inspector-actions {
+    width: calc( 100% - 120px );
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vi .results-filters {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.vi .results-viewer {
+    margin-right: 8px;
+}
+
+.vi .toggle-results {
+    min-width: 92px;
+    margin-right: 8px;
+}
+
+.vi .results-operations {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.vi .autorefresh-results {
+    border-radius: 3px 0 0 3px;
+    border-right: 0;
+}
+
+.vi .refresh-results {
+    margin-right: 8px;
+    border-radius: 0 3px 3px 0;
+    border-left-color: #bcd4e7;
+}
+
+.vi .no-results {
+    padding-top: .5em;
+    padding-bottom: 1.5em;
+    border-bottom:  1px solid #ddd;
+}
+
+.vi .inspector-footer {
+}
+
+.vi .ui.accordion {
+    position: relative;
+    margin: 0;
+}
+
+.vi .ui.accordion .title:not(.ui) {
+    font-family: inherit;
+    color: #2271b1;
+}
+
+.vi .ui.accordion .title:not(.ui):hover {
+    text-decoration: underline;
+}
+
+.vi .ui.accordion .title.active {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #ddd;
+}
+
+.vi .sample-results-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+/* Accordion */
+
+.vi .accordion {
+  margin-top: 1em;
+  margin-bottom: .5em;
+}
+.vi .accordion__control {
+  position: relative;
+  padding: 12px 12px 8px;
+  background-color: #f7f7f7;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  transition: 0.25s;
+  font-weight: 600;
+}
+.vi .accordion__control:not(:first-child) {
+  margin-top: 1rem;
+}
+.vi .accordion__control:hover {
+  background-color: #f1f1f1;
+  border-color: #999;
+}
+.vi .accordion__control--active {
+  background-color: #f7f7f7;
+  border-radius: 3px 3px 0 0;
+}
+.vi .accordion__control:hover {
+  cursor: pointer;
+}
+.vi .accordion__indicator {
+  position: absolute;
+  top: 50%;
+  right: 0.5em;
+  transform: translateY(-50%);
+  font-size: 1.78em;
+}
+.vi .accordion__indicator::after {
+  content: "+";
+}
+.vi .accordion__control--active .accordion__indicator::after {
+  content: "-";
+  font-size: 1.5em;
+}
+.vi .accordion__panel {
+  display: none;
+  border: 1px solid #dddddd;
+  border-top: none;
+  border-radius: 0 0 3px 3px;
+  padding: 0.5em 1.5em 1.5em;
+  background: #f7f7f7;
+}
+
+.vi .accordion__panel pre {
+  font-family: 'Source Code Pro', sans-serif;
+  white-space: pre-wrap;    
+}
+
+.vi .inspection-results {
+    padding-top: 1em;    
+}
+
+.vi .inspection-result {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    /* border-bottom: 1px solid #ddd; */
+}
+
+.vi .inspection-result:last-of-type {
+    border-bottom: none;
+}
+
+.vi .inspection-result:last-of-type .accordion {
+    margin-bottom: 0;
+}
+
+.vi .inspection-time,
+.vi .inspection-accordion,
+.vi .accordion__control,
+.vi .result-deletion,
+.vi .delete-result {
+    box-sizing: border-box;
+}
+
+.vi .inspection-time,
+.vi .accordion__control,
+.vi .delete-result {
+    min-height: 48px;
+}
+
+.vi .inspection-time {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 112px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    background-color: #f7f7f7;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.vi .inspection-time span.time-hi,
+.vi .inspection-time span.time-s {
+    background: none !important;
+    color: #3c434a !important;
+}
+
+.vi .inspection-accordion {
+    width: calc( 100% - 120px );
+}
+
+
+
+.vi .ui.tab.active, 
+.vi .ui.tab.open {
+    max-height: 50vh;
+    overflow-y: scroll;
+    border: 1px solid #dddddd;
+}
+
+.vi .variable-type {
+    display: inline-block;
+    box-sizing: border-box;
+    min-width: 67px;
+    position: relative;
+    top: -1px;
+    text-align: center;
+    border: 1px solid #999;
+    border-radius: 5px;
+    background: #fafafa;
+    padding: 1px 8px 3px;
+    margin-right: 8px;
+    font-weight: normal;
+}
+
+.vi .variable-name {
+    font-size: 1.125em;
+}
+
+.vi .variable-notes {
+    margin-left: 8px;
+    font-weight: normal;
+}
+
+.vi .inspection-origin {
+    color: #bbb;
+    margin-top: 0.5em;
+    transition: .25s;
+}
+
+.vi .inspection-origin:hover {
+    color: #3c434a;
+}
+
+.vi .inspection-accordion pre {
+    margin: 0;
+    background: #ffffff;
+    padding: 12px 16px;
+}
+
+/* Fomantic UI - Tabs */
+
+.vi .functions {
+    display: flex;
+    margin: 8px 0;
+}
+
+.vi .functions .item {
+    cursor: pointer;
+    margin: 0 12px;
+    padding-bottom: 4px;
+}
+
+.vi .functions .item:first-child {
+    margin-left: 0;
+}
+
+.vi .functions .item:last-child {
+    margin-right: 0;
+}
+
+.vi .functions .item.active {
+    color: #3c434a;
+    font-weight: 600;
+}
+
+.vi .functions .item:not(.active):hover {
+    text-decoration: underline;
+}
+
+.vi .separator {
+    font-weight: 600;
+}
+
+/* Hide freemius tabs */
+.vi-header-left .nav-tab-wrapper,
+.fs-section .nav-tab-wrapper {
+    display: none;
+}
+
+.tools_page_variable-inspector-account #wpfooter {
+    display: none;
+}
+
+/* Button Style - Solid */
+
+/* .wp-core-ui .vi-header .button-primary {
+    font-weight: 500;
+    transition: .25s;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.wp-core-ui .button-primary.plugin-sponsor {
+    border-radius: 3px 0 0 3px;
+    margin-left: 16px;
+    background: #de4c73;
+    border-color: #de4c73;
+}
+
+.wp-core-ui .button-primary.plugin-sponsor:hover {
+    background: #b13c5c;
+    border-color: #b13c5c;    
+}
+
+.wp-core-ui .button-primary.plugin-sponsor:focus {
+    box-shadow: none;    
+} */
+
+.wp-core-ui .button-primary.plugin-upgrade {
+    margin-left: 8px;
+    background: #008000;
+    border-color: #008000;
+}
+
+.wp-core-ui .button-primary.plugin-upgrade:hover {
+    background: #006600;
+    border-color: #006600;    
+}
+
+.wp-core-ui .button-primary.plugin-upgrade:focus {
+    box-shadow: none;
+}
+
+/* Button Style - Outlined */
+
+.wp-core-ui .vi-header .button-primary {
+    font-weight: 500;
+    transition: .1s;
+}
+
+.wp-core-ui .button-primary.plugin-sponsor {
+    margin-left: 16px;
+    color: #de4c73;
+    background: transparent;
+    border-color: #de4c73;
+}
+
+.wp-core-ui .button-primary.plugin-sponsor:hover {
+    color: #fff;
+    background: #de4c73;
+}
+
+.wp-core-ui .button-primary.plugin-sponsor:focus {
+    box-shadow: none;    
+}
+
+/* .wp-core-ui .button-primary.plugin-upgrade {
+    margin-left: 8px;
+    color: green;
+    background: transparent;
+    border-color: green;
+}
+
+.wp-core-ui .button-primary.plugin-upgrade:hover {
+    color: #fff;
+    background: green;
+}
+
+.wp-core-ui .button-primary.plugin-upgrade:focus {
+    box-shadow: none;
+} */
+
+.vi .gray-dot {
+    background: #6B7282;    
+}
+
+
+
+/* Sponsorship and Upgrade Modals */
+
+.jBox-Modal.plugin-sponsor-modal .jBox-content,
+.jBox-Modal.plugin-upgrade-modal .jBox-content {
+    max-height: calc( 100vh - 120px ) !important;
+    margin-top: 40px;
+    padding: 20px 40px;
+}
+.cta-modal-content .sponsorship-content,
+.cta-modal-content .upgrade-content {
+}
+.cta-modal-content h2 {
+    font-size: 1.875em;
+    line-height: 1.2;
+}
+.cta-modal-content h3 {
+    font-size: 1.5em;
+    line-height: 1.4;
+}
+.cta-modal-content p {
+    text-align: left;
+    font-size: 1.25em;
+    line-height: 1.7;
+}
+/* Sponsorship Modal */
+
+.jBox-Modal.plugin-sponsor-modal .jBox-content {
+}
+.cta-modal-content.sponsorship .sponsorship-content {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;    
+}
+.cta-modal-content.sponsorship .sponsorship-header {
+    text-align: center;
+}
+.cta-modal-content.sponsorship .sponsorship-image {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -20px;
+}
+.cta-modal-content.sponsorship .sponsorship-image img {
+    width: 50%;    
+}
+.cta-modal-content.sponsorship .sponsorship-content-sections {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.cta-modal-content .sponsorship-info {
+    display: flex;
+    width: 48%;
+}
+.cta-modal-content .sponsorship-methods {
+    display: flex;
+    width: 48%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.cta-modal-content.sponsorship a:not(.button) {
+    color: #de4c73;
+    text-decoration: none;
+}
+.cta-modal-content.sponsorship a:not(.button):hover {
+    text-decoration: underline;
+}
+.cta-modal-content .sponsorship-button {
+    display: flex;
+    align-items: center;
+    font-size: 1.25em;
+}
+.cta-modal-content .sponsorship-button.monthly {
+    font-weight: 500;
+    transition: .25s;
+    color: #fff;
+    background: #de4c73;
+    border-color: #de4c73;
+    margin-bottom: 2em;
+}
+.cta-modal-content .sponsorship-button.monthly:hover {
+    background: #b13c5c;
+    border-color: #b13c5c;    
+}
+.cta-modal-content .sponsorship-button.monthly:focus {
+    box-shadow: none;
+}
+.cta-modal-content .sponsorship-button.one-time {
+    color: #de4c73;
+    background: transparent;
+    border-color: #de4c73;
+    transition: .1s;
+}
+.cta-modal-content .sponsorship-button.one-time:hover {
+    color: #fff;
+    background: #de4c73;
+}
+.cta-modal-content .sponsorship-button.one-time:focus {
+    box-shadow: none;
+}
+
+.cta-modal-content .sponsorship-button .dashicons {
+    margin-left: 4px;
+}
+
+/* Upgrade Modal */
+
+.jBox-Modal.plugin-upgrade-modal .jBox-content {
+    padding-bottom: 0;
+}
+.cta-modal-content .upgrade-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+}
+.cta-modal-content.upgrade .upgrade-image {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -20px;
+}
+.cta-modal-content.upgrade .upgrade-image img {
+    width: 50%;    
+}
+.cta-modal-content .upgrade-header h2 {
+    margin-bottom: 0;
+}
+.cta-modal-content .upgrade-header h3 {
+    margin-top: 0.25em;
+}
+.cta-modal-content .feature-description {
+    margin-bottom: 40px;
+}
+.cta-modal-content .feature-description h3 {
+    padding-bottom: 0.5em;
+    border-bottom: 3px solid #008000;
+}
+.cta-modal-content .feature-description img {
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    margin: 16px 0;
+}
+.cta-modal-content .upgrade-footer {
+    position: sticky;
+    left: 0;
+    bottom: 0;
+    margin-left: -40px;
+    margin-right: -40px;
+}
+.cta-modal-content .upgrade-footer a {
+    display: block;
+    background: #008000;
+    padding: 20px 40px;
+    font-size: 1.25em;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    transition: .25s;
+    border-radius: 0 0 4px 4px;
+}
+.cta-modal-content .upgrade-footer a:hover {
+    background: #006600;    
+}
+
+
+
+@media (max-width: 768px) {
+
+    .inspector-header,
+    .inspection-result {
+        flex-direction: column;
+    }
+
+    .inspector-header {
+        padding-bottom: 1.5em;
+    }
+
+    .inspection-time,
+    .inspection-accordion {
+        width: 100%;
+    }
+
+    .inspection-time {
+        margin-top: 1.5em;
+        margin-bottom: 0;
+    }
+
+}
