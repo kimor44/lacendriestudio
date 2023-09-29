@@ -39,11 +39,24 @@ function cendrie_dependencies_versions()
   wp_send_json($return);
 }
 
+/**
+ * This is our callback function that embeds our resource in a WP_REST_Response
+ */
+function prefix_get_private_data_permissions_check()
+{
+  // Some code if restriction needed about user capabilities
+  // Remind to look at this link
+  // https://developer.wordpress.org/rest-api/extending-the-rest-api/routes-and-endpoints/#permissions-callback
+
+  return true;
+}
+
 function cendrie_get_current_versions()
 {
   register_rest_route('cendrie/v1', '/versions', array(
     'methods' => WP_REST_Server::READABLE,
-    'callback' => 'cendrie_dependencies_versions'
+    'callback' => 'cendrie_dependencies_versions',
+    'permission_callback' => 'prefix_get_private_data_permissions_check',
   ));
 }
 
