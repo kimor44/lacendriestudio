@@ -4,7 +4,7 @@ Donate link: https://webba-booking.com/
 Tags: appointment booking, booking calendar, online scheduling, event booking, service reservations
 Requires at least: 5.6
 Tested up to: 6.3.1
-Stable tag: 5.0.9
+Stable tag: 5.0.11
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -177,11 +177,11 @@ Visit our WordPress plugin [support forum](https://wordpress.org/support/plugin/
 
 == Changelog ==
 
-5.0.9
+5.0.11
 
-28/09/2023
+01/10/2023
 
-Bugfix: minor bugs fixed
+Improvements: minor improvements
 
 5.0.8
 

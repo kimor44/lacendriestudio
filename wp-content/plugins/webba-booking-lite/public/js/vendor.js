@@ -108,6 +108,7 @@
                 $dropdown.find('.selected').addClass('focus');
             } else {
                 $dropdown.focus();
+                $(document).trigger('nice-select-close');
             }
         });
 
@@ -115,6 +116,8 @@
         $(document).on('click.nice_select', function (event) {
             if ($(event.target).closest('.nice-select').length === 0) {
                 $('.nice-select').removeClass('open').find('.option');
+                $(document).trigger('nice-select-close');
+
             }
         });
 

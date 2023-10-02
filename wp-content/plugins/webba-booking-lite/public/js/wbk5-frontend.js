@@ -1512,7 +1512,20 @@ class WEBBA5_Form {
     init_nice_select() {
         jQuery('.wbk-select').niceSelect('destroy');
         jQuery('.wbk-select').niceSelect();
+        jQuery('.nice-select').click(function(){
+            Scrollbar.destroyAll();
+            jQuery('.appointment-content-scroll-w').css('overflow', 'hidden');             
+        });
+
+        jQuery('.wbk-select').on( 'change', function() { 
+            Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });
+ 
+        });
+        jQuery(document).on('nice-select-close', function(){
+            Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });            
+        });
     }
+
 
     get_next_screen() {
         return this.container

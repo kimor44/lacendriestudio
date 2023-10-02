@@ -19,16 +19,12 @@ class WBK_Backend_Options {
 	}
 
 	public function save_options() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( !current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( 'No permissions' );
 		}
-
 		global $wp_settings_fields;
-
 		parse_str( $_POST['form_data'], $options );
-
 		$settings_fields = $wp_settings_fields['wbk-options'];
-
 		foreach ( $settings_fields[ $options['section'] ] as $field ) {
 			if ( isset( $options[ $field['id'] ] ) ) {
 				update_option( $field['id'], $options[ $field['id'] ] );
@@ -36,7 +32,6 @@ class WBK_Backend_Options {
 				update_option( $field['id'], '' );
 			}
 		}
-
 		wp_send_json_success();
 	}
 
@@ -1280,8 +1275,8 @@ Admin Notifications: The reply-to email address is set to the customer\'s email 
         wbk_opt()->add_option( 'wbk_disable_security', 'checkbox', __( 'Disable advanced security checks', 'webba-booking-lite' ), 'wbk_general_settings_section',
 			array(
 				'checkbox_value' => 'true',
-                'default' => '',
-				'popup' => __( 'IMPORTANT: turn on this option ONLY if you experience troubles with caching and can\'t setup caching exceptions for booking page.', 'webba-booking-lite')
+                'default' => 'true',
+				'popup' => __( 'IMPORTANT: if you disable this option, make sure to not cache pages with the booking form.', 'webba-booking-lite')
             ),
             'advanced'
 		);

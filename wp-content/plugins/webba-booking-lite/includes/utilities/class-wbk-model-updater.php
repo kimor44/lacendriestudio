@@ -48,8 +48,8 @@ class WBK_Model_Updater
         */
         self::update_4_3_0_1();
         self::update_4_5_1();
-        self::update_5_0_0();
         self::update_5_0_0_static();
+        self::update_5_0_11();
     }
     
     public static function run_previous_update()
@@ -1433,9 +1433,10 @@ class WBK_Model_Updater
     
     }
     
-    static function update_5_0_0()
+    static function update_5_0_11()
     {
-        if ( self::is_update_required( 'update_4_5_1' ) ) {
+        if ( self::is_update_required( 'update_5_0_11' ) ) {
+            update_option( 'wbk_disable_security', 'true' );
         }
     }
     
