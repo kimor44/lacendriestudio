@@ -25,25 +25,44 @@ function cendrie_set_end_timeslots($timeslots, $day, $service_id)
 {
 	$disallawed_hours = ['13', '17'];
 	foreach ($timeslots as $timeslot) {
+		$start = $timeslot->get_start();
+		$start_hour = date('H', $start);
 		$end = $timeslot->get_end();
 		$end_hour = date('H', $end);
 		if (in_array($end_hour, $disallawed_hours)) {
-			// Set start & end of the timeslot
-			$end_timeslot = $end + SECONDS_IN_HOUR;
-			$timeslot->set($timeslot->get_start(), $end_timeslot);
+			/**
+			 * global en hour + 1
+			 */
+			$end_hour_plus_one_hour = (string) ((int) $end_hour + 1);
 
-			// Set the formated time of the timeslot
-			$hour_plus_one = (string) ((int) $end_hour + 1);
-			$formated_time = str_replace($end_hour, $hour_plus_one, $timeslot->get_formated_time());
+			/**
+			 * set (timestamps start & end)
+			 */
+			$end_timeslot = $end + SECONDS_IN_HOUR;
+			$timeslot->set($start, $end_timeslot);
+
+			/**
+			 * set_formated_time
+			 */
+			$formated_time = str_replace($end_hour, $end_hour_plus_one_hour, $timeslot->get_formated_time());
 			$timeslot->set_formated_time($formated_time);
 
-			// Set the formated time local of the timeslot
-			$local_hour_plus_one = (string) ((int) $hour_plus_one + 1);
-			$formated_time_local = str_replace($hour_plus_one, $local_hour_plus_one, $timeslot->get_formated_time_local());
+			/**
+			 * set_formated_time_local
+			 */
+			// Set the START time local of the timeslot
+			$start_hour_to_one_hour = (string) ((int) $start_hour - 1);
+			$formated_time_local = str_replace($start_hour_to_one_hour, $start_hour, $timeslot->get_formated_time_local());
+			// Set the END time local of the timeslot
+			$end_hour_to_one_hour = (string) ((int) $end_hour - 1);
+			$formated_time_local = str_replace($end_hour_to_one_hour, $end_hour_plus_one_hour, $formated_time_local);
+			// Finally, set the formated time local
 			$timeslot->set_formated_time_local($formated_time_local);
 
-			// Set the formated time backend of the timeslot
-			$formated_time_backend = str_replace($end_hour, $hour_plus_one, $timeslot->get_formated_time_backend());
+			/**
+			 * set_formated_time_backend
+			 */
+			$formated_time_backend = str_replace($end_hour, $end_hour_plus_one_hour, $timeslot->get_formated_time_backend());
 			$timeslot->set_formated_time_backend($formated_time_backend);
 		}
 	}
