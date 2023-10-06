@@ -4,7 +4,7 @@ Donate link: https://webba-booking.com/
 Tags: appointment booking, booking calendar, online scheduling, event booking, service reservations
 Requires at least: 5.6
 Tested up to: 6.3.1
-Stable tag: 5.0.11
+Stable tag: 5.0.14
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -173,9 +173,18 @@ Yes, Webba Booking is compatible with most themes and page builders (Elementor, 
 
 **How can I contact Webba Booking support?**
 Visit our WordPress plugin [support forum](https://wordpress.org/support/plugin/webba-booking-lite/) or send us a message on our [website's contact form](https://webba-booking.com/contact-us/). Our team will be happy to answer any of your questions!
+
+** How can I report security bugs? **
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/webba-booking-lite)
  
 
 == Changelog ==
+
+5.0.14
+
+05/10/2023
+
+Bugfix: minor bugfix
 
 5.0.11
 

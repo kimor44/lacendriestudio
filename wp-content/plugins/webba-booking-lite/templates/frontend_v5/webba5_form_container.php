@@ -89,8 +89,8 @@ if( isset( $appearance_data[ 'wbk_appearance_field_2' ] ) ){
                 <div class="scrollbar-track scrollbar-track-x show" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-x" style="width: 480px; transform: translate3d(0px, 0px, 0px);"></div></div><div class="scrollbar-track scrollbar-track-y show" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-y" style="height: 500px; transform: translate3d(0px, 0px, 0px);"></div></div></div><!-- /.appointent-content-scroll-w -->
                 
                 <div class="button-block-w two-buttons-w">
-                    <button class="button-w button-prev-w"><?php echo esc_html__( 'Back', 'webba-booking-lite' ) ?></button>
-                    <button class="button-w button-next-w"><?php echo esc_html__( 'Next', 'webba-booking-lite' ) ?><span class="btn-ring-wb"></span></button>
+                    <button type="button" class="button-w button-prev-w"><?php echo esc_html__( 'Back', 'webba-booking-lite' ) ?></button>
+                    <button type="button" class="button-w button-next-w"><?php echo esc_html__( 'Next', 'webba-booking-lite' ) ?><span class="btn-ring-wb"></span></button>
                 </div><!-- /.button-block-w -->
                 <div class="form-error-w" style="display: none;">
                     <img class="warning-img-w" src="<?php echo  WP_WEBBA_BOOKING__PLUGIN_URL . '/public/images/error-icon.png'; ?>" alt="error">

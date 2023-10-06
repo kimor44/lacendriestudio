@@ -232,12 +232,49 @@ class WEBBA5_Form {
         }
     }
 
+    process_conditional(elem) {
+        return;
+        const get_this = () => {
+            return this;
+        };
+        if( this.container.find('[name="_wpcf7cf_options"]').length == 0 ){
+            return;
+        }
+        var condition = jQuery.parseJSON(this.container.find('[name="_wpcf7cf_options"]').val());
+
+        console.log(condition);
+       
+        jQuery.each(condition.conditions, function(i, data) {
+            var and_rules = data.and_rules;
+            var then_field  = data.then_field;
+            
+            jQuery.each( and_rules, function(k, rule) {
+                if( rule.if_field == elem.attr('name') && rule.operator == 'equals' ){
+                    console.log('executing group rule');
+                    if( rule.if_value == elem.val() ){
+                        console.log( 'matching' );
+                        jQuery('[data-id="'+ then_field +'"]').css('display', 'block');
+                    } else {
+                        jQuery('[data-id="'+ then_field +'"]').css('display', 'none');
+
+                        console.log( 'not matching' );
+                    }
+                }
+
+            });
+
+        });
+    }
+    
     set_input_events() {
         const get_this = () => {
             return this;
         };
         this.container.find('.wbk-input').on('input', function () {
+
+            get_this().process_conditional( jQuery(this) );
             get_this().validate_form();
+
         });
         this.container.find('.wbk-book-quantity').change(function () {
             get_this().set_multiple_data();
@@ -253,6 +290,7 @@ class WEBBA5_Form {
 
         this.container.find('[name="quantity"]').trigger('change');
         this.container.find('.wbk-input').change(function () {
+            get_this().process_conditional( jQuery(this) );
             get_this().validate_form();
         });
     }
@@ -329,13 +367,13 @@ class WEBBA5_Form {
                             '</div>'
                     );
 
+                this.init_nice_select();
                 get_this().init_scroll_bars();
                 this.container
                     .find('.appointment-content-screen-active-w')
                     .find('.hider-w')
                     .fadeIn('slow', function () {});
 
-                this.init_nice_select();
                 this.container.find('.wbk-checkbox-custom').each(function () {
                     var exculsive = jQuery(this).hasClass('wpcf7-exclusive-checkbox');
                     var chk_id = jQuery(this).attr('id');
@@ -397,8 +435,8 @@ class WEBBA5_Form {
                 get_this()
                     .container.find('.appointment-content-screen-active-w')
                     .find(
-                        '.wbk-text:not([name="custname"]):not([name="email"]):not([name="phone"]), .wbk-textarea:not([name="desc"]), .wbk-select:not(.nice-select):not(.wbk-book-quantity)'
-                    )
+                        '.wbk-text:not([name="custname"]):not([name="email"]):not([name="phone"]), .wbk-textarea:not([name="wbk-comment"]), .wbk-select:not(.nice-select):not(.wbk-book-quantity)'
+                    ) 
                     .addClass('wbk-custom-field')
                     .removeAttr('id');
 
@@ -486,13 +524,12 @@ class WEBBA5_Form {
                 this.set_input_events();
 
                 if (wbkl10n.phoneformat.trim() != '') {
-                     
                     get_this()
                         .container.find('[name="phone"]')
                         .mask(wbkl10n.phoneformat);
                 }
                  
-
+                
                 get_this().validate_form();
                 return;
                 break;
@@ -854,6 +891,17 @@ class WEBBA5_Form {
     }
 
     init_scroll_bars() {
+        if( this.container.find('.appointment-content-screen-active-w').attr('data-request') == 'wbk_render_booking_form' ){
+            console.log('length: '  + this.container.find('.appointment-content-screen-active-w').find('.nice-select').length );
+            if( this.container.find('.appointment-content-screen-active-w').find('.nice-select').length > 0 ){
+                jQuery('.appointment-content-scroll-w').css('height', 'auto'); 
+                if( jQuery('.wbk_custom_form_spacer').length == 0 ){
+                    jQuery('.appointment-content-scroll-w').append('<div class="wbk_custom_form_spacer"></div>');
+                }
+                return;
+            }
+        }
+        jQuery('.appointment-content-scroll-w').css('height', '555px'); 
         Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });
     }
 
@@ -1513,17 +1561,22 @@ class WEBBA5_Form {
         jQuery('.wbk-select').niceSelect('destroy');
         jQuery('.wbk-select').niceSelect();
         jQuery('.nice-select').click(function(){
-            Scrollbar.destroyAll();
-            jQuery('.appointment-content-scroll-w').css('overflow', 'hidden');             
+        //    Scrollbar.destroyAll();
+        //    jQuery('.appointment-content-scroll-w').css('overflow', 'hidden');  
+        //    jQuery('.appointment-content-scroll-w').css('height', 'auto');             
+            
         });
-
+ 
         jQuery('.wbk-select').on( 'change', function() { 
-            Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });
+        //    Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });
+        //   jQuery('.appointment-content-scroll-w').css('height', '555px'); 
  
         });
         jQuery(document).on('nice-select-close', function(){
-            Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });            
+        //    Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });      
+        //     jQuery('.appointment-content-scroll-w').css('height', '555px');       
         });
+ 
     }
 
 

@@ -11,6 +11,9 @@ function wbkCheckFloat(val) {
 
 // check string
 function wbk_check_string(val, min, max) {
+    if( val == null ){
+        return false;
+    }
     if (val.length < min || val.length > max) {
         return false;
     } else {
