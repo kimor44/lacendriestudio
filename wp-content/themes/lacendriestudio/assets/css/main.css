@@ -40,6 +40,7 @@
   /* extra height container */
   .cendrie-h-full {
     height: 100%;
+    overflow: visible !important; /* reset unexpected behavior */
   }
 
   /* set body's height to maximum value */

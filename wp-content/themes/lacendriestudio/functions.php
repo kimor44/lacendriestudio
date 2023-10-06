@@ -26,14 +26,10 @@ function cendrie_add_theme_scripts()
   wp_register_style('style', get_stylesheet_uri(), [], false, 'all');
   wp_register_style('main', get_template_directory_uri() . '/assets/css/main.css', array(), time(), 'all');
   wp_register_style('main.prod', get_template_directory_uri() . '/assets/css/main.prod.css', array(), time(), 'all');
-  // wp_register_style('main', get_stylesheet_uri() . '/assets/css/main.css', [], false, 'all');
-  // wp_register_style('main.prod', get_stylesheet_uri() . '/assets/css/main.prod.css', [], false, 'all');
   /* Enqueue styles */
   wp_enqueue_style('style');
   wp_enqueue_style('main');
   wp_enqueue_style('main.prod');
-  // wp_enqueue_style('main', get_template_directory_uri() . '/assets/css/main.css', array(), time(), 'all');
-  // wp_enqueue_style('main.prod', get_template_directory_uri() . '/assets/css/main.prod.css', array(), time(), 'all');
 
   /* Register scripts */
   wp_register_script('script', get_template_directory_uri() . '/node_modules/tw-elements/dist/js/index.min.js', array(), time(), array('in_footer' => true));
@@ -48,6 +44,24 @@ function cendrie_add_theme_scripts()
     */
 }
 add_action('wp_enqueue_scripts', 'cendrie_add_theme_scripts');
+
+/**
+ * Enqueue a style in the WebbaBooking admin scheduler.
+ *
+ * @param string $hook Hook suffix for the current admin page.
+ */
+function overwrite_wbk_plugin_styles($hook)
+{
+  global $pagenow;
+
+  if ('webba-booking_page_wbk-schedule' != $hook && $pagenow != 'admin.php') {
+    return;
+  }
+
+  wp_register_style('overwrite-booking_page_wbk-schedule', get_template_directory_uri() . '/assets/css/overwrite-wbk-plugin-styles.css', array(), false, 'all');
+  wp_enqueue_style('overwrite-booking_page_wbk-schedule');
+}
+add_action('admin_enqueue_scripts', 'overwrite_wbk_plugin_styles');
 
 /*
 Set maximum content width to 800 pixels
