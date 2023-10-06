@@ -58,7 +58,7 @@ function overwrite_wbk_plugin_styles($hook)
     return;
   }
 
-  wp_register_style('overwrite-booking_page_wbk-schedule', get_template_directory_uri() . '/assets/css/reset-wb-plugin-style.css', array(), false, 'all');
+  wp_register_style('overwrite-booking_page_wbk-schedule', get_template_directory_uri() . '/assets/css/reset-wb-plugin-style.css', array(), time(), 'all');
   wp_enqueue_style('overwrite-booking_page_wbk-schedule');
 }
 add_action('admin_enqueue_scripts', 'overwrite_wbk_plugin_styles');
