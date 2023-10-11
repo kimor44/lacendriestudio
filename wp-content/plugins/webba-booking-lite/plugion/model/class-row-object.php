@@ -166,6 +166,7 @@ class Row_Object {
      */
     public function save(){
         global $wpdb;
+        
         $fields = Plugion()->tables->get_element_at( $this->table_name )->fields->get_elements();
         $values = array();
         $formats = array();

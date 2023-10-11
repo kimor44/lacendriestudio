@@ -11761,3 +11761,9 @@ span.smal_id_wbk {
 .fc-timegrid-event-harness-inset{
     background: #fff;
 }
+.fc-timegrid-event-harness {
+    position: relative !important;
+}
+a.fc-timegrid-event.fc-v-event.fc-event.fc-event-start.fc-event-end {
+    position: relative !important;
+}

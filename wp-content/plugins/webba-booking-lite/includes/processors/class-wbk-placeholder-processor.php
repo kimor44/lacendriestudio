@@ -414,6 +414,12 @@ class WBK_Placeholder_Processor {
 		$message = str_replace( '#admin_cancel_link', $admin_cancel_link, $message );
 		$message = str_replace( '#admin_approve_link', $admin_approve_link, $message );
 
+        if( $booking->get('canceled_by' ) != false ){
+            $message = str_replace( '#canceled_by', $booking->get('canceled_by'), $message );
+        } else {
+            $message = str_replace( '#canceled_by', __( 'no data', 'webba-booking-lite' ), $message );
+        }
+
         $message = str_replace( '#total_amount', $total_amount, $message );
 		$message = str_replace( '#subtotal_amount', $subtotal_amount, $message );
 

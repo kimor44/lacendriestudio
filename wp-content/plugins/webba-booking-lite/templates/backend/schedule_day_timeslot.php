@@ -86,7 +86,7 @@ if( $timeslot->get_status() != 0 ) {
                                     <div class="popover-service-wb">'.$service->get('name').'</div>
                                    
                                     <div class="popover-footer-wb">
-                                        <div class="popover-name-letter-wb">' . substr( str_replace( '&#039;',"'", stripslashes( $booking->get_name() ) ), 0, 1 ) . '</div>
+                                        <div class="popover-name-letter-wb">' . mb_substr( str_replace( '&#039;',"'", stripslashes( $booking->get_name() ) ), 0, 1 ) . '</div>
                                         <div class="popover-name-wb">'.esc_html( str_replace( '&#039;',"'", stripslashes( $booking->get_name() ) ) ) .'</div>'.
                                    '<div class="popover-edit-wb wbk-appointment-backend" id="wbk_appointment_' . esc_attr( $booking_id ) . '_'. esc_attr( $service_id ) .'_1" data-timeslot-timestamp="'.$timeslot->start.'"></div>'
                                 .'</div>

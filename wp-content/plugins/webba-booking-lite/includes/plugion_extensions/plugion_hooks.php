@@ -186,7 +186,7 @@ function wbk_plugion_table_row( $input, $row, $table ){
     $extra = '';
     if ( get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments' == $table ) {
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-        $extra = '<td data-order="' . esc_attr( $row->time ) . '">' . date( get_option( 'wbk_date_format_backend', 'm/d/y'), $row->time) . '<br />' . date('g:i a', $row->time) . '</td>';
+        $extra = '<td data-order="' . esc_attr( $row->time ) . '">' . date( get_option( 'wbk_date_format_backend', 'm/d/y'), $row->time) . '<br />' . date( get_option( 'time_format', 'g:i a' ), $row->time ) . '</td>';
     }
 
     $input = str_replace( '<tr', '<tr has-hidden-details ', $input );

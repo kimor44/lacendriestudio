@@ -461,9 +461,9 @@ Note: With autolock turned on, connected service bookings are considered when lo
 				'extra' => array(
 					'disabled' => __( 'No', 'webba-booking-lite' ),
 			    	'enabled' => __( 'Yes', 'webba-booking-lite' ),
-                    'popup' => __('Disable date in the calendar if no free time slots found.','webba-booking-lite'),
                     'enabled_plus' => __( 'Yes (including bookings from neighboring services.)', 'webba-booking-lite' )
-				)
+                ),
+                'popup' => __('Disable date in the calendar if no free time slots found.','webba-booking-lite'),
 			)
 		);
  
@@ -1421,6 +1421,15 @@ Available placeholders: #name (customer name), #id (appointment id), #service (s
 			),
             'advanced'
 		);
+
+		wbk_opt()->add_option( 'wbk_booking_canceled_message', 'text', __( 'Cancellation success message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+			array(
+				'default' => __( 'Your booking has been cncelled.', 'webba-booking-lite' ),
+                'popup' => __('Text of the shown to a customer when booking is cancelled.', 'webba-booking-lite' )
+			),
+            'advanced'
+		);
+
 		wbk_opt()->add_option( 'wbk_email_landing_text_approve_admin', 'text', __( 'Text of the approval link sent to an admin)', 'webba-booking-lite' ), 'wbk_translation_settings_section',
 			array(
 				'default' => __( 'Click here to approve this booking.', 'webba-booking-lite' ),

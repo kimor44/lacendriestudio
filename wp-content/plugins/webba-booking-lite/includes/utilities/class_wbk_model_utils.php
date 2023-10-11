@@ -559,6 +559,22 @@ class WBK_Model_Utils
         );
     }
     
+    public static function set_booking_canceled_by( $booking_id, $value )
+    {
+        global  $wpdb ;
+        $wpdb->update(
+            get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
+            array(
+            'canceled_by' => $value,
+        ),
+            array(
+            'id' => $booking_id,
+        ),
+            array( '%s' ),
+            array( '%d' )
+        );
+    }
+    
     public static function set_booking_status( $booking_id, $status )
     {
         global  $wpdb ;

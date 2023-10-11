@@ -509,7 +509,9 @@ class WBK_Schedule_Processor
                     
                     if ( $available < $service->get( 'min_quantity' ) ) {
                         $timeslots[$i]->set_free_places( 0 );
-                        // $timeslots[$i]->set_status(-2);
+                        if ( $current_quantity > 0 ) {
+                            $timeslots[$i]->set_free_places( $current_quantity );
+                        }
                     } else {
                         
                         if ( $partial_check && $current_quantity == 0 ) {

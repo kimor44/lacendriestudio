@@ -990,8 +990,10 @@ class WBK_Db_Utils
             foreach ( $ids as $appointment_id ) {
                 
                 if ( WBK_Validator::validateId( $appointment_id, 'wbk_appointments' ) ) {
+                    $booking = new WBK_Booking( $appointment_id );
                     $valid_ids[] = $appointment_id;
                     WBK_Model_Utils::set_booking_status( $appointment_id, 'cancelled' );
+                    WBK_Model_Utils::set_booking_canceled_by( $appointment_id, 'auto' );
                 }
             
             }
@@ -1628,6 +1630,13 @@ class WBK_Db_Utils
             $zoom_url = '';
             $zoom_pass = '';
             $zoom_meeting_id = '';
+        }
+        
+        
+        if ( $booking->get( 'canceled_by' ) != false ) {
+            $message = str_replace( '#canceled_by', $booking->get( 'canceled_by' ), $message );
+        } else {
+            $message = str_replace( '#canceled_by', __( 'no data', 'webba-booking-lite' ), $message );
         }
         
         $message = str_replace( '#zoom_url', $zoom_url, $message );

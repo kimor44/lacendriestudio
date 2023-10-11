@@ -1783,6 +1783,11 @@ class WBK_Request_Manager
                 $multi_booking_valid = false;
             }
         }
+        foreach ( $booking_ids as $booking_id ) {
+            $booking = new WBK_Booking( $booking_id );
+            $booking->set( 'canceled_by', __( 'customer', 'webba-booking-lite' ) );
+            $booking->save();
+        }
         // usage of deprecate method
         $appointment_ids = $booking_ids;
         
@@ -1862,7 +1867,7 @@ class WBK_Request_Manager
                 $bf->destroy( $booking_id, 'customer', true );
                 $i++;
             }
-            $message = esc_html( get_option( 'wbk_booking_canceled_message', '' ) );
+            $message = '<div class="thank-you-block-w"><div class="thank-you-content-w">' . esc_html( get_option( 'wbk_booking_canceled_message', 'Your booking has been cancelled.' ) ) . '</div></div>';
             echo  json_encode( array(
                 'status'         => 'success',
                 'thanks_message' => $message,

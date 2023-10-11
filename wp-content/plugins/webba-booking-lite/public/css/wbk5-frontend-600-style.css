@@ -2786,6 +2786,11 @@ li.wbk_service_item {
     cursor: pointer;
     user-select: none;
 }
+.appontment-time-list-w li{
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
 .appontment-time-list-w .radio-checkmark {
     display: inline-block;
     width: 15px;

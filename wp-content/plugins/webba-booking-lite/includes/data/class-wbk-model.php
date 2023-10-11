@@ -612,6 +612,18 @@ class WBK_Model
             false,
             false
         );
+        $table->add_field(
+            'appointment_canceled_by',
+            'canceled_by',
+            'canceled_by',
+            'text',
+            '',
+            null,
+            '',
+            false,
+            false,
+            false
+        );
         $tooltip = __( 'Specify the number of places being booked for this appointment.', 'webba-booking-lite' );
         $table->add_field(
             'appointment_quantity',

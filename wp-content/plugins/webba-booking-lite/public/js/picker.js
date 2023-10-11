@@ -844,17 +844,7 @@ function PickerConstructor( ELEMENT, NAME, COMPONENT, OPTIONS ) {
     // Wait for transitions to end before focusing the holder. Otherwise, while
     // using the `container` option, the view jumps to the container.
     function focusPickerOnceOpened() {
-
-        if (IS_DEFAULT_THEME && supportsTransitions) {
-            P.$holder.find('.' + CLASSES.frame).one('transitionend', function() {
-                P.$holder.eq(0).focus()
-            })
-        }
-        else {
-            setTimeout(function() {
-                P.$holder.eq(0).focus()
-            }, 0)
-        }
+        return; 
     }
 
 
