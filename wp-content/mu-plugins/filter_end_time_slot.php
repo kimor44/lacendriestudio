@@ -16,8 +16,11 @@ defined('ABSPATH') or die('Cheatin&#8217; uh?');
 // Number of seconds in one hour constant
 define("SECONDS_IN_HOUR", 60 * 60);
 
-// Start hours of discount
-define("CONSECUTIVE_HOURS_FOR_DISCOUNTS", ['10', '14']);
+// End hours of the morning timeslots
+define("MORNING_END_HOURS", ['10' => '14', '14' => '18']);
+
+// Start hours of the morning timeslots
+define("MORNING_START_HOURS", array_keys(MORNING_END_HOURS));
 
 // Applied price for the timeslot when 2 consecutive bookings in the same morning
 define("DISCOUNT_OF_5_EUROS", 5);
@@ -31,47 +34,40 @@ define("DISCOUNT_OF_5_EUROS", 5);
  */
 function cendrie_set_end_timeslots($timeslots, $day, $service_id): array
 {
-	$disallawed_hours = ['13', '17'];
 	foreach ($timeslots as $timeslot) {
 		$start = $timeslot->get_start();
 		$start_hour = date('H', $start);
-		$end = $timeslot->get_end();
-		$end_hour = date('H', $end);
-		if (in_array($end_hour, $disallawed_hours)) {
+		if (in_array($start_hour, MORNING_START_HOURS)) {
 			/**
-			 * global en hour + 1
+			 * global variables
 			 */
-			$end_hour_plus_one_hour = (string) ((int) $end_hour + 1);
+			$corrected_end_time = MORNING_END_HOURS[$start_hour];
+			$end = $timeslot->get_end();
+			$end_hour = date('H', $end);
 
 			/**
 			 * set (timestamps start & end)
 			 */
-			$end_timeslot = $end + SECONDS_IN_HOUR;
-			$timeslot->set($start, $end_timeslot);
+			$corrected_ending_timestamp = $end + SECONDS_IN_HOUR;
+			$timeslot->set($start, $corrected_ending_timestamp);
 
 			/**
 			 * set_formated_time
 			 */
-			$formated_time = str_replace($end_hour, $end_hour_plus_one_hour, $timeslot->get_formated_time());
-			$timeslot->set_formated_time($formated_time);
+			$corrected_formated_time = str_replace($end_hour, $corrected_end_time, $timeslot->get_formated_time());
+			$timeslot->set_formated_time($corrected_formated_time);
 
 			/**
 			 * set_formated_time_local
 			 */
-			// Set the START time local of the timeslot
-			$start_hour_to_one_hour = (string) ((int) $start_hour - 1);
-			$formated_time_local = str_replace($start_hour_to_one_hour, $start_hour, $timeslot->get_formated_time_local());
-			// Set the END time local of the timeslot
-			$end_hour_to_one_hour = (string) ((int) $end_hour - 1);
-			$formated_time_local = str_replace($end_hour_to_one_hour, $end_hour_plus_one_hour, $formated_time_local);
-			// Finally, set the formated time local
-			$timeslot->set_formated_time_local($formated_time_local);
+			$corrected_formated_time_local = $corrected_formated_time;
+			$timeslot->set_formated_time_local($corrected_formated_time_local);
 
 			/**
 			 * set_formated_time_backend
 			 */
-			$formated_time_backend = str_replace($end_hour, $end_hour_plus_one_hour, $timeslot->get_formated_time_backend());
-			$timeslot->set_formated_time_backend($formated_time_backend);
+			$corrected_formated_time_backend = str_replace($end_hour, $corrected_end_time, $timeslot->get_formated_time_backend());
+			$timeslot->set_formated_time_backend($corrected_formated_time_backend);
 
 			/**
 			 * set_offset
@@ -96,7 +92,7 @@ function is_morning_booked(string $start, int $day, array $timeslots): bool
 	foreach ($timeslots as $slot) {
 		$slot_start = $slot->get_start();
 		if ($slot->get_day() == $day && $slot_start != $start) {
-			if (in_array(date('H', $slot_start), CONSECUTIVE_HOURS_FOR_DISCOUNTS)) {
+			if (in_array(date('H', $slot_start), MORNING_START_HOURS)) {
 				return true;
 			}
 		}
@@ -121,7 +117,7 @@ function cendrie_princing_for_booked_morning(string $default_price, WBK_Booking 
 	$start = $booking->get_start();
 	$start_hour = date('H', $start);
 
-	if (in_array($start_hour, CONSECUTIVE_HOURS_FOR_DISCOUNTS)) {
+	if (in_array($start_hour, MORNING_START_HOURS)) {
 		$is_morning_booked = is_morning_booked($start, $booking->get_day(), $bookings);
 		if ($is_morning_booked) {
 			$cloned_default_price = (string) (intval($cloned_default_price) - DISCOUNT_OF_5_EUROS);
