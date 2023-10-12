@@ -551,6 +551,7 @@ li.wbk_service_item {
     user-select: none;
 }
 .nice-select .current {
+    min-height: 50px;
     display: block;
     position: relative;
     background-color: #fff;
@@ -3153,10 +3154,7 @@ td.disabledDay {
     .appontment-time-list-w.group-list-w {
         grid-template-columns: 1fr 1fr;
     }
-    .appontment-time-list-w.group-list-w .radio-time-block-w {
-        width: 50%;
-    }
-
+ 
     .appointment-box-w .appointment-status-wrapper-w {
         padding: 10px;
     }

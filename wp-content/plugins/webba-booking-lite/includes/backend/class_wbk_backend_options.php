@@ -408,7 +408,7 @@ class WBK_Backend_Options {
             'advanced'
 		);
 	 
-		wbk_opt()->add_option( 'wbk_appointments_lock_time slot_if_parital_booked', 'select_multiple', __( 'Lock time slot if at least one place is booked', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+		wbk_opt()->add_option( 'wbk_appointments_lock_timeslot_if_parital_booked', 'select_multiple', __( 'Lock time slot if at least one place is booked', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
 			array(
 				'extra' => WBK_Model_Utils::get_services(),
 				'popup' => __( 'Select the services for which a time slot will be automatically locked once at least one place is booked. Note: With autolock turned on, connected service bookings are considered when locking time slots.', 'webba-booking-lite' )  
@@ -416,7 +416,7 @@ class WBK_Backend_Options {
             ),
             'advanced'            
 		);
-		wbk_opt()->add_option( 'wbk_appointments_lock_day_if_time slot_booked', 'select_multiple', __( 'Lock whole day if at least one time slot is booked', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
+		wbk_opt()->add_option( 'wbk_appointments_lock_day_if_timeslot_booked', 'select_multiple', __( 'Lock whole day if at least one time slot is booked', 'webba-booking-lite' ), 'wbk_appointments_settings_section',
 			array(
 				'extra' => WBK_Model_Utils::get_services(),
 				'popup' => __( '"Select the services for which a whole day will be automatically locked once at least one time slot is booked. 

@@ -4,7 +4,7 @@ Donate link: https://webba-booking.com/
 Tags: appointment booking, booking calendar, online scheduling, event booking, service reservations
 Requires at least: 5.6
 Tested up to: 6.3.1
-Stable tag: 5.0.15
+Stable tag: 5.0.16
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -179,6 +179,12 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
  
 
 == Changelog ==
+
+5.0.16
+
+12/10/2023
+
+Bugfix: minor bugfix
 
 5.0.15
 
