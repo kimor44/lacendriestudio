@@ -15,7 +15,7 @@ if (!class_exists('Admin_Handling')) {
     }
     /**
      * Get the current post thumbnail
-     * @return void 
+     * @return void
      */
     function get_the_thumbnail_for_custom_column(): void
     {
@@ -31,8 +31,9 @@ if (!class_exists('Admin_Handling')) {
     function get_is_visible_metabox_for_custom_column(): void
     {
       require_once('includes/slider_tools.php');
+      require_once('class-carousel-metabox.php');
 
-      $value = get_post_meta($this->post_id, 'is_visible_meta_key', true);
+      $value = get_post_meta($this->post_id, Carousel_Metabox::META_KEY, true);
       $translated_value = Slider_Tools::visibility($value);
       if (!isset($translated_value)) {
         $translated_value = "no";
