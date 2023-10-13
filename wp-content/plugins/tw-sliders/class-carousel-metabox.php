@@ -39,7 +39,7 @@ abstract class Carousel_Metabox
   public static function build_is_visible_form(WP_Post $post)
   {
     $value = get_post_meta($post->ID, self::META_KEY, true);
-    $checked = $value == "yes" ? "checked" : "";
+    $checked = ($value == "yes" || $value == "") ? "checked" : "";
     // Add an nonce field so we can check for it later.
     wp_nonce_field(self::NONCE, self::NONCE);
 ?>
