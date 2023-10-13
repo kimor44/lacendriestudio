@@ -19,6 +19,34 @@ if (!function_exists('cendrie_pluginprefix_activate')) {
    */
   function cendrie_pluginprefix_activate()
   {
+    $role = get_role('administrator');
+    $capabilities = array(
+      'edit_slides',
+      'edit_other_slides',
+      'delete_slides',
+      'publish_slides',
+      'read_private_slides',
+      'delete_private_slides',
+      'delete_published_slides',
+      'delete_other_slides',
+      'edit_private_slides',
+      'edit_published_slides',
+    );
+
+    foreach ($capabilities as $capability) {
+      $role->add_cap($capability);
+    }
+
+    add_role('writer', 'Writer', array(
+      'edit_slides' => true,
+      'delete_slides' => true,
+      'publish_slides' => true,
+      'read_private_slides' => true,
+      'read' => true,
+      'delete_private_slides' => true,
+      'edit_private_slides' => true,
+    ));
+
     // Trigger our function that registers the custom post type plugin.
     cendrie_create_slider_post_type();
     // Clear the permalinks after the post type has been registered.
@@ -33,6 +61,25 @@ if (!function_exists('cendrie_pluginprefix_deactivate')) {
    */
   function cendrie_pluginprefix_deactivate()
   {
+    $role = get_role('administrator');
+    $capabilities = array(
+      'edit_slides',
+      'edit_other_slides',
+      'delete_slides',
+      'publish_slides',
+      'read_private_slides',
+      'delete_private_slides',
+      'delete_published_slides',
+      'delete_other_slides',
+      'edit_private_slides',
+      'edit_published_slides',
+    );
+
+    foreach ($capabilities as $capability) {
+      $role->remove_cap($capability);
+    }
+
+    remove_role('writer');
     // Unregister the post type, so the rules are no longer in memory.
     unregister_post_type('slider');
     // Clear the permalinks to remove our post type's rules from the database.
@@ -89,8 +136,8 @@ if (!function_exists('cendrie_create_slider_post_type')) {
       /**valeur de votre choix**/
       'public' => true,
       'has_archive' => true,
+      'capability_type' => array('slide', 'slides'),
       'map_meta_cap' => true,
-      'capability_type' => 'post',
       'hierarchical' => true,
       'rewrite' => array('slug' => false),
       'menu_icon' => 'dashicons-images-alt2',
