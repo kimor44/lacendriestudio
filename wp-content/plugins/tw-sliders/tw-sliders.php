@@ -205,6 +205,7 @@ if (!function_exists('slider_custom_columns')) {
       'overview' => __('Aperçu', 'text-slider'),
       'title' => $columns['title'],
       'visible' => __('Visible ?', 'text-slider'),
+      'ID' => __('ID', 'text-slider'),
       'date' => $columns['date']
     );
     return $custom_col_order;
@@ -221,12 +222,22 @@ if (!function_exists('display_thumbnail_of_slider')) {
     require_once('class-admin-handling.php');
     $admin_handle_init = new Admin_Handling($post_id);
 
-    if ($column == 'overview') {
-      $admin_handle_init->get_the_thumbnail_for_custom_column();
-    }
+    switch ($column) {
+      case 'overview':
+        $admin_handle_init->get_the_thumbnail_for_custom_column();
+        break;
 
-    if ($column == 'visible') {
-      $admin_handle_init->get_is_visible_metabox_for_custom_column();
+      case 'visible':
+        $admin_handle_init->get_is_visible_metabox_for_custom_column();
+        break;
+
+      case 'ID':
+        $admin_handle_init->get_the_post_id();
+        break;
+
+      default:
+        $admin_handle_init->get_the_post_id();
+        break;
     }
   }
 }

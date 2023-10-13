@@ -28,6 +28,10 @@ table.fixed tbody tr td.column-visible .visible-yes {
   background-color: var(--success-indicator);
 }
 
+.widefat thead tr th.column-ID {
+  width: 50px;
+}
+
 div.meta-box-sortables div#is_visible {
   /* border: solid 4px green; */
   border-radius: 10px;
