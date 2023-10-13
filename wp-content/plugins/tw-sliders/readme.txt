@@ -2,9 +2,9 @@
 Contributors: Julien Guibert
 Tags: pictures, carousel, animations, slides
 Requires at least: 5.4
-Tested up to: 6.1.1
+Tested up to: 6.3.1
 Requires PHP: 7.4.21
-Stable tag: 1.5.0
+Stable tag: 1.6.0
 
 Create carousel and its slides.
 Manage the slides you want to show.
@@ -30,6 +30,16 @@ Why my picture doesn't appear in the carousel ?
 You have to chek the "Cocher la case pour afficher l'image dans le carrousel" checkbox in the "Ajouter une nouvelle slide" page.
 
 == Changelog ==
+1.6.0
+
+13/10/2023
+
+* Added custom warning notification when slide is set to "not visible" on the edit page
+* Added a custom info notification when multiple slides are updated
+* Customized the bulk update messages
+* "Visible ?" checkbox on the edit page is automatically set to "checked" when it's a new slide
+* "ID" column added to the "All slides" page
+* Added capabilities to the Slider CPT
 
 1.5.0
 
