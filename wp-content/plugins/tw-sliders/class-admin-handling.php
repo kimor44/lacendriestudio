@@ -40,5 +40,15 @@ if (!class_exists('Admin_Handling')) {
       }
       echo '<div class="visible-cell visible-' . $value . '">' . $translated_value . '</div>';
     }
+
+    /**
+     * Get the current slide ID
+     *
+     * @return void
+     */
+    function get_the_post_id(): void
+    {
+      echo $this->post_id;
+    }
   }
 }
