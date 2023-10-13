@@ -11,6 +11,7 @@
  */
 
 require_once('class-carousel-metabox.php');
+require_once('includes/sliders-managing-notifications.php');
 
 if (!function_exists('cendrie_pluginprefix_activate')) {
   /**
@@ -63,7 +64,6 @@ add_action('admin_enqueue_scripts', 'slider_admin_scripts');
 /**
  * Add metabox for carousel, build HTML and save data
  */
-require_once('class-carousel-metabox.php');
 
 if (!function_exists('cendrie_create_slider_post_type')) {
   /**
@@ -323,8 +323,6 @@ if (!function_exists('tw_slider_load_help_menu')) {
  */
 function manage_custom_post_updated_messages(array $messages): array
 {
-  require_once('includes/sliders-managing-notifications.php');
-
   $current_screen = get_current_screen();
   $post = get_post();
   if ($current_screen->post_type == 'slider' && isset($_GET['action']) && $_GET['action'] == 'edit') {
@@ -374,3 +372,40 @@ function manage_custom_post_updated_messages(array $messages): array
 }
 
 add_filter('post_updated_messages', 'manage_custom_post_updated_messages', 10, 1);
+
+/**
+ * Sliders bulk update messages.
+ *
+ * @param array $bulk_messages Arrays of messages, each keyed by the corresponding post type..
+ * @param array $bulk_counts Array of item counts for each message, used to build internationalized strings.
+ * @return array Return the new messages when bulk update.
+ */
+function sliders_bulk_post_updated_messages_filter(array $bulk_messages, array $bulk_counts): array
+{
+  $updated_count = $bulk_counts['updated'];
+
+  $bulk_messages['slider'] = array(
+    'updated'   => _n('%s slide mise &agrave; jour.', '%s slides mises &agrave; jour.', $updated_count),
+    'locked'    => _n('%s slide non mise &agrave; jour, quelqu\'un est en train de m\'&eacute;diter.', '%s slides non mises &agrave; jour, quelqu\'un les &eacute;dite.', $bulk_counts['locked']),
+    'deleted'   => _n('%s slide supprim&eacute;e d&eacute;finitivement.', '%s slides supprim&eacute;es d&eacute;finitivement.', $bulk_counts['deleted']),
+    'trashed'   => _n('%s slide plac&eacute;e dans la corbeille.', '%s slides plac&eacute;es dans la corbeille.', $bulk_counts['trashed']),
+    'untrashed' => _n('%s slide restaur&eacute;e depuis la corbeille.', '%s slides restaur&eacute;e depuis la corbeille.', $bulk_counts['untrashed']),
+  );
+
+  if ($updated_count > 0) {
+    $notif_message = sprintf(
+      _n(
+        'Si vous n\'avez pas coch&eacute; la case "Visible ?", la slide n\'apparaîtra pas dans le carrousel.',
+        'Si vous n\'avez pas coch&eacute; la case "Visible ?", les %s slides n\'apparaîtront pas dans le carrousel.',
+        $updated_count,
+        'text-slider'
+      ),
+      $updated_count
+    );
+
+    new Sliders_Managing_Notifications($notif_message, 'info', true);
+  }
+
+  return $bulk_messages;
+}
+add_filter('bulk_post_updated_messages', 'sliders_bulk_post_updated_messages_filter', 10, 2);
