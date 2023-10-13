@@ -242,7 +242,7 @@ add_action('save_post', ['Carousel_Metabox', 'save_is_visible_postdata']);
 
 global $pagenow;
 
-if ($pagenow == 'edit.php' && is_admin() && $_GET['post_type'] == 'slider') {
+if ($pagenow == 'edit.php' && is_admin() && isset($_GET['post_type']) && $_GET['post_type'] == 'slider') {
   add_action('quick_edit_custom_box', ['Carousel_Metabox', 'is_visible_custom_box_quick_edit_bulk_edit'], 10, 1);
   add_action('restrict_manage_posts', ['Carousel_Metabox', 'is_visible_filtering'], 10, 1);
   add_action('parse_query', ['Carousel_Metabox', 'is_visible_filter_parsing'], 10, 1);
