@@ -3,17 +3,17 @@
 abstract class Carousel_Metabox
 {
 
-  const META_BOX_ID = 'is_visible';
-  const META_KEY = 'is_visible_meta_key';
-  const NONCE = '_cendrie_is_visible_nonce';
-  const FILTER = 'visibility_filtering';
+  public const META_BOX_ID = 'is_visible';
+  public const META_KEY = 'is_visible_meta_key';
+  public const NONCE = '_cendrie_is_visible_nonce';
+  public const FILTER = 'visibility_filtering';
 
 
   //_____Start_Add_Meta_box_____
   /**
    * Create the checkbox metabox in the admin panel of "sliders" plugin
    * to show or not the slide in the carousel
-   * 
+   *
    * @param string $post_type Post Type
    * @param WP_Post $post Post Object
    */
@@ -80,7 +80,7 @@ abstract class Carousel_Metabox
   //_____Start_Quick_Edit_and_Bulk_Edit_Mode_custom_checkbox_____
   /**
    * Display Meta Box in quick edit mode
-   * 
+   *
    *  @param string $column_name Name of the column to edit.
    */
   public static function is_visible_custom_box_quick_edit_bulk_edit(string $column_name)
@@ -105,7 +105,7 @@ abstract class Carousel_Metabox
   //_____Start_Filter_____
   /**
    * Build filter for the is_visible meta data
-   * 
+   *
    * @param string $post_type The post type slug
    */
   public static function is_visible_filtering(string $post_type)
@@ -126,7 +126,7 @@ abstract class Carousel_Metabox
         "
         SELECT DISTINCT pm.meta_value FROM {$wpdb->postmeta} pm
         LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
-        WHERE pm.meta_key = '%s' 
+        WHERE pm.meta_key = '%s'
         ORDER BY pm.meta_value DESC",
         self::META_KEY
       )
@@ -142,7 +142,7 @@ abstract class Carousel_Metabox
 
   /**
    * Query filters slides according to visibility
-   * 
+   *
    * @param WP_Query $query the WP_Query instance
    * @return WP_Query $query the WP_Query instance modified
    */
@@ -183,7 +183,7 @@ abstract class Carousel_Metabox
   //_____Start_Sort_Column_____
   /**
    * Insert the 'visible' column to the sortable columns array
-   * 
+   *
    * @param array $columns Array with all the sortable columns
    * @return array $columns Array of columns filterd with the new "visible" column
    */
@@ -198,7 +198,7 @@ abstract class Carousel_Metabox
 
   /**
    * Handle WP_Query to sort sliders by meta_values "is_visible"
-   * 
+   *
    * @param WP_Query $query The WP_Query instance
    */
   public static function visibility_order_by(WP_Query $query)
@@ -216,8 +216,8 @@ abstract class Carousel_Metabox
   //_____Start_Bulk_update_____
   /**
    * Update is_visible meta data in the bulk update mode
-   * 
-   * @param int $post_ID ID of the current post 
+   *
+   * @param int $post_ID ID of the current post
    */
   public static function bulk_edit_custom_is_visible(int $post_ID)
   {

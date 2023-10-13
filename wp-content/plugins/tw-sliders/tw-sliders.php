@@ -10,6 +10,8 @@
  * Text Domain:       text-slider
  */
 
+require_once('class-carousel-metabox.php');
+
 if (!function_exists('cendrie_pluginprefix_activate')) {
   /**
    * Activate the plugin.
@@ -128,7 +130,7 @@ if (!function_exists('tw_sliders_init')) {
 
       $args = array(
         'post_type'   => 'slider',
-        'meta_key'    => 'is_visible_meta_key',
+        'meta_key'    => Carousel_Metabox::META_KEY,
         'meta_value'  => 'yes',
       );
 
@@ -310,3 +312,65 @@ if (!function_exists('tw_slider_load_help_menu')) {
     $help_tabs->set_help_tabs($types[$current_screen->id]);
   }
 }
+
+/**
+ * Slider-specific update messages.
+ *
+ * @see /wp-admin/edit-form-advanced.php
+ *
+ * @param array $messages Existing post update messages.
+ * @return array Amended post update messages with new CPT update messages.
+ */
+function manage_custom_post_updated_messages(array $messages): array
+{
+  require_once('includes/sliders-managing-notifications.php');
+
+  $current_screen = get_current_screen();
+  $post = get_post();
+  if ($current_screen->post_type == 'slider' && isset($_GET['action']) && $_GET['action'] == 'edit') {
+    $value = get_post_meta($post->ID, Carousel_Metabox::META_KEY, true);
+    if ($value === 'no') {
+      new Sliders_Managing_Notifications('!! La slide ne sera pas visible dans le carrousel !', 'warning', true);
+    }
+  }
+
+  $post_type = get_post_type($post);
+  $post_type_object = get_post_type_object($post_type);
+
+  $messages['slider'] = array(
+    0  => '', // Unused. Messages start at index 1.
+    1  => __('Slide mise &agrave; jour.', 'text-slider'),
+    2  => __('Champ personnalis&eacute; mis &agrave; jour.', 'text-slider'),
+    3  => __('Champ personnalis&eacute; supprim&eacute;.', 'text-slider'),
+    4  => __('Slide mise &agrave; jour.', 'text-slider'),
+    /* translators: %s: date and time of the revision */
+    5  => isset($_GET['revision']) ? sprintf(__('Slide restored to revision from %s', 'text-slider'), wp_post_revision_title((int) $_GET['revision'], false)) : false,
+    6  => __('Slide publi&eacute;e', 'text-slider'),
+    7  => __('Slide enregistr&eacute;e.', 'text-slider'),
+    8  => __('Slide envoy&eacute;e.', 'text-slider'),
+    9  => sprintf(
+      __('Slide pr&eacute; pour: <strong>%1$s</strong>.', 'text-slider'),
+      // translators: Publish box date format, see http://php.net/date
+      date_i18n(__('M j, Y @ G:i', 'text-slider'), strtotime($post->post_date))
+    ),
+    10 => __('Brouillon de la slide mis à jour.', 'text-slider'),
+  );
+
+  if ($post_type_object->publicly_queryable) {
+    $permalink = get_permalink($post->ID);
+
+    $view_link = sprintf(' <a href="%s">%s</a>', esc_url($permalink), __('Voir la Slide', 'text-slider'));
+    $messages['slider'][1] .= $view_link;
+    $messages['slider'][6] .= $view_link;
+    $messages['slider'][9] .= $view_link;
+
+    $preview_permalink = add_query_arg('preview', 'true', $permalink);
+    $preview_link      = sprintf('<a target="_blank" href="%s">%s</a>', esc_url($preview_permalink), __('Apperçu de la slide', 'text-slider'));
+    $messages[$post_type][8] .= $preview_link;
+    $messages[$post_type][10] .= $preview_link;
+  }
+
+  return $messages;
+}
+
+add_filter('post_updated_messages', 'manage_custom_post_updated_messages', 10, 1);
