@@ -392,7 +392,8 @@ function sliders_bulk_post_updated_messages_filter(array $bulk_messages, array $
     'untrashed' => _n('%s slide restaur&eacute;e depuis la corbeille.', '%s slides restaur&eacute;e depuis la corbeille.', $bulk_counts['untrashed']),
   );
 
-  if ($updated_count > 0) {
+  $current_screen = get_current_screen();
+  if ($updated_count > 0 && $current_screen->post_type == 'slider') {
     $notif_message = sprintf(
       _n(
         'Si vous n\'avez pas coch&eacute; la case "Visible ?", la slide n\'apparaîtra pas dans le carrousel.',
