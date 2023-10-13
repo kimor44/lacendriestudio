@@ -39,11 +39,10 @@ abstract class Carousel_Metabox
   public static function build_is_visible_form(WP_Post $post)
   {
     $value = get_post_meta($post->ID, self::META_KEY, true);
-    $checked = ($value == "yes" || $value == "") ? "checked" : "";
     // Add an nonce field so we can check for it later.
     wp_nonce_field(self::NONCE, self::NONCE);
 ?>
-    <input type="checkbox" id="<?= self::META_BOX_ID ?>" name="<?= self::META_BOX_ID ?>" value="yes" <?php echo $checked; ?>>
+    <input type="checkbox" id="<?= self::META_BOX_ID ?>" name="<?= self::META_BOX_ID ?>" value="yes" <?php checked(in_array($value, array("yes", "")), true); ?>>
     <label for="<?= self::META_BOX_ID ?>">Cocher la case pour afficher l'image dans le carrousel</label>
     <?php
   }
