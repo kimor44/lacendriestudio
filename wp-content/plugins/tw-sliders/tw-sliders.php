@@ -3,7 +3,7 @@
 /**
  * Plugin Name:       tw Sliders
  * Description:       A basic slider built with Tailwind CSS framework
- * Version:           1.1.1
+ * Version:           1.7.0
  * Requires at least: 5.2
  * Requires PHP:      7.4.21
  * Author:            Julien Guibert
@@ -61,25 +61,6 @@ if (!function_exists('cendrie_pluginprefix_deactivate')) {
    */
   function cendrie_pluginprefix_deactivate()
   {
-    $role = get_role('administrator');
-    $capabilities = array(
-      'edit_slides',
-      'edit_other_slides',
-      'delete_slides',
-      'publish_slides',
-      'read_private_slides',
-      'delete_private_slides',
-      'delete_published_slides',
-      'delete_other_slides',
-      'edit_private_slides',
-      'edit_published_slides',
-    );
-
-    foreach ($capabilities as $capability) {
-      $role->remove_cap($capability);
-    }
-
-    remove_role('writer');
     // Unregister the post type, so the rules are no longer in memory.
     unregister_post_type('slider');
     // Clear the permalinks to remove our post type's rules from the database.
