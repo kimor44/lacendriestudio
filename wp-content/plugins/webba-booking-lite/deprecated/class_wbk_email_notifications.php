@@ -50,7 +50,7 @@ class WBK_Email_Notifications
         $this->customer_email_subject = get_option( 'wbk_email_customer_book_subject', '' );
         $this->admin_email_subject = get_option( 'wbk_email_admin_book_subject', '' );
         $this->customer_daily_subject = get_option( 'wbk_email_customer_daily_subject', '' );
-        $this->admin_daily_subject = get_option( 'wbk_email_admin_daily_subject', '' );
+        $this->admin_daily_subject = stripslashes( get_option( 'wbk_email_admin_daily_subject', '' ) );
         $this->secondary_email_subject = get_option( 'wbk_email_secondary_book_subject', '' );
         $this->super_admin_email = get_option( 'wbk_super_admin_email', '' );
         $this->from_email = get_option( 'wbk_from_email' );
@@ -307,7 +307,7 @@ class WBK_Email_Notifications
                         $agenda .= '<tr>
 											  <td style="margin:0;border:1px solid #ccc;padding:5px;">' . $service->getName() . '</td>
 											  <td style="margin:0;border:1px solid #ccc;padding:5px;">' . $time_string . '</td>
-											  <td style="margin:0;border:1px solid #ccc;padding:5px;">' . $appointment->getName() . '</td>
+											  <td style="margin:0;border:1px solid #ccc;padding:5px;">' . stripslashes( $appointment->getName() ) . '</td>
 											  <td style="margin:0;border:1px solid #ccc;padding:5px;">' . $appointment->getEmail() . '</td>
 											  <td style="margin:0;border:1px solid #ccc;padding:5px;">' . $appointment->getPhone() . '</td>
 								   		      <td style="margin:0;border:1px solid #ccc;padding:5px;">' . $appointment->getQuantity() . '</td>
@@ -1124,21 +1124,8 @@ class WBK_Email_Notifications
                 return;
             }
             
-            if ( $by_customer == false || $by_customer == 'auto' ) {
-                
-                if ( $by_customer == 'auto' ) {
-                    $message = get_option( 'wbk_email_customer_automatic_appointment_cancel_message', '' );
-                    
-                    if ( strip_tags( $message ) == '' ) {
-                        $message = $this->message_placeholder_processing( $this->customer_cancel_message, $appointment, $service );
-                    } else {
-                        $message = $this->message_placeholder_processing( $message, $appointment, $service );
-                    }
-                
-                } else {
-                    $message = $this->message_placeholder_processing( $this->customer_cancel_message, $appointment, $service );
-                }
-            
+            if ( $by_customer == false ) {
+                $message = $this->message_placeholder_processing( $this->customer_cancel_message, $appointment, $service );
             } else {
                 $message = get_option( 'wbk_email_customer_bycustomer_appointment_cancel_message' );
                 $message = $this->message_placeholder_processing( $message, $appointment, $service );

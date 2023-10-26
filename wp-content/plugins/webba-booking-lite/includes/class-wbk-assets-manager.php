@@ -71,7 +71,8 @@ class WBK_Assets_Manager
             'ajaxurl'             => admin_url( 'admin-ajax.php' ),
             'nofication_icon'     => WP_WEBBA_BOOKING__PLUGIN_URL . '/public/images/notification-icon.png',
         );
-        wp_localize_script( 'wbk-dashboard-script', 'wbk_dashboardl10n', $translation_array );
+        wp_localize_script( 'wbk5-backend-script', 'wbk_dashboardl10n', $translation_array );
+        wp_localize_script( 'wbk-backend-script', 'wbk_dashboardl10n_old', $translation_array );
         // remove in V5
         
         if ( isset( $_GET['page'] ) && $_GET['page'] == 'wbk-schedule' ) {
@@ -267,8 +268,9 @@ class WBK_Assets_Manager
             'deselect_text_timeslot'    => get_option( 'wbk_deselect_text_timeslot', '' ),
             'wbkf_nonce'                => wp_create_nonce( 'wbkf_nonce' ),
             'wrong_field'               => __( 'Wrong field', 'webba-booking-lite' ),
-            'approve_payment_text'      => __( 'Approve payment', 'webba-booking-lite' ),
-            'continue'                  => __( 'Continue', 'webba-booking-lite' ),
+            'approve_payment_text'      => esc_html( get_option( 'wbk_approve_button_text', __( 'Approve payment', 'webba-booking-lite' ) ) ),
+            'continue'                  => __( 'Continue' ),
+            'of'                        => esc_html( get_option( 'wbk_step_separator', __( 'of', 'webba-booking-lite' ) ) ),
         );
         $sanitized_array = array();
         foreach ( $translation_array as $key => $value ) {

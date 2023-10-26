@@ -772,6 +772,31 @@ class WBK_Schedule_Processor
                 if ( date( 'N', $day ) == $item->day_of_week && $item->status == 'active' ) {
                     return true;
                 }
+                $data = trim( get_option( 'wbk_appointments_special_hours', '' ) );
+                
+                if ( $data != '' ) {
+                    $data = explode( PHP_EOL, $data );
+                    foreach ( $data as $line ) {
+                        $parts = explode( ' ', $line );
+                        if ( count( $parts ) != 2 && count( $parts ) != 3 ) {
+                            continue;
+                        }
+                        
+                        if ( count( $parts ) == 3 ) {
+                            if ( $service_id != $parts[0] ) {
+                                continue;
+                            }
+                        } else {
+                            array_unshift( $parts, 'x' );
+                        }
+                        
+                        $date_this = strtotime( $parts[1] );
+                        if ( $date_this == $day ) {
+                            return true;
+                        }
+                    }
+                }
+            
             }
         
         }

@@ -11767,3 +11767,9 @@ white-space: normal !important;
 }
 .main-block-wb  {
 }
+.fc-timegrid-event-harness {
+    height: 300px !important;
+}
+.fc-timegrid-slots tr{
+    height: 150px;
+}

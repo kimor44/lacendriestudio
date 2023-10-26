@@ -6,6 +6,7 @@ $tokens = $data[2];
 if( !is_array( $tokens ) || count( $tokens ) < 1 ){
     return;
 }
+
 $tokens = implode( '-', $tokens );
 $email_cancel_label = esc_html( get_option( 'wbk_booking_cancel_email_label', '' ) );
 

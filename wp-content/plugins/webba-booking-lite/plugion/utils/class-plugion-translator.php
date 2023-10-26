@@ -31,7 +31,7 @@ class Plugion_Translator {
 
     public function localize_script( $slug ){
         $translation_array = [
-            'rest_url' =>  esc_url_raw( parse_url( rest_url(), PHP_URL_PATH )  ),
+            'rest_url' =>  esc_url_raw( parse_url( rest_url(), PHP_URL_PATH ) ),
             'nonce' => wp_create_nonce( 'wp_rest' ),
             'properties_error_list_title' => $this->translate_string( 'The following fields are wrong:' ),
             'loading' => $this->translate_string( 'Loading...' ),

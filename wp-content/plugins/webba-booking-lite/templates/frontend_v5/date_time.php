@@ -26,7 +26,7 @@ if( $data[0] == true ){
         <span class="checkmark-w"></span>
     </span> 
     <span class="checkbox-text-w">
-        <span class="checkbox-title-w"><?php echo esc_html__('Your local time', 'webba-booking-lite');  ?></span>
+        <span class="checkbox-title-w"><?php echo esc_html( get_option( 'wbk_local_time_label', __('Your local time', 'webba-booking-lite') ) );  ?></span>
     </span>
 </label>
 

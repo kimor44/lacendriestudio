@@ -171,13 +171,13 @@ class WBK_Frontend_Booking {
                 }
             }
 
-            $this->scenario[] = array( 'title' => esc_html__( 'Service', 'webba-booking-lite' ),
+            $this->scenario[] = array( 'title' => esc_html( get_option( 'wbk_service_step_title', __( 'Service', 'webba-booking-lite' ) ) ),
                                        'slug' => 'services',
                                        'templates' =>  $templates, 					 
                                        'request' => '' 
                                         );
     
-            $this->scenario[] = array( 'title' => esc_html__( 'Date and time', 'webba-booking-lite' ),
+            $this->scenario[] = array( 'title' => esc_html( get_option( 'wbk_date_time_step_title',  __( 'Date and time', 'webba-booking-lite' ) ) ),
                                        'slug' => 'date_time',
                                        'templates' => array( 'frontend_v5/date_time' => array( false ) ),							 
                                        'request' => 'wbk_prepare_service_data' 
@@ -185,7 +185,7 @@ class WBK_Frontend_Booking {
         } else {
             $service_ids = array( $service );
 
-            $this->scenario[] = array( 'title' => esc_html__( 'Date and time', 'webba-booking-lite' ),
+            $this->scenario[] = array( 'title' => esc_html( get_option( 'wbk_date_time_step_title',  __( 'Date and time', 'webba-booking-lite') ) ),
                                        'slug' => 'date_time',
                                        'templates' => array( 'frontend_v5/service_dropdown' => array( $service_ids, true ),
                                                              'frontend_v5/date_time' => array( true ) ),							 
@@ -212,7 +212,7 @@ class WBK_Frontend_Booking {
         }         
  
         $this->scenario[] = array( 
-                            'title' => esc_html__( 'Details', 'webba-booking-lite' ),
+                            'title' => esc_html( get_option( 'wbk_details_step_title', __( 'Details', 'webba-booking-lite' ) ) ),
                             'slug' => 'form',								     					 
                             'request' => 'wbk_render_booking_form',
                         );
@@ -226,7 +226,7 @@ class WBK_Frontend_Booking {
             }
             // only paid services
             $this->scenario[] = array(      
-                        'title' => esc_html__( 'Payment', 'webba-booking-lite' ),          
+                        'title' =>  esc_html( get_option( 'wbk_payment_step_title', __( 'Payment', 'webba-booking-lite' ) ) ),          
                         'slug' => $payment_slug,								     					 
                         'request' => 'wbk_book'
                         );
@@ -242,13 +242,12 @@ class WBK_Frontend_Booking {
                             'request' => 'wbk_book'
                             );
         }       
-  	
- 		return WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( $this->scenario ), false );
+
+        return WBK_Renderer::load_template( 'frontend_v5/webba5_form_container', array( $this->scenario ), false );
 
  	}	
 	
 	public function wp_enqueue_scripts() {
-
 	  
 	 		$select_date_extended_label = get_option( 'wbk_date_extended_label', '' );
 	 		$select_date_basic_label = get_option( 'wbk_date_basic_label', '' );

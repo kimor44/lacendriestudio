@@ -10,7 +10,7 @@ $titles = array(
     'bank'        => get_option( 'wbk_bank_transfer_button_text', 'Pay by bank transfer' ),
 );
 $descriptions= array(
-    'paypal'      => __( 'You will be redirected to PayPal to approve the payment.', 'webba-booking-lite'),
+    'paypal'      => esc_html( get_option( 'wbk_paypal_prompt', __( 'You will be redirected to PayPal to approve the payment.', 'webba-booking-lite') ) ),
     'stripe'      => WBK_Renderer::load_template( 'frontend_v5/stripe_elements', null, false ),
     'arrival'     => get_option( 'wbk_pay_on_arrival_message', 'Pay on arrival' ),
     'bank'        => get_option( 'wbk_bank_transfer_message', 'Pay by bank transfer' ),     
@@ -21,7 +21,7 @@ $payment_methods_all = Plugion()->tables->get_element_at( get_option( 'wbk_db_pr
 $payment_methods_html = '';
 
 ?>
-<p class="first-text-w custom-w"><b><?php echo __( 'Please tell us how you would like to pay', 'webba-booking-lite' ); ?></b></p>
+<p class="first-text-w custom-w"><b><?php echo esc_html( get_option( 'wbk_payment_methods_title', __( 'Please tell us how you would like to pay', 'webba-booking-lite' ) ) ); ?></b></p>
 <ul class="payment-method-list-w">
 <?php
 foreach( $payment_methods as $payment_method ){

@@ -316,7 +316,11 @@ class WBK_Booking_Factory
         $send_single_bookigng_email = true;
         
         if ( $by == 'Service administrator (dashboard)' || get_option( 'wbk_multi_booking' ) != 'enabled' ) {
-            $noifications->prepareOnCancelCustomer();
+            $by_customer = false;
+            if ( $by == 'customer' ) {
+                $by_customer = true;
+            }
+            $noifications->prepareOnCancelCustomer( $by_customer );
             $noifications->sendOnCancelCustomer();
         }
         

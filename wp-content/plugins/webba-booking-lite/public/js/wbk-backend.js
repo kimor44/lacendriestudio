@@ -282,7 +282,7 @@ jQuery(function ($) {
             }
 
             form_data.append('action', 'wbk_create_multiple_bookings');
-            form_data.append('nonce', wbk_dashboardl10n.wbkb_nonce);
+            form_data.append('nonce', wbk_dashboardl10n_old.wbkb_nonce);
             form_data.append('service_id', service_id);
             form_data.append('date', date);
             form_data.append('name', name);
@@ -298,7 +298,7 @@ jQuery(function ($) {
 
             wbk_change_button_status(btn, 'loading');
             jQuery.ajax({
-                url: wbk_dashboardl10n.ajaxurl,
+                url: wbk_dashboardl10n_old.ajaxurl,
                 type: 'POST',
                 data: form_data,
                 cache: false,
@@ -319,7 +319,7 @@ jQuery(function ($) {
         }
 
         form_data.append('action', 'wbk_schedule_tools_action');
-        form_data.append('nonce', wbk_dashboardl10n.wbkb_nonce);
+        form_data.append('nonce', wbk_dashboardl10n_old.wbkb_nonce);
 
         var error_status = 0;
 
@@ -414,7 +414,7 @@ jQuery(function ($) {
         }
         wbk_change_button_status(btn, 'loading');
         jQuery.ajax({
-            url: wbk_dashboardl10n.ajaxurl,
+            url: wbk_dashboardl10n_old.ajaxurl,
             type: 'POST',
             data: form_data,
             cache: false,
@@ -482,7 +482,7 @@ function wbk_show_backend_notification(message, element = null) {
         '<div style="top:' +
         top +
         ';" class="notification-bar-wb" data-js="notification-bar-wb"><span class="block-icon-wb"><img src= "' +
-        wbk_dashboardl10n.nofication_icon +
+        wbk_dashboardl10n_old.nofication_icon +
         '"></span><div class="block-text-wb">' +
         message +
         '</div><span class="block-close-wb" data-js="block-close-wb"></span></div>';

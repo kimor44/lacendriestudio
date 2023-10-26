@@ -34,7 +34,7 @@ if ( $timeslot->get_free_places() > 0 ) {
                 <span class="available-w">
                     <img src="<?php echo  WP_WEBBA_BOOKING__PLUGIN_URL . '/public/images/' ?>group-default-icon.png" alt="group" class="group-default-icon-w">
                     <img src="<?php echo  WP_WEBBA_BOOKING__PLUGIN_URL . '/public/images/' ?>group-active-icon.png" alt="group" class="group-active-icon-w">
-                    <?php echo __( 'Available', 'webba-booking-lite' ) .': ' .  $timeslot->get_free_places(); ?>
+                    <?php echo esc_html( get_option( 'wbk_available_label', __( 'Available', 'webba-booking-lite' ) ) ) .': ' .  $timeslot->get_free_places(); ?>
                 </span>
             </span>
         </label>

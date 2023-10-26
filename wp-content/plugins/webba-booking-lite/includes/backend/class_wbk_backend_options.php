@@ -31,6 +31,18 @@ class WBK_Backend_Options {
 			} else {
 				update_option( $field['id'], '' );
 			}
+            if( $field['id'] == 'wbk_email_admin_daily_time' ){
+                date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+                $time_corr = intval( get_option( 'wbk_email_admin_daily_time', '68400' ));
+                $midnight = strtotime('today midnight');
+                $timestamp = strtotime('today midnight') + $time_corr;
+                if ( $timestamp <  time() ){
+                    $timestamp += 86400;
+                }
+                wp_clear_scheduled_hook( 'wbk_daily_event' );
+                wp_schedule_event( $timestamp, 'daily', 'wbk_daily_event' );
+                date_default_timezone_set(  'UTC'  );
+            }
 		}
 		wp_send_json_success();
 	}
@@ -1140,13 +1152,7 @@ Admin Notifications: The reply-to email address is set to the customer\'s email 
                                 ),
                                 'advanced' );
 
-		wbk_opt()->add_option( 'wbk_coupon_field_placeholder', 'text_alfa_numeric', __( 'Coupon code field placeholder', 'webba-booking-lite' ), 'wbk_translation_settings_section',
-			array(
-				'default' => __( 'Coupon code', 'webba-booking-lite' ),
-                'popup' => __( 'Placeholder shown in the coupon field', 'webba-booking-lite' )
-			),
-            'advanced'
-		);
+ 
 
         /*
 		wbk_opt()->add_option( 'wbk_coupon_applied', 'text_alfa_numeric', __( 'Coupon success message', 'webba-booking-lite' ), 'wbk_translation_settings_section',
@@ -1371,7 +1377,7 @@ Admin Notifications: The reply-to email address is set to the customer\'s email 
 		 
 		wbk_opt()->add_option( 'wbk_appointment_information', 'text', __( 'Booking details', 'webba-booking-lite' ), 'wbk_translation_settings_section',
 			array(
-				'default' => __( 'Booking on #dt', 'webba-booking-lite' ),
+				'default' => __( 'Booking', 'webba-booking-lite' ),
 				'popup' => __( '"Message shown when customers pay for a booking or cancel their booking using the link sent in the email notification.
 Available placeholders: #name (customer name), #id (appointment id), #service (service name), #date (appointment date), #time (appointment time), #dt (appointment date and time), #start_end (appointment time in start-end format)."', 'webba-booking-lite' ) 
 						    
@@ -1996,7 +2002,108 @@ Available placeholders: #name (customer name), #id (appointment id), #service (s
 					'popup' => 'Customize the booking approval SMS message. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ). '</a>'
 				)
 			);
+           
 		}
+         wbk_opt()->add_option( 'wbk_service_step_title', 'text', __( 'Services step title', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'Services', 'webba-booking-lite' ),
+                    'popup' => __( 'Services title in the booking form sidebar.','webba-booking-lite' )
+                )
+            );
+            wbk_opt()->add_option( 'wbk_date_time_step_title', 'text', __( 'Date and time step title', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'Date and time', 'webba-booking-lite' ),
+                    'popup' => __( 'Date and time title in the booking form sidebar.','webba-booking-lite')
+                )
+            );
+            wbk_opt()->add_option( 'wbk_details_step_title', 'text', __( 'Details step title', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'Details', 'webba-booking-lite' ),
+                    'popup' => __('User details title in the booking form sidebar.','webba-booking-lite')
+                )
+            );
+            wbk_opt()->add_option( 'wbk_payment_step_title', 'text', __( 'Payment step title', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'Payment', 'webba-booking-lite' ),
+                    'popup' => __('Payment title in the booking form sidebar.','webba-booking-lite')
+                )
+            );
+            wbk_opt()->add_option( 'wbk_step_separator', 'text', __( 'Step separator on mobile', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'of', 'webba-booking-lite' ),
+                    'popup' => __('On mobile, you\'ll find a step separator. For instance, \'1 of 3\' (steps). Translate the seperator "of."', 'webba-booking-lite' )
+                ),
+                'advanced'
+            );
+            wbk_opt()->add_option( 'wbk_minutes_label', 'text', __( 'Minutes label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'min', 'webba-booking-lite' ),
+                    'popup' => __('Minutes label in the services step.', 'webba-booking-lite' )
+                ),
+                'advanced'
+            );
+            wbk_opt()->add_option( 'wbk_local_time_label', 'text', __( 'Your local time checkbox', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'Your local time', 'webba-booking-lite' ),
+                    'popup' => __('Text for the "Your local time" checkbox.', 'webba-booking-lite' )
+                ),
+                'advanced'
+            );            
+            wbk_opt()->add_option( 'wbk_coupon_label', 'text', __( 'Coupon label', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'Coupon', 'webba-booking-lite' ),
+                    'popup' => __('Coupon field label', 'webba-booking-lite' )
+                ),
+                'advanced'
+            ); 
+            wbk_opt()->add_option( 'wbk_coupon_apply_text', 'text', __( 'Apply coupon button text', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'Apply', 'webba-booking-lite' ),
+                    'popup' => __( 'Label for "Apply" coupon button', 'webba-booking-lite' )
+                ),
+                'advanced'
+            );
+            wbk_opt()->add_option( 'wbk_payment_methods_title', 'text', __( 'Payment methods title', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'Please tell us how you would like to pay', 'webba-booking-lite' ),
+                    'popup' => __( 'Label shown above the payment methods', 'webba-booking-lite' )
+                ),
+                'advanced'
+            );
+            wbk_opt()->add_option( 'wbk_paypal_prompt', 'text', __( 'PayPal payment redirect notice', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'You will be redirected to PayPal to approve the payment', 'webba-booking-lite' ),
+                    'popup' => __( 'Text shown when user selects PayPal payment method and will be redirected to PayPal to approve the payment.', 'webba-booking-lite' )
+                ),
+                'advanced'
+            );
+            wbk_opt()->add_option( 'wbk_available_label', 'text', __( 'Label for available spots', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'Available', 'webba-booking-lite' ),
+                    'popup' => __( 'Text shown on the group service time slots. For example "Available: 10".', 'webba-booking-lite' )
+                ),
+                'advanced'
+            );
+            wbk_opt()->add_option( 'wbk_approve_button_text', 'text', __( 'Approve payment button text', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'approve payment', 'webba-booking-lite' ),
+                    'popup' => __( 'Label for payment approval button.', 'webba-booking-lite' )
+                ),
+                'advanced'
+            );           
+            wbk_opt()->add_option( 'wbk_places_selection_mode', 'select', __( 'Multiple seat selection mode', 'webba-booking-lite' ), 'wbk_mode_settings_section',
+                array(
+                    'popup' => __( 'Choose how many places customer can select in the group service booking.', 'webba-booking-lite'),
+                    'default' => 'normal',
+                    'extra' => array(
+                        'normal' => __( 'Let users select count', 'wbk' ),
+                        'normal_no_default' => __( 'Let users select count (no default value)', 'wbk' ),
+                        '1' => __( 'Allow select only one place', 'wbk' ),
+                        'max' => __( 'Allow select only maximum places', 'wbk' )
+                    )
+                ),
+                'advanced'
+            );
         if( get_option( 'wbk_price_separator' ) === false ){
             wbk_opt()->reset_defaults();
         }

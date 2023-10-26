@@ -623,6 +623,13 @@ class WEBBA5_Form {
                                 fontSize: '16px',
                             },
                         };
+                        var locale = jQuery('html').attr('lang');
+                        if( locale.length == '' || locale.length == 'undefined' ){
+                            locale = 'en'
+                        }
+                        if( locale.length > 2 ){
+                            locale = locale.slice(0, 2);
+                        }
                         get_this().stripe = Stripe(wbkl10n.stripe_public_key);
                         var elements = get_this().stripe.elements();
                         var stripe_hide_postal =
@@ -1461,7 +1468,13 @@ class WEBBA5_Form {
             .append(
                 '<div class="calendar-horizontal-w" id="' + id + '"></div>'
             );
-
+        var locale = jQuery('html').attr('lang');
+        if( locale.length == '' || locale.length == 'undefined' ){
+            locale = 'en'
+        }
+        if( locale.length > 2 ){
+            locale = locale.slice(0, 2);
+        }
         this.container.find('#' + id).rescalendar({
             id: id,
             format: 'YYYY/MM/DD',
@@ -1471,6 +1484,8 @@ class WEBBA5_Form {
             disabledDays: this.disabled_dates_horizontal,
             dataKeyField: 'name',
             dataKeyValues: ['item1'],
+            locale: locale
+
         });
         this.container
             .find('.wbk_horizontal_calendar_container')
@@ -1891,7 +1906,7 @@ class WEBBA5_Form {
         var step = parseInt(this.container.attr('data-step'));
         this.container
             .find('.circle-chart-text-wb')
-            .html(step + ' of ' + total_steps);
+            .html(step + ' ' + wbkl10n.of + ' ' + total_steps);
 
         var acive_step_title = this.container
             .find('.appointment-status-list-w > li.active-w')

@@ -2766,6 +2766,9 @@ li.wbk_service_item {
     margin: 0 0 30px 0 !important;
     padding: 0 !important;
 }
+.appontment-time-list-w li label {
+    width: 100% !important;
+}
 .radio-time-group-w {
     display: table-cell !important;
 }

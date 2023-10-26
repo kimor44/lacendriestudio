@@ -47,7 +47,7 @@ $service_ids = $data[0];
                 <img class="wbk_service_sub_img" src="<?php echo WP_WEBBA_BOOKING__PLUGIN_URL . '/public/images/clock_grey.png"'; ?>   height="20"> 
                 <img class="wbk_service_sub_img_active" src="<?php echo WP_WEBBA_BOOKING__PLUGIN_URL . '/public/images/clock_white.png"'; ?>   height="20"> 
                 <span class="wbk_single_service_sub_title">
-                    <?php echo $service->get_duration()  . ' ' . __( 'min', 'webba-booking-lite' ); ?>
+                    <?php echo $service->get_duration()  . ' ' . esc_html( get_option( 'wbk_minutes_label', __( 'min', 'webba-booking-lite' ) ) ); ?>
                 </span>
                 <?php
                     if( $service->get_price() > 0){

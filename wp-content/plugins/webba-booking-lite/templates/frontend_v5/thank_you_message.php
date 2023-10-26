@@ -1,6 +1,9 @@
 <?php
 if ( !defined( 'ABSPATH' ) ) exit;
 
+$prev_time_zone = date_default_timezone_get();
+date_default_timezone_set( get_option('wbk_timezone', 'UTC') );
+
 $booking_ids = $data[0];
 $thanks_message = trim( get_option( 'wbk_book_thanks_message', '' ) );
 if( $thanks_message != '' ){
@@ -16,6 +19,7 @@ if( $thanks_message != '' ){
         </div>
     </div>
     <?php 
+    date_default_timezone_set( $prev_time_zone );
     return;
 }
 
@@ -24,8 +28,8 @@ $time_format = WBK_Format_Utils::get_time_format();
 $date_format = WBK_Format_Utils::get_date_format();
 
 $payment_details = WBK_Price_Processor::get_payment_items_post_booked( $booking_ids );
-$prev_time_zone = date_default_timezone_get();
-date_default_timezone_set( get_option('wbk_timezone', 'UTC') );
+
+
 ?> 
 
 <div class="thank-you-block-w">
@@ -98,11 +102,7 @@ date_default_timezone_set( get_option('wbk_timezone', 'UTC') );
                 <p class="text-sent-w"><b><?php echo __( 'Booking confirmation  has been sent to your email address.', 'webba-booking-lite' ) ?></b></p>
                 <?php
             }            
-            /*
-                   <div class="buttons-block-w">
-                       <button class="button-w">Close</button>
-                   </div> 
-            */
+            
         ?>
     </div> 
 </div>

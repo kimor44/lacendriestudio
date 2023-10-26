@@ -4,7 +4,7 @@
 * Plugin Name: Webba Booking
 * Plugin URI: https://webba-booking.com
 * Description: Webba Booking is a powerful and easy-to-use WordPress booking plugin made to create, manage and accept online bookings with ease, through a modern and user-friendly booking interface.
-* Version: 5.0.16
+* Version: 5.0.21
 * Author: WebbaPlugins
 * Author URI: https://webba-booking.com
 * */
@@ -47,10 +47,6 @@ if ( !function_exists( 'wbk_fs' ) ) {
                 'is_premium'      => false,
                 'has_addons'      => false,
                 'has_paid_plans'  => true,
-                'trial'           => array(
-                'days'               => 14,
-                'is_require_payment' => true,
-            ),
                 'has_affiliation' => 'selected',
                 'menu'            => array(
                 'slug'       => 'wbk-main',
@@ -77,7 +73,7 @@ if ( !defined( 'WP_WEBBA_BOOKING__PLUGIN_DIR' ) ) {
 }
 
 if ( !defined( 'WP_WEBBA_BOOKING__VERSION' ) ) {
-    define( 'WP_WEBBA_BOOKING__VERSION', '5.0.16' );
+    define( 'WP_WEBBA_BOOKING__VERSION', '5.0.21' );
 }
 
 if ( !function_exists( 'wbk_plugins_loaded' ) && !function_exists( 'wbk_load_textdomain' ) ) {
@@ -216,28 +212,6 @@ if ( !function_exists( 'wbk_plugins_loaded' ) && !function_exists( 'wbk_load_tex
         'jquery-repeater',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/vendor/jquery.repeater/jquery.repeater.min.js',
         array( 'jquery' ),
-        WP_WEBBA_BOOKING__VERSION
-    ), array(
-        'backend',
-        array(
-        'wbk-services',
-        'wbk-email-templates',
-        'wbk-service-categories',
-        'wbk-appointments',
-        'wbk-coupons',
-        'wbk-pricing-rules',
-        'wbk-appearance',
-        'wbk-schedule',
-        'wbk-dashboard'
-    ),
-        'wbk-dashboard-script',
-        WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-dashboard.js',
-        array(
-        'jquery',
-        'jquery-ui-slider',
-        'jquery-touch-punch',
-        'jquery-ui-draggable'
-    ),
         WP_WEBBA_BOOKING__VERSION
     ) );
     $js_array[] = array(

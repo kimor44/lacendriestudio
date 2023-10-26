@@ -466,6 +466,8 @@ function wbk_load_schedule_fullcalendar(start, service_id, initialView) {
                 weekday: 'short',
                 day: 'numeric',
             },
+            
+            
             dayHeaderContent: (args) => {
                 // if (args.view)
                 if (args.view.type == 'dayGridMonth') {
@@ -476,12 +478,13 @@ function wbk_load_schedule_fullcalendar(start, service_id, initialView) {
                 left: 'title,prev,next',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay',
             },
-            eventMinHeight: 30,
+             
             eventSources: [
                 {
                     events: events,
                 },
             ],
+        
             eventClick: function (info) {},
             eventContent: function (args) {
                 if (args.event.extendedProps.status < 1) {

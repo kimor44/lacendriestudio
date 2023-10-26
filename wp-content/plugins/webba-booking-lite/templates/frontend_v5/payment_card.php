@@ -44,11 +44,11 @@ $booking_ids = json_encode( $temp );
 
         <tfoot>
             <tr>
-                <td><?php echo esc_html__( 'Subtotal', 'webba-booking-lite' ); ?></td>
+                <td><?php echo esc_html( get_option( 'wbk_payment_subtotal_title', __( 'Subtotal', 'webba-booking-lite' ) ) ); ?></td>
                 <td><?php echo WBK_Format_Utils::format_price( $payment_items['subtotal'] ); ?></td>
             </tr>
             <tr>
-                <td><?php echo esc_html__( 'Total', 'webba-booking-lite' ); ?></td>
+                <td><?php echo esc_html( get_option( 'wbk_payment_total_title', __( 'Total', 'webba-booking-lite' ) ) ); ?></td>
                 <td><?php echo WBK_Format_Utils::format_price( $payment_items['total'] ); ?></td>
             </tr>
         </tfoot>

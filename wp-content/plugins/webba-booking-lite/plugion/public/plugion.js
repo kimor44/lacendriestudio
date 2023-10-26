@@ -917,7 +917,6 @@ class Plugion{
                             [0, 'desc']
                         ]).draw(true);
 
-
                         node.setAttribute('data-id', response.db_row_data.id);
                         if (response.row_options.canedit == true) {
                             node.classList.add('plugion_editable_row');

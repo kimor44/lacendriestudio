@@ -52,7 +52,7 @@ if ( $service->get_quantity() > 1 ) {
     if( $selection_mode == 'normal' || $selection_mode == 'normal_no_default'  ){
         $html .= '<label for="wbk-quantity">' . esc_html( $quantity_label ) . '</label>';
         $html .= '<select name="wbk-book-quantity" autocomplete="disabled" type="text" data-service="' . esc_attr( $service_id ) . '" class="wbk-select wbk-input wbk-width-100 wbk-mb-10 wbk-book-quantity">';
-        if( $selection_mode == 'normal_no_default' ){
+        if( $selection_mode == 'normal' ){
             $html .= '<option value="0" >--</option>';
         }
         for ( $i = $service->get_min_quantity(); $i <= $avail_count; $i ++ ) {
@@ -65,7 +65,7 @@ if ( $service->get_quantity() > 1 ) {
 
     } elseif ( $selection_mode == 'max' ){
         $html .= '<select name="wbk-book-quantity" autocomplete="disabled" type="text" data-service="' . esc_attr( $service_id ) . '" class="wbk-input wbk_hidden wbk-width-100 wbk-mb-10 wbk-book-quantity">';
-        $html .= '<option value="' . esc_attr( $service->get_quantity() ) . '">' . esc_html( $service->get_quantity() ) .'</option>';
+        $html .= '<option value="' . esc_attr(  $avail_count  ) . '">' . esc_html(  $avail_count ) .'</option>';
         $html .= '</select>';
     }
 
