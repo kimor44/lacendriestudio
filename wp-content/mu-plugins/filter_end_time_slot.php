@@ -22,9 +22,6 @@ define("MORNING_END_HOURS", ['10' => '14', '14' => '18']);
 // Start hours of the morning timeslots
 define("MORNING_START_HOURS", array_keys(MORNING_END_HOURS));
 
-// Applied price for the timeslot when 2 consecutive bookings in the same morning
-define("DISCOUNT_OF_5_EUROS", 5);
-
 /**
  * catch and set the end time when timeslot is 10:00 or 14:00
  * Retrieve original file :
@@ -78,55 +75,6 @@ function cendrie_set_end_timeslots($timeslots, $day, $service_id): array
 	return $timeslots;
 }
 add_filter('get_time_slots_by_day', 'cendrie_set_end_timeslots', 10, 3);
-
-/**
- * Check if the morning of the current booking is booked
- *
- * @param string $start number of start timeslot
- * @param int $day timestamp of the current booking's day
- * @param WBK_Booking[] $timeslots array of timeslots
- * @return bool true if th morning of the current booking is booked
- */
-function is_morning_booked(string $start, int $day, array $timeslots): bool
-{
-	foreach ($timeslots as $slot) {
-		$slot_start = $slot->get_start();
-		if ($slot->get_day() == $day && $slot_start != $start) {
-			if (in_array(date('H', $slot_start), MORNING_START_HOURS)) {
-				return true;
-			}
-		}
-	}
-
-	return false;
-}
-
-/**
- * Apply discount if the morning of booking is booked
- * Retrieve origingal file :
- * wp-content/plugins/webba-booking-lite/includes/processors/class-wbk-price-processor.php
- *
- * @param string $default_price Price applied before discount
- * @param WBK_Booking $booking Data of the current booking
- * @param WBK_Booking[] $bookings array of bookings
- * @return string the new price applied
- */
-function cendrie_princing_for_booked_morning(string $default_price, WBK_Booking $booking, array $bookings): string
-{
-	$cloned_default_price = $default_price;
-	$start = $booking->get_start();
-	$start_hour = date('H', $start);
-
-	if (in_array($start_hour, MORNING_START_HOURS)) {
-		$is_morning_booked = is_morning_booked($start, $booking->get_day(), $bookings);
-		if ($is_morning_booked) {
-			$cloned_default_price = (string) (intval($cloned_default_price) - DISCOUNT_OF_5_EUROS);
-		}
-	}
-
-	return $cloned_default_price;
-}
-add_filter('webba_after_pricing_rule_applied', 'cendrie_princing_for_booked_morning', 10, 3);
 
 /**
  * Retrieve original files :

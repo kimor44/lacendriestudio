@@ -5,3 +5,5 @@ wp-content/plugins/variable-inspector
 
 wp-content/themes/lacendriestudio/node_modules/
 wp-content/ai1wm-backups/
+
+wp-content/plugins/**/*.htaccess
