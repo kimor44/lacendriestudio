@@ -19,7 +19,11 @@ foreach ( $service_ids as $service_id ) {
         if( get_option( 'wbk_appointments_default_status', '') == 'pending' &&  get_option( 'wbk_appointments_allow_payments', '') == 'enabled' ){
             $payable = 'false';
         } else {
-            $payable = 'true';
+            if( $service->has_only_arrival_payment_method() ){
+                $payable = 'false';
+            } else {
+                $payable = 'true';
+            }
         }
     }
     if( function_exists('pll__' ) ){

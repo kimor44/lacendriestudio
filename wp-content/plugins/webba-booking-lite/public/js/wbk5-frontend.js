@@ -187,6 +187,10 @@ class WEBBA5_Form {
         jQuery('.wbk-addgg-link').click(function () {
             window.location.href = jQuery(this).attr('data-link');
         });
+
+        this.container.find('form').on('submit', function (e) {
+            e.preventDefault();
+        });
     }
     async get_service_data() {
         this.container
@@ -233,48 +237,48 @@ class WEBBA5_Form {
     }
 
     process_conditional(elem) {
-        return;
         const get_this = () => {
             return this;
         };
-        if( this.container.find('[name="_wpcf7cf_options"]').length == 0 ){
+        if (this.container.find('[name="_wpcf7cf_options"]').length == 0) {
             return;
         }
-        var condition = jQuery.parseJSON(this.container.find('[name="_wpcf7cf_options"]').val());
+        var condition = jQuery.parseJSON(
+            this.container.find('[name="_wpcf7cf_options"]').val()
+        );
 
-        console.log(condition);
-       
-        jQuery.each(condition.conditions, function(i, data) {
+        jQuery.each(condition.conditions, function (i, data) {
             var and_rules = data.and_rules;
-            var then_field  = data.then_field;
-            
-            jQuery.each( and_rules, function(k, rule) {
-                if( rule.if_field == elem.attr('name') && rule.operator == 'equals' ){
-                    console.log('executing group rule');
-                    if( rule.if_value == elem.val() ){
-                        console.log( 'matching' );
-                        jQuery('[data-id="'+ then_field +'"]').css('display', 'block');
-                    } else {
-                        jQuery('[data-id="'+ then_field +'"]').css('display', 'none');
+            var then_field = data.then_field;
 
-                        console.log( 'not matching' );
+            jQuery.each(and_rules, function (k, rule) {
+                if (
+                    rule.if_field == elem.attr('name') &&
+                    rule.operator == 'equals'
+                ) {
+                    if (rule.if_value == elem.val()) {
+                        jQuery('[data-id="' + then_field + '"]').css(
+                            'display',
+                            'block'
+                        );
+                    } else {
+                        jQuery('[data-id="' + then_field + '"]').css(
+                            'display',
+                            'none'
+                        );
                     }
                 }
-
             });
-
         });
     }
-    
+
     set_input_events() {
         const get_this = () => {
             return this;
         };
         this.container.find('.wbk-input').on('input', function () {
-
-            get_this().process_conditional( jQuery(this) );
+            get_this().process_conditional(jQuery(this));
             get_this().validate_form();
-
         });
         this.container.find('.wbk-book-quantity').change(function () {
             get_this().set_multiple_data();
@@ -284,13 +288,14 @@ class WEBBA5_Form {
             .not('[name="custname"]')
             .not('[name="email"]')
             .not('[name="phone"]')
+            .not('.wbk_not_change_amount')
             .change(function () {
                 get_this().update_amount();
             });
 
         this.container.find('[name="quantity"]').trigger('change');
         this.container.find('.wbk-input').change(function () {
-            get_this().process_conditional( jQuery(this) );
+            get_this().process_conditional(jQuery(this));
             get_this().validate_form();
         });
     }
@@ -375,49 +380,77 @@ class WEBBA5_Form {
                     .fadeIn('slow', function () {});
 
                 this.container.find('.wbk-checkbox-custom').each(function () {
-                    var exculsive = jQuery(this).hasClass('wpcf7-exclusive-checkbox');
+                    var exculsive = jQuery(this).hasClass(
+                        'wpcf7-exclusive-checkbox'
+                    );
                     var chk_id = jQuery(this).attr('id');
-                    var chk_label = jQuery("label[for='" + chk_id + "']").html();
-                    var new_checkbox_html = '<div class="wbk_checkbox_container"><label class="wbk-input-label" for="' + chk_id + '" >' + chk_label + '</label>';
+                    var chk_label = jQuery(
+                        "label[for='" + chk_id + "']"
+                    ).html();
+                    var new_checkbox_html =
+                        '<div class="wbk_checkbox_container"><label class="wbk-input-label" for="' +
+                        chk_id +
+                        '" >' +
+                        chk_label +
+                        '</label>';
                     var checkbox_data_validation = '';
-                    if( jQuery(this).hasClass( 'wpcf7-validates-as-required' )){
-                        checkbox_data_validation = ' data-validation="not_empty" ';                        
+                    if (jQuery(this).hasClass('wpcf7-validates-as-required')) {
+                        checkbox_data_validation =
+                            ' data-validation="not_empty" ';
                     }
-                    new_checkbox_html += '<input type="text" ' + checkbox_data_validation + '  class="wbk-input wbk_chk_proxy wbk-custom-field wbk_hidden" name="' + chk_id +'">';
+                    new_checkbox_html +=
+                        '<input type="text" ' +
+                        checkbox_data_validation +
+                        '  class="wbk-input wbk_chk_proxy wbk-custom-field wbk_hidden" name="' +
+                        chk_id +
+                        '">';
 
                     var i = 0;
-                    jQuery(this).find('input[type="checkbox"]').each(function () {
-                        i++;
-                        var chk_val = jQuery(this).attr('value');
-                        
-                        
-                        new_checkbox_html += '<label for="'+ chk_id + '_' + i +'" class="checkbox-row-w one-row-w">';
-                        new_checkbox_html += '<span class="checkbox-custom-w">' +
-                            '<input type="checkbox" ' + checkbox_data_validation + ' data-exclusive="' + exculsive + '" data-id="' + chk_id + '" class="wbk_input_checkbox_option"' +
-                            'name="' +
-                            chk_id +
-                            '" id="' +
-                            chk_id + '_' + i +
-                            '" value="' +
-                            chk_val +
-                            '">' +
-                            '<span class="checkmark-w"></span>' +
-                            '</span>' +
-                            '<span class="checkbox-text-w">' +
-                            '<span class="checkbox-title-w">' +
-                            chk_val +
-                            '</span>' +
-                            '</span>' +
-                            '</label>';
+                    jQuery(this)
+                        .find('input[type="checkbox"]')
+                        .each(function () {
+                            i++;
+                            var chk_val = jQuery(this).attr('value');
 
-                            
-                    });
-                    new_checkbox_html += '</div><div style="display:block;width:100%;height:50px"></div>';
+                            new_checkbox_html +=
+                                '<label for="' +
+                                chk_id +
+                                '_' +
+                                i +
+                                '" class="checkbox-row-w one-row-w">';
+                            new_checkbox_html +=
+                                '<span class="checkbox-custom-w">' +
+                                '<input type="checkbox" ' +
+                                checkbox_data_validation +
+                                ' data-exclusive="' +
+                                exculsive +
+                                '" data-id="' +
+                                chk_id +
+                                '" class="wbk_input_checkbox_option"' +
+                                'name="' +
+                                chk_id +
+                                '" id="' +
+                                chk_id +
+                                '_' +
+                                i +
+                                '" value="' +
+                                chk_val +
+                                '">' +
+                                '<span class="checkmark-w"></span>' +
+                                '</span>' +
+                                '<span class="checkbox-text-w">' +
+                                '<span class="checkbox-title-w">' +
+                                chk_val +
+                                '</span>' +
+                                '</span>' +
+                                '</label>';
+                        });
+                    new_checkbox_html +=
+                        '</div><div style="display:block;width:100%;height:50px"></div>';
                     get_this()
                         .container.find("label[for='" + chk_id + "']")
                         .replaceWith(new_checkbox_html);
                     jQuery(this).remove();
-
                 });
                 get_this()
                     .container.find('.appointment-content-screen-active-w')
@@ -436,7 +469,7 @@ class WEBBA5_Form {
                     .container.find('.appointment-content-screen-active-w')
                     .find(
                         '.wbk-text:not([name="custname"]):not([name="email"]):not([name="phone"]), .wbk-textarea:not([name="wbk-comment"]), .wbk-select:not(.nice-select):not(.wbk-book-quantity)'
-                    ) 
+                    )
                     .addClass('wbk-custom-field')
                     .removeAttr('id');
 
@@ -461,29 +494,40 @@ class WEBBA5_Form {
                     .attr('data-validation', 'phone');
 
                 // custom checkbox processing
-                jQuery('.wbk_input_checkbox_option').change(function(){
+                jQuery('.wbk_input_checkbox_option').change(function () {
                     var check_id = jQuery(this).attr('data-id');
-                    if( jQuery(this).attr('data-exclusive') == 'true' ){
-                         jQuery('input[data-id="' + check_id + '"]' ).not(this).prop('checked', false);
-
+                    if (jQuery(this).attr('data-exclusive') == 'true') {
+                        jQuery('input[data-id="' + check_id + '"]')
+                            .not(this)
+                            .prop('checked', false);
                     }
                     var values = [];
-                    jQuery('input[data-id="' + check_id + '"]' ).each(function(){
-                        if( jQuery(this).is(':checked') ){
-                            values.push( jQuery(this).attr('value'));
+                    jQuery('input[data-id="' + check_id + '"]').each(
+                        function () {
+                            if (jQuery(this).is(':checked')) {
+                                values.push(jQuery(this).attr('value'));
+                            }
                         }
-                    })
+                    );
                     values = values.join();
-                    jQuery(this).closest('.wbk_checkbox_container').find('.wbk_chk_proxy').val(values);
-                    jQuery(this).closest('.wbk_checkbox_container').find('.wbk_chk_proxy').trigger('change');
-                  
+                    jQuery(this)
+                        .closest('.wbk_checkbox_container')
+                        .find('.wbk_chk_proxy')
+                        .val(values);
+                    jQuery(this)
+                        .closest('.wbk_checkbox_container')
+                        .find('.wbk_chk_proxy')
+                        .trigger('change');
                 });
 
-
                 jQuery(document).trigger('wbk_form_rendered');
-                
+
+                this.set_input_events();
+
                 // custom data processing
-                get_this().container.find('[name="wbk-comment"]').attr('name','comment');
+                get_this()
+                    .container.find('[name="wbk-comment"]')
+                    .attr('name', 'comment');
                 get_this()
                     .container.find('.wbk-custom-field')
                     .change(function () {
@@ -491,16 +535,29 @@ class WEBBA5_Form {
                         get_this()
                             .container.find('.wbk-custom-field')
                             .each(function () {
+                                if (
+                                    jQuery(this).closest(
+                                        '[data-class="wpcf7cf_group"]'
+                                    ).length > 0
+                                ) {
+                                    if (
+                                        jQuery(this)
+                                            .closest(
+                                                '[data-class="wpcf7cf_group"]'
+                                            )
+                                            .attr('style') == 'display: none;'
+                                    ) {
+                                        return;
+                                    }
+                                }
                                 var id = wbk_strip_html(
                                     jQuery(this).attr('name')
                                 );
                                 var val = '';
                                 var title = '';
-                     
-                                var val = wbk_strip_html(
-                                    jQuery(this).val()
-                                );
-                               
+
+                                var val = wbk_strip_html(jQuery(this).val());
+
                                 title = wbk_strip_html(
                                     get_this()
                                         .container.find(
@@ -521,15 +578,12 @@ class WEBBA5_Form {
 
                 get_this().set_multiple_data();
 
-                this.set_input_events();
-
                 if (wbkl10n.phoneformat.trim() != '') {
                     get_this()
                         .container.find('[name="phone"]')
                         .mask(wbkl10n.phoneformat);
                 }
-                 
-                
+
                 get_this().validate_form();
                 return;
                 break;
@@ -624,10 +678,13 @@ class WEBBA5_Form {
                             },
                         };
                         var locale = jQuery('html').attr('lang');
-                        if( locale.length == '' || locale.length == 'undefined' ){
-                            locale = 'en'
+                        if (
+                            locale.length == '' ||
+                            locale.length == 'undefined'
+                        ) {
+                            locale = 'en';
                         }
-                        if( locale.length > 2 ){
+                        if (locale.length > 2) {
                             locale = locale.slice(0, 2);
                         }
                         get_this().stripe = Stripe(wbkl10n.stripe_public_key);
@@ -708,7 +765,12 @@ class WEBBA5_Form {
                     })
                     .then(function (result) {
                         if (result.error) {
-                            get_this().change_button_status( get_this().container.find('.button-approve-stripe-payment'), 'regular');
+                            get_this().change_button_status(
+                                get_this().container.find(
+                                    '.button-approve-stripe-payment'
+                                ),
+                                'regular'
+                            );
                             get_this().show_error(result.error.message);
                         } else {
                             get_this()
@@ -806,25 +868,19 @@ class WEBBA5_Form {
         };
         var response = await this.do_request('wbk_approve_payment');
         if (response == false) {
-           
             get_this().change_button_status(
-                                get_this().container.find(
-                                    '.button-approve-stripe-payment'
-                                ),
-                                'regular'
-                            );
+                get_this().container.find('.button-approve-stripe-payment'),
+                'regular'
+            );
             this.show_error('An unexpected error occoured.');
             return;
         }
         response = jQuery.parseJSON(response);
         if (response.status == 'fail') {
-         
             get_this().change_button_status(
-                                get_this().container.find(
-                                    '.button-approve-stripe-payment'
-                                ),
-                                'regular'
-                            );
+                get_this().container.find('.button-approve-stripe-payment'),
+                'regular'
+            );
             this.show_error(response.description);
             return;
         }
@@ -862,9 +918,7 @@ class WEBBA5_Form {
             }
         }
         if (response.status == 'fail') {
-             
             get_this().change_button_status(
-                
                 get_this().container.find('.button-approve-stripe-payment'),
                 'regular'
             );
@@ -898,17 +952,26 @@ class WEBBA5_Form {
     }
 
     init_scroll_bars() {
-        if( this.container.find('.appointment-content-screen-active-w').attr('data-request') == 'wbk_render_booking_form' ){
-            console.log('length: '  + this.container.find('.appointment-content-screen-active-w').find('.nice-select').length );
-            if( this.container.find('.appointment-content-screen-active-w').find('.nice-select').length > 0 ){
-                jQuery('.appointment-content-scroll-w').css('height', 'auto'); 
-                if( jQuery('.wbk_custom_form_spacer').length == 0 ){
-                    jQuery('.appointment-content-scroll-w').append('<div class="wbk_custom_form_spacer"></div>');
+        if (
+            this.container
+                .find('.appointment-content-screen-active-w')
+                .attr('data-request') == 'wbk_render_booking_form'
+        ) {
+            if (
+                this.container
+                    .find('.appointment-content-screen-active-w')
+                    .find('.nice-select').length > 0
+            ) {
+                jQuery('.appointment-content-scroll-w').css('height', 'auto');
+                if (jQuery('.wbk_custom_form_spacer').length == 0) {
+                    jQuery('.appointment-content-scroll-w').append(
+                        '<div class="wbk_custom_form_spacer"></div>'
+                    );
                 }
                 return;
             }
         }
-        jQuery('.appointment-content-scroll-w').css('height', '555px'); 
+        jQuery('.appointment-content-scroll-w').css('height', '555px');
         Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });
     }
 
@@ -1265,7 +1328,7 @@ class WEBBA5_Form {
 
         if (response.limits != '') {
             var date_range = response.limits.split('-');
-          
+
             range_min = date_range[0].split(',');
             range_min[0] = parseInt(range_min[0]);
             range_min[1] = parseInt(range_min[1]) - 1;
@@ -1299,7 +1362,7 @@ class WEBBA5_Form {
         this.container.find('.wbk_date').replaceWith(date_html);
         this.container.find('[name="date"]').remove();
         var fixed_startofweek = 0;
-        if( !this.is_ios() ){
+        if (!this.is_ios()) {
             fixed_startofweek = wbkl10n.startofweek;
         }
 
@@ -1403,7 +1466,6 @@ class WEBBA5_Form {
             },
         });
 
-      
         jQuery('input[name="wbk-datedate_formated_submit"]').addClass(
             'wbk-input'
         );
@@ -1412,20 +1474,23 @@ class WEBBA5_Form {
             'date'
         );
         jQuery('input[name="date"]').attr('data-validation', 'not_empty');
-        
+
         var open_calendar = true;
         if (range_min != undefined) {
             var picker = this.date_input.pickadate('picker');
             picker.set('min', range_min);
             picker.set('max', range_max);
- 
-            if( range_min[0] == range_max[0] && range_min[1] == range_max[1]  && range_min[2] == range_max[2]){
-    
-                picker.set('select', range_min );
+
+            if (
+                range_min[0] == range_max[0] &&
+                range_min[1] == range_max[1] &&
+                range_min[2] == range_max[2]
+            ) {
+                picker.set('select', range_min);
                 open_calendar = false;
             }
         }
-        if( open_calendar ){
+        if (open_calendar) {
             this.container.find('.wbk_date').trigger('click');
         }
 
@@ -1469,10 +1534,10 @@ class WEBBA5_Form {
                 '<div class="calendar-horizontal-w" id="' + id + '"></div>'
             );
         var locale = jQuery('html').attr('lang');
-        if( locale.length == '' || locale.length == 'undefined' ){
-            locale = 'en'
+        if (locale.length == '' || locale.length == 'undefined') {
+            locale = 'en';
         }
-        if( locale.length > 2 ){
+        if (locale.length > 2) {
             locale = locale.slice(0, 2);
         }
         this.container.find('#' + id).rescalendar({
@@ -1484,8 +1549,7 @@ class WEBBA5_Form {
             disabledDays: this.disabled_dates_horizontal,
             dataKeyField: 'name',
             dataKeyValues: ['item1'],
-            locale: locale
-
+            locale: locale,
         });
         this.container
             .find('.wbk_horizontal_calendar_container')
@@ -1575,25 +1639,21 @@ class WEBBA5_Form {
     init_nice_select() {
         jQuery('.wbk-select').niceSelect('destroy');
         jQuery('.wbk-select').niceSelect();
-        jQuery('.nice-select').click(function(){
-        //    Scrollbar.destroyAll();
-        //    jQuery('.appointment-content-scroll-w').css('overflow', 'hidden');  
-        //    jQuery('.appointment-content-scroll-w').css('height', 'auto');             
-            
+        jQuery('.nice-select').click(function () {
+            //    Scrollbar.destroyAll();
+            //    jQuery('.appointment-content-scroll-w').css('overflow', 'hidden');
+            //    jQuery('.appointment-content-scroll-w').css('height', 'auto');
         });
- 
-        jQuery('.wbk-select').on( 'change', function() { 
-        //    Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });
-        //   jQuery('.appointment-content-scroll-w').css('height', '555px'); 
- 
-        });
-        jQuery(document).on('nice-select-close', function(){
-        //    Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });      
-        //     jQuery('.appointment-content-scroll-w').css('height', '555px');       
-        });
- 
-    }
 
+        jQuery('.wbk-select').on('change', function () {
+            //    Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });
+            //   jQuery('.appointment-content-scroll-w').css('height', '555px');
+        });
+        jQuery(document).on('nice-select-close', function () {
+            //    Scrollbar.initAll({ alwaysShowTracks: true, damping: 0.5 });
+            //     jQuery('.appointment-content-scroll-w').css('height', '555px');
+        });
+    }
 
     get_next_screen() {
         return this.container
@@ -1660,13 +1720,25 @@ class WEBBA5_Form {
         };
         this.mark_checked_services();
         let passed = false;
-         
+
         this.container
             .find('.appointment-content-screen-active-w')
             .find('.wbk-input')
             .not('.nice-select')
             .not('[type="radio"]')
             .each(function () {
+                if (
+                    jQuery(this).closest('[data-class="wpcf7cf_group"]')
+                        .length > 0
+                ) {
+                    if (
+                        jQuery(this)
+                            .closest('[data-class="wpcf7cf_group"]')
+                            .attr('style') == 'display: none;'
+                    ) {
+                        return;
+                    }
+                }
                 const elem = jQuery(this);
                 const value = jQuery(this).val();
                 const field_name = jQuery(this).attr('data-validationmsg');
@@ -1678,13 +1750,11 @@ class WEBBA5_Form {
                         passed = wbk_check_string(value, 1, 16384);
                         break;
                     case 'must_have_items':
-                    
                         passed = false;
                         if (jQuery(this).is('select')) {
                             elem.find('option').each(function () {
                                 if (jQuery(this).prop('selected')) {
                                     passed = true;
-                                     
                                 }
                             });
                         }
@@ -1745,13 +1815,12 @@ class WEBBA5_Form {
                 .val();
 
             if (radio_val == undefined) {
-        
                 passed = false;
             } else {
                 passed = true;
             }
         }
-         
+
         // check if payment method radio button is present and checked
         if (
             this.container
@@ -1764,7 +1833,6 @@ class WEBBA5_Form {
                 .val();
 
             if (radio_val == undefined) {
-                 
                 passed = false;
             } else {
                 passed = true;
@@ -1792,7 +1860,7 @@ class WEBBA5_Form {
                 .not('.wbk_service_radio')
                 .val('');
         }
-        element.find('select.wbk-input').val(0);
+        element.find('select.wbk-input').not('.wbk_services_hidden').val(0);
         element.find('select.wbk-input').trigger('change');
         element.find('.wbk-input').niceSelect('update');
         element.attr('style', '');
@@ -1827,7 +1895,7 @@ class WEBBA5_Form {
                 }
                 get_this().container.append(response.thanks_message);
             });
-         
+
         jQuery(document).trigger('webba_booking_finalize', [response, this]);
     }
 

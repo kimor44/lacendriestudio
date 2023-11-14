@@ -193,9 +193,7 @@ class WBK_Frontend_Booking {
                                     );
 
         }
-        
-
-
+         
         // detect if there are free services
         $free_services = 0;
         $paid_services = 0;                         
@@ -207,7 +205,11 @@ class WBK_Frontend_Booking {
             if( $service->get_payment_methods() == '' ){
                 $free_services++;
             } else {
-                $paid_services++;
+                if( $service->has_only_arrival_payment_method() ){
+                    $free_services++;
+                } else {
+                    $paid_services++;
+                }
             }
         }         
  

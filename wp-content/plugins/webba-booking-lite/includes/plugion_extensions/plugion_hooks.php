@@ -328,8 +328,10 @@ function wbk_plugion_cell_content( $input, $data ){
 		if ( !$service->load() ) {
 			return $result;
 		}
+         
 		$result = WBK_Db_Utils::message_placeholder_processing( $result, $appointment, $service );
-		// remove not used custom field placeholders
+
+        // remove not used custom field placeholders
 		$field_parts = explode( '#field_',$result );
 		foreach( $field_parts as $part ) {
 			$to_replace = '#field_' . $part;

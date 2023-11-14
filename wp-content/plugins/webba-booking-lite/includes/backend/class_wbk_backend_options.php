@@ -2028,6 +2028,20 @@ Available placeholders: #name (customer name), #id (appointment id), #service (s
                     'popup' => __('Payment title in the booking form sidebar.','webba-booking-lite')
                 )
             );
+            // next and prev
+            wbk_opt()->add_option( 'wbk_next_button_text', 'text', __( 'Next button text', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'Next' ),
+                    'popup' => __('Text on the Next button.','webba-booking-lite' )
+                )
+            );
+            wbk_opt()->add_option( 'wbk_back_button_text', 'text', __( 'Back button text', 'webba-booking-lite' ), 'wbk_translation_settings_section',
+                array(
+                    'default' => __( 'Back' ),
+                    'popup' => __('Text on the Back button.','webba-booking-lite' )
+                )
+            );
+            // next end prev end
             wbk_opt()->add_option( 'wbk_step_separator', 'text', __( 'Step separator on mobile', 'webba-booking-lite' ), 'wbk_translation_settings_section',
                 array(
                     'default' => __( 'of', 'webba-booking-lite' ),

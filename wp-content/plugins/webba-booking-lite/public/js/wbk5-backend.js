@@ -424,7 +424,6 @@ class Plugion_WBK {
                 }
             },
             date_range: function (element, value) {
-                
                 var datepicker_start = element
                     .parent()
                     .find('.plugion_input_date_range_start')
@@ -544,7 +543,7 @@ class Plugion_WBK {
             wbk_business_hours: function (element, value) {
                 element.val(value);
                 var format = element.attr('data-format');
-                console.log('use format:' + format );
+
                 jQuery('.wbk_repeater_add_btn').unbind();
                 var $repeater = element.siblings('.repeater').repeater({
                     defaultValues: {
@@ -970,27 +969,28 @@ class Plugion_WBK {
             }
             get_this().apply_filters();
         });
- 
+
         jQuery('.plugion_filter_daterange').each(function () {
-            var element = jQuery(this)
+            var element = jQuery(this);
             jQuery(this).pickadate({
                 firstDay: 1,
                 format: jQuery(this).attr('data-dateformat'),
                 onSet: function (thingSet) {
-                            if (thingSet.select == null) {
-                         
-                            } else {
-                                
-                                element.attr('data-formated-date', this.get('select', 'mm/dd/yyyy') ) ;
-                                get_this().apply_filters();
-                            }
-                        }
+                    if (thingSet.select == null) {
+                    } else {
+                        element.attr(
+                            'data-formated-date',
+                            this.get('select', 'mm/dd/yyyy')
+                        );
+                        get_this().apply_filters();
+                    }
+                },
             });
         });
 
         jQuery('.plugion_filter_daterange').off('change');
         jQuery('.plugion_filter_daterange').on('change', function () {
-           // get_this().apply_filters();
+            // get_this().apply_filters();
         });
 
         get_this().set_rows_events();
@@ -1198,7 +1198,6 @@ class Plugion_WBK {
     }
 
     apply_filters() {
-         
         const get_this = () => {
             return this;
         };
@@ -1212,8 +1211,7 @@ class Plugion_WBK {
                 let name = jQuery(this).attr('name');
 
                 if ('appointment_day' == name) {
-                   
-                    value = jQuery(this).attr('data-formated-date'); 
+                    value = jQuery(this).attr('data-formated-date');
                 }
 
                 var filter = {
@@ -1581,16 +1579,15 @@ class Plugion_WBK {
 
                         get_this().set_properties(response.db_row_data);
                         get_this().init_dependency();
-                        jQuery('.plugion_table td').each(function(){
-                            if( jQuery(this).html() == '[object Object]' ){
-                                jQuery(this).html('')
+                        jQuery('.plugion_table td').each(function () {
+                            if (jQuery(this).html() == '[object Object]') {
+                                jQuery(this).html('');
                             }
                         });
                         jQuery(document).trigger(
                             'plugion_after_row_added',
                             response.db_row_data
                         );
-                        
                     }
 
                     sidebarRoll.removeClass('loading');
@@ -2686,12 +2683,13 @@ jQuery(function () {
         });
     });
 
-    jQuery('.wbk_demo_button').click(function(){
-        wbk_show_backend_notification( "This button is for demonstration purposes only.",jQuery('.main-block-wb') );
+    jQuery('.wbk_demo_button').click(function () {
+        wbk_show_backend_notification(
+            'This button is for demonstration purposes only.',
+            jQuery('.main-block-wb')
+        );
         return false;
-
     });
-
 });
 /* END document ready */
 
@@ -3984,10 +3982,10 @@ function status_custom_select() {
 
                 jQuery(
                     '.dashboard-header-wb .plugion_input_date_range_start'
-                ).attr( 'data-formated-date', moment().format(input_format));
+                ).attr('data-formated-date', moment().format(input_format));
                 jQuery(
                     '.dashboard-header-wb .plugion_input_date_range_end'
-                ).attr( 'data-formated-date', moment().format(input_format));
+                ).attr('data-formated-date', moment().format(input_format));
 
                 break;
             case 'l_7':
@@ -4000,11 +3998,17 @@ function status_custom_select() {
 
                 jQuery(
                     '.dashboard-header-wb .plugion_input_date_range_start'
-                ).attr( 'data-formated-date', moment().subtract(8, 'days').format(input_format));
+                ).attr(
+                    'data-formated-date',
+                    moment().subtract(8, 'days').format(input_format)
+                );
                 jQuery(
                     '.dashboard-header-wb .plugion_input_date_range_end'
-                ).attr( 'data-formated-date', moment().subtract(1, 'days').format(input_format));
-                
+                ).attr(
+                    'data-formated-date',
+                    moment().subtract(1, 'days').format(input_format)
+                );
+
                 break;
             case 'u_7':
                 jQuery(
@@ -4013,15 +4017,17 @@ function status_custom_select() {
                 jQuery(
                     '.dashboard-header-wb .plugion_input_date_range_end'
                 ).val(moment().add(7, 'days').format(input_format));
-                
+
                 jQuery(
                     '.dashboard-header-wb .plugion_input_date_range_start'
-                ).attr( 'data-formated-date', moment().format(input_format));
+                ).attr('data-formated-date', moment().format(input_format));
                 jQuery(
                     '.dashboard-header-wb .plugion_input_date_range_end'
-                ).attr( 'data-formated-date', moment().add(7, 'days').format(input_format));
+                ).attr(
+                    'data-formated-date',
+                    moment().add(7, 'days').format(input_format)
+                );
 
-                
                 break;
             case 'l_30':
                 jQuery(
@@ -4033,10 +4039,16 @@ function status_custom_select() {
 
                 jQuery(
                     '.dashboard-header-wb .plugion_input_date_range_start'
-                ).attr( 'data-formated-date', moment().subtract(31, 'days').format(input_format));
+                ).attr(
+                    'data-formated-date',
+                    moment().subtract(31, 'days').format(input_format)
+                );
                 jQuery(
                     '.dashboard-header-wb .plugion_input_date_range_end'
-                ).attr( 'data-formated-date', moment().subtract(1, 'days').format(input_format));
+                ).attr(
+                    'data-formated-date',
+                    moment().subtract(1, 'days').format(input_format)
+                );
 
                 break;
             case 'u_30':
@@ -4049,18 +4061,20 @@ function status_custom_select() {
 
                 jQuery(
                     '.dashboard-header-wb .plugion_input_date_range_start'
-                ).attr( 'data-formated-date', moment().format(input_format));
+                ).attr('data-formated-date', moment().format(input_format));
                 jQuery(
                     '.dashboard-header-wb .plugion_input_date_range_end'
-                ).attr( 'data-formated-date', moment().add(30, 'days').format(input_format));
-                
+                ).attr(
+                    'data-formated-date',
+                    moment().add(30, 'days').format(input_format)
+                );
+
                 break;
             case 'custom':
                 break;
         }
-        
-       plugion.apply_filters();
-       
+
+        plugion.apply_filters();
     });
 
     jQuery('.dashboard-header-wb .plugion_input_text').on(
@@ -4206,7 +4220,6 @@ function wbk_show_backend_notification(message, element = null) {
         });
 }
 
-
 function wbk_format_ampm(date) {
     var hours = date.getUTCHours();
     var minutes = date.getUTCMinutes();
@@ -4217,8 +4230,6 @@ function wbk_format_ampm(date) {
     var strTime = hours + ':' + minutes + ' ' + ampm;
     return strTime;
 }
-
-
 
 jQuery(document).on('plugion_initialized', function (event) {
     // wbk_dashboard = new WBK_Dashboard();
@@ -4259,14 +4270,11 @@ jQuery(document).on('plugion_row_events_set', function (event) {
 });
 jQuery(function ($) {});
 
-
 function wbk_init_app_custom_fiels(skip_th = false) {
-    console.log('usage of custom fields');
-    if (typeof wbk_custom_fields == 'undefined') {  
-        console.log('usage of custom fields return');
+    if (typeof wbk_custom_fields == 'undefined') {
         return;
     }
-    console.log(wbk_custom_fields);
+
     if (wbk_custom_fields != '') {
         var items = wbk_get_custom_fields(wbk_custom_fields);
         if (!skip_th) {
@@ -4310,7 +4318,7 @@ function wbk_set_custom_fields_value(elem, items) {
         elem_html = elem_html.trim();
         if (elem_html != '') {
             var custom_data = jQuery.parseJSON(elem_html);
-             
+
             jQuery.each(custom_data, function (k, v) {
                 if (val[0].trim() == v[0].trim()) {
                     current_name = v[1].trim();
@@ -4319,7 +4327,6 @@ function wbk_set_custom_fields_value(elem, items) {
             });
         }
 
-        console.log('iter x');
         value_html +=
             '<br /><span class="plugion_cell plugion_exportable">' +
             current_name +
@@ -4347,7 +4354,7 @@ function wbk_get_custom_fields(input) {
     });
     return result;
 }
- class WBK_Dashboard {
+class WBK_Dashboard {
     constructor() {
         const get_this = () => {
             return this;
@@ -4556,31 +4563,33 @@ function wbk_get_custom_fields(input) {
                 var error_labels = [];
                 jQuery(this).html(wbk_dashboardl10n.please_wait);
 
-                jQuery('.plugion_filter_input').not('.nice-select').each(function () {
-                    var value = plugion.get_field_value(jQuery(this));
-                    
-                    if (value != '' && value != 'plugion_null' ) {
-                        let name = jQuery(this).attr('name');
+                jQuery('.plugion_filter_input')
+                    .not('.nice-select')
+                    .each(function () {
+                        var value = plugion.get_field_value(jQuery(this));
 
-                        if ('appointment_day' == name) {
-                             value = jQuery(this).attr('data-formated-date');
+                        if (value != '' && value != 'plugion_null') {
+                            let name = jQuery(this).attr('name');
+
+                            if ('appointment_day' == name) {
+                                value = jQuery(this).attr('data-formated-date');
+                            }
+
+                            var filter = {
+                                name: name,
+                                value: value,
+                            };
+                            filters.push(filter);
                         }
+                    });
 
-                        var filter = {
-                            name: name,
-                            value: value,
-                        };
-                        filters.push(filter);
-                    }
-                });
-                
                 if (es) {
                     return;
                 }
                 jQuery('.plugion_input_field_error').removeClass(
                     'plugion_input_field_error'
                 );
-                 
+
                 var data = {
                     filters: filters,
                 };

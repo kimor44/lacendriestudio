@@ -8,7 +8,8 @@ if( !is_array( $tokens ) || count( $tokens ) < 1 ){
 }
 
 $tokens = implode( '-', $tokens );
-$email_cancel_label = esc_html( get_option( 'wbk_booking_cancel_email_label', '' ) );
+ 
+$email_cancel_label = esc_html( stripslashes( get_option( 'wbk_booking_cancel_email_label', '' ) ) );
 
 ?>
 <p>

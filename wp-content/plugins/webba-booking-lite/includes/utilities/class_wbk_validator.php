@@ -423,8 +423,12 @@ class WBK_Validator {
             'data-mce-bogus' => array(),
 			'type' => array(),
 			'colspan' => array(),
-			'src' => array()
-
+			'src' => array(),
+            'width' => array(),
+            'cellspacing' => array(),
+            'cellpadding' => array(),
+            'border' => array(),
+            'align' => array()
         );
         $allowed_tags = array(
 			'h1'            => $default_attribs,

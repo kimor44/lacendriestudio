@@ -149,6 +149,12 @@ class WBK_Booking_Factory
             $booking = new WBK_Booking( $booking_id );
             $service_id = $booking->get_service();
             $service = new WBK_Service( $service_id );
+            
+            if ( $service->has_only_arrival_payment_method() ) {
+                $booking->set( 'payment_method', 'Pay on arrival' );
+                $booking->save();
+            }
+            
             Plugion()->set_value(
                 get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
                 'appointment_created_on',

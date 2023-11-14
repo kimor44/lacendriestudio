@@ -220,5 +220,19 @@ class WBK_Service extends WBK_Model_Object{
         }
         return '';
     }
+    public function has_only_arrival_payment_method(){
+        if( $this->get_payment_methods() == '' ){
+            return false;
+        }
+        $payment_methods = json_decode( $this->get_payment_methods(), true );
+        if( is_array( $payment_methods ) ){
+            if( count( $payment_methods ) > 1 ){
+                return false;
+            } elseif( count( $payment_methods ) == 1 && $payment_methods[0] == 'arrival' ){
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

@@ -1492,7 +1492,13 @@ class WBK_Request_Manager
         if ( get_option( 'wbk_appointments_default_status', '' ) == 'pending' && get_option( 'wbk_appointments_allow_payments', '' ) == 'enabled' ) {
             $payable = false;
         } else {
-            $payable = true;
+            
+            if ( is_array( $payment_methods ) && count( $payment_methods ) == 1 && $payment_methods[0] == 'arrival' ) {
+                $payable = false;
+            } else {
+                $payable = true;
+            }
+        
         }
         
         

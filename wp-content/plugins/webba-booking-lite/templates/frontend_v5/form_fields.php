@@ -93,7 +93,7 @@ $times_by_service = array();
                                  'name="wbk-acceptance" value="1" id="wbk-acceptance" aria-invalid="false"><span class="wbk-checkbox-label"></span> <input type="hidden"',
                                   $cf7_form );
         $cf7_form = str_replace('type="file"', 'type="file" accept="application/pdf,image/png,image/jpeg,.doc, .docx"', $cf7_form );
-        $cf7_form .= '<textarea style="display:none" name="extra" class="wbk-input wbk-extra"></textarea>';
+        $cf7_form .= '<textarea style="display:none;" name="extra" class="wbk-input wbk-extra"></textarea>';
         $html .= $cf7_form;
     }
 

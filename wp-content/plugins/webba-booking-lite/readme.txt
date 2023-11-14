@@ -3,8 +3,8 @@ Contributors: Webba agency, freemius
 Donate link: https://webba-booking.com/
 Tags: appointment booking, booking calendar, online scheduling, event booking, service reservations
 Requires at least: 5.6
-Tested up to: 6.3.1
-Stable tag: 5.0.21
+Tested up to: 6.4
+Stable tag: 5.0.22
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -180,6 +180,16 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+5.0.22
+
+03/11/2023
+
+* Improvements: conditional fields in custom forms
+* Improvements: choose payment method by default for 'Pay on arrival' payment method
+* Improvements: Back and Next buttons translatable in the Wording / Translation settings
+* Bugfix: issues with special characters in the CSV export
+* Bugfix: issues with email template styling (on saving)
+
 5.0.21
 
 24/10/2023
@@ -191,45 +201,45 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 21/10/2023
 
-Bugfix: minor bugfix
+* Bugfix: minor bugfix
 
 5.0.17
 
 20/10/2023
 
-Improvements: translation improvements
-Bugfix: minor bugfix
+* Improvements: translation improvements
+* Bugfix: minor bugfix
 
 5.0.16
 
 12/10/2023
 
-Bugfix: minor bugfix
+* Bugfix: minor bugfix
 
 5.0.15
 
 09/10/2023
 
-Improvements: minor improvements
-Bugfix: minor bugfix
+* Improvements: minor improvements
+* Bugfix: minor bugfix
 
 5.0.14
 
 05/10/2023
 
-Bugfix: minor bugfix
+* Bugfix: minor bugfix
 
 5.0.11
 
 01/10/2023
 
-Improvements: minor improvements
+* Improvements: minor improvements
 
 5.0.8
 
 23/09/2023
 
-Bugfix: bug with the custom forms on certain configurations
+* ugfix: bug with the custom forms on certain configurations
 
 5.0.7
 
