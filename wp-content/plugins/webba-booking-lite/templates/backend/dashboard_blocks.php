@@ -4,8 +4,8 @@ if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
 $pro_version = false;
-$table = $data["table"];
-$filters = $data["filters"] ?? [];
+$table = $data['table'];
+$filters = $data['filters'] ?? [];
 $approved = 0;
 $pending = 0;
 $approved_balance = 0;
@@ -26,13 +26,13 @@ if ( empty($filters) ) {
     $start = strtotime( 'today midnight' ) - 86400 * 31;
     $end = strtotime( 'today midnight' ) - 86400;
 } else {
-    $start = strtotime( $filters[0]["value"] );
-    $end = strtotime( $filters[1]["value"] );
+    $start = strtotime( $filters[0]['value'] );
+    $end = strtotime( $filters[1]['value'] );
 }
 
 date_default_timezone_set( $prev_time_zone );
-$approved_search = "approved,paid_approved,arrived,added_by_admin_paid";
-$pending_search = "pending,paid,woocommerce,added_by_admin_not_paid";
+$approved_search = 'approved,paid_approved,arrived,added_by_admin_paid';
+$pending_search = 'pending,paid,woocommerce,added_by_admin_not_paid';
 $approved_search_arr = explode( ',', $approved_search );
 $pending_search_arr = explode( ',', $pending_search );
 $num = 100;
@@ -43,7 +43,7 @@ if ( $end > $start ) {
     while ( $start <= $end ) {
         $prev_time_zone = date_default_timezone_get();
         date_default_timezone_set( get_option( 'wbk_timezone' ) );
-        $g_date = date( "Y-m-d", $start );
+        $g_date = date( 'Y-m-d', $start );
         date_default_timezone_set( $prev_time_zone );
         $labels[] = $g_date;
         $bookings_on_date = WBK_Model_Utils::get_booking_ids_by_day( $start );
@@ -70,28 +70,28 @@ if ( $end > $start ) {
         }
         $approved_data[] = $this_day_approved_ballance;
         $pending_data[] = $this_day_pending_ballance;
-        $start = strtotime( "+1 days", $start );
+        $start = strtotime( '+1 days', $start );
     }
 }
 $graph_options = [];
 if ( !empty($labels) ) {
     $graph_options = [
-        "labels"   => $labels,
-        "datasets" => [ [
-        "label"       => esc_html__( 'No. of bookings', 'webba-booking-lite' ),
-        "data"        => $total_data,
-        "borderWidth" => 1,
-        "yAxisID"     => "y",
+        'labels'   => $labels,
+        'datasets' => [ [
+        'label'       => esc_html__( 'No. of bookings', 'webba-booking-lite' ),
+        'data'        => $total_data,
+        'borderWidth' => 1,
+        'yAxisID'     => 'y',
     ], [
-        "label"       => esc_html__( 'Revenue (approved)', 'webba-booking-lite' ),
-        "data"        => $approved_data,
-        "borderWidth" => 1,
-        "yAxisID"     => "yRevenu",
+        'label'       => esc_html__( 'Revenue (approved)', 'webba-booking-lite' ),
+        'data'        => $approved_data,
+        'borderWidth' => 1,
+        'yAxisID'     => 'yRevenu',
     ], [
-        "label"       => esc_html__( 'Revenue (pending)', 'webba-booking-lite' ),
-        "data"        => $pending_data,
-        "borderWidth" => 1,
-        "yAxisID"     => "yRevenu",
+        'label'       => esc_html__( 'Revenue (pending)', 'webba-booking-lite' ),
+        'data'        => $pending_data,
+        'borderWidth' => 1,
+        'yAxisID'     => 'yRevenu',
     ] ],
     ];
 }
@@ -116,11 +116,11 @@ if ( $pro_version ) {
             <div class="description-wb">
                 <div class="description-inner-wb">
                     <span class="approved-wb"><?php 
-    printf( "%s %s", WBK_Format_Utils::format_price( $approved_balance ), esc_html__( 'approved', 'webba-booking-lite' ) );
+    printf( '%s %s', WBK_Format_Utils::format_price( $approved_balance ), esc_html__( 'approved', 'webba-booking-lite' ) );
     ?> </span> 
                     <span class="separator-wb">|</span>
                     <span class="pending-wb"><?php 
-    printf( "%s %s", WBK_Format_Utils::format_price( $pending_balance ), esc_html__( 'pending', 'webba-booking-lite' ) );
+    printf( '%s %s', WBK_Format_Utils::format_price( $pending_balance ), esc_html__( 'pending', 'webba-booking-lite' ) );
     ?></span>
                 </div><!-- /.description-wb -->
             </div><!-- /.description-wb -->

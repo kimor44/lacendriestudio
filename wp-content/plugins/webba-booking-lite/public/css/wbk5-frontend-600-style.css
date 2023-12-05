@@ -23,19 +23,48 @@
     src: url(../fonts/poppins/Poppins-Bold.ttf);
     font-weight: bold;
 }
-
 body {
     margin: 0;
 }
-.appointment-status-wrapper-w{background-color: #213f5b ;border-color: #213f5b ;}
-.circle-chart-wb{background-color: #213f5b ;border-color: #213f5b ;}
-.button-w{background-color: #1f6763 ;border-color: #1f6763 ;}
-.wb_slot_checked{background-color: #1f6763 ;border-color: #1f6763 ;}
-.middleDay > .cell_inner{background-color: #1f6763 ;border-color: #1f6763 ;}
-.checkbox-custom-w input:checked ~ .checkmark-w{background-color: #1f6763 ;border-color: #1f6763 ;}
-.checkbox-subtitle-w{color: #1f6763 ;color: #1f6763 ;}
-.wbk_service_item_active{background-color: #1f6763 ;border-color: #1f6763 ;}
+span.wbk_single_service_title {
+    color: #000;
+}
+.appointment-box-w {
+    color: #000;
+}
 
+.appointment-status-wrapper-w {
+    background-color: #213f5b;
+    border-color: #213f5b;
+}
+.circle-chart-wb {
+    background-color: #213f5b;
+    border-color: #213f5b;
+}
+.button-w {
+    background-color: #1f6763;
+    border-color: #1f6763;
+}
+.wb_slot_checked {
+    background-color: #1f6763;
+    border-color: #1f6763;
+}
+.middleDay > .cell_inner {
+    background-color: #1f6763;
+    border-color: #1f6763;
+}
+.checkbox-custom-w input:checked ~ .checkmark-w {
+    background-color: #1f6763;
+    border-color: #1f6763;
+}
+.checkbox-subtitle-w {
+    color: #1f6763;
+    color: #1f6763;
+}
+.wbk_service_item_active {
+    background-color: #1f6763;
+    border-color: #1f6763;
+}
 
 .wbk_v5_service_list {
     list-style: none !important;
@@ -159,8 +188,6 @@ li.wbk_service_item {
     display: none !important;
 }
 
- 
-    
 .header-main-w {
     background: #212121;
     padding: 8px 15px 8px 15px;
@@ -497,7 +524,7 @@ li.wbk_service_item {
     border-radius: 15px !important;
     color: #fff !important;
     border: 0 !important;
-    padding: 8px 10px 8px 10px !important;;
+    padding: 8px 10px 8px 10px !important;
     font-size: 16px !important;
     transition: 0.2s !important;
     cursor: pointer !important;
@@ -506,7 +533,6 @@ li.wbk_service_item {
     position: relative !important;
     height: 50px !important;
     text-align: center !important;
-
 }
 .button-w:hover {
     opacity: 0.8;
@@ -1010,7 +1036,6 @@ li.wbk_service_item {
 .picker__day {
     padding: 7px 0 !important;
     color: #000 !important;
-
 }
 
 .picker__day--infocus {
@@ -1051,7 +1076,7 @@ li.wbk_service_item {
 .picker__header {
     margin-top: 0.75em !important;
 }
- 
+
 .picker__nav--prev,
 .picker__nav--next {
     position: absolute;
@@ -2514,7 +2539,6 @@ li.wbk_service_item {
     user-select: none;
     box-sizing: border-box;
     font-weight: normal !important;
-
 }
 
 .custom-radiobutton-w input {
@@ -2790,7 +2814,7 @@ li.wbk_service_item {
     cursor: pointer;
     user-select: none;
 }
-.appontment-time-list-w li{
+.appontment-time-list-w li {
     margin: 0 !important;
     padding: 0 !important;
 }
@@ -2979,7 +3003,6 @@ li.wbk_service_item {
     cursor: pointer;
     border: none !important;
     padding: 4px !important;
-
 }
 .rescalendar_day_cells {
     border: none !important;
@@ -3112,10 +3135,10 @@ td.disabledDay {
 }
 
 @media (max-width: 950px) {
-    .appointment-status-text-mobile-w .btn-ring-wb{
+    .appointment-status-text-mobile-w .btn-ring-wb {
         display: none !important;
     }
-    .rescalendar_day_cells td:last-child{
+    .rescalendar_day_cells td:last-child {
         display: none !important;
     }
     .appontment-time-list-w {
@@ -3161,7 +3184,7 @@ td.disabledDay {
     .appontment-time-list-w.group-list-w {
         grid-template-columns: 1fr 1fr;
     }
- 
+
     .appointment-box-w .appointment-status-wrapper-w {
         padding: 10px;
     }
@@ -3394,7 +3417,9 @@ select.wbk-select {
 .wbk_hidden {
     display: none !important;
 }
-
+.wbk_invisible {
+    visibility: hidden !important;
+}
 .input-textarea-w,
 .input-textarea-w:focus {
     max-width: 345px;
@@ -3517,12 +3542,16 @@ select.wbk-select {
 .wbk_fade_out {
     visibility: hidden;
     opacity: 0;
-    transition: visibility 0s linear 300ms, opacity 300ms;
+    transition:
+        visibility 0s linear 300ms,
+        opacity 300ms;
 }
 .wbk_fade_in {
     visibility: visible;
     opacity: 1;
-    transition: visibility 0s linear 0s, opacity 300ms;
+    transition:
+        visibility 0s linear 0s,
+        opacity 300ms;
 }
 .wbk_single_service_title {
     font-family: poppins, arial;
@@ -3553,15 +3582,15 @@ li.wbk_service_item {
     text-align: center;
     margin-bottom: 45px;
 }
-.details-list-w li{
+.details-list-w li {
     clear: both;
     display: block;
     height: 26px;
-} 
-.dataRow td{
+}
+.dataRow td {
     border: none !important;
 }
-.wbk_custom_form_spacer{
+.wbk_custom_form_spacer {
     display: block;
     width: 100%;
     height: 300px;

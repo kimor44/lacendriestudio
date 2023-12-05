@@ -15,22 +15,22 @@ class WBK_Model_Utils
         global  $wpdb ;
         $query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( get_option( 'wbk_db_prefix', '' ) . 'wbk_services' ) );
         if ( !$wpdb->get_var( $query ) == get_option( 'wbk_db_prefix', '' ) . 'wbk_services' ) {
-            return array();
+            return [];
         }
-        $sql = "SELECT id,users FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_services ";
+        $sql = 'SELECT id,users FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_services ';
         $sql = apply_filters( 'wbk_get_service_ids', $sql );
         $order_type = get_option( 'wbk_order_service_by', 'a-z' );
         if ( $order_type == 'a-z' ) {
-            $sql .= " order by name asc ";
+            $sql .= ' order by name asc ';
         }
         if ( $order_type == 'priority' ) {
-            $sql .= " order by priority desc";
+            $sql .= ' order by priority desc';
         }
         if ( $order_type == 'priority_a' ) {
-            $sql .= " order by priority asc";
+            $sql .= ' order by priority asc';
         }
         $rows = $wpdb->get_results( $sql, ARRAY_A );
-        $result = array();
+        $result = [];
         foreach ( $rows as $item ) {
             
             if ( $restricted ) {
@@ -64,22 +64,22 @@ class WBK_Model_Utils
         global  $wpdb ;
         $query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( get_option( 'wbk_db_prefix', '' ) . 'wbk_services' ) );
         if ( !$wpdb->get_var( $query ) == get_option( 'wbk_db_prefix', '' ) . 'wbk_services' ) {
-            return array();
+            return [];
         }
-        $sql = "SELECT id,name,users FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_services ";
+        $sql = 'SELECT id,name,users FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_services ';
         $sql = apply_filters( 'wbk_get_services', $sql );
         $order_type = get_option( 'wbk_order_service_by', 'a-z' );
         if ( $order_type == 'a-z' ) {
-            $sql .= " order by name asc ";
+            $sql .= ' order by name asc ';
         }
         if ( $order_type == 'priority' ) {
-            $sql .= " order by priority desc";
+            $sql .= ' order by priority desc';
         }
         if ( $order_type == 'priority_a' ) {
-            $sql .= " order by priority asc";
+            $sql .= ' order by priority asc';
         }
         $rows = $wpdb->get_results( $sql, ARRAY_A );
-        $result = array();
+        $result = [];
         foreach ( $rows as $item ) {
             
             if ( $restricted ) {
@@ -113,11 +113,11 @@ class WBK_Model_Utils
         global  $wpdb ;
         $query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( get_option( 'wbk_db_prefix', '' ) . 'wbk_email_templates' ) );
         if ( !$wpdb->get_var( $query ) == get_option( 'wbk_db_prefix', '' ) . 'wbk_email_templates' ) {
-            return array();
+            return [];
         }
-        $sql = "SELECT id,name FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_email_templates ";
+        $sql = 'SELECT id,name FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_email_templates ';
         $rows = $wpdb->get_results( $sql, ARRAY_A );
-        $result_converted = array();
+        $result_converted = [];
         foreach ( $rows as $item ) {
             $result_converted[$item['id']] = $item['name'];
         }
@@ -133,11 +133,11 @@ class WBK_Model_Utils
         global  $wpdb ;
         $query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( get_option( 'wbk_db_prefix', '' ) . 'wbk_gg_calendars' ) );
         if ( !$wpdb->get_var( $query ) == get_option( 'wbk_db_prefix', '' ) . 'wbk_gg_calendars' ) {
-            return array();
+            return [];
         }
-        $sql = "SELECT id,name FROM  " . get_option( 'wbk_db_prefix', '' ) . "wbk_gg_calendars ";
+        $sql = 'SELECT id,name FROM  ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_gg_calendars ';
         $result = $wpdb->get_results( $sql, ARRAY_A );
-        $result_converted = array();
+        $result_converted = [];
         foreach ( $result as $item ) {
             $result_converted[$item['id']] = $item['name'];
         }
@@ -150,11 +150,11 @@ class WBK_Model_Utils
      */
     public static function get_gg_calendar_modes()
     {
-        $result = array(
+        $result = [
             'One-way'        => __( 'One-way (export)', 'webba-booking-lite' ),
             'One-way-import' => __( 'One-way (import)', 'webba-booking-lite' ),
             'Two-ways'       => __( 'Two-ways', 'webba-booking-lite' ),
-        );
+        ];
         return $result;
     }
     
@@ -170,7 +170,7 @@ class WBK_Model_Utils
             return null;
         }
         $data = json_decode( $data );
-        if ( $data === NULL ) {
+        if ( $data === null ) {
             return null;
         }
         foreach ( $data as $item ) {
@@ -196,7 +196,7 @@ class WBK_Model_Utils
     public static function get_appointment_columns( $keys_only = false )
     {
         if ( $keys_only ) {
-            return array(
+            return [
                 'service_id',
                 'day',
                 'time',
@@ -209,9 +209,9 @@ class WBK_Model_Utils
                 'payment_method',
                 'moment_price',
                 'coupon'
-            );
+            ];
         }
-        return array(
+        return [
             'service_id'     => __( 'Service', 'webba-booking-lite' ),
             'created_on'     => __( 'Created on', 'webba-booking-lite' ),
             'day'            => __( 'Date', 'webba-booking-lite' ),
@@ -227,7 +227,7 @@ class WBK_Model_Utils
             'moment_price'   => __( 'Price', 'webba-booking-lite' ),
             'coupon'         => __( 'Coupon', 'webba-booking-lite' ),
             'ip'             => __( 'User IP', 'webba-booking-lite' ),
-        );
+        ];
     }
     
     /**
@@ -236,7 +236,7 @@ class WBK_Model_Utils
      */
     static function get_booking_status_list()
     {
-        $result = array(
+        $result = [
             'pending'                 => __( 'Awaiting approval', 'webba-booking-lite' ),
             'approved'                => __( 'Approved', 'webba-booking-lite' ),
             'paid'                    => __( 'Paid (awaiting approval)', 'webba-booking-lite' ),
@@ -245,7 +245,7 @@ class WBK_Model_Utils
             'woocommerce'             => __( 'Managed by WooCommerce', 'webba-booking-lite' ),
             'added_by_admin_not_paid' => __( 'Added by the administrator (not paid)', 'webba-booking-lite' ),
             'added_by_admin_paid'     => __( 'Added by the administrator (paid)', 'webba-booking-lite' ),
-        );
+        ];
         return $result;
     }
     
@@ -257,16 +257,46 @@ class WBK_Model_Utils
     static function get_services_in_category( $category_id, $pair = false )
     {
         global  $wpdb ;
-        $list = $wpdb->get_var( $wpdb->prepare( "SELECT category_list FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_service_categories WHERE id = %d", $category_id ) );
+        $list = $wpdb->get_var( $wpdb->prepare( 'SELECT category_list FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_service_categories WHERE id = %d', $category_id ) );
         if ( $list == '' ) {
-            return FALSE;
+            return false;
         }
         
         if ( !$pair ) {
-            return json_decode( $list );
+            $service_ids = json_decode( $list );
+            $order_type = get_option( 'wbk_order_service_by', 'a-z' );
+            if ( $order_type == 'priority_a' || $order_type == 'priority' ) {
+                
+                if ( $order_type == 'priority' ) {
+                    usort( $service_ids, function ( $k1, $k2 ) {
+                        $service1 = new WBK_Service( $k1 );
+                        $service2 = new WBK_Service( $k2 );
+                        $priority1 = $service1->get( 'priority' );
+                        $priority2 = $service2->get( 'priority' );
+                        if ( $priority1 === $priority2 ) {
+                            return 0;
+                        }
+                        return ( $priority1 < $priority2 ? -1 : 1 );
+                    } );
+                } else {
+                    usort( $service_ids, function ( $k1, $k2 ) {
+                        $service1 = new WBK_Service( $k1 );
+                        $service2 = new WBK_Service( $k2 );
+                        $priority1 = $service1->get( 'priority' );
+                        $priority2 = $service2->get( 'priority' );
+                        if ( $priority1 === $priority2 ) {
+                            return 0;
+                        }
+                        return ( $priority1 > $priority2 ? -1 : 1 );
+                    } );
+                }
+            
+            }
+            return $service_ids;
         } else {
             $ids = json_decode( $list );
-            $result = array();
+            $result = [];
+            $priorities = [];
             foreach ( $ids as $id ) {
                 $service = new WBK_Service( $id );
                 if ( !$service->is_loaded() ) {
@@ -288,7 +318,7 @@ class WBK_Model_Utils
     public static function get_services_with_same_category( $service_id )
     {
         global  $wpdb ;
-        $result = array();
+        $result = [];
         $categories = self::get_service_categories();
         foreach ( $categories as $key => $value ) {
             $services = self::get_services_in_category( $key );
@@ -313,14 +343,14 @@ class WBK_Model_Utils
         global  $wpdb ;
         $query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( get_option( 'wbk_db_prefix', '' ) . 'wbk_service_categories' ) );
         if ( !$wpdb->get_var( $query ) == get_option( 'wbk_db_prefix', '' ) . 'wbk_service_categories' ) {
-            return array();
+            return [];
         }
-        $sql = "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_service_categories";
+        $sql = 'SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_service_categories';
         $sql = apply_filters( 'wbk_get_categories', $sql );
         $categories = $wpdb->get_col( $sql );
-        $result = array();
+        $result = [];
         foreach ( $categories as $category_id ) {
-            $name = $wpdb->get_var( $wpdb->prepare( " SELECT name FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_service_categories WHERE id = %d", $category_id ) );
+            $name = $wpdb->get_var( $wpdb->prepare( ' SELECT name FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_service_categories WHERE id = %d', $category_id ) );
             $result[$category_id] = $name;
         }
         return $result;
@@ -335,11 +365,11 @@ class WBK_Model_Utils
         global  $wpdb ;
         $query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( get_option( 'wbk_db_prefix', '' ) . 'wbk_service_categories' ) );
         if ( !$wpdb->get_var( $query ) == get_option( 'wbk_db_prefix', '' ) . 'wbk_service_categories' ) {
-            return array();
+            return [];
         }
-        $sql = "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_service_categories ";
+        $sql = 'SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_service_categories ';
         $rows = $wpdb->get_results( $sql, ARRAY_A );
-        $result = array();
+        $result = [];
         foreach ( $rows as $item ) {
             $result[] = $item['id'];
         }
@@ -355,14 +385,14 @@ class WBK_Model_Utils
     public static function get_booking_ids_by_day_service( $day, $service_id )
     {
         global  $wpdb ;
-        $result = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where day=%d and service_id=%d ", $day, $service_id ) );
+        $result = $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments where day=%d and service_id=%d ', $day, $service_id ) );
         return $result;
     }
     
     public static function get_booking_ids_by_day( $day )
     {
         global  $wpdb ;
-        $result = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where day=%d", $day ) );
+        $result = $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments where day=%d', $day ) );
         return $result;
     }
     
@@ -370,7 +400,7 @@ class WBK_Model_Utils
     {
         global  $wpdb ;
         $result = $wpdb->get_col( $wpdb->prepare(
-            "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where day=%d and service_id=%d and email=%s order by time ASC",
+            'SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments where day=%d and service_id=%d and email=%s order by time ASC',
             $day,
             $service_id,
             $email
@@ -382,7 +412,7 @@ class WBK_Model_Utils
     {
         global  $wpdb ;
         $result = $wpdb->get_col( $wpdb->prepare(
-            "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where time=%d and service_id=%d and email=%s order by time ASC",
+            'SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments where time=%d and service_id=%d and email=%s order by time ASC',
             $time,
             $service_id,
             $email
@@ -393,7 +423,7 @@ class WBK_Model_Utils
     public static function get_booking_ids_by_service_email( $service_id, $email )
     {
         global  $wpdb ;
-        $result = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where service_id=%d and email=%s order by time ASC", $service_id, $email ) );
+        $result = $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments where service_id=%d and email=%s order by time ASC', $service_id, $email ) );
         return $result;
     }
     
@@ -423,7 +453,7 @@ class WBK_Model_Utils
     {
         global  $wpdb ;
         $result = $wpdb->get_col( $wpdb->prepare(
-            "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where time >= %d AND time < %d AND service_id=%d ",
+            'SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments where time >= %d AND time < %d AND service_id=%d ',
             $start,
             $end,
             $service_id
@@ -442,14 +472,14 @@ class WBK_Model_Utils
     public static function get_booking_by_date_range( $start, $end )
     {
         global  $wpdb ;
-        $result = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where created_on >= %d AND created_on < %d ORDER BY created_on", $start, $end ) );
+        $result = $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments where created_on >= %d AND created_on < %d ORDER BY created_on', $start, $end ) );
         return $result;
     }
     
     public static function get_booking_ids_by_email( $email )
     {
         global  $wpdb ;
-        $result = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where email = %s order by time desc", $email ) );
+        $result = $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments where email = %s order by time desc', $email ) );
         return $result;
     }
     
@@ -458,7 +488,7 @@ class WBK_Model_Utils
         global  $wpdb ;
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
         $today = strtotime( 'today midnight' );
-        $result = $wpdb->get_col( $wpdb->prepare( " SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE service_id=%d AND day=%d  ORDER BY time ", $service_id, $today ) );
+        $result = $wpdb->get_col( $wpdb->prepare( ' SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments WHERE service_id=%d AND day=%d  ORDER BY time ', $service_id, $today ) );
         date_default_timezone_set( 'UTC' );
         return $result;
     }
@@ -468,7 +498,7 @@ class WBK_Model_Utils
         global  $wpdb ;
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
         $today = strtotime( 'today midnight' );
-        $result = $wpdb->get_col( $wpdb->prepare( " SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE status <> 'arrived' AND day=%d  ORDER BY time ", $today ) );
+        $result = $wpdb->get_col( $wpdb->prepare( ' SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE status <> 'arrived' AND day=%d  ORDER BY time ", $today ) );
         date_default_timezone_set( 'UTC' );
         return $result;
     }
@@ -478,7 +508,7 @@ class WBK_Model_Utils
         global  $wpdb ;
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
         $time_in_past = time() - 86400 * 7;
-        $result = $wpdb->get_col( $wpdb->prepare( " SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE status <> 'arrived' AND time > %d ORDER BY time ", $time_in_past ) );
+        $result = $wpdb->get_col( $wpdb->prepare( ' SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE status <> 'arrived' AND time > %d ORDER BY time ", $time_in_past ) );
         date_default_timezone_set( 'UTC' );
         return $result;
     }
@@ -515,11 +545,11 @@ class WBK_Model_Utils
         global  $wpdb ;
         $query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( get_option( 'wbk_db_prefix', '' ) . 'wbk_coupons' ) );
         if ( !$wpdb->get_var( $query ) == get_option( 'wbk_db_prefix', '' ) . 'wbk_coupons' ) {
-            return array();
+            return [];
         }
-        $sql = "SELECT id,name FROM  " . get_option( 'wbk_db_prefix', '' ) . "wbk_coupons ";
+        $sql = 'SELECT id,name FROM  ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_coupons ';
         $result = $wpdb->get_results( $sql, ARRAY_A );
-        $result_converted = array();
+        $result_converted = [];
         foreach ( $result as $item ) {
             $result_converted[$item['id']] = $item['name'];
         }
@@ -533,9 +563,9 @@ class WBK_Model_Utils
         if ( !$wpdb->get_var( $query ) == get_option( 'wbk_db_prefix', '' ) . 'wbk_pricing_rules' ) {
             return;
         }
-        $sql = "SELECT id,name FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_pricing_rules";
+        $sql = 'SELECT id,name FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_pricing_rules';
         $result = $wpdb->get_results( $sql, ARRAY_A );
-        $result_converted = array();
+        $result_converted = [];
         foreach ( $result as $item ) {
             $result_converted[$item['id']] = $item['name'];
         }
@@ -547,15 +577,15 @@ class WBK_Model_Utils
         global  $wpdb ;
         $result = $wpdb->update(
             get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-            array(
+            [
             'moment_price'   => $amount,
             'amount_details' => $details,
-        ),
-            array(
+        ],
+            [
             'id' => $booking_id,
-        ),
-            array( '%s', '%s' ),
-            array( '%d' )
+        ],
+            [ '%s', '%s' ],
+            [ '%d' ]
         );
     }
     
@@ -564,14 +594,14 @@ class WBK_Model_Utils
         global  $wpdb ;
         $wpdb->update(
             get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-            array(
+            [
             'canceled_by' => $value,
-        ),
-            array(
+        ],
+            [
             'id' => $booking_id,
-        ),
-            array( '%s' ),
-            array( '%d' )
+        ],
+            [ '%s' ],
+            [ '%d' ]
         );
     }
     
@@ -582,25 +612,25 @@ class WBK_Model_Utils
         $prev_status = $booking->get( 'status' );
         $wpdb->update(
             get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-            array(
+            [
             'status' => $status,
-        ),
-            array(
+        ],
+            [
             'id' => $booking_id,
-        ),
-            array( '%s' ),
-            array( '%d' )
+        ],
+            [ '%s' ],
+            [ '%d' ]
         );
         $wpdb->update(
             get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-            array(
+            [
             'prev_status' => $prev_status,
-        ),
-            array(
+        ],
+            [
             'id' => $booking_id,
-        ),
-            array( '%s' ),
-            array( '%d' )
+        ],
+            [ '%s' ],
+            [ '%d' ]
         );
     }
     
@@ -613,14 +643,14 @@ class WBK_Model_Utils
         }
         $result = $wpdb->update(
             get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-            array(
+            [
             'end' => $booking->get_end(),
-        ),
-            array(
+        ],
+            [
             'id' => $booking_id,
-        ),
-            array( '%d' ),
-            array( '%d' )
+        ],
+            [ '%d' ],
+            [ '%d' ]
         );
     }
     
@@ -634,7 +664,7 @@ class WBK_Model_Utils
     static function get_bookings_page_columns( $keys_only = false )
     {
         if ( $keys_only ) {
-            return array(
+            return [
                 'service_id',
                 'day',
                 'time',
@@ -647,9 +677,9 @@ class WBK_Model_Utils
                 'payment_method',
                 'moment_price',
                 'coupon'
-            );
+            ];
         }
-        return array(
+        return [
             'service_id'     => __( 'Service', 'webba-booking-lite' ),
             'created_on'     => __( 'Created on', 'webba-booking-lite' ),
             'day'            => __( 'Date', 'webba-booking-lite' ),
@@ -665,20 +695,20 @@ class WBK_Model_Utils
             'moment_price'   => __( 'Price', 'webba-booking-lite' ),
             'coupon'         => __( 'Coupon', 'webba-booking-lite' ),
             'ip'             => __( 'User IP', 'webba-booking-lite' ),
-        );
+        ];
     }
     
     static function get_custom_fields_list()
     {
         $ids = get_option( 'wbk_custom_fields_columns', '' );
-        $result = array();
+        $result = [];
         
         if ( $ids != '' ) {
             $ids = explode( ',', $ids );
             $html = '';
             foreach ( $ids as $id ) {
                 $col_title = '';
-                preg_match( "/\\[[^\\]]*\\]/", $id, $matches );
+                preg_match( '/\\[[^\\]]*\\]/', $id, $matches );
                 if ( is_array( $matches ) && count( $matches ) > 0 ) {
                     $col_title = rtrim( ltrim( $matches[0], '[' ), ']' );
                 }
@@ -699,18 +729,18 @@ class WBK_Model_Utils
         // analog of getServiceAbiliy
         $service = new WBK_Service( $service_id );
         if ( !$service->is_loaded() ) {
-            return array();
+            return [];
         }
         // init service schedulle
         $sp = new WBK_Schedule_Processor();
         $sp->load_data();
         $date_format = WBK_Format_Utils::get_date_format();
         $prepare_time = round( $service->get_prepare_time() / 1440 );
-        $arr_disabled = array();
-        $arr_enabled = array();
+        $arr_disabled = [];
+        $arr_enabled = [];
         $day_to_render = strtotime( 'today midnight' );
         $last_day = $day_to_render + 86400 * $number_of_days;
-        $google_events = array();
+        $google_events = [];
         
         if ( !is_null( $service->get_availability_range() ) && is_array( $service->get_availability_range() ) && count( $service->get_availability_range() ) == 2 ) {
             $availability_range = $service->get_availability_range();
@@ -782,13 +812,13 @@ class WBK_Model_Utils
                     $sp->get_time_slots_by_day(
                         $day_to_render,
                         $service_id,
-                        array(
+                        [
                         'calculate_availability' => $calculate_availability,
                         'calculate_night_hours'  => false,
                         'skip_gg_calendar'       => true,
                         null,
                         null,
-                    ),
+                    ],
                         null,
                         false
                     );
@@ -834,7 +864,7 @@ class WBK_Model_Utils
     static function get_quantity_by_range_sevices( $start, $end, $services )
     {
         global  $wpdb ;
-        $quantity = $wpdb->get_var( $wpdb->prepare( "SELECT SUM(quantity) FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments" . " WHERE " . "service_id IN (" . implode( ',', $services ) . ") AND " . "( ( time = %d ) OR " . "( time > %d AND time < %d ) OR " . "( time > %d AND time <= %d ) OR " . "( time >= %d AND time <= %d ) ) ", array(
+        $quantity = $wpdb->get_var( $wpdb->prepare( 'SELECT SUM(quantity) FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments' . ' WHERE ' . 'service_id IN (' . implode( ',', $services ) . ') AND ' . '( ( time = %d ) OR ' . '( time > %d AND time < %d ) OR ' . '( time > %d AND time <= %d ) OR ' . '( time >= %d AND time <= %d ) ) ', [
             $start,
             $start,
             $end,
@@ -842,7 +872,7 @@ class WBK_Model_Utils
             $end,
             $start,
             $end
-        ) ) );
+        ] ) );
         return $quantity;
     }
     
@@ -878,7 +908,7 @@ class WBK_Model_Utils
     {
         $sp = new WBK_Schedule_Processor();
         $sp->load_unlocked_days();
-        $result = array();
+        $result = [];
         for ( $i = 1 ;  $i <= 7 ;  $i++ ) {
             if ( !$sp->is_working_day( $i, $service_id ) && !$sp->is_unlockced_has_dow( $i, $service_id ) ) {
                 
@@ -900,7 +930,7 @@ class WBK_Model_Utils
     static function get_category_names_by_service( $service_id )
     {
         $categories = self::get_service_categories();
-        $result = array();
+        $result = [];
         foreach ( $categories as $key => $value ) {
             $category = new WBK_Service_Category( $key );
             $services = json_decode( $category->get( 'category_list' ) );
@@ -920,8 +950,8 @@ class WBK_Model_Utils
         if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
             $cancelled_by .= ' (' . $_SERVER['REMOTE_ADDR'] . ')';
         }
-        $booking_data = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments  WHERE id = %d", $booking_id ), ARRAY_A );
-        $wpdb->insert( get_option( 'wbk_db_prefix', '' ) . 'wbk_cancelled_appointments', array(
+        $booking_data = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments  WHERE id = %d', $booking_id ), ARRAY_A );
+        $wpdb->insert( get_option( 'wbk_db_prefix', '' ) . 'wbk_cancelled_appointments', [
             'id_cancelled'         => $booking_id,
             'cancelled_by'         => $cancelled_by,
             'name'                 => $booking_data['name'],
@@ -948,7 +978,7 @@ class WBK_Model_Utils
             'payment_method'       => $booking_data['payment_method'],
             'lang'                 => $booking_data['lang'],
             'moment_price'         => $booking_data['moment_price'],
-        ), array(
+        ], [
             '%d',
             '%s',
             '%s',
@@ -978,7 +1008,7 @@ class WBK_Model_Utils
             '%s',
             '%s',
             '%s'
-        ) );
+        ] );
         do_action( 'wbk_table_after_add', [ $wpdb->insert_id, get_option( 'wbk_db_prefix', '' ) . 'wbk_cancelled_appointments' ] );
     }
     
@@ -986,12 +1016,12 @@ class WBK_Model_Utils
     {
         global  $wpdb ;
         $arr_tokens = explode( '-', $token );
-        $result = array();
+        $result = [];
         if ( count( $arr_tokens ) > 60 ) {
             return $result;
         }
         foreach ( $arr_tokens as $token ) {
-            $booking_id = $wpdb->get_var( $wpdb->prepare( " SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE token = %s ", $token ) );
+            $booking_id = $wpdb->get_var( $wpdb->prepare( ' SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments WHERE token = %s ', $token ) );
             
             if ( $booking_id == null ) {
                 continue;
@@ -1007,12 +1037,12 @@ class WBK_Model_Utils
     {
         global  $wpdb ;
         $arr_tokens = explode( '-', $token );
-        $result = array();
+        $result = [];
         if ( count( $arr_tokens ) > 60 ) {
             return $result;
         }
         foreach ( $arr_tokens as $token ) {
-            $booking_id = $wpdb->get_var( $wpdb->prepare( " SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE admin_token = %s ", $token ) );
+            $booking_id = $wpdb->get_var( $wpdb->prepare( ' SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments WHERE admin_token = %s ', $token ) );
             
             if ( $booking_id == null ) {
                 continue;
@@ -1026,7 +1056,7 @@ class WBK_Model_Utils
     
     static function get_payment_methods_for_bookings_intersected( $booking_ids )
     {
-        $services_ids = array();
+        $services_ids = [];
         foreach ( $booking_ids as $booking_id ) {
             $booking = new WBK_Booking( $booking_id );
             if ( !$booking->is_loaded() ) {
@@ -1035,7 +1065,7 @@ class WBK_Model_Utils
             $services_ids[] = $booking->get_service();
         }
         $db_prefix = get_option( 'wbk_db_prefix', '' );
-        $payment_methods_result = array();
+        $payment_methods_result = [];
         foreach ( $services_ids as $service_id ) {
             $service = new WBK_Service( $service_id );
             $payment_methods_service = json_decode( $service->get( 'payment_methods' ) );
@@ -1054,7 +1084,7 @@ class WBK_Model_Utils
     
     static function get_payment_methods_for_bookings( $booking_ids )
     {
-        $services_ids = array();
+        $services_ids = [];
         foreach ( $booking_ids as $booking_id ) {
             $booking = new WBK_Booking( $booking_id );
             if ( !$booking->is_loaded() ) {
@@ -1064,7 +1094,7 @@ class WBK_Model_Utils
         }
         $db_prefix = get_option( 'wbk_db_prefix', '' );
         $payment_methods_all = Plugion()->tables->get_element_at( $db_prefix . 'wbk_services' )->fields->get_element_at( 'service_payment_methods' )->get_extra_data()['items'];
-        $payment_methods_allowed = array();
+        $payment_methods_allowed = [];
         foreach ( $payment_methods_all as $payment_method => $payment_method_name ) {
             $allowed = true;
             foreach ( $services_ids as $service_id ) {
@@ -1093,7 +1123,7 @@ class WBK_Model_Utils
     
     public static function get_payment_fields()
     {
-        return array(
+        return [
             'name'        => __( 'Cardholder name', 'webba-booking-lite' ),
             'city'        => __( 'City', 'webba-booking-lite' ),
             'country'     => __( 'Country', 'webba-booking-lite' ),
@@ -1101,16 +1131,16 @@ class WBK_Model_Utils
             'line2'       => __( 'Address line 1', 'webba-booking-lite' ),
             'postal_code' => __( 'Postal code', 'webba-booking-lite' ),
             'state'       => __( 'State', 'webba-booking-lite' ),
-        );
+        ];
     }
     
     public static function delete_booking( $booking_id )
     {
         global  $wpdb ;
         $db_prefix = get_option( 'wbk_db_prefix', '' );
-        $wpdb->delete( $db_prefix . 'wbk_appointments', array(
+        $wpdb->delete( $db_prefix . 'wbk_appointments', [
             'id' => $booking_id,
-        ), array( '%d' ) );
+        ], [ '%d' ] );
     }
     
     public static function get_bookings_by_service_and_time( $service_id, $time )
@@ -1123,7 +1153,7 @@ class WBK_Model_Utils
     static function get_total_count_of_bookings_by_day( $day )
     {
         global  $wpdb ;
-        $count = $wpdb->get_var( $wpdb->prepare( " SELECT COUNT(*) FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments WHERE  day = %d", $day ) );
+        $count = $wpdb->get_var( $wpdb->prepare( ' SELECT COUNT(*) FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments WHERE  day = %d', $day ) );
         return $count;
     }
     
@@ -1160,22 +1190,22 @@ class WBK_Model_Utils
         }
     }
     
-    public static function get_booking_by_date_revenue( $start, $end, $type = "" )
+    public static function get_booking_by_date_revenue( $start, $end, $type = '' )
     {
         global  $wpdb ;
-        $type_condition = "1 = 1";
+        $type_condition = '1 = 1';
         
         if ( $type ) {
-            $types = explode( ",", $type );
+            $types = explode( ',', $type );
             $type_conditions = [];
             foreach ( $types as $type ) {
                 $type_conditions[] = "status='" . esc_sql( trim( $type ) ) . "'";
             }
-            $type_condition = " ( " . implode( " OR ", $type_conditions ) . " ) ";
+            $type_condition = ' ( ' . implode( ' OR ', $type_conditions ) . ' ) ';
         }
         
         $sql = $wpdb->prepare( "SELECT GROUP_CONCAT(id SEPARATOR ',') as ids, {{date}} FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where time >= %d AND time < %d AND {$type_condition} GROUP BY created_date ", $start, $end );
-        $result = $wpdb->get_results( str_replace( "{{date}}", "from_unixtime(time, '%Y-%m-%d') as created_date", $sql ) );
+        $result = $wpdb->get_results( str_replace( '{{date}}', "from_unixtime(time, '%Y-%m-%d') as created_date", $sql ) );
         
         if ( !empty($result) ) {
             $sorted = [];
@@ -1191,26 +1221,26 @@ class WBK_Model_Utils
     public static function get_booking_by_date_range_type(
         $start,
         $end,
-        $type = "",
+        $type = '',
         $return = 'fields'
     )
     {
         global  $wpdb ;
-        $type_condition = "1 = 1";
+        $type_condition = '1 = 1';
         
         if ( $type ) {
-            $types = explode( ",", $type );
+            $types = explode( ',', $type );
             $type_conditions = [];
             foreach ( $types as $type ) {
                 $type_conditions[] = "status='" . esc_sql( trim( $type ) ) . "'";
             }
-            $type_condition = " ( " . implode( " OR ", $type_conditions ) . " ) ";
+            $type_condition = ' ( ' . implode( ' OR ', $type_conditions ) . ' ) ';
         }
         
         
         if ( $return == 'fields' ) {
-            $sql = $wpdb->prepare( "SELECT COUNT(id) as count, {{date}} FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where time >= %d AND time < %d AND {$type_condition} GROUP BY created_date ", $start, $end );
-            $result = $wpdb->get_results( str_replace( "{{date}}", "from_unixtime(time, '%Y-%m-%d') as created_date", $sql ) );
+            $sql = $wpdb->prepare( 'SELECT COUNT(id) as count, {{date}} FROM ' . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where time >= %d AND time < %d AND {$type_condition} GROUP BY created_date ", $start, $end );
+            $result = $wpdb->get_results( str_replace( '{{date}}', "from_unixtime(time, '%Y-%m-%d') as created_date", $sql ) );
             
             if ( !empty($result) ) {
                 $sorted = [];
@@ -1221,7 +1251,7 @@ class WBK_Model_Utils
             }
         
         } else {
-            $sql = $wpdb->prepare( "SELECT id FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where time >= %d AND time < %d AND {$type_condition}", $start, $end );
+            $sql = $wpdb->prepare( 'SELECT id FROM ' . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments where time >= %d AND time < %d AND {$type_condition}", $start, $end );
             return $wpdb->get_col( $sql );
         }
         

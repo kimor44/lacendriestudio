@@ -14,13 +14,13 @@ class WBK_Assets_Manager
     {
         $this->css = $css;
         $this->js = $js;
-        add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 20 );
-        add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ), 20 );
+        add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ], 20 );
+        add_action( 'wp_enqueue_scripts', [ $this, 'wp_enqueue_scripts' ], 20 );
     }
     
     public function admin_enqueue_scripts()
     {
-        $admin_pages = array(
+        $admin_pages = [
             'wbk-services',
             'wbk-email-templates',
             'wbk-service-categories',
@@ -29,7 +29,7 @@ class WBK_Assets_Manager
             'wbk-gg-calendars',
             'wbk-pricing-rules',
             'wbk-dashboard'
-        );
+        ];
         if ( isset( $_GET['page'] ) && in_array( $_GET['page'], $admin_pages ) ) {
             Plugion()->initialize_assets( false, false );
         }
@@ -61,7 +61,7 @@ class WBK_Assets_Manager
                 }
             }
         }
-        $translation_array = array(
+        $translation_array = [
             'disable_nice_select' => get_option( 'wbk_disable_nice_select', '' ),
             'export_csv'          => __( 'Export to CSV', 'webba-booking-lite' ),
             'start_export'        => __( 'Start export', 'webba-booking-lite' ),
@@ -70,14 +70,14 @@ class WBK_Assets_Manager
             'wbkb_nonce'          => wp_create_nonce( 'wbkb_nonce' ),
             'ajaxurl'             => admin_url( 'admin-ajax.php' ),
             'nofication_icon'     => WP_WEBBA_BOOKING__PLUGIN_URL . '/public/images/notification-icon.png',
-        );
+        ];
         wp_localize_script( 'wbk5-backend-script', 'wbk_dashboardl10n', $translation_array );
         wp_localize_script( 'wbk-backend-script', 'wbk_dashboardl10n_old', $translation_array );
         // remove in V5
         
         if ( isset( $_GET['page'] ) && $_GET['page'] == 'wbk-schedule' ) {
             wp_deregister_script( 'chosen' );
-            $translation_array = array(
+            $translation_array = [
                 'addappointment' => __( 'Add appointment', 'webba-booking-lite' ),
                 'add'            => __( 'Add', 'webba-booking-lite' ),
                 'close'          => __( 'Close', 'webba-booking-lite' ),
@@ -90,7 +90,7 @@ class WBK_Assets_Manager
                 'phone_required' => get_option( 'wbk_phone_required', '3' ),
                 'wbkb_nonce'     => wp_create_nonce( 'wbkb_nonce' ),
                 'ajaxurl'        => admin_url( 'admin-ajax.php' ),
-            );
+            ];
             wp_localize_script( 'wbk-schedule', 'wbkl10n', $translation_array );
         }
         
@@ -176,7 +176,7 @@ class WBK_Assets_Manager
         if ( $wbk_phone_requeired == '' ) {
             $wbk_phone_requeired = '0';
         }
-        $translation_array = array(
+        $translation_array = [
             'mode'                      => get_option( 'wbk_mode', 'extended' ),
             'phonemask'                 => get_option( 'wbk_phone_mask', 'enabled' ),
             'phoneformat'               => get_option( 'wbk_phone_format', '' ),
@@ -271,8 +271,8 @@ class WBK_Assets_Manager
             'approve_payment_text'      => esc_html( get_option( 'wbk_approve_button_text', __( 'Approve payment', 'webba-booking-lite' ) ) ),
             'continue'                  => __( 'Continue' ),
             'of'                        => esc_html( get_option( 'wbk_step_separator', __( 'of', 'webba-booking-lite' ) ) ),
-        );
-        $sanitized_array = array();
+        ];
+        $sanitized_array = [];
         foreach ( $translation_array as $key => $value ) {
             $sanitized_array[$key] = WBK_Validator::alfa_numeric( $value );
         }

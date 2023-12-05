@@ -14,18 +14,18 @@ class WBK_Backend
     public function __construct()
     {
         //add action for wp menu construction
-        add_action( 'admin_menu', array( $this, 'createAdminMenu' ) );
+        add_action( 'admin_menu', [ $this, 'createAdminMenu' ] );
         //set components of backend
-        add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+        add_action( 'admin_notices', [ $this, 'admin_notices' ] );
         add_action(
             'in_plugin_update_message-webba-booking/webba-booking-lite.php',
-            array( $this, 'prefix_plugin_update_message' ),
+            [ $this, 'prefix_plugin_update_message' ],
             10,
             2
         );
         add_action(
             'in_plugin_update_message-webba-booking-lite/webba-booking-lite.php',
-            array( $this, 'prefix_plugin_update_message' ),
+            [ $this, 'prefix_plugin_update_message' ],
             10,
             2
         );
@@ -37,7 +37,7 @@ class WBK_Backend
     {
         
         if ( isset( $data['upgrade_notice'] ) ) {
-            $message = str_replace( array( '<p>', '</p>' ), array( '<div>', '</div>' ), $data['upgrade_notice'] );
+            $message = str_replace( [ '<p>', '</p>' ], [ '<div>', '</div>' ], $data['upgrade_notice'] );
             echo  '<style type="text/css">
 			#webba-booking-lite-update .update-message p:not(:first-child){
 				display: none;
@@ -85,7 +85,7 @@ class WBK_Backend
                 $root_name,
                 'read',
                 'wbk-main',
-                array( 'WBK_Renderer', 'render_backend_page' ),
+                [ 'WBK_Renderer', 'render_backend_page' ],
                 WP_WEBBA_BOOKING__PLUGIN_URL . '/public/images/webba-booking.png'
             );
             add_submenu_page(
@@ -94,7 +94,7 @@ class WBK_Backend
                 __( 'Dashboard', 'webba-booking-lite' ),
                 'manage_options',
                 'wbk-dashboard',
-                array( 'WBK_Renderer', 'render_backend_page' )
+                [ 'WBK_Renderer', 'render_backend_page' ]
             );
             add_submenu_page(
                 'wbk-main',
@@ -102,7 +102,7 @@ class WBK_Backend
                 __( 'Services', 'webba-booking-lite' ),
                 'manage_options',
                 'wbk-services',
-                array( 'WBK_Renderer', 'render_backend_page' )
+                [ 'WBK_Renderer', 'render_backend_page' ]
             );
             add_submenu_page(
                 'wbk-main',
@@ -110,7 +110,7 @@ class WBK_Backend
                 __( 'Bookings', 'webba-booking-lite' ),
                 'read',
                 'wbk-appointments',
-                array( 'WBK_Renderer', 'render_backend_page' )
+                [ 'WBK_Renderer', 'render_backend_page' ]
             );
             add_submenu_page(
                 'wbk-main',
@@ -118,7 +118,7 @@ class WBK_Backend
                 __( 'Calendar', 'webba-booking-lite' ),
                 'read',
                 'wbk-schedule',
-                array( 'WBK_Renderer', 'render_backend_page' )
+                [ 'WBK_Renderer', 'render_backend_page' ]
             );
             add_submenu_page(
                 'wbk-main',
@@ -126,7 +126,7 @@ class WBK_Backend
                 __( 'Appearance', 'webba-booking-lite' ),
                 'manage_options',
                 'wbk-appearance',
-                array( 'WBK_Renderer', 'render_backend_page' )
+                [ 'WBK_Renderer', 'render_backend_page' ]
             );
             add_submenu_page(
                 'wbk-main',
@@ -134,7 +134,7 @@ class WBK_Backend
                 __( 'Email templates', 'webba-booking-lite' ),
                 'manage_options',
                 'wbk-email-templates',
-                array( 'WBK_Renderer', 'render_backend_page' )
+                [ 'WBK_Renderer', 'render_backend_page' ]
             );
             add_submenu_page(
                 'wbk-main',
@@ -142,7 +142,7 @@ class WBK_Backend
                 __( 'Pricing rules', 'webba-booking-lite' ),
                 'read',
                 'wbk-pricing-rules',
-                array( 'WBK_Renderer', 'render_backend_page' )
+                [ 'WBK_Renderer', 'render_backend_page' ]
             );
             $hook = add_submenu_page(
                 'wbk-main',
@@ -150,9 +150,9 @@ class WBK_Backend
                 __( 'SETTINGS', 'webba-booking-lite' ),
                 'manage_options',
                 'wbk-options',
-                array( 'WBK_Renderer', 'render_backend_page' )
+                [ 'WBK_Renderer', 'render_backend_page' ]
             );
-            add_action( 'load-' . $hook, array( $this, 'settings_updated' ) );
+            add_action( 'load-' . $hook, [ $this, 'settings_updated' ] );
             global  $submenu ;
             unset( $submenu['wbk-main'][0] );
         }
@@ -168,11 +168,11 @@ class WBK_Backend
         }
         
         if ( $new_edit == 'edit' ) {
-            return in_array( $pagenow, array( 'post.php' ) );
+            return in_array( $pagenow, [ 'post.php' ] );
         } elseif ( $new_edit == 'new' ) {
-            return in_array( $pagenow, array( 'post-new.php' ) );
+            return in_array( $pagenow, [ 'post-new.php' ] );
         } else {
-            return in_array( $pagenow, array( 'post.php', 'post-new.php' ) );
+            return in_array( $pagenow, [ 'post.php', 'post-new.php' ] );
         }
     
     }

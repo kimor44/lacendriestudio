@@ -76,7 +76,7 @@ class WBK_Email_Notifications
         return 'text/html';
     }
     
-    public function send( $event, $send_single = FALSE )
+    public function send( $event, $send_single = false )
     {
         global  $wbk_wording ;
         $date_format = WBK_Format_Utils::get_date_format();
@@ -100,7 +100,7 @@ class WBK_Email_Notifications
                 // email to cutomer
                 if ( $this->customer_book_status != '' ) {
                     
-                    if ( $send_single == TRUE || get_option( 'wbk_multi_booking', 'disabled' ) != 'enabled' ) {
+                    if ( $send_single == true || get_option( 'wbk_multi_booking', 'disabled' ) != 'enabled' ) {
                         //	validation
                         if ( !WBK_Validator::check_string_size( $this->customer_email_message, 1, 50000 ) || !WBK_Validator::check_string_size( $this->customer_email_subject, 1, 200 ) || !WBK_Validator::check_email( $this->from_email ) || !WBK_Validator::check_string_size( $this->from_name, 1, 200 ) ) {
                             return;
@@ -122,8 +122,8 @@ class WBK_Email_Notifications
                         if ( get_option( 'wbk_email_override_replyto', 'true' ) == 'true' ) {
                             $headers[] = 'Reply-To: ' . $service->getName() . ' <' . $service->getEmail() . '>';
                         }
-                        $attachment = array();
-                        add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+                        $attachment = [];
+                        add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
                         wp_mail(
                             $appointment->getEmail(),
                             $subject,
@@ -131,14 +131,14 @@ class WBK_Email_Notifications
                             $headers,
                             $attachment
                         );
-                        remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+                        remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
                     }
                 
                 }
                 // email to admin
                 if ( $this->admin_book_status != '' ) {
                     
-                    if ( $send_single == TRUE || get_option( 'wbk_multi_booking', 'disabled' ) != 'enabled' ) {
+                    if ( $send_single == true || get_option( 'wbk_multi_booking', 'disabled' ) != 'enabled' ) {
                         //	validation
                         if ( !WBK_Validator::check_string_size( $this->admin_email_message, 1, 50000 ) || !WBK_Validator::check_string_size( $this->admin_email_subject, 1, 200 ) || !WBK_Validator::check_email( $this->from_email ) || !WBK_Validator::check_string_size( $this->from_name, 1, 200 ) ) {
                             return;
@@ -149,7 +149,7 @@ class WBK_Email_Notifications
                         $message = str_replace( '[appointment_loop_end]', '', $message );
                         $subject = str_replace( '[appointment_loop_start]', '', $subject );
                         $subject = str_replace( '[appointment_loop_end]', '', $subject );
-                        $headers = array();
+                        $headers = [];
                         $headers[] = 'From: ' . $this->from_name . ' <' . $this->from_email . '>';
                         if ( get_option( 'wbk_email_override_replyto', 'true' ) == 'true' ) {
                             $headers[] = 'Reply-To: ' . $appointment->getName() . ' <' . $appointment->getEmail() . '>';
@@ -160,13 +160,13 @@ class WBK_Email_Notifications
                             $attachment = $appointment->getAttachment();
                             
                             if ( $attachment == '' ) {
-                                $attachment = array();
+                                $attachment = [];
                             } else {
                                 $attachment = json_decode( $attachment );
                             }
                         
                         } else {
-                            $attachment = array();
+                            $attachment = [];
                         }
                         
                         /* END: ICal Generation   */
@@ -184,7 +184,7 @@ class WBK_Email_Notifications
                         								}
                         							}
                         						}*/
-                        add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+                        add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
                         wp_mail(
                             $service->getEmail(),
                             $subject,
@@ -201,7 +201,7 @@ class WBK_Email_Notifications
                                 $attachment
                             );
                         }
-                        remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+                        remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
                         
                         if ( $appointment->getAttachment() != '' ) {
                             $file = json_decode( $appointment->getAttachment() );
@@ -230,10 +230,10 @@ class WBK_Email_Notifications
                     $this->customer_daily_status = false;
                 }
                 $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
-                add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+                add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
                 //iterating over services
                 $service_ids = WBK_Db_Utils::getServices();
-                $customer_remider_ids = array();
+                $customer_remider_ids = [];
                 foreach ( $service_ids as $service_id ) {
                     $service = new WBK_Service_deprecated();
                     if ( !$service->setId( $service_id ) ) {
@@ -271,7 +271,7 @@ class WBK_Email_Notifications
                         
                         if ( get_option( 'wbk_email_reminders_only_for_approved', '' ) == 'true' ) {
                             $status = WBK_Db_Utils::getStatusByAppointmentId( $appointment_id );
-                            $skip_status = array( 'pending', 'paid', 'arrived' );
+                            $skip_status = [ 'pending', 'paid', 'arrived' ];
                             if ( in_array( $status, $skip_status ) ) {
                                 continue;
                             }
@@ -342,7 +342,7 @@ class WBK_Email_Notifications
                                         $customer_daily_message,
                                         $headers
                                     );
-                                    do_action( 'wbk_after_reminder_sent_to_customer', array( $appointment_id ) );
+                                    do_action( 'wbk_after_reminder_sent_to_customer', [ $appointment_id ] );
                                 } else {
                                     $customer_remider_ids[$appointment->getEmail()][] = $appointment_id;
                                 }
@@ -395,7 +395,7 @@ class WBK_Email_Notifications
                                 
                                 if ( get_option( 'wbk_email_reminders_only_for_approved', '' ) == 'true' ) {
                                     $status = WBK_Db_Utils::getStatusByAppointmentId( $appointment_id );
-                                    $skip_status = array( 'pending', 'paid', 'arrived' );
+                                    $skip_status = [ 'pending', 'paid', 'arrived' ];
                                     if ( in_array( $status, $skip_status ) ) {
                                         continue;
                                     }
@@ -451,7 +451,7 @@ class WBK_Email_Notifications
                                 
                                 if ( get_option( 'wbk_email_reminders_only_for_approved', '' ) == 'true' ) {
                                     $status = WBK_Db_Utils::getStatusByAppointmentId( $appointment_id );
-                                    $skip_status = array( 'pending', 'paid', 'arrived' );
+                                    $skip_status = [ 'pending', 'paid', 'arrived' ];
                                     if ( in_array( $status, $skip_status ) ) {
                                         continue;
                                     }
@@ -515,7 +515,7 @@ class WBK_Email_Notifications
                         $customer_daily_subject = get_option( 'wbk_email_customer_daily_subject', '' );
                         $appointment = WBK_Db_Utils::initAppointmentById( $appointment_ids[0] );
                         
-                        if ( $appointment != FALSE ) {
+                        if ( $appointment != false ) {
                             $this->sendMultipleNotification(
                                 $appointment_ids,
                                 $customer_daily_message,
@@ -527,7 +527,7 @@ class WBK_Email_Notifications
                     
                     }
                 }
-                remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+                remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
                 break;
         }
     }
@@ -590,9 +590,9 @@ class WBK_Email_Notifications
         // end get total price
         // start processing message
         $looped_html = '';
-        $token_arr = array();
-        $token_arr_admin = array();
-        $attachment_all = array();
+        $token_arr = [];
+        $token_arr_admin = [];
+        $attachment_all = [];
         $looped = '';
         $app_price_total = 0;
         $start = '';
@@ -685,7 +685,7 @@ class WBK_Email_Notifications
         // end processing message
         // start processing subject
         $looped_html = '';
-        $token_arr = array();
+        $token_arr = [];
         
         if ( WBK_Validator::check_email_loop( $subject ) ) {
             $looped = $this->get_string_between( $subject, '[appointment_loop_start]', '[appointment_loop_end]' );
@@ -724,14 +724,14 @@ class WBK_Email_Notifications
         $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
         
         if ( $generate_ical == 'admin' ) {
-            $headers = array();
+            $headers = [];
             $headers[] = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
             if ( get_option( 'wbk_email_override_replyto', 'true' ) == 'true' ) {
                 $headers[] = 'Reply-To: ' . $appointment->getName() . ' <' . $appointment->getEmail() . '>' . "\r\n";
             }
         }
         
-        add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         /* END: ICal Generation */
         /*
         		if ( get_option( 'wbk_email_customer_on_booking_pdf_status', '' ) != '' ) {
@@ -756,7 +756,7 @@ class WBK_Email_Notifications
             $headers,
             $attachment_all
         );
-        remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         date_default_timezone_set( 'UTC' );
         
         if ( $appointment->getAttachment() != '' && $generate_ical != 'customer' ) {
@@ -933,14 +933,14 @@ class WBK_Email_Notifications
                 $message = str_replace( '#group_customer_name', $name, $message );
                 $subject = str_replace( '#group_customer_name', $name, $subject );
                 $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
-                add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+                add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
                 wp_mail(
                     $email,
                     $subject,
                     $message,
                     $headers
                 );
-                remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+                remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
             }
         }
     }
@@ -999,7 +999,7 @@ class WBK_Email_Notifications
             $message = wbk_cleanup_loop( $message );
             $subject = wbk_cleanup_loop( $subject );
             $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
-            add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+            add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
             wp_mail(
                 $appointment->getEmail(),
                 $subject,
@@ -1024,7 +1024,7 @@ class WBK_Email_Notifications
                 }
             }
             
-            remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+            remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         }
         
         date_default_timezone_set( 'UTC' );
@@ -1076,7 +1076,7 @@ class WBK_Email_Notifications
                 return;
             }
             $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
-            add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+            add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
             if ( WBK_Validator::check_email( $service->getEmail() ) ) {
                 wp_mail(
                     $service->getEmail(),
@@ -1093,7 +1093,7 @@ class WBK_Email_Notifications
                     $headers
                 );
             }
-            remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+            remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         }
         
         return;
@@ -1146,7 +1146,7 @@ class WBK_Email_Notifications
         
         if ( $this->customer_cancel_status != '' ) {
             $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
-            add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+            add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
             if ( WBK_Validator::check_email( $this->customer_cancel_email ) ) {
                 wp_mail(
                     $this->customer_cancel_email,
@@ -1155,7 +1155,7 @@ class WBK_Email_Notifications
                     $headers
                 );
             }
-            remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+            remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         }
         
         return;
@@ -1259,7 +1259,7 @@ class WBK_Email_Notifications
         $message = $this->message_placeholder_processing( $message, $appointment, $service );
         $subject = $this->subject_placeholder_processing( $this->customer_invoice_subject, $appointment, $service );
         $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
-        add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         wp_mail(
             $appointment->getEmail(),
             $subject,
@@ -1274,7 +1274,7 @@ class WBK_Email_Notifications
                 $headers
             );
         }
-        remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
     }
     
     public function sendMultipleCustomerInvoice( $appointment_ids )
@@ -1359,15 +1359,23 @@ class WBK_Email_Notifications
         }
         $message = $this->message_placeholder_processing( $message, $appointment, $service );
         $subject = $this->subject_placeholder_processing( $subject, $appointment, $service );
+        $attachment = [];
+        $attachment = apply_filters(
+            'wbk_payment_notification_attachmets',
+            $attachment,
+            $this->appointment_id,
+            $to
+        );
         $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
-        add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         
         if ( $to == 'customer' ) {
             wp_mail(
                 $appointment->getEmail(),
                 $subject,
                 $message,
-                $headers
+                $headers,
+                $attachment
             );
         } elseif ( $to == 'admin' ) {
             wp_mail(
@@ -1381,12 +1389,13 @@ class WBK_Email_Notifications
                     $this->super_admin_email,
                     $subject,
                     $message,
-                    $headers
+                    $headers,
+                    $attachment
                 );
             }
         }
         
-        remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
     }
     
     public function sendSingleArrived()
@@ -1417,14 +1426,14 @@ class WBK_Email_Notifications
         $subject = $this->subject_placeholder_processing( $subject, $appointment, $service );
         $prev_zone = date_default_timezone_set( $prev_zone );
         $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
-        add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         wp_mail(
             $appointment->getEmail(),
             $subject,
             $message,
             $headers
         );
-        remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
     }
     
     public function send_single_notification( $booking_id, $message, $subject )
@@ -1450,14 +1459,14 @@ class WBK_Email_Notifications
         $message = WBK_Placeholder_Processor::process_placeholders( $message, $booking_id );
         $subject = WBK_Placeholder_Processor::process_placeholders( $subject, $booking_id );
         $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
-        add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         wp_mail(
             $appointment->getEmail(),
             $subject,
             $message,
             $headers
         );
-        remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
     }
     
     public function sendSingleBookedManually()
@@ -1481,7 +1490,7 @@ class WBK_Email_Notifications
         if ( $this->customer_book_status != '' ) {
             $message = get_option( 'wbk_email_customer_manual_book_message', '' );
             $subject = get_option( 'wbk_email_customer_manual_book_subject', '' );
-            $attachment = array();
+            $attachment = [];
             //	validation
             if ( !WBK_Validator::check_string_size( $message, 1, 50000 ) || !WBK_Validator::check_string_size( $subject, 1, 200 ) || !WBK_Validator::check_email( $this->from_email ) || !WBK_Validator::check_string_size( $this->from_name, 1, 200 ) ) {
                 return;
@@ -1492,7 +1501,7 @@ class WBK_Email_Notifications
             if ( get_option( 'wbk_email_override_replyto', 'true' ) == 'true' ) {
                 $headers[] = 'Reply-To: ' . $service->getName() . ' <' . $service->getEmail() . '>';
             }
-            add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+            add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
             wp_mail(
                 $appointment->getEmail(),
                 $subject,
@@ -1500,7 +1509,7 @@ class WBK_Email_Notifications
                 $headers,
                 $attachment
             );
-            remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+            remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         }
         
         
@@ -1518,7 +1527,7 @@ class WBK_Email_Notifications
             if ( get_option( 'wbk_email_override_replyto', 'true' ) == 'true' ) {
                 $headers[] = 'Reply-To: ' . $this->from_name . ' <' . $service->getEmail() . '>';
             }
-            add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+            add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
             wp_mail(
                 $service->getEmail(),
                 $subject,
@@ -1533,7 +1542,7 @@ class WBK_Email_Notifications
                     $headers
                 );
             }
-            remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+            remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         }
     
     }
@@ -1599,7 +1608,7 @@ class WBK_Email_Notifications
         $time_format = WBK_Date_Time_Utils::get_time_format();
         foreach ( $appointment_ids as $id ) {
             $appointment = WBK_Db_Utils::initAppointmentById( $id );
-            if ( $appointment == FALSE ) {
+            if ( $appointment == false ) {
                 continue;
             }
             $service = WBK_Db_Utils::initServiceById( $appointment->getService() );
@@ -1632,14 +1641,14 @@ class WBK_Email_Notifications
             return;
         }
         $headers = 'From: ' . $this->from_name . ' <' . $this->from_email . '>' . "\r\n";
-        add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         wp_mail(
             $service->getEmail(),
             'Issue with the Google calendar intgration.',
             'Webba Booking plugin was unable to connect with the Google Calendar, please check the settings. Details: ' . $error_message,
             $headers
         );
-        remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
     }
 
 }

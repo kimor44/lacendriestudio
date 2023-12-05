@@ -1,13 +1,13 @@
 <?php
 
 /**
-* Plugin Name: Webba Booking
-* Plugin URI: https://webba-booking.com
-* Description: Webba Booking is a powerful and easy-to-use WordPress booking plugin made to create, manage and accept online bookings with ease, through a modern and user-friendly booking interface.
-* Version: 5.0.22
-* Author: WebbaPlugins
-* Author URI: https://webba-booking.com
-* */
+ * Plugin Name: Webba Booking
+ * Plugin URI: https://webba-booking.com
+ * Description: Webba Booking is a powerful and easy-to-use WordPress booking plugin made to create, manage and accept online bookings with ease, through a modern and user-friendly booking interface.
+ * Version: 5.0.25
+ * Author: WebbaPlugins
+ * Author URI: https://webba-booking.com
+ *   */
 // check if accessed directly
 if ( !defined( 'ABSPATH' ) ) {
     exit;
@@ -38,7 +38,7 @@ if ( !function_exists( 'wbk_fs' ) ) {
         if ( !isset( $wbk_fs ) ) {
             // Include Freemius SDK.
             require_once dirname( __FILE__ ) . '/freemius/start.php';
-            $wbk_fs = fs_dynamic_init( array(
+            $wbk_fs = fs_dynamic_init( [
                 'id'              => '4728',
                 'slug'            => 'webba-booking-lite',
                 'premium_slug'    => 'webba-booking',
@@ -48,13 +48,13 @@ if ( !function_exists( 'wbk_fs' ) ) {
                 'has_addons'      => false,
                 'has_paid_plans'  => true,
                 'has_affiliation' => 'selected',
-                'menu'            => array(
+                'menu'            => [
                 'slug'       => 'wbk-main',
                 'first-path' => $first_page,
                 'support'    => false,
-            ),
+            ],
                 'is_live'         => true,
-            ) );
+            ] );
         }
         
         return $wbk_fs;
@@ -73,7 +73,7 @@ if ( !defined( 'WP_WEBBA_BOOKING__PLUGIN_DIR' ) ) {
 }
 
 if ( !defined( 'WP_WEBBA_BOOKING__VERSION' ) ) {
-    define( 'WP_WEBBA_BOOKING__VERSION', '5.0.22' );
+    define( 'WP_WEBBA_BOOKING__VERSION', '5.0.25' );
 }
 
 if ( !function_exists( 'wbk_plugins_loaded' ) && !function_exists( 'wbk_load_textdomain' ) ) {
@@ -187,227 +187,227 @@ if ( !function_exists( 'wbk_plugins_loaded' ) && !function_exists( 'wbk_load_tex
     }
     
     $wizard = new WBK_Wizard();
-    $js_array = array( array(
+    $js_array = [ [
         'backend',
-        array(
+        [
         'wbk-services',
         'wbk-email-templates',
         'wbk-service-categories',
         'wbk-coupons',
         'wbk-pricing-rules'
-    ),
+    ],
         'wbk-tinymce',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-tinymce.js',
-        array( 'wp-tinymce' ),
+        [ 'wp-tinymce' ],
         WP_WEBBA_BOOKING__VERSION
-    ), array(
+    ], [
         'backend',
-        array(
+        [
         'wbk-services',
         'wbk-email-templates',
         'wbk-service-categories',
         'wbk-coupons',
         'wbk-pricing-rules'
-    ),
+    ],
         'jquery-repeater',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/vendor/jquery.repeater/jquery.repeater.min.js',
-        array( 'jquery' ),
+        [ 'jquery' ],
         WP_WEBBA_BOOKING__VERSION
-    ) );
-    $js_array[] = array(
+    ] ];
+    $js_array[] = [
         'frontend',
         null,
         'wbk-common-script',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-form.js',
-        array( 'jquery' ),
+        [ 'jquery' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'frontend',
         null,
         'wbk-validator',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-validator.js',
-        array( 'jquery' ),
+        [ 'jquery' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'frontend5',
         null,
         'wbk-validator',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-validator.js',
-        array( 'jquery' ),
+        [ 'jquery' ],
         WP_WEBBA_BOOKING__VERSION
-    );
+    ];
     
     if ( get_option( 'wbk_phone_mask', 'enabled' ) == 'enabled' ) {
-        $js_array[] = array(
+        $js_array[] = [
             'frontend',
             null,
             'jquery-maskedinput',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/jquery.maskedinput.min.js',
-            array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+            [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
             WP_WEBBA_BOOKING__VERSION
-        );
-        $js_array[] = array(
+        ];
+        $js_array[] = [
             'backend',
-            array( 'wbk-schedule' ),
+            [ 'wbk-schedule' ],
             'jquery-maskedinput',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/jquery.maskedinput.min.js',
-            array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+            [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
             WP_WEBBA_BOOKING__VERSION
-        );
+        ];
     } elseif ( get_option( 'wbk_phone_mask', 'enabled' ) == 'enabled_mask_plugin' ) {
-        $js_array[] = array(
+        $js_array[] = [
             'frontend',
             null,
             'jquery-maskedinput',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/jquery.mask.js',
-            array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+            [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
             WP_WEBBA_BOOKING__VERSION
-        );
-        $js_array[] = array(
+        ];
+        $js_array[] = [
             'backend',
             null,
             'jquery-maskedinput',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/jquery.mask.js',
-            array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+            [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
             WP_WEBBA_BOOKING__VERSION
-        );
+        ];
     }
     
     
     if ( get_option( 'wbk_pickadate_load', 'yes' ) == 'yes' ) {
-        $js_array[] = array(
+        $js_array[] = [
             'frontend',
             null,
             'picker',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/picker.js',
-            array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+            [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
             WP_WEBBA_BOOKING__VERSION
-        );
-        $js_array[] = array(
+        ];
+        $js_array[] = [
             'frontend',
             null,
             'picker-date',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/picker.date.js',
-            array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+            [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
             WP_WEBBA_BOOKING__VERSION
-        );
-        $js_array[] = array(
+        ];
+        $js_array[] = [
             'frontend',
             null,
             'picker-legacy',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/legacy.js',
-            array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+            [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
             WP_WEBBA_BOOKING__VERSION
-        );
-        $js_array[] = array(
+        ];
+        $js_array[] = [
             'frontend5',
             null,
             'picker',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/picker.js',
-            array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+            [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
             WP_WEBBA_BOOKING__VERSION
-        );
-        $js_array[] = array(
+        ];
+        $js_array[] = [
             'frontend5',
             null,
             'picker-date',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/picker.date.js',
-            array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+            [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
             WP_WEBBA_BOOKING__VERSION
-        );
-        $js_array[] = array(
+        ];
+        $js_array[] = [
             'frontend5',
             null,
             'picker-legacy',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/legacy.js',
-            array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+            [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
             WP_WEBBA_BOOKING__VERSION
-        );
+        ];
     }
     
-    $js_array[] = array(
+    $js_array[] = [
         'frontend',
         null,
         'wbk-frontend',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-frontend.js',
-        array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+        [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'frontend5',
         null,
         'wbk-vendor',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/vendor.js',
-        array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+        [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'frontend5',
         null,
         'wbk-frontend',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk5-frontend.js',
-        array(
+        [
         'jquery',
         'jquery-ui-core',
         'jquery-effects-core',
         'wbk-vendor'
-    ),
+    ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $css_array = array();
-    $css_array[] = array(
+    ];
+    $css_array = [];
+    $css_array[] = [
         'frontend5',
         null,
         'wbk-frontend-style-custom',
         content_url() . '/webba_booking_style/wbk5-frontend-custom-style.css',
-        array(),
+        [],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $css_array[] = array(
+    ];
+    $css_array[] = [
         'frontend',
         null,
         'wbk-frontend-style',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/wbk-frontend-default-style.css',
-        array(),
+        [],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $css_array[] = array(
+    ];
+    $css_array[] = [
         'frontend',
         null,
         'picker-classic',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/classic.css',
-        array(),
+        [],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $css_array[] = array(
+    ];
+    $css_array[] = [
         'frontend',
         null,
         'picker-classic-date',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/classic.date.css',
-        array(),
+        [],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $css_array[] = array(
+    ];
+    $css_array[] = [
         'frontend5',
         null,
         'picker-classic',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/classic.css',
-        array(),
+        [],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $css_array[] = array(
+    ];
+    $css_array[] = [
         'frontend5',
         null,
         'picker-classic-date',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/classic.date.css',
-        array(),
+        [],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $css_array[] = array(
+    ];
+    $css_array[] = [
         'backend',
-        array(
+        [
         'wbk-schedule',
         'wbk-options',
         'wbk-gg-calendars',
@@ -419,103 +419,103 @@ if ( !function_exists( 'wbk_plugins_loaded' ) && !function_exists( 'wbk_load_tex
         'wbk-service-categories',
         'wbk-email-templates',
         'wbk-dashboard'
-    ),
+    ],
         'wbk-backend-style',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/wbk5-backend.css',
-        array(),
+        [],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $css_array[] = array(
+    ];
+    $css_array[] = [
         'backend',
-        array( '__wbk-schedule', 'wbk-options', 'wbk-gg-calendars' ),
+        [ '__wbk-schedule', 'wbk-options', 'wbk-gg-calendars' ],
         'chosen-style',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/chosen.min.css',
-        array(),
+        [],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $css_array[] = array(
+    ];
+    $css_array[] = [
         'backend',
-        array( 'wbk-schedule', 'wbk-options', 'wbk-gg-calendars' ),
+        [ 'wbk-schedule', 'wbk-options', 'wbk-gg-calendars' ],
         'multidate-picker-style',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/jquery.datepick.css',
-        array(),
+        [],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $css_array[] = array(
+    ];
+    $css_array[] = [
         'backend',
-        array( 'wbk-schedule' ),
+        [ 'wbk-schedule' ],
         'wbk-backend-style-old',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/wbk-backend.css',
-        array(),
+        [],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
-        array( 'wbk-schedule', 'wbk-options' ),
+        [ 'wbk-schedule', 'wbk-options' ],
         'jquery-plugin',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/jquery.plugin.js',
-        array( 'jquery', 'jquery-ui-core', 'jquery-effects-core' ),
+        [ 'jquery', 'jquery-ui-core', 'jquery-effects-core' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
-        array( 'wbk-schedule' ),
+        [ 'wbk-schedule' ],
         'wbk-fullcalendar',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-fullcalendar.min.js',
-        array( 'jquery' ),
+        [ 'jquery' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
-        array( 'wbk-schedule' ),
+        [ 'wbk-schedule' ],
         'wbk-schedule',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-schedule.js',
-        array( 'jquery', 'jquery-ui-core', 'jquery-ui-dialog' ),
+        [ 'jquery', 'jquery-ui-core', 'jquery-ui-dialog' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
-        array( 'wbk-schedule', 'wbk-options' ),
+        [ 'wbk-schedule', 'wbk-options' ],
         'wbk-validator',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-validator.js',
-        array( 'jquery' ),
+        [ 'jquery' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
-        array( 'wbk-options' ),
+        [ 'wbk-options' ],
         'wbk-options',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-options.js',
-        array( 'jquery', 'wbk5-backend-plugins' ),
+        [ 'jquery', 'wbk5-backend-plugins' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
-        array( 'wbk-schedule', 'wbk-options' ),
+        [ 'wbk-schedule', 'wbk-options' ],
         'wbk-chosen',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/chosen.jquery.min.js',
-        array( 'jquery', 'jquery-ui-core', 'jquery-ui-tabs' ),
+        [ 'jquery', 'jquery-ui-core', 'jquery-ui-tabs' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
-        array( 'wbk-schedule', 'wbk-options' ),
+        [ 'wbk-schedule', 'wbk-options' ],
         'multidate-picker',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/jquery.datepick.min.js',
-        array( 'jquery' ),
+        [ 'jquery' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
-        array( 'wbk-appearance', 'wbk-schedule', 'wbk-options' ),
+        [ 'wbk-appearance', 'wbk-schedule', 'wbk-options' ],
         'wbk-backend-script',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk-backend.js',
-        array( 'jquery' ),
+        [ 'jquery' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
-        array(
+        [
         'wbk-schedule',
         'wbk-options',
         'wbk-gg-calendars',
@@ -527,15 +527,15 @@ if ( !function_exists( 'wbk_plugins_loaded' ) && !function_exists( 'wbk_load_tex
         'wbk-service-categories',
         'wbk-email-templates',
         'wbk-dashboard'
-    ),
+    ],
         'wbk5-backend-plugins',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk5-backend-plugins.js',
-        array( 'jquery' ),
+        [ 'jquery' ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
-        array(
+        [
         'wbk-gg-calendars',
         'wbk-services',
         'wbk-pricing-rules',
@@ -545,62 +545,62 @@ if ( !function_exists( 'wbk_plugins_loaded' ) && !function_exists( 'wbk_load_tex
         'wbk-service-categories',
         'wbk-email-templates',
         'wbk-dashboard'
-    ),
+    ],
         'wbk5-backend-script',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk5-backend.js',
-        array(
+        [
         'jquery',
         'jquery-ui-core',
         'jquery-effects-core',
         'jquery-effects-slide'
-    ),
+    ],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
-        array( 'wbk-appearance', 'wbk-schedule' ),
+        [ 'wbk-appearance', 'wbk-schedule' ],
         'nice-select',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/plugion/vendor/jquery-nice-select/js/jquery.nice-select.min.js',
-        array( 'jquery' ),
+        [ 'jquery' ],
         WP_WEBBA_BOOKING__VERSION
-    );
+    ];
     
     if ( get_option( 'wbk_form_layout', 'default' ) == 'default' ) {
-        $css_array[] = array(
+        $css_array[] = [
             'frontend5',
             null,
             'wbk-frontend5-style',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/wbk5-frontend-760-style.css',
-            array(),
+            [],
             WP_WEBBA_BOOKING__VERSION
-        );
+        ];
     } else {
-        $css_array[] = array(
+        $css_array[] = [
             'frontend5',
             null,
             'wbk-frontend5-style',
             WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/wbk5-frontend-600-style.css',
-            array(),
+            [],
             WP_WEBBA_BOOKING__VERSION
-        );
+        ];
     }
     
-    $css_array[] = array(
+    $css_array[] = [
         'backend',
-        array( 'wbk-appearance' ),
+        [ 'wbk-appearance' ],
         'wbk-frontend5-style',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/css/wbk5-frontend-760-style.css',
-        array(),
+        [],
         WP_WEBBA_BOOKING__VERSION
-    );
-    $js_array[] = array(
+    ];
+    $js_array[] = [
         'backend',
         'all',
         'wbk-admin-notices',
         WP_WEBBA_BOOKING__PLUGIN_URL . '/public/js/wbk_admin_notices.js',
-        array( 'jquery' ),
+        [ 'jquery' ],
         WP_WEBBA_BOOKING__VERSION
-    );
+    ];
     $wbk_assets_manager = new WBK_Assets_Manager( $css_array, $js_array );
 }
 
@@ -729,7 +729,7 @@ if ( !function_exists( 'wbk_cleanup_attachements' ) ) {
         if ( $wpdb->get_var( $query ) != $prefix . 'wbk_appointments' ) {
             return;
         }
-        $result = $wpdb->get_results( "Select * from " . $prefix . "wbk_appointments where attachment  <> '' LIMIT 10 ", ARRAY_A );
+        $result = $wpdb->get_results( 'Select * from ' . $prefix . "wbk_appointments where attachment  <> '' LIMIT 10 ", ARRAY_A );
         foreach ( $result as $item ) {
             $file = json_decode( $item['attachment'] );
             
@@ -743,14 +743,14 @@ if ( !function_exists( 'wbk_cleanup_attachements' ) ) {
                 }
                 $wpdb->update(
                     get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-                    array(
+                    [
                     'attachment' => '',
-                ),
-                    array(
+                ],
+                    [
                     'id' => $item['id'],
-                ),
-                    array( '%s' ),
-                    array( '%d' )
+                ],
+                    [ '%s' ],
+                    [ '%d' ]
                 );
             }
         
@@ -840,7 +840,7 @@ if ( !function_exists( 'wbk_delete_expired_appointments' ) ) {
 if ( !function_exists( 'wbk_admin_permission' ) ) {
     function wbk_admin_permission()
     {
-        if ( is_admin() && !empty($_REQUEST["page"]) && $_REQUEST["page"] == "wbk-dashboard" ) {
+        if ( is_admin() && !empty($_REQUEST['page']) && $_REQUEST['page'] == 'wbk-dashboard' ) {
             
             if ( !current_user_can( 'manage_options' ) ) {
                 http_response_code( 403 );

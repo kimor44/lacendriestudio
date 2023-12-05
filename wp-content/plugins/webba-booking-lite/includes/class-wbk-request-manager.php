@@ -49,31 +49,31 @@ class WBK_Request_Manager
                 'permission_callback' => [ $this, 'get_service_list_permission' ],
             ] );
         } );
-        add_action( 'wp_ajax_wbk_calculate_amounts', array( $this, 'calculate_amounts' ) );
-        add_action( 'wp_ajax_nopriv_wbk_calculate_amounts', array( $this, 'calculate_amounts' ) );
-        add_action( 'wp_ajax_wbk_search_time', array( $this, 'search_time' ) );
-        add_action( 'wp_ajax_nopriv_wbk_search_time', array( $this, 'search_time' ) );
-        add_action( 'wp_ajax_wbk-render-days', array( $this, 'render_days' ) );
-        add_action( 'wp_ajax_nopriv_wbk-render-days', array( $this, 'render_days' ) );
-        add_action( 'wp_ajax_wbk_prepare_service_data', array( $this, 'prepare_service_data' ) );
-        add_action( 'wp_ajax_nopriv_wbk_prepare_service_data', array( $this, 'prepare_service_data' ) );
-        add_action( 'wp_ajax_wbk_render_booking_form', array( $this, 'render_booking_form' ) );
-        add_action( 'wp_ajax_nopriv_wbk_render_booking_form', array( $this, 'render_booking_form' ) );
-        add_action( 'wp_ajax_wbk_book', array( $this, 'book' ) );
-        add_action( 'wp_ajax_nopriv_wbk_book', array( $this, 'book' ) );
-        add_action( 'wp_ajax_wbk_prepare_payment', array( $this, 'prepare_payment' ) );
-        add_action( 'wp_ajax_nopriv_wbk_prepare_payment', array( $this, 'prepare_payment' ) );
-        add_action( 'wp_ajax_wbk_cancel_appointment', array( $this, 'cancel_booking' ) );
-        add_action( 'wp_ajax_nopriv_wbk_cancel_appointment', array( $this, 'cancel_booking' ) );
-        add_action( 'wp_ajax_wbk_save_appearance', array( $this, 'save_appearance' ) );
-        add_action( 'wp_ajax_wbk_schedule_tools_action', array( $this, 'schedule_tools_action' ) );
-        add_action( 'wp_ajax_wbk_report_error', array( $this, 'wbk_report_error' ) );
-        add_action( 'wp_ajax_nopriv_wbk_report_error', array( $this, 'wbk_report_error' ) );
-        add_action( 'wp_ajax_wbk_apply_coupon', array( $this, 'wbk_apply_coupon' ) );
-        add_action( 'wp_ajax_nopriv_wbk_apply_coupon', array( $this, 'wbk_apply_coupon' ) );
-        add_action( 'wp_ajax_wbk_approve_payment', array( $this, 'wbk_approve_payment' ) );
-        add_action( 'wp_ajax_nopriv_wbk_approve_payment', array( $this, 'wbk_approve_payment' ) );
-        add_action( 'wp_ajax_wbk_backend_hide_notice', array( $this, 'wbk_backend_hide_notice' ) );
+        add_action( 'wp_ajax_wbk_calculate_amounts', [ $this, 'calculate_amounts' ] );
+        add_action( 'wp_ajax_nopriv_wbk_calculate_amounts', [ $this, 'calculate_amounts' ] );
+        add_action( 'wp_ajax_wbk_search_time', [ $this, 'search_time' ] );
+        add_action( 'wp_ajax_nopriv_wbk_search_time', [ $this, 'search_time' ] );
+        add_action( 'wp_ajax_wbk-render-days', [ $this, 'render_days' ] );
+        add_action( 'wp_ajax_nopriv_wbk-render-days', [ $this, 'render_days' ] );
+        add_action( 'wp_ajax_wbk_prepare_service_data', [ $this, 'prepare_service_data' ] );
+        add_action( 'wp_ajax_nopriv_wbk_prepare_service_data', [ $this, 'prepare_service_data' ] );
+        add_action( 'wp_ajax_wbk_render_booking_form', [ $this, 'render_booking_form' ] );
+        add_action( 'wp_ajax_nopriv_wbk_render_booking_form', [ $this, 'render_booking_form' ] );
+        add_action( 'wp_ajax_wbk_book', [ $this, 'book' ] );
+        add_action( 'wp_ajax_nopriv_wbk_book', [ $this, 'book' ] );
+        add_action( 'wp_ajax_wbk_prepare_payment', [ $this, 'prepare_payment' ] );
+        add_action( 'wp_ajax_nopriv_wbk_prepare_payment', [ $this, 'prepare_payment' ] );
+        add_action( 'wp_ajax_wbk_cancel_appointment', [ $this, 'cancel_booking' ] );
+        add_action( 'wp_ajax_nopriv_wbk_cancel_appointment', [ $this, 'cancel_booking' ] );
+        add_action( 'wp_ajax_wbk_save_appearance', [ $this, 'save_appearance' ] );
+        add_action( 'wp_ajax_wbk_schedule_tools_action', [ $this, 'schedule_tools_action' ] );
+        add_action( 'wp_ajax_wbk_report_error', [ $this, 'wbk_report_error' ] );
+        add_action( 'wp_ajax_nopriv_wbk_report_error', [ $this, 'wbk_report_error' ] );
+        add_action( 'wp_ajax_wbk_apply_coupon', [ $this, 'wbk_apply_coupon' ] );
+        add_action( 'wp_ajax_nopriv_wbk_apply_coupon', [ $this, 'wbk_apply_coupon' ] );
+        add_action( 'wp_ajax_wbk_approve_payment', [ $this, 'wbk_approve_payment' ] );
+        add_action( 'wp_ajax_nopriv_wbk_approve_payment', [ $this, 'wbk_approve_payment' ] );
+        add_action( 'wp_ajax_wbk_backend_hide_notice', [ $this, 'wbk_backend_hide_notice' ] );
         // get dashboard applying filters (if set)
         add_action( 'rest_api_init', function () {
             register_rest_route( 'wbk/v1', '/get-dashboard/', [
@@ -87,7 +87,7 @@ class WBK_Request_Manager
     public function wbk_apply_coupon()
     {
         
-        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
+        if ( get_option( 'wbk_disable_security', '' ) != 'true' && !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
             wp_die();
             return;
         }
@@ -97,10 +97,10 @@ class WBK_Request_Manager
         foreach ( $service_ids as $service_this ) {
             
             if ( !WBK_Validator::check_integer( $service_this, 1, 2758537351 ) ) {
-                echo  json_encode( array(
+                echo  json_encode( [
                     'status'      => 'fail',
                     'description' => 'Wrong service IDs',
-                ) ) ;
+                ] ) ;
                 wp_die();
                 return;
             }
@@ -109,10 +109,10 @@ class WBK_Request_Manager
         $booking_ids = json_decode( $_POST['booking_ids'] );
         
         if ( is_null( $booking_ids ) || !is_array( $booking_ids ) ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'      => 'fail',
                 'description' => 'Wrong booking IDs',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
@@ -120,10 +120,10 @@ class WBK_Request_Manager
         foreach ( $booking_ids as $booking_id ) {
             
             if ( !WBK_Validator::check_integer( $booking_id, 1, 99999999 ) ) {
-                echo  json_encode( array(
+                echo  json_encode( [
                     'status'      => 'fail',
                     'description' => 'Wrong booking IDs',
-                ) ) ;
+                ] ) ;
                 wp_die();
                 return;
             }
@@ -151,15 +151,15 @@ class WBK_Request_Manager
         }
         
         if ( $coupon_result == false ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status' => 'not_applied',
-            ) ) ;
+            ] ) ;
         } else {
-            $payment_card = WBK_Renderer::load_template( 'frontend_v5/payment_card', array( $payment_details, $booking_ids ), false );
-            echo  json_encode( array(
+            $payment_card = WBK_Renderer::load_template( 'frontend_v5/payment_card', [ $payment_details, $booking_ids ], false );
+            echo  json_encode( [
                 'status'       => 'applied',
                 'payment_card' => $payment_card,
-            ) ) ;
+            ] ) ;
         }
         
         wp_die();
@@ -169,7 +169,7 @@ class WBK_Request_Manager
     public function wbk_approve_payment()
     {
         
-        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
+        if ( get_option( 'wbk_disable_security', '' ) != 'true' && !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
             wp_die();
             return;
         }
@@ -177,10 +177,10 @@ class WBK_Request_Manager
         $booking_ids = json_decode( $_POST['booking_ids'] );
         
         if ( is_null( $booking_ids ) || !is_array( $booking_ids ) ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'      => 'fail',
                 'description' => 'Wrong booking IDs',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
@@ -188,10 +188,10 @@ class WBK_Request_Manager
         foreach ( $booking_ids as $booking_id ) {
             
             if ( !WBK_Validator::check_integer( $booking_id, 1, 99999999 ) ) {
-                echo  json_encode( array(
+                echo  json_encode( [
                     'status'      => 'fail',
                     'description' => 'Wrong booking IDs',
-                ) ) ;
+                ] ) ;
                 wp_die();
                 return;
             }
@@ -201,22 +201,22 @@ class WBK_Request_Manager
         $booking = new WBK_Booking( $booking_ids[0] );
         
         if ( !$booking->is_loaded() ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'      => 'error',
                 'description' => esc_html( __( 'Unable to open booking', 'webba-booking-lite' ) ),
-            ) ) ;
+            ] ) ;
             date_default_timezone_set( 'UTC' );
             wp_die();
             return;
         }
         
         $coupon_id = $booking->get( 'coupon' );
-        $coupon_result = FALSE;
+        $coupon_result = false;
         
         if ( !is_null( $coupon_id ) && is_numeric( $coupon_id ) && $coupon_id > 0 ) {
             $coupon = new WBK_Coupon( $coupon_id );
             if ( $coupon->is_loaded() ) {
-                $coupon_result = array( $coupon_id, $coupon->get( 'amount_fixed' ), $coupon->get( 'amount_percentage' ) );
+                $coupon_result = [ $coupon_id, $coupon->get( 'amount_fixed' ), $coupon->get( 'amount_percentage' ) ];
             }
         }
         
@@ -242,32 +242,32 @@ class WBK_Request_Manager
                     
                     $booking->save();
                 }
-                echo  json_encode( array(
+                echo  json_encode( [
                     'status'         => 'success',
-                    'thanks_message' => WBK_Renderer::load_template( 'frontend_v5/thank_you_message', array( $booking_ids ), false ),
-                ) ) ;
+                    'thanks_message' => WBK_Renderer::load_template( 'frontend_v5/thank_you_message', [ $booking_ids ], false ),
+                ] ) ;
                 break;
             case 'woocommerce':
                 $result = WBK_WooCommerce::add_to_cart( $booking_ids );
                 $result = json_decode( $result, true );
                 
                 if ( is_null( $result ) ) {
-                    echo  json_encode( array(
+                    echo  json_encode( [
                         'status' => 'fail',
                         'result' => 'Unexpected error occoured.',
-                    ) ) ;
+                    ] ) ;
                 } else {
                     
                     if ( $result['status'] == 0 ) {
-                        echo  json_encode( array(
+                        echo  json_encode( [
                             'status'      => 'fail',
                             'description' => $result['details'],
-                        ) ) ;
+                        ] ) ;
                     } elseif ( $result['status'] == 1 ) {
-                        echo  json_encode( array(
+                        echo  json_encode( [
                             'status' => 'success',
                             'url'    => $result['details'],
-                        ) ) ;
+                        ] ) ;
                     }
                 
                 }
@@ -284,24 +284,24 @@ class WBK_Request_Manager
                 }
                 $paypal = new WBK_PayPal();
                 $referer = explode( '?', wp_get_referer() );
-                if ( $paypal->init( $referer[0], $booking_ids ) === FALSE ) {
-                    echo  json_encode( array(
+                if ( $paypal->init( $referer[0], $booking_ids ) === false ) {
+                    echo  json_encode( [
                         'status' => 'fail',
                         'result' => 'Unable to initilize PayPal API',
-                    ) ) ;
+                    ] ) ;
                 }
                 $url = $paypal->create_payment_v5( $booking_ids );
                 if ( $url === false ) {
-                    echo  json_encode( array(
+                    echo  json_encode( [
                         'status' => 'fail',
                         'result' => 'Unable to create payment',
-                    ) ) ;
+                    ] ) ;
                 }
-                echo  json_encode( array(
+                echo  json_encode( [
                     'status'         => 'success',
                     'thanks_message' => '',
                     'url'            => $url,
-                ) ) ;
+                ] ) ;
                 break;
             case 'stripe':
                 $error_message = get_option( 'wbk_stripe_api_error_message', 'Payment failed: #response' );
@@ -310,10 +310,10 @@ class WBK_Request_Manager
                     $payment_method_id = $_POST['payment_method_id'];
                 } else {
                     $error_message = str_replace( '#response', __( 'Payment method not set', 'webba-booking-lite' ), $error_message );
-                    echo  json_encode( array(
+                    echo  json_encode( [
                         'status'      => 'fail',
                         'description' => $error_message,
-                    ) ) ;
+                    ] ) ;
                     wp_die();
                     return;
                 }
@@ -323,22 +323,22 @@ class WBK_Request_Manager
                     $payment_intent_id = $_POST['payment_intent_id'];
                 } else {
                     $error_message = str_replace( '#response', __( 'Payment intent not set', 'webba-booking-lite' ), $error_message );
-                    echo  json_encode( array(
+                    echo  json_encode( [
                         'status'      => 'fail',
                         'description' => $error_message,
-                    ) ) ;
+                    ] ) ;
                     wp_die();
                     return;
                 }
                 
                 $stripe = new WBK_Stripe();
                 
-                if ( $stripe->init( $booking->get_service() ) == FALSE ) {
+                if ( $stripe->init( $booking->get_service() ) == false ) {
                     $error_message = str_replace( '#response', __( 'Unable to initalize Stripe object', 'webba-booking-lite' ), $error_message );
-                    echo  json_encode( array(
+                    echo  json_encode( [
                         'status'      => 'fail',
                         'description' => $error_message,
-                    ) ) ;
+                    ] ) ;
                     wp_die();
                     return;
                 }
@@ -349,10 +349,10 @@ class WBK_Request_Manager
                     
                     if ( !isset( $payment_method_id ) || $payment_method_id == '' ) {
                         $error_message = str_replace( '#response', __( 'Invalid payment id', 'webba-booking-lite' ), $error_message );
-                        echo  json_encode( array(
+                        echo  json_encode( [
                             'status'      => 'fail',
                             'description' => $error_message,
-                        ) ) ;
+                        ] ) ;
                         wp_die();
                         return;
                     }
@@ -394,28 +394,28 @@ class WBK_Request_Manager
                     
                     if ( get_option( 'wbk_stripe_redirect_url', '' ) == '' ) {
                         $result['url'] = '';
-                        $result['thanks_message'] = WBK_Renderer::load_template( 'frontend_v5/thank_you_message', array( $booking_ids ), false );
+                        $result['thanks_message'] = WBK_Renderer::load_template( 'frontend_v5/thank_you_message', [ $booking_ids ], false );
                     } else {
                         $result['url'] = get_option( 'wbk_stripe_redirect_url', '' );
                         $result['thanks_message'] = '';
                     }
                     
-                    echo  json_encode( array(
+                    echo  json_encode( [
                         'status' => 'success',
                         'result' => $result,
-                    ) ) ;
+                    ] ) ;
                 } else {
                     
                     if ( count( $result ) == 2 ) {
-                        echo  json_encode( array(
+                        echo  json_encode( [
                             'status'      => 'fail',
                             'description' => $result[1],
-                        ) ) ;
+                        ] ) ;
                     } else {
-                        echo  json_encode( array(
+                        echo  json_encode( [
                             'status'      => 'fail',
                             'description' => 'Uknown error',
-                        ) ) ;
+                        ] ) ;
                     }
                 
                 }
@@ -438,9 +438,9 @@ class WBK_Request_Manager
         $current_booking = $request['current_booking'];
         
         if ( !WBK_Validator::is_service_exists( $service_id ) ) {
-            $data = array(
+            $data = [
                 'Reason' => 'Service not exists',
-            );
+            ];
             $response = new \WP_REST_Response( $data );
             $response->set_status( 400 );
             return $response;
@@ -448,9 +448,9 @@ class WBK_Request_Manager
         
         
         if ( !WBK_Validator::is_date( $day ) ) {
-            $data = array(
+            $data = [
                 'Reason' => 'Wrong date passed',
-            );
+            ];
             $response = new \WP_REST_Response( $data );
             $response->set_status( 400 );
             return $response;
@@ -465,17 +465,17 @@ class WBK_Request_Manager
         $timeslots = $sp->get_time_slots_by_day(
             $day,
             $service_id,
-            array(
+            [
             'skip_gg_calendar'       => false,
             'ignore_preparation'     => true,
             'calculate_availability' => true,
             'calculate_night_hours'  => false,
-        ),
+        ],
             $current_booking
         );
-        $data = array(
+        $data = [
             'time_slots' => $timeslots,
-        );
+        ];
         $response = new \WP_REST_Response( $data );
         $response->set_status( 200 );
         date_default_timezone_set( 'UTC' );
@@ -516,9 +516,9 @@ class WBK_Request_Manager
     
     public function get_wp_users( $request )
     {
-        $data = array(
+        $data = [
             'none_admin_users' => WBK_User_Utils::get_none_admin_wp_users(),
-        );
+        ];
         $response = new \WP_REST_Response( $data );
         $response->set_status( 200 );
         return $response;
@@ -539,11 +539,11 @@ class WBK_Request_Manager
         global  $wpdb ;
         $table = Plugion()->tables->get_element_at( $table );
         $table_name = $table->get_table_name();
-        $wpdb->update( $table_name, array(
+        $wpdb->update( $table_name, [
             'status' => $status,
-        ), array(
+        ], [
             'id' => $row_id,
-        ) );
+        ] );
         $bf = new WBK_Booking_Factory();
         $bf->update( $row_id );
         $response = new \WP_REST_Response();
@@ -558,9 +558,9 @@ class WBK_Request_Manager
         foreach ( $services as $id => $service ) {
             $html .= '<option value="' . $id . '">' . $service . '</option>';
         }
-        $data = array(
+        $data = [
             'html' => $html,
-        );
+        ];
         $response = new \WP_REST_Response( $data );
         $response->set_status( 200 );
         return $response;
@@ -645,7 +645,7 @@ class WBK_Request_Manager
         
         $phone = sanitize_text_field( $_POST['phone'] );
         $i = -1;
-        $bookings = array();
+        $bookings = [];
         foreach ( $times as $time ) {
             $i++;
             $service = 0;
@@ -724,14 +724,14 @@ class WBK_Request_Manager
             ''
         ), $price_format );
         date_default_timezone_set( 'UTC' );
-        $result = array(
+        $result = [
             'sub_total'          => $sub_total,
             'tax'                => $tax_amount,
             'total'              => $total_amount,
             'sub_total_formated' => $sub_total_formated,
             'tax_formated'       => $tax_amount_formated,
             'total_formated'     => $total_formated,
-        );
+        ];
         $result = json_encode( $result );
         echo  $result ;
         wp_die();
@@ -752,7 +752,7 @@ class WBK_Request_Manager
             $service_ids = $_POST['initial_services'];
             $multi_service = true;
         } else {
-            $service_ids = array( $_POST['service'] );
+            $service_ids = [ $_POST['service'] ];
             $multi_service = false;
         }
         
@@ -861,19 +861,19 @@ class WBK_Request_Manager
                     
                     if ( $day_status == 1 ) {
                         $time_after = $day_to_render;
-                        $timeslots = $sp->get_time_slots_by_day( $day_to_render, $service_id, array(
+                        $timeslots = $sp->get_time_slots_by_day( $day_to_render, $service_id, [
                             'skip_gg_calendar'       => false,
                             'ignore_preparation'     => false,
                             'calculate_availability' => true,
-                        ) );
-                        $slots_html .= WBK_Renderer::load_template( 'frontend/day_with_timeslots', array(
+                        ] );
+                        $slots_html .= WBK_Renderer::load_template( 'frontend/day_with_timeslots', [
                             $day_to_render,
                             $timeslots,
                             $offset,
                             $service_id,
                             $multi_service,
                             $time_after
-                        ), false );
+                        ], false );
                         if ( $slots_html != '' ) {
                             $take_day_into_account = true;
                         }
@@ -884,19 +884,19 @@ class WBK_Request_Manager
                     
                     if ( substr_count( $slots_html, 'wbk-timeslot-btn' ) == 1 && $skip_value == 'enabled' ) {
                         $first_time = $timeslots[0]->get_start();
-                        $form_html = WBK_Renderer::load_template( 'frontend/form_title', array( $service_ids, array( $first_time ) ), false );
-                        $form_html .= WBK_Renderer::load_template( 'frontend/form_fields', array( $service_ids, array( $first_time ) ), false );
+                        $form_html = WBK_Renderer::load_template( 'frontend/form_title', [ $service_ids, [ $first_time ] ], false );
+                        $form_html .= WBK_Renderer::load_template( 'frontend/form_fields', [ $service_ids, [ $first_time ] ], false );
                         $form_html = apply_filters(
                             'wbk_form_html',
                             $form_html,
                             $service_id,
                             $first_time
                         );
-                        $result = array(
+                        $result = [
                             'dest' => 'form',
                             'data' => $form_html,
                             'time' => $first_time,
-                        );
+                        ];
                         date_default_timezone_set( 'UTC' );
                         echo  json_encode( $result ) ;
                         wp_die();
@@ -923,7 +923,7 @@ class WBK_Request_Manager
         }
         
         if ( $html == '' ) {
-            $html .= WBK_Renderer::load_template( 'frontend/no_results', array(), false );
+            $html .= WBK_Renderer::load_template( 'frontend/no_results', [], false );
         }
         
         if ( get_option( 'wbk_show_cancel_button', 'disabled' ) == 'enabled' && get_option( 'wbk_mode' ) != 'webba5' ) {
@@ -932,10 +932,10 @@ class WBK_Request_Manager
             $html .= '<input class="wbk-button wbk-width-100 wbk-cancel-button"  value="' . esc_attr( $cancel_label ) . '" type="button">';
         }
         
-        $result = array(
+        $result = [
             'dest' => 'slot',
             'data' => $html,
-        );
+        ];
         echo  json_encode( $result ) ;
         date_default_timezone_set( 'UTC' );
         die;
@@ -963,7 +963,7 @@ class WBK_Request_Manager
         $service = new WBK_Service( $service_id );
         $sp = new WBK_Schedule_Processor();
         $sp->load_unlocked_days();
-        WBK_Renderer::load_template( 'frontend/suitable_hours', array( $service_id, $sp ), true );
+        WBK_Renderer::load_template( 'frontend/suitable_hours', [ $service_id, $sp ], true );
         wp_die();
         return;
     }
@@ -985,7 +985,7 @@ class WBK_Request_Manager
             if ( isset( $_POST['initial_services'] ) ) {
                 $service_id = $_POST['initial_services'];
             }
-            $result = array();
+            $result = [];
             
             if ( !is_array( $service_id ) ) {
                 
@@ -1016,8 +1016,8 @@ class WBK_Request_Manager
             
             } else {
                 $service_ids = $service_id;
-                $total_array = array();
-                $use_limits = TRUE;
+                $total_array = [];
+                $use_limits = true;
                 $range_start = 7863319160;
                 $range_end = 0;
                 
@@ -1057,12 +1057,12 @@ class WBK_Request_Manager
                             $range_end = $current_end;
                         }
                     } else {
-                        $use_limits = FALSE;
+                        $use_limits = false;
                     }
                 
                 }
                 $total_array = array_unique( $total_array );
-                $toal_array_filtered = array();
+                $toal_array_filtered = [];
                 if ( get_option( 'wbk_date_input', 'popup' ) == 'dropdown' ) {
                     foreach ( $total_array as $item ) {
                         if ( strpos( $item, '-HM-wbk_dropdown_limit_reached' ) !== false ) {
@@ -1111,7 +1111,7 @@ class WBK_Request_Manager
         $time = $_POST['time'];
         
         if ( isset( $_POST['service'] ) ) {
-            $service_ids = array();
+            $service_ids = [];
             
             if ( is_array( $time ) ) {
                 foreach ( $time as $time_this ) {
@@ -1156,7 +1156,7 @@ class WBK_Request_Manager
                 return;
             }
             
-            $time = array( $time );
+            $time = [ $time ];
         }
         
         
@@ -1169,12 +1169,12 @@ class WBK_Request_Manager
         if ( isset( $_POST['category'] ) && is_numeric( $_POST['category'] ) ) {
             $category_id = $_POST['category'];
         }
-        $html = WBK_Renderer::load_template( 'frontend/form_title', array( $service_ids, $time, $category_id ) );
+        $html = WBK_Renderer::load_template( 'frontend/form_title', [ $service_ids, $time, $category_id ] );
         
         if ( wbk_is5() ) {
-            $html .= WBK_Renderer::load_template( 'frontend_v5/form_fields', array( $service_ids, $time, $category_id ) );
+            $html .= WBK_Renderer::load_template( 'frontend_v5/form_fields', [ $service_ids, $time, $category_id ] );
         } else {
-            $html .= WBK_Renderer::load_template( 'frontend/form_fields', array( $service_ids, $time, $category_id ) );
+            $html .= WBK_Renderer::load_template( 'frontend/form_fields', [ $service_ids, $time, $category_id ] );
         }
         
         echo  $html ;
@@ -1192,12 +1192,12 @@ class WBK_Request_Manager
         }
         
         global  $wpdb ;
-        $arr_uploaded_urls = array();
+        $arr_uploaded_urls = [];
         if ( get_option( 'wbk_allow_attachemnt', 'no' ) == 'yes' ) {
             foreach ( $_FILES as $file ) {
-                $uploaded_file = wp_handle_upload( $file, array(
+                $uploaded_file = wp_handle_upload( $file, [
                     'test_form' => false,
-                ) );
+                ] );
                 if ( $uploaded_file && !isset( $uploaded_file['error'] ) ) {
                     $arr_uploaded_urls[] = $uploaded_file['file'];
                 }
@@ -1266,7 +1266,7 @@ class WBK_Request_Manager
             $secondary_data = '';
         }
         
-        $per_serv_quantity_result = array();
+        $per_serv_quantity_result = [];
         
         if ( isset( $_POST['service'] ) && $_POST['service'] != 'undefined' ) {
             $service_id = $_POST['service'];
@@ -1300,13 +1300,13 @@ class WBK_Request_Manager
         $booking_data['secondary_data'] = $secondary_data;
         $booking_data['attachment'] = $attachments;
         // end obtaining data and validation
-        $booking_ids = array();
+        $booking_ids = [];
         $i = -1;
         $skipped_count = 0;
-        $serices_used = array();
-        $notification_booking_ids = array();
+        $serices_used = [];
+        $notification_booking_ids = [];
         $not_booked_due_limit = false;
-        $services_used = array();
+        $services_used = [];
         $sp = new WBK_Schedule_Processor();
         
         if ( count( $times ) > 50 ) {
@@ -1365,12 +1365,12 @@ class WBK_Request_Manager
             }
             
             // ** double check for timeslot status and available places
-            $timeslots = $sp->get_time_slots_by_day( $day, $service_id, array(
+            $timeslots = $sp->get_time_slots_by_day( $day, $service_id, [
                 'skip_gg_calendar'       => false,
                 'ignore_preparation'     => true,
                 'calculate_availability' => true,
                 'calculate_night_hours'  => false,
-            ) );
+            ] );
             $time_slot_valid = false;
             foreach ( $timeslots as $timeslot ) {
                 if ( $timeslot->get_start() == $time ) {
@@ -1421,7 +1421,7 @@ class WBK_Request_Manager
                 $booking_ids[] = $status[1];
                 $notification_booking_ids = $status[1];
                 do_action( 'wbk_table_after_add', [ $status[1], get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments' ] );
-                $wbk_action_data = array(
+                $wbk_action_data = [
                     'appointment_id' => $status[1],
                     'customer'       => $booking_data_this['name'],
                     'email'          => $booking_data_this['email'],
@@ -1431,7 +1431,7 @@ class WBK_Request_Manager
                     'duration'       => $booking_data_this['duration'],
                     'comment'        => $booking_data_this['description'],
                     'quantity'       => $booking_data_this['quantity'],
-                );
+                ];
                 do_action( 'wbk_add_appointment', $wbk_action_data );
             }
         
@@ -1440,10 +1440,10 @@ class WBK_Request_Manager
         if ( count( $booking_ids ) == 0 && $not_booked_due_limit == true ) {
             
             if ( wbk_is5() ) {
-                echo  json_encode( array(
+                echo  json_encode( [
                     'status'      => 'fail',
                     'description' => __( 'Limit reached', 'webba-booking-lite' ),
-                ) ) ;
+                ] ) ;
             } else {
                 echo  '-14' ;
             }
@@ -1457,10 +1457,10 @@ class WBK_Request_Manager
         if ( count( $booking_ids ) == 0 ) {
             
             if ( wbk_is5() ) {
-                echo  json_encode( array(
+                echo  json_encode( [
                     'status'      => 'fail',
                     'description' => __( 'Time slot was not booked', 'webba-booking-lite' ),
-                ) ) ;
+                ] ) ;
             } else {
                 echo  '-13' ;
             }
@@ -1493,7 +1493,7 @@ class WBK_Request_Manager
             $payable = false;
         } else {
             
-            if ( is_array( $payment_methods ) && count( $payment_methods ) == 1 && $payment_methods[0] == 'arrival' ) {
+            if ( is_array( $payment_methods ) && count( $payment_methods ) == 1 && $payment_methods[0] == 'arrival' && get_option( 'wbk_skip_on_arrival_payment_method', 'true' ) == 'true' ) {
                 $payable = false;
             } else {
                 $payable = true;
@@ -1504,23 +1504,23 @@ class WBK_Request_Manager
         
         if ( count( $payment_methods ) > 0 && $payable ) {
             $payment_details = WBK_Price_Processor::get_payment_items( $booking_ids, get_option( 'wbk_general_tax', '0' ) );
-            $payment_card = WBK_Renderer::load_template( 'frontend_v5/payment_card', array( $payment_details, $booking_ids ), false );
+            $payment_card = WBK_Renderer::load_template( 'frontend_v5/payment_card', [ $payment_details, $booking_ids ], false );
             
             if ( get_option( 'wbk_allow_coupons' ) == 'enabled' ) {
-                $coupon_field = WBK_Renderer::load_template( 'frontend_v5/coupon_field', array( $payment_details ), false );
+                $coupon_field = WBK_Renderer::load_template( 'frontend_v5/coupon_field', [ $payment_details ], false );
             } else {
                 $coupon_field = '';
             }
             
-            $payment_methods_html = WBK_Renderer::load_template( 'frontend_v5/payment_methods', array( $payment_methods ), false );
-            $result = array(
+            $payment_methods_html = WBK_Renderer::load_template( 'frontend_v5/payment_methods', [ $payment_methods ], false );
+            $result = [
                 'thanks_message' => $payment_card . $coupon_field . $payment_methods_html,
-            );
+            ];
         } else {
-            $thanks_message = WBK_Renderer::load_template( 'frontend_v5/thank_you_message', array( $booking_ids ), false );
-            $result = array(
+            $thanks_message = WBK_Renderer::load_template( 'frontend_v5/thank_you_message', [ $booking_ids ], false );
+            $result = [
                 'thanks_message' => $thanks_message,
-            );
+            ];
         }
         
         echo  json_encode( $result ) ;
@@ -1542,8 +1542,8 @@ class WBK_Request_Manager
         $booking_ids_unfiltered = explode( ',', sanitize_text_field( $_POST['app_id'] ) );
         $referer = explode( '?', wp_get_referer() );
         $coupon = sanitize_text_field( trim( $_POST['coupon'] ) );
-        $booking_ids = array();
-        $service_ids = array();
+        $booking_ids = [];
+        $service_ids = [];
         $sub_total = 0;
         $pay_not_approved = get_option( 'wbk_appointments_allow_payments', 'disabled' );
         
@@ -1574,10 +1574,10 @@ class WBK_Request_Manager
             $html = get_option( 'wbk_nothing_to_pay_message', '' );
             
             if ( $method == 'woocommerce' ) {
-                echo  json_encode( array(
+                echo  json_encode( [
                     'status'  => 0,
                     'details' => $html,
-                ) ) ;
+                ] ) ;
             } else {
                 echo  $html ;
             }
@@ -1593,11 +1593,11 @@ class WBK_Request_Manager
             if ( $coupon != '' ) {
                 $coupon_result = WBK_Validator::check_coupon( $coupon, $service_ids );
             } else {
-                $coupon_result = FALSE;
+                $coupon_result = false;
             }
         
         } else {
-            $coupon_result = FALSE;
+            $coupon_result = false;
         }
         
         
@@ -1650,7 +1650,7 @@ class WBK_Request_Manager
                 }
                 $booking->set( 'payment_method', 'Pay on arrival' );
             }
-            $html = WBK_Renderer::load_template( 'frontend/pay_on_arrival_message', array(), false );
+            $html = WBK_Renderer::load_template( 'frontend/pay_on_arrival_message', [], false );
         }
         
         
@@ -1662,7 +1662,7 @@ class WBK_Request_Manager
                 }
                 $booking->set( 'payment_method', 'Bank transfer' );
             }
-            $html = WBK_Renderer::load_template( 'frontend/bank_message', array( $booking_ids ), false );
+            $html = WBK_Renderer::load_template( 'frontend/bank_message', [ $booking_ids ], false );
         }
         
         if ( $method == 'paypal' ) {
@@ -1700,11 +1700,11 @@ class WBK_Request_Manager
         $bf->set_as_paid( $booking_ids, 'coupon' );
         
         if ( $method == 'coupon' ) {
-            $thanks_message = WBK_Renderer::load_template( 'frontend_v5/thank_you_message', array( $booking_ids ), false );
-            echo  json_encode( array(
+            $thanks_message = WBK_Renderer::load_template( 'frontend_v5/thank_you_message', [ $booking_ids ], false );
+            echo  json_encode( [
                 'status'         => 'payment_complete',
                 'thanks_message' => $thanks_message,
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
@@ -1725,16 +1725,16 @@ class WBK_Request_Manager
         
         
         if ( $method == 'woocommerce' ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 5,
                 'details' => $html,
-            ) ) ;
+            ] ) ;
             date_default_timezone_set( 'UTC' );
             wp_die();
             return;
         }
         
-        echo  WBK_Renderer::load_template( 'frontend/payment_complete', array(), false ) ;
+        echo  WBK_Renderer::load_template( 'frontend/payment_complete', [], false ) ;
         date_default_timezone_set( 'UTC' );
         wp_die();
         return;
@@ -1753,10 +1753,10 @@ class WBK_Request_Manager
         $app_token = $_POST['app_token'];
         
         if ( !WBK_Validator::check_email( $email ) ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'      => 'fail',
                 'description' => 'Wrong email address',
-            ) ) ;
+            ] ) ;
             date_default_timezone_set( 'UTC' );
             wp_die();
             return;
@@ -1765,10 +1765,10 @@ class WBK_Request_Manager
         $booking_ids = WBK_Model_Utils::get_booking_ids_by_group_token( $app_token );
         
         if ( count( $booking_ids ) > 50 ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'      => 'fail',
                 'description' => 'Something went wrong',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
@@ -1840,7 +1840,7 @@ class WBK_Request_Manager
                         if ( $appointment->load() ) {
                             $service = WBK_Db_Utils::initServiceById( $appointment->getService() );
                             
-                            if ( $service != FALSE ) {
+                            if ( $service != false ) {
                                 $recipient = $service->getEmail();
                                 $subject = get_option( 'wbk_email_adimn_appointment_cancel_subject', '' );
                                 $message = get_option( 'wbk_email_adimn_appointment_cancel_message', '' );
@@ -1874,16 +1874,16 @@ class WBK_Request_Manager
                 $i++;
             }
             $message = '<div class="thank-you-block-w"><div class="thank-you-content-w">' . esc_html( get_option( 'wbk_booking_canceled_message', 'Your booking has been cancelled.' ) ) . '</div></div>';
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'         => 'success',
                 'thanks_message' => $message,
-            ) ) ;
+            ] ) ;
         } else {
             $message = esc_html( get_option( 'wbk_booking_cancel_error_message', '' ) );
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'      => 'fail',
                 'description' => stripslashes( $message ),
-            ) ) ;
+            ] ) ;
         }
         
         date_default_timezone_set( 'UTC' );
@@ -1898,7 +1898,7 @@ class WBK_Request_Manager
             update_option( 'wbk_show_go_preimum_1', 'false' );
         }
         
-        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkb_nonce' ) ) {
+        if ( get_option( 'wbk_disable_security', '' ) != 'true' && !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
             wp_die();
             return;
         }
@@ -1920,27 +1920,27 @@ class WBK_Request_Manager
         global  $current_user ;
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
         
-        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkb_nonce' ) ) {
+        if ( get_option( 'wbk_disable_security', '' ) != 'true' && !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
             wp_die();
             return;
         }
         
         
         if ( !isset( $_POST['lock_action'] ) ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 0,
                 'message' => 'Wrong action.',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
         
         
         if ( $_POST['lock_action'] != 'lock' && $_POST['lock_action'] != 'unlock' ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 0,
                 'message' => 'Wrong action target.',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
@@ -1948,20 +1948,20 @@ class WBK_Request_Manager
         $lock_action = sanitize_text_field( $_POST['lock_action'] );
         
         if ( !isset( $_POST['lock_target'] ) ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 0,
                 'message' => 'Wrong action target.',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
         
         
         if ( $_POST['lock_target'] != 'dates' && $_POST['lock_target'] != 'timeslots' ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 0,
                 'message' => 'Wrong action target.',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
@@ -1971,10 +1971,10 @@ class WBK_Request_Manager
         $date_range = explode( ' - ', $date_range );
         
         if ( !is_array( $date_range ) || count( $date_range ) != 2 ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 0,
                 'message' => 'Wrong date range.',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
@@ -1983,10 +1983,10 @@ class WBK_Request_Manager
         $end = strtotime( $date_range[1] );
         
         if ( $end < $start ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 0,
                 'message' => 'Wrong date range.',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
@@ -1995,10 +1995,10 @@ class WBK_Request_Manager
         $category_id = sanitize_text_field( $_POST['category'] );
         
         if ( !is_numeric( $service_id ) && !is_numeric( $category_id ) ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 0,
                 'message' => 'Wrong service or category.',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
@@ -2009,27 +2009,27 @@ class WBK_Request_Manager
             $to = sanitize_text_field( $_POST['to'] );
             
             if ( !WBK_Validator::check_integer( $from, 900, 85500 ) || !WBK_Validator::check_integer( $to, 0, 86400 ) ) {
-                echo  json_encode( array(
+                echo  json_encode( [
                     'status'  => 0,
                     'message' => 'Wrong time interval.',
-                ) ) ;
+                ] ) ;
                 wp_die();
                 return;
             }
             
             
             if ( $from >= $to ) {
-                echo  json_encode( array(
+                echo  json_encode( [
                     'status'  => 0,
                     'message' => 'Wrong time interval.',
-                ) ) ;
+                ] ) ;
                 wp_die();
                 return;
             }
         
         } else {
             $excluded_dates = explode( ',', sanitize_text_field( $_POST['exclude_dates'] ) );
-            $excluded_dates_temp = array();
+            $excluded_dates_temp = [];
             foreach ( $excluded_dates as $date ) {
                 $date = strtotime( $date );
                 if ( $date ) {
@@ -2042,20 +2042,20 @@ class WBK_Request_Manager
         $days_of_week = explode( ',', $_POST['days_of_week'] );
         
         if ( !is_array( $days_of_week ) ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 0,
                 'message' => 'Wrong days of the week.',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
         
         
         if ( count( $days_of_week ) == 0 || count( $days_of_week ) > 7 ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 0,
                 'message' => 'Wrong days of the week.',
-            ) ) ;
+            ] ) ;
             wp_die();
             return;
         }
@@ -2063,17 +2063,17 @@ class WBK_Request_Manager
         foreach ( $days_of_week as $day_of_week ) {
             
             if ( !WBK_Validator::check_integer( $day_of_week, 1, 7 ) ) {
-                echo  json_encode( array(
+                echo  json_encode( [
                     'status'  => 0,
                     'message' => 'Wrong days of the week.',
-                ) ) ;
+                ] ) ;
                 wp_die();
                 return;
             }
         
         }
         $total_locked = 0;
-        $arr_service_ids = array( $service_id );
+        $arr_service_ids = [ $service_id ];
         if ( $category_id != -1 ) {
             if ( WBK_Validator::check_integer( $category_id, 1, 999999 ) ) {
                 $arr_service_ids = WBK_Model_Utils::get_services_in_category( $category_id );
@@ -2085,10 +2085,10 @@ class WBK_Request_Manager
             if ( !current_user_can( 'manage_options' ) ) {
                 
                 if ( !WBK_Validator::check_access_to_service( $service_id ) ) {
-                    echo  json_encode( array(
+                    echo  json_encode( [
                         'status'  => 0,
                         'message' => 'Unauthorised access.',
-                    ) ) ;
+                    ] ) ;
                     wp_die();
                     return;
                 }
@@ -2115,11 +2115,11 @@ class WBK_Request_Manager
                 
                 if ( $lock_target == 'dates' ) {
                     
-                    if ( $wpdb->query( $wpdb->prepare( "DELETE FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_days_on_off WHERE day = %d and service_id = %d", $curent_day, $service_id ) ) === false ) {
-                        echo  json_encode( array(
+                    if ( $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_days_on_off WHERE day = %d and service_id = %d', $curent_day, $service_id ) ) === false ) {
+                        echo  json_encode( [
                             'status'  => 0,
                             'message' => 'Internal database error.',
-                        ) ) ;
+                        ] ) ;
                         wp_die();
                         return;
                     } else {
@@ -2134,15 +2134,15 @@ class WBK_Request_Manager
                     }
                     
                     
-                    if ( $wpdb->insert( get_option( 'wbk_db_prefix', '' ) . 'wbk_days_on_off', array(
+                    if ( $wpdb->insert( get_option( 'wbk_db_prefix', '' ) . 'wbk_days_on_off', [
                         'service_id' => $service_id,
                         'day'        => $curent_day,
                         'status'     => $status,
-                    ), array( '%d', '%d', '%d' ) ) === false ) {
-                        echo  json_encode( array(
+                    ], [ '%d', '%d', '%d' ] ) === false ) {
+                        echo  json_encode( [
                             'status'  => 0,
                             'message' => 'Internal database error.',
-                        ) ) ;
+                        ] ) ;
                         wp_die();
                         return;
                     }
@@ -2154,21 +2154,21 @@ class WBK_Request_Manager
                 $day_time_start = WBK_Time_Math_Utils::adjust_times( $curent_day, $from, get_option( 'wbk_timezone', 'UTC' ) );
                 $day_time_end = WBK_Time_Math_Utils::adjust_times( $curent_day, $to, get_option( 'wbk_timezone', 'UTC' ) );
                 $i = 1;
-                $timeslots = $sp->get_time_slots_by_day( $curent_day, $service_id, array(
+                $timeslots = $sp->get_time_slots_by_day( $curent_day, $service_id, [
                     'skip_gg_calendar'       => true,
                     'ignore_preparation'     => true,
                     'calculate_availability' => false,
-                ) );
+                ] );
                 foreach ( $timeslots as $timeslot ) {
                     if ( $timeslot->get_start() < $day_time_start || $timeslot->get_start() > $day_time_end ) {
                         continue;
                     }
                     
-                    if ( $wpdb->query( $wpdb->prepare( "DELETE FROM " . get_option( 'wbk_db_prefix', '' ) . "wbk_locked_time_slots WHERE time = %d and service_id = %d", $timeslot->get_start(), $service_id ) ) === false ) {
-                        echo  json_encode( array(
+                    if ( $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_locked_time_slots WHERE time = %d and service_id = %d', $timeslot->get_start(), $service_id ) ) === false ) {
+                        echo  json_encode( [
                             'status'  => 0,
                             'message' => 'Internal database error.',
-                        ) ) ;
+                        ] ) ;
                         wp_die();
                         return;
                     } else {
@@ -2177,14 +2177,14 @@ class WBK_Request_Manager
                     
                     if ( $lock_action == 'lock' ) {
                         
-                        if ( $wpdb->insert( get_option( 'wbk_db_prefix', '' ) . 'wbk_locked_time_slots', array(
+                        if ( $wpdb->insert( get_option( 'wbk_db_prefix', '' ) . 'wbk_locked_time_slots', [
                             'service_id' => $service_id,
                             'time'       => $timeslot->get_start(),
-                        ), array( '%d', '%d' ) ) === false ) {
-                            echo  json_encode( array(
+                        ], [ '%d', '%d' ] ) === false ) {
+                            echo  json_encode( [
                                 'status'  => 0,
                                 'message' => 'Internal database error.',
-                            ) ) ;
+                            ] ) ;
                             wp_die();
                             return;
                         }
@@ -2197,15 +2197,15 @@ class WBK_Request_Manager
         }
         
         if ( $lock_action == 'lock' ) {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 1,
                 'message' => __( 'Total locked: ', 'webba-booking-lite' ) . $total_locked,
-            ) ) ;
+            ] ) ;
         } else {
-            echo  json_encode( array(
+            echo  json_encode( [
                 'status'  => 1,
                 'message' => __( 'Total unlocked: ', 'webba-booking-lite' ) . $total_locked,
-            ) ) ;
+            ] ) ;
         }
         
         date_default_timezone_set( 'UTC' );
@@ -2216,12 +2216,12 @@ class WBK_Request_Manager
     public function save_appearance()
     {
         
-        if ( !wp_verify_nonce( $_POST['nonce'], 'wbkb_nonce' ) ) {
+        if ( get_option( 'wbk_disable_security', '' ) != 'true' && !wp_verify_nonce( $_POST['nonce'], 'wbkf_nonce' ) ) {
             wp_die();
             return;
         }
         
-        $allowed_classes = array(
+        $allowed_classes = [
             'appointment-status-wrapper-w',
             'button-w',
             'wb_slot_checked',
@@ -2230,20 +2230,20 @@ class WBK_Request_Manager
             'checkbox-subtitle-w',
             'circle-chart-wb',
             'wbk_service_item_active'
-        );
-        $allowed_properties = array(
+        ];
+        $allowed_properties = [
             'background-color',
             'color',
             'border-radius',
             'border-color',
             'background-color,border-color'
-        );
-        $allowed_ids = array(
+        ];
+        $allowed_ids = [
             'wbk_appearance_field_1',
             'wbk_appearance_field_2',
             'wbk_appearance_field_3',
             'wbk_appearance_field_4'
-        );
+        ];
         $app_data = stripslashes( $_POST['appearance_data'] );
         $app_data = json_decode( $app_data );
         
@@ -2258,8 +2258,8 @@ class WBK_Request_Manager
             return;
         }
         
-        $classes = array();
-        $ids = array();
+        $classes = [];
+        $ids = [];
         foreach ( $app_data as $item ) {
             
             if ( !in_array( $item->class, $allowed_classes ) || !in_array( $item->property, $allowed_properties ) || !in_array( $item->id, $allowed_ids ) ) {
@@ -2289,7 +2289,7 @@ class WBK_Request_Manager
             }
             $properties = explode( ',', $item->property );
             foreach ( $properties as $property ) {
-                $classes[$item->class][] = array( $property, $item->value );
+                $classes[$item->class][] = [ $property, $item->value ];
             }
             $ids[$item->id] = $item->value;
         }
@@ -2324,7 +2324,7 @@ class WBK_Request_Manager
         wp_die();
         return;
         $headers = 'From: ' . get_option( 'wbk_from_name' ) . ' <' . get_option( 'wbk_from_email' ) . '>' . "\r\n";
-        $when_allowed = array( 'prepare_service_data' );
+        $when_allowed = [ 'prepare_service_data' ];
         $when = $_POST['when'];
         
         if ( !in_array( $when, $when_allowed ) ) {
@@ -2341,14 +2341,14 @@ class WBK_Request_Manager
         
         $details = 'Request: ' . $when . '<br>Service: ' . $post_details[0];
         $solution = '<br>For more information on troubleshooting please read the following article: <a href="https://webba-booking.com/documentaion/troubleshooting/hanging-after-service-selected/">Hanging when service selected</a>.';
-        add_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        add_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
         wp_mail(
             get_bloginfo( 'admin_email' ),
             'Problem with the Webba Booking plugin',
             'The Webba Booking plugin could not complete the request. <br><br>Details:<br> ' . $details . '<br>' . $solution,
             $headers
         );
-        remove_filter( 'wp_mail_content_type', array( $this, 'set_email_content_type' ) );
+        remove_filter( 'wp_mail_content_type', [ $this, 'set_email_content_type' ] );
     }
     
     public function set_email_content_type()
@@ -2382,8 +2382,8 @@ class WBK_Request_Manager
         }
         
         $data = \WBK_Renderer::load_template( 'backend/dashboard_blocks', [
-            "table"   => $table,
-            "filters" => $filters,
+            'table'   => $table,
+            'filters' => $filters,
         ], false );
         $response = new \WP_REST_Response( $data );
         $response->set_status( 200 );

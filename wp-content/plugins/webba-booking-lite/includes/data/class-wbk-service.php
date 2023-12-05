@@ -1,34 +1,39 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
-class WBK_Service extends WBK_Model_Object{
-    public function __construct( $id = null ) {
-        $this->table_name =  get_option('wbk_db_prefix', '' ) . 'wbk_services';
-		parent::__construct( $id );
-
-	}
+if (!defined('ABSPATH')) {
+    exit();
+}
+class WBK_Service extends WBK_Model_Object
+{
+    public function __construct($id = null)
+    {
+        $this->table_name = get_option('wbk_db_prefix', '') . 'wbk_services';
+        parent::__construct($id);
+    }
     /**
      * get attached google calendars
      * @return array IDs of the google calendars
      */
-    public function get_gg_calendars(){
-        if( !is_null( $this->fields['gg_calendars'] ) ){
-            $gg_calendars = json_decode( $this->fields['gg_calendars'] );
-            if( is_numeric( $gg_calendars ) ){
-                $gg_calendars = array( $gg_calendars );
+    public function get_gg_calendars()
+    {
+        if (!is_null($this->fields['gg_calendars'])) {
+            $gg_calendars = json_decode($this->fields['gg_calendars']);
+            if (is_numeric($gg_calendars)) {
+                $gg_calendars = [$gg_calendars];
             }
-            if( is_array( $gg_calendars) ){
+            if (is_array($gg_calendars)) {
                 return $gg_calendars;
             }
         }
-        return array();
+        return [];
     }
 
     /**
      * get interval between $booking_ids
      * @return int interval between bookings
      */
-    public function get_interval_between(){
-        if( !isset( $this->fields['interval_between'] ) ){
+    public function get_interval_between()
+    {
+        if (!isset($this->fields['interval_between'])) {
             return null;
         }
         return $this->fields['interval_between'];
@@ -38,9 +43,9 @@ class WBK_Service extends WBK_Model_Object{
      * get duration
      * @return int get duration
      */
-    public function get_duration(){
-        if( !isset( $this->fields['duration'] ) ){
-      
+    public function get_duration()
+    {
+        if (!isset($this->fields['duration'])) {
             return null;
         }
         return $this->fields['duration'];
@@ -50,8 +55,9 @@ class WBK_Service extends WBK_Model_Object{
      * get step
      * @return int step
      */
-    public function get_step(){
-        if( !isset( $this->fields['step'] ) ){
+    public function get_step()
+    {
+        if (!isset($this->fields['step'])) {
             return null;
         }
         return $this->fields['step'];
@@ -61,8 +67,9 @@ class WBK_Service extends WBK_Model_Object{
      * get preparation time
      * @return int preparation time
      */
-    public function get_prepare_time(){
-        if( !isset( $this->fields['prepare_time'] ) ){
+    public function get_prepare_time()
+    {
+        if (!isset($this->fields['prepare_time'])) {
             return null;
         }
         return $this->fields['prepare_time'];
@@ -72,48 +79,61 @@ class WBK_Service extends WBK_Model_Object{
      * get business hours
      * @return array business hours
      */
-    public function get_business_hours(){
-        if( !isset( $this->fields['business_hours_v4'] ) ){
+    public function get_business_hours()
+    {
+        if (!isset($this->fields['business_hours_v4'])) {
             return null;
         }
         return $this->fields['business_hours_v4'];
-
     }
 
     /**
      * get maximum quantity
      * @return int quantity
      */
-    public function get_quantity( $time = null ){
-        if( !isset( $this->fields['quantity'] ) ){
+    public function get_quantity($time = null)
+    {
+        if (!isset($this->fields['quantity'])) {
             return null;
         }
-        return apply_filters( 'wbk_service_quantity', $this->fields['quantity'], $this->get_id(), $time );
+        return apply_filters(
+            'wbk_service_quantity',
+            $this->fields['quantity'],
+            $this->get_id(),
+            $time
+        );
     }
 
     /**
      * get minimum quantity
      * @return int quantity
      */
-    public function get_min_quantity( $time = null ){
-        if( !isset( $this->fields['min_quantity'] ) ){
+    public function get_min_quantity($time = null)
+    {
+        if (!isset($this->fields['min_quantity'])) {
             return null;
         }
-        return apply_filters( 'wbk_service_quantity', $this->fields['min_quantity'], $this->get_id(), $time );
+        return apply_filters(
+            'wbk_service_quantity',
+            $this->fields['min_quantity'],
+            $this->get_id(),
+            $time
+        );
     }
 
     /**
      * get date_range
      * @return array date_range
      */
-    public function get_availability_range(){
-        if( !isset( $this->fields['date_range'] ) ){
+    public function get_availability_range()
+    {
+        if (!isset($this->fields['date_range'])) {
             return null;
         }
-        $date_range = explode( '-',  $this->fields['date_range'] );
-        $result = array();
-        foreach( $date_range as $item ){
-            $result[] = trim( $item );
+        $date_range = explode('-', $this->fields['date_range']);
+        $result = [];
+        foreach ($date_range as $item) {
+            $result[] = trim($item);
         }
         return $result;
     }
@@ -122,39 +142,40 @@ class WBK_Service extends WBK_Model_Object{
      * get price of the service
      * @return float price
      */
-    public function get_price(){
-        if( !isset( $this->fields['price'] ) ){
+    public function get_price()
+    {
+        if (!isset($this->fields['price'])) {
             return null;
         }
         return $this->fields['price'];
-
     }
 
     /**
      * get pricing rules
      * @return array IDs of the pricing rules
      */
-    public function get_pricing_rules(){
-        if( !is_null( $this->fields['pricing_rules'] ) ){
-            $items = json_decode( $this->fields['pricing_rules'] );
-            if( is_numeric( $items ) ){
-                $items = array( $items );
+    public function get_pricing_rules()
+    {
+        if (!is_null($this->fields['pricing_rules'])) {
+            $items = json_decode($this->fields['pricing_rules']);
+            if (is_numeric($items)) {
+                $items = [$items];
             }
-            if( is_array( $items) ){
+            if (is_array($items)) {
                 return $items;
             }
         }
-        return array();
+        return [];
     }
 
     /**
      * get on changes template
      * @return int id of the on changed template
      */
-    public function get_on_changes_template(){
-        if( !is_null( $this->fields['booking_changed_template'] ) ){
+    public function get_on_changes_template()
+    {
+        if (!is_null($this->fields['booking_changed_template'])) {
             return $this->fields['booking_changed_template'];
-
         }
         return false;
     }
@@ -162,10 +183,10 @@ class WBK_Service extends WBK_Model_Object{
      * get on approval template
      * @return int id of the on changed template
      */
-    public function get_on_approval_template(){
-        if( !is_null( $this->fields['approval_template'] ) ){
+    public function get_on_approval_template()
+    {
+        if (!is_null($this->fields['approval_template'])) {
             return $this->fields['approval_template'];
-
         }
         return false;
     }
@@ -174,65 +195,78 @@ class WBK_Service extends WBK_Model_Object{
      * get the service fee
      * @return flot service fee
      */
-    public function get_fee(){
-        if( !isset( $this->fields['service_fee'] ) ){
+    public function get_fee()
+    {
+        if (!isset($this->fields['service_fee'])) {
             return 0;
         }
         return $this->fields['service_fee'];
     }
 
-    public function get_description( $unescaped = false ){
+    public function get_description($unescaped = false)
+    {
         $value = '';
-        if( isset( $this->fields['description'] ) ){
+        if (isset($this->fields['description'])) {
             $value = $this->fields['description'];
-            if( $unescaped ){
-                $value = stripcslashes( $value );
+            if ($unescaped) {
+                $value = stripcslashes($value);
             }
         }
         return $value;
     }
 
-    public function get_multi_mode_low_limit(){
-        if( !is_null( $this->fields['multi_mode_low_limit'] ) ){
+    public function get_multi_mode_low_limit()
+    {
+        if (!is_null($this->fields['multi_mode_low_limit'])) {
             return $this->fields['multi_mode_low_limit'];
-
         }
         return '';
     }
 
-    public function get_multi_mode_limit(){
-        if( !is_null( $this->fields['multi_mode_limit'] ) ){
+    public function get_multi_mode_limit()
+    {
+        if (!is_null($this->fields['multi_mode_limit'])) {
             return $this->fields['multi_mode_limit'];
         }
         return '';
     }
 
-    public function get_form(){
-        if( !is_null( $this->fields['form'] ) ){
+    public function get_form()
+    {
+        if (!is_null($this->fields['form'])) {
             return $this->fields['form'];
         }
         return '';
     }
 
-    public function get_payment_methods(){
-        if( !is_null( $this->fields['payment_methods'] ) ){
+    public function get_payment_methods()
+    {
+        if (!is_null($this->fields['payment_methods'])) {
             return $this->fields['payment_methods'];
         }
         return '';
     }
-    public function has_only_arrival_payment_method(){
-        if( $this->get_payment_methods() == '' ){
+    public function has_only_arrival_payment_method()
+    {
+        if ($this->get_payment_methods() == '') {
             return false;
         }
-        $payment_methods = json_decode( $this->get_payment_methods(), true );
-        if( is_array( $payment_methods ) ){
-            if( count( $payment_methods ) > 1 ){
+        if (
+            get_option('wbk_skip_on_arrival_payment_method', 'true') != 'true'
+        ) {
+            return false;
+        }
+        $payment_methods = json_decode($this->get_payment_methods(), true);
+        if (is_array($payment_methods)) {
+            if (count($payment_methods) > 1) {
                 return false;
-            } elseif( count( $payment_methods ) == 1 && $payment_methods[0] == 'arrival' ){
+            } elseif (
+                count($payment_methods) == 1 &&
+                $payment_methods[0] == 'arrival'
+            ) {
                 return true;
             }
         }
         return false;
     }
-
 }

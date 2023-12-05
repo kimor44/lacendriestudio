@@ -3,8 +3,8 @@ Contributors: Webba agency, freemius
 Donate link: https://webba-booking.com/
 Tags: appointment booking, booking calendar, online scheduling, event booking, service reservations
 Requires at least: 5.6
-Tested up to: 6.4
-Stable tag: 5.0.22
+Tested up to: 6.4.1
+Stable tag: 5.0.25
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -13,8 +13,6 @@ Webba Booking is the most versatile and easy-to-use appointment & event booking 
 
 == DESCRIPTION ==
 = Webba Booking - One-Stop Online Booking Management Solution =
-
-**BIG NEWS:** Webba launched it's newest and best version - Webba 5. Read the announcement with all the details on [our blog](https://webba-booking.com/blog/webba-5-launch-guide/ "new online booking webba 5").
 
 Are you looking for an online booking plugin that offers a **professional-looking booking form, easy setup and seamless schedule management**? Look no further!
 
@@ -180,6 +178,26 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+5.0.25
+
+30/11/2023
+
+* Improvements: mobile layout improved
+* Bugfix: bug with service descriptions on certain configurations
+* Bugfix: bug with custom fields encoding
+* Bugfix: bug with the order of services inside category
+ 
+
+5.0.23
+
+20/11/2023
+
+* Improvements: option to control payment on Arrival method
+* Improvements: service descriptions in the booking form
+* Improvements: option to set up translation of the cancellation form title  
+* Improvements: #total_amount placeholder in the Booking form label option
+* Bugfix: wrong message when booking can't be canceled due to buffer
+   
 5.0.22
 
 03/11/2023

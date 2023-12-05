@@ -23,20 +23,75 @@
     src: url(../fonts/poppins/Poppins-Bold.ttf);
     font-weight: bold;
 }
-
 body {
     margin: 0;
 }
-.appointment-status-wrapper-w{background-color: #213f5b ;border-color: #213f5b ;}
-.circle-chart-wb{background-color: #213f5b ;border-color: #213f5b ;}
-.button-w{background-color: #1f6763 ;border-color: #1f6763 ;}
-.wb_slot_checked{background-color: #1f6763 ;border-color: #1f6763 ;}
-.middleDay > .cell_inner{background-color: #1f6763 ;border-color: #1f6763 ;}
-.checkbox-custom-w input:checked ~ .checkmark-w{background-color: #1f6763 ;border-color: #1f6763 ;}
-.checkbox-subtitle-w{color: #1f6763 ;color: #1f6763 ;}
-.wbk_service_item_active{background-color: #1f6763 ;border-color: #1f6763 ;}
+span.wbk_single_service_title {
+    color: #000;
+}
+.appointment-box-w {
+    color: #000;
+}
+.appointment-status-wrapper-w {
+    background-color: #213f5b;
+    border-color: #213f5b;
+}
+.circle-chart-wb {
+    background-color: #213f5b;
+    border-color: #213f5b;
+}
+.button-w {
+    background-color: #1f6763;
+    border-color: #1f6763;
+}
+.wb_slot_checked {
+    background-color: #1f6763;
+    border-color: #1f6763;
+}
+.middleDay > .cell_inner {
+    background-color: #1f6763;
+    border-color: #1f6763;
+}
+.checkbox-custom-w input:checked ~ .checkmark-w {
+    background-color: #1f6763;
+    border-color: #1f6763;
+}
+.checkbox-subtitle-w {
+    color: #1f6763;
+    color: #1f6763;
+}
+.wbk_service_item_active {
+    background-color: #1f6763;
+    border-color: #1f6763;
+}
 
+.wbk_service_description_switcher {
+    display: block;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    background: transparent url(../images/chevron-rigth.png) no-repeat;
+    background-size: contain;
+    outline: none;
+    right: 0;
+}
+.wbk_service_item_active .wbk_service_description_switcher {
+    background: transparent url(../images/chevron-rigth-white.png) no-repeat;
+    background-size: contain;
+}
+.checkbox-row-w .wbk_service_description_switcher {
+    right: 10px;
+}
+.wbk_rotate_90 {
+    transform: rotate(90deg);
+}
+.wbk_service_description_holder {
+    padding: 20px 10px 0 0 !important;
+}
 
+.wbk_service_item_active .wbk_service_description_holder {
+    color: #fff;
+}
 .wbk_v5_service_list {
     list-style: none !important;
     padding: 0 !important;
@@ -809,7 +864,7 @@ li.wbk_service_item {
     .appointment-box-w {
         display: block;
         box-shadow: none;
-        padding: 5px 0 10px 0
+        padding: 5px 0 10px 0;
         min-height: 0;
     }
     .appointment-content-scroll-w {
@@ -1023,7 +1078,6 @@ li.wbk_service_item {
     border: 0 !important;
 }
 
-
 .picker__day--disabled,
 .picker__day--disabled:hover,
 .picker--focused .picker__day--disabled {
@@ -1084,7 +1138,7 @@ li.wbk_service_item {
 
     .appointment-content-w .two-buttons-w {
         justify-content: space-between;
-        padding: 0 15px 0 15px;
+        padding: 0;
     }
     .appointment-content-w .two-buttons-w .button-w {
         min-width: 160px;
@@ -2828,11 +2882,10 @@ li.wbk_service_item {
 .appontment-time-list-w input[type='radio'] ~ .radio-time-block-w:hover {
     opacity: 0.7;
 }
-.appontment-time-list-w li{
+.appontment-time-list-w li {
     margin: 0 !important;
     padding: 0 !important;
 }
-
 
 .appontment-time-list-w
     input[type='radio'][disabled]
@@ -2975,7 +3028,6 @@ li.wbk_service_item {
     cursor: pointer;
     border: none !important;
     padding: 4px !important;
-
 }
 .rescalendar_day_cells {
     border: none !important;
@@ -3108,10 +3160,10 @@ td.disabledDay {
 }
 
 @media (max-width: 950px) {
-    .appointment-status-text-mobile-w .btn-ring-wb{
+    .appointment-status-text-mobile-w .btn-ring-wb {
         display: none !important;
     }
-    .rescalendar_day_cells td:last-child{
+    .rescalendar_day_cells td:last-child {
         display: none !important;
     }
     .appontment-time-list-w {
@@ -3157,7 +3209,7 @@ td.disabledDay {
     .appontment-time-list-w.group-list-w {
         grid-template-columns: 1fr 1fr;
     }
- 
+
     .appointment-box-w .appointment-status-wrapper-w {
         padding: 10px;
     }
@@ -3390,7 +3442,9 @@ select.wbk-select {
 .wbk_hidden {
     display: none !important;
 }
-
+.wbk_invisible {
+    visibility: hidden !important;
+}
 .input-textarea-w,
 .input-textarea-w:focus {
     max-width: 345px;
@@ -3513,31 +3567,35 @@ select.wbk-select {
 .wbk_fade_out {
     visibility: hidden;
     opacity: 0;
-    transition: visibility 0s linear 300ms, opacity 300ms;
+    transition:
+        visibility 0s linear 300ms,
+        opacity 300ms;
 }
 .wbk_fade_in {
     visibility: visible;
     opacity: 1;
-    transition: visibility 0s linear 0s, opacity 300ms;
+    transition:
+        visibility 0s linear 0s,
+        opacity 300ms;
 }
 .thank-you-title-w {
     font-size: 22px;
     text-align: center;
     margin-bottom: 45px;
 }
-.details-list-w li{
+.details-list-w li {
     clear: both;
     display: block;
     height: 26px;
 }
-.dataRow td{
-	border: none !important;
+.dataRow td {
+    border: none !important;
 }
-.wbk_custom_form_spacer{
+.wbk_custom_form_spacer {
     display: block;
     width: 100%;
     height: 300px;
 }
-body{
+body {
     overflow: visible !important;
 }

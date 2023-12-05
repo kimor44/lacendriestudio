@@ -7,7 +7,7 @@ class WBK_Model
 {
     public function __construct()
     {
-        add_action( 'init', array( $this, 'initalize_model' ), 20 );
+        add_action( 'init', [ $this, 'initalize_model' ], 20 );
     }
     
     public function initalize_model()
@@ -35,9 +35,9 @@ class WBK_Model
             __( 'Service name', 'webba-booking-lite' ),
             'text',
             'general',
-            array(
+            [
             'tooltip' => __( 'Enter service name.', 'webba-booking-lite' ),
-        )
+        ]
         );
         $table->add_field(
             'service_description',
@@ -45,9 +45,9 @@ class WBK_Model
             __( 'Description', 'webba-booking-lite' ),
             'editor',
             'general',
-            array(
+            [
             'tooltip' => __( 'Enter a description of the service.', 'webba-booking-lite' ),
-        ),
+        ],
             '',
             true,
             false,
@@ -60,11 +60,11 @@ class WBK_Model
             __( 'Availability date range', 'webba-booking-lite' ),
             'date_range',
             'hours',
-            array(
+            [
             'tooltip'     => $tooltip,
             'date_format' => $date_format,
             'time_zone'   => get_option( 'wbk_timezone', 'UTC' ),
-        ),
+        ],
             '',
             true,
             false,
@@ -88,9 +88,9 @@ class WBK_Model
             __( 'Business hours', 'webba-booking-lite' ),
             'wbk_business_hours',
             'hours',
-            array(
+            [
             'tooltip' => $tooltip,
-        ),
+        ],
             $business_hours_default,
             true,
             false,
@@ -103,10 +103,10 @@ class WBK_Model
             __( 'Price', 'webba-booking-lite' ),
             'text',
             'pricing',
-            array(
+            [
             'tooltip' => $tooltip,
             'type'    => 'none_negative_float',
-        ),
+        ],
             '0',
             true,
             true,
@@ -119,10 +119,10 @@ class WBK_Model
             __( 'Email', 'webba-booking-lite' ),
             'text',
             'email',
-            array(
+            [
             'tooltip' => $tooltip,
             'type'    => 'email',
-        ),
+        ],
             get_option( 'new_admin_email' )
         );
         $table->add_field(
@@ -131,10 +131,10 @@ class WBK_Model
             __( 'Priority', 'webba-booking-lite' ),
             'text',
             'general',
-            array(
+            [
             'type'    => 'none_negative_integer',
             'tooltip' => __( 'If you have multiple services in one form, set the display priority by entering a priority number. A lower number indicates a higher priority.', 'webba-booking-lite' ),
-        ),
+        ],
             '0',
             true,
             false
@@ -146,10 +146,10 @@ class WBK_Model
             __( 'Minimum booking count per time slot', 'webba-booking-lite' ),
             'text',
             'general',
-            array(
+            [
             'tooltip' => $tooltip,
             'type'    => 'positive_integer',
-        ),
+        ],
             '1',
             true,
             false
@@ -161,19 +161,19 @@ class WBK_Model
             __( 'Maximum booking count per time slot', 'webba-booking-lite' ),
             'text',
             'general',
-            array(
+            [
             'tooltip' => $tooltip,
             'type'    => 'positive_integer',
-        ),
+        ],
             '1',
             true,
             false
         );
-        $args = array(
+        $args = [
             'post_type'      => 'wpcf7_contact_form',
             'posts_per_page' => -1,
-        );
-        $forms = array();
+        ];
+        $forms = [];
         if ( $cf7_forms = get_posts( $args ) ) {
             foreach ( $cf7_forms as $cf7_form ) {
                 $form = new stdClass();
@@ -189,13 +189,13 @@ class WBK_Model
             __( 'Booking form', 'webba-booking-lite' ),
             'select',
             'general',
-            array(
+            [
             'tooltip'    => $tooltip,
             'items'      => $forms,
-            'null_value' => array(
+            'null_value' => [
             '0' => __( 'Default form', 'webba-booking-lite' ),
-        ),
-        ),
+        ],
+        ],
             '0',
             true,
             false,
@@ -208,11 +208,11 @@ class WBK_Model
             __( 'Google calendar', 'webba-booking-lite' ),
             'select',
             'general',
-            array(
+            [
             'tooltip'  => $tooltip,
             'items'    => WBK_Model_Utils::get_google_calendars(),
             'multiple' => true,
-        ),
+        ],
             null,
             true,
             false,
@@ -225,11 +225,11 @@ class WBK_Model
             __( 'Users', 'webba-booking-lite' ),
             'select',
             'general',
-            array(
-            'items'    => array(),
+            [
+            'items'    => [],
             'multiple' => true,
             'tooltip'  => $tooltip,
-        ),
+        ],
             0,
             true,
             false,
@@ -242,10 +242,10 @@ class WBK_Model
             __( 'Duration (minutes)', 'webba-booking-lite' ),
             'text',
             'hours',
-            array(
+            [
             'type'    => 'positive_integer',
             'tooltip' => $tooltip,
-        ),
+        ],
             '30'
         );
         $tooltip = __( 'Specify the buffer period for new reservations. E.g., if it\'s 9 AM and you want to offer time slots starting 24 hours later, enter 1440 (24 hours * 60 minutes).', 'webba-booking-lite' );
@@ -255,10 +255,10 @@ class WBK_Model
             __( 'Preparation time (minutes)', 'webba-booking-lite' ),
             'text',
             'general',
-            array(
+            [
             'type'    => 'none_negative_integer',
             'tooltip' => $tooltip,
-        ),
+        ],
             '0',
             true,
             false
@@ -270,10 +270,10 @@ class WBK_Model
             __( 'Gap (minutes)', 'webba-booking-lite' ),
             'text',
             'hours',
-            array(
+            [
             'tooltip' => $tooltip,
             'type'    => 'none_negative_integer',
-        ),
+        ],
             '0',
             true,
             false
@@ -285,18 +285,18 @@ class WBK_Model
             __( 'Step (minutes)', 'webba-booking-lite' ),
             'text',
             'hours',
-            array(
+            [
             'tooltip' => $tooltip,
             'type'    => 'positive_integer',
-        ),
+        ],
             '30',
             true,
             false
         );
-        $payment_methods = array(
+        $payment_methods = [
             'arrival' => 'On arrival',
             'bank'    => 'Bank transfer',
-        );
+        ];
         $tooltip = __( 'Select a template for booking confirmation notifications.', 'webba-booking-lite' );
         $table->add_field(
             'service_notification_template',
@@ -304,13 +304,13 @@ class WBK_Model
             __( '\'On Booking\' notification template', 'webba-booking-lite' ),
             'select',
             'email',
-            array(
+            [
             'tooltip'    => $tooltip,
             'items'      => WBK_Model_Utils::get_email_templates(),
-            'null_value' => array(
+            'null_value' => [
             '0' => __( 'Default', 'webba-booking-lite' ),
-        ),
-        ),
+        ],
+        ],
             '0',
             true,
             false,
@@ -323,13 +323,13 @@ class WBK_Model
             __( 'Reminder notification template', 'webba-booking-lite' ),
             'select',
             'email',
-            array(
+            [
             'tooltip'    => $tooltip,
             'items'      => WBK_Model_Utils::get_email_templates(),
-            'null_value' => array(
+            'null_value' => [
             '0' => __( 'Default', 'webba-booking-lite' ),
-        ),
-        ),
+        ],
+        ],
             '0',
             true,
             false,
@@ -342,13 +342,13 @@ class WBK_Model
             __( 'Invoice notification template', 'webba-booking-lite' ),
             'select',
             'email',
-            array(
+            [
             'tooltip'    => $tooltip,
             'items'      => WBK_Model_Utils::get_email_templates(),
-            'null_value' => array(
+            'null_value' => [
             '0' => __( 'Default', 'webba-booking-lite' ),
-        ),
-        ),
+        ],
+        ],
             '0',
             true,
             false,
@@ -361,13 +361,13 @@ class WBK_Model
             __( 'Booking changes template', 'webba-booking-lite' ),
             'select',
             'email',
-            array(
+            [
             'tooltip'    => $tooltip,
             'items'      => WBK_Model_Utils::get_email_templates(),
-            'null_value' => array(
+            'null_value' => [
             '0' => __( 'Default', 'webba-booking-lite' ),
-        ),
-        ),
+        ],
+        ],
             '0',
             true,
             false,
@@ -380,11 +380,11 @@ class WBK_Model
             __( 'Payment methods', 'webba-booking-lite' ),
             'select',
             'pricing',
-            array(
+            [
             'tooltip'  => $tooltip,
             'items'    => $payment_methods,
             'multiple' => true,
-        ),
+        ],
             null,
             true,
             false,
@@ -397,10 +397,10 @@ class WBK_Model
             __( 'Add amount to order (deposit)', 'webba-booking-lite' ),
             'text',
             'pricing',
-            array(
+            [
             'tooltip' => $tooltip,
             'type'    => 'none_negative_float',
-        ),
+        ],
             '0',
             true,
             false,
@@ -413,22 +413,16 @@ class WBK_Model
             __( 'Pricing rules', 'webba-booking-lite' ),
             'select',
             'pricing',
-            array(
+            [
             'tooltip'  => $tooltip,
             'items'    => WBK_Model_Utils::get_pricing_rules(),
             'multiple' => true,
-        ),
+        ],
             null,
             true,
             false,
             false
         );
-        /*
-        $table->add_field( 'service_multi_mode_low_limit', 'multi_mode_low_limit', __( 'Lower limit for multiple mode', 'webba-booking-lite' ), 'text', 'general', array( 'type' => 'none_negative_integer'),
-        '', true, false, false );
-        $table->add_field( 'service_multi_mode_limit', 'multi_mode_limit', __( 'Upper limit for multiple mode', 'webba-booking-lite' ), 'text', 'general', array( 'type' => 'none_negative_integer'),
-        '', true, false, false  );
-        */
         $tooltip = 'Check this to automatically create <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/integrations/integration-with-zoom/">Zoom events</a> for each booking of this service.';
         $table->add_field(
             'service_zoom',
@@ -436,10 +430,10 @@ class WBK_Model
             __( 'Create Zoom events', 'webba-booking-lite' ),
             'checkbox',
             'general',
-            array(
+            [
             'yes'     => __( 'Yes', 'webba-booking-lite' ),
             'tooltip' => $tooltip,
-        ),
+        ],
             '',
             true,
             false,
@@ -447,7 +441,7 @@ class WBK_Model
         );
         $table->sync_structure();
         if ( $table->fields->get_element_at( 'service_extcalendar_group_mode' ) != false ) {
-            $table->fields->get_element_at( 'service_extcalendar_group_mode' )->set_dependency( array( array( 'quantity', '>', '1' ), array( 'extcalendar', '!=', '' ) ) );
+            $table->fields->get_element_at( 'service_extcalendar_group_mode' )->set_dependency( [ [ 'quantity', '>', '1' ], [ 'extcalendar', '!=', '' ] ] );
         }
         Plugion()->tables->add( $table, $db_prefix . 'wbk_services' );
         // Service categories
@@ -463,9 +457,9 @@ class WBK_Model
             __( 'Category name', 'webba-booking-lite' ),
             'text',
             'general',
-            array(
+            [
             'tooltip' => $tooltip,
-        )
+        ]
         );
         $tooltip = __( 'Select the services to be included in this category.', 'webba-booking-lite' );
         $table->add_field(
@@ -474,11 +468,11 @@ class WBK_Model
             __( 'Services', 'webba-booking-lite' ),
             'select',
             'general',
-            array(
+            [
             'tooltip'  => $tooltip,
             'items'    => WBK_Model_Utils::get_services(),
             'multiple' => true,
-        ),
+        ],
             null,
             true,
             true,
@@ -497,9 +491,9 @@ class WBK_Model
             __( 'Name', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
-        )
+        ]
         );
         $tooltip = __( 'Use the text editor to prepare the email template. <a rel="noopener" target="_blank" href="https://webba-booking.com/documentation/placeholders/">' . __( 'List of available placeholders', 'webba-booking-lite' ) . '</a>', 'webba-booking-lite' );
         $table->add_field(
@@ -508,9 +502,9 @@ class WBK_Model
             __( 'Template', 'webba-booking-lite' ),
             'editor',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
-        ),
+        ],
             '',
             true,
             false,
@@ -523,14 +517,14 @@ class WBK_Model
         if ( $time_format == '' ) {
             $time_format = get_option( 'time_format' );
         }
-        $allowed_fields = apply_filters( 'webba_booking_bookings_table_allowed_filters', array(
+        $allowed_fields = apply_filters( 'webba_booking_bookings_table_allowed_filters', [
             'id',
             'name',
             'duration',
             'moment_price',
             'status',
             'service_id'
-        ) );
+        ] );
         $table = new Plugion\Table( $db_prefix . 'wbk_appointments' );
         $table->set_single_item_name( __( 'Booking', 'webba-booking-lite' ) );
         $table->set_multiple_item_name( __( 'Bookings', 'webba-booking-lite' ) );
@@ -544,9 +538,9 @@ class WBK_Model
             __( 'Customer', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
-        ),
+        ],
             '',
             true,
             in_array( 'name', $allowed_fields )
@@ -558,11 +552,11 @@ class WBK_Model
             __( 'Service', 'webba-booking-lite' ),
             'select',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
             'items'   => WBK_Model_Utils::get_services( true ),
             'type'    => 'positive_integer',
-        ),
+        ],
             null,
             true,
             in_array( 'service_id', $allowed_fields ),
@@ -575,11 +569,11 @@ class WBK_Model
             __( 'Date', 'webba-booking-lite' ),
             'wbk_date',
             '',
-            array(
+            [
             'tooltip'     => $tooltip,
             'date_format' => $date_format,
             'time_zone'   => get_option( 'wbk_timezone', 'UTC' ),
-        ),
+        ],
             '',
             true,
             in_array( 'day', $allowed_fields )
@@ -591,11 +585,11 @@ class WBK_Model
             __( 'Time', 'webba-booking-lite' ),
             'wbk_time',
             '',
-            array(
+            [
             'tooltip'     => $tooltip,
             'time_format' => $time_format,
             'time_zone'   => get_option( 'wbk_timezone', 'UTC' ),
-        ),
+        ],
             '',
             true,
             in_array( 'time', $allowed_fields )
@@ -631,11 +625,11 @@ class WBK_Model
             __( 'Places booked', 'webba-booking-lite' ),
             'select',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
             'type'    => 'positive_integer',
-            'items'   => array(),
-        ),
+            'items'   => [],
+        ],
             null,
             true,
             in_array( 'quantity', $allowed_fields ),
@@ -647,9 +641,9 @@ class WBK_Model
             'Duration',
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             true,
@@ -661,9 +655,9 @@ class WBK_Model
             __( 'Created on', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             in_array( 'created_on', $allowed_fields ),
@@ -676,10 +670,10 @@ class WBK_Model
             __( 'Email', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
             'type'    => 'email',
-        ),
+        ],
             '',
             true,
             in_array( 'email', $allowed_fields )
@@ -691,9 +685,9 @@ class WBK_Model
             __( 'Phone', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
-        ),
+        ],
             '',
             true,
             in_array( 'phone', $allowed_fields ),
@@ -706,9 +700,9 @@ class WBK_Model
             __( 'Comment', 'webba-booking-lite' ),
             'textarea',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
-        ),
+        ],
             '',
             true,
             in_array( 'description', $allowed_fields ),
@@ -732,9 +726,9 @@ class WBK_Model
             'coupon',
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             in_array( 'coupon', $allowed_fields ),
@@ -759,10 +753,10 @@ class WBK_Model
             'Payment',
             'text',
             '',
-            array(
+            [
             'tooltip'    => $tooltip,
             'field_type' => 'number',
-        ),
+        ],
             '',
             true,
             in_array( 'moment_price', $allowed_fields ),
@@ -787,10 +781,10 @@ class WBK_Model
             __( 'Status' ),
             'select',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
             'items'   => WBK_Model_Utils::get_booking_status_list(),
-        ),
+        ],
             'pending',
             true,
             in_array( 'status', $allowed_fields ),
@@ -826,9 +820,9 @@ class WBK_Model
             'end',
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             false,
@@ -900,9 +894,9 @@ class WBK_Model
             'expiration_time',
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             false,
@@ -914,9 +908,9 @@ class WBK_Model
             'time_offset',
             'text',
             '',
-            array(
+            [
             'type' => 'integer',
-        ),
+        ],
             '',
             false,
             false,
@@ -1032,9 +1026,9 @@ class WBK_Model
             __( 'ID of cancelled appointment', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             true,
@@ -1046,10 +1040,10 @@ class WBK_Model
             __( 'Time', 'webba-booking-lite' ),
             'wbk_time',
             '',
-            array(
+            [
             'time_format' => $time_format,
             'time_zone'   => get_option( 'wbk_timezone', 'UTC' ),
-        ),
+        ],
             '',
             false,
             in_array( 'time', $allowed_fields )
@@ -1072,10 +1066,10 @@ class WBK_Model
             __( 'Service', 'webba-booking-lite' ),
             'select',
             '',
-            array(
+            [
             'items' => WBK_Model_Utils::get_services(),
             'type'  => 'positive_integer',
-        ),
+        ],
             null,
             false,
             in_array( 'service_id', $allowed_fields ),
@@ -1087,9 +1081,9 @@ class WBK_Model
             'created_on',
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             in_array( 'created_on', $allowed_fields ),
@@ -1101,10 +1095,10 @@ class WBK_Model
             __( 'Date', 'webba-booking-lite' ),
             'wbk_date',
             '',
-            array(
+            [
             'date_format' => $date_format,
             'time_zone'   => get_option( 'wbk_timezone', 'UTC' ),
-        ),
+        ],
             '',
             false,
             in_array( 'day', $allowed_fields )
@@ -1115,10 +1109,10 @@ class WBK_Model
             __( 'Places booked', 'webba-booking-lite' ),
             'select',
             '',
-            array(
+            [
             'type'  => 'positive_integer',
-            'items' => array(),
-        ),
+            'items' => [],
+        ],
             null,
             false,
             in_array( 'quantity', $allowed_fields ),
@@ -1141,9 +1135,9 @@ class WBK_Model
             __( 'Email', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'type' => 'email',
-        ),
+        ],
             '',
             false,
             in_array( 'email', $allowed_fields )
@@ -1190,9 +1184,9 @@ class WBK_Model
             'coupon',
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             in_array( 'coupon', $allowed_fields ),
@@ -1240,9 +1234,9 @@ class WBK_Model
             __( 'Status' ),
             'select',
             '',
-            array(
+            [
             'items' => WBK_Model_Utils::get_booking_status_list(),
-        ),
+        ],
             '',
             false,
             false
@@ -1277,9 +1271,9 @@ class WBK_Model
             'duration',
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             false,
@@ -1351,9 +1345,9 @@ class WBK_Model
             'expiration_time',
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             false,
@@ -1365,9 +1359,9 @@ class WBK_Model
             'time_offset',
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             false,
@@ -1402,9 +1396,9 @@ class WBK_Model
             __( 'Name', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
-        )
+        ]
         );
         $tooltip = '';
         $table->add_field(
@@ -1413,13 +1407,13 @@ class WBK_Model
             __( 'User', 'webba-booking-lite' ),
             'select',
             '',
-            array(
+            [
             'tooltip'    => $tooltip,
-            'items'      => array(),
-            'null_value' => array(
+            'items'      => [],
+            'null_value' => [
             '0' => __( 'select option', 'webba-booking-lite' ),
-        ),
-        ),
+        ],
+        ],
             0,
             true,
             true,
@@ -1432,9 +1426,9 @@ class WBK_Model
             __( 'Calendar ID', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
-        )
+        ]
         );
         $tooltip = __( 'Choose the calendar connection mode', 'webba-booking-lite' );
         $table->add_field(
@@ -1443,10 +1437,10 @@ class WBK_Model
             __( 'Mode', 'webba-booking-lite' ),
             'select',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
             'items'   => WBK_Model_Utils::get_gg_calendar_modes(),
-        ),
+        ],
             null,
             true,
             true,
@@ -1475,9 +1469,9 @@ class WBK_Model
             __( 'Coupon', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
-        )
+        ]
         );
         $tooltip = __( 'Define the time period during which the coupon will be valid.', 'webba-booking-lite' );
         $table->add_field(
@@ -1486,10 +1480,10 @@ class WBK_Model
             __( 'Available on', 'webba-booking-lite' ),
             'date_range',
             '',
-            array(
+            [
             'tooltip'   => $tooltip,
             'time_zone' => get_option( 'wbk_timezone', 'UTC' ),
-        ),
+        ],
             '',
             true,
             true,
@@ -1502,11 +1496,11 @@ class WBK_Model
             __( 'Services', 'webba-booking-lite' ),
             'select',
             '',
-            array(
+            [
             'tooltip'  => $tooltip,
             'items'    => WBK_Model_Utils::get_services(),
             'multiple' => true,
-        ),
+        ],
             null,
             true,
             true,
@@ -1519,11 +1513,11 @@ class WBK_Model
             __( 'Usage limit', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip'    => $tooltip,
             'field_type' => 'number',
             'type'       => 'none_negative_integer',
-        ),
+        ],
             '',
             true,
             true,
@@ -1535,9 +1529,9 @@ class WBK_Model
             __( 'Used', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             false,
             true,
@@ -1550,11 +1544,11 @@ class WBK_Model
             __( 'Discount (fixed)', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip'    => $tooltip,
             'field_type' => 'number',
             'type'       => 'none_negative_float',
-        ),
+        ],
             '',
             true,
             true,
@@ -1567,11 +1561,11 @@ class WBK_Model
             __( 'Discount (percentage)', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip'    => $tooltip,
             'field_type' => 'number',
             'type'       => 'none_negative_float',
-        ),
+        ],
             '',
             true,
             true,
@@ -1590,9 +1584,9 @@ class WBK_Model
             __( 'Name', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
-        )
+        ]
         );
         $tooltip = __( 'Specify the order for applying pricing rules to a service. This matters when you apply multiple rules for the same service.', 'webba-booking-lite' );
         $table->add_field(
@@ -1601,14 +1595,14 @@ class WBK_Model
             __( 'Priority', 'webba-booking-lite' ),
             'select',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
-            'items'   => array(
+            'items'   => [
             '1'  => __( 'low', 'webba-booking-lite' ),
             '10' => __( 'medium', 'webba-booking-lite' ),
             '20' => __( 'high', 'webba-booking-lite' ),
-        ),
-        ),
+        ],
+        ],
             1,
             true,
             true,
@@ -1621,17 +1615,17 @@ class WBK_Model
             __( 'Type', 'webba-booking-lite' ),
             'select',
             '',
-            array(
+            [
             'tooltip' => $tooltip,
-            'items'   => array(
+            'items'   => [
             'date_range'           => __( 'Price for date range', 'webba-booking-lite' ),
             'early_booking'        => __( 'Price for early booking', 'webba-booking-lite' ),
             'custom_field'         => __( 'Price based on custom field value', 'webba-booking-lite' ),
             'day_of_week_and_time' => __( 'Price for day of week and time range', 'webba-booking-lite' ),
             'number_of_seats'      => __( 'Price based on number of seats booked', 'webba-booking-lite' ),
             'number_of_timeslots'  => __( 'Price based on number of timeslots booked', 'webba-booking-lite' ),
-        ),
-        ),
+        ],
+        ],
             null,
             true,
             true,
@@ -1643,9 +1637,9 @@ class WBK_Model
             __( 'Date range', 'webba-booking-lite' ),
             'date_range',
             '',
-            array(
+            [
             'time_zone' => get_option( 'wbk_timezone', 'UTC' ),
-        ),
+        ],
             '',
             true,
             false
@@ -1656,9 +1650,9 @@ class WBK_Model
             __( 'Minimum number of days before the booked date', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'type' => 'positive_integer',
-        ),
+        ],
             '',
             true,
             false
@@ -1680,11 +1674,11 @@ class WBK_Model
             __( 'Operator', 'webba-booking-lite' ),
             'radio',
             '',
-            array(
+            [
             'equals'    => __( 'equals', 'webba-booking-lite' ),
             'more_than' => __( 'more than', 'webba-booking-lite' ),
             'less_than' => __( 'less than', 'webba-booking-lite' ),
-        ),
+        ],
             'equals',
             true,
             false
@@ -1706,11 +1700,11 @@ class WBK_Model
             __( 'Operator', 'webba-booking-lite' ),
             'radio',
             '',
-            array(
+            [
             'equals'    => __( 'equals', 'webba-booking-lite' ),
             'more_than' => __( 'more than', 'webba-booking-lite' ),
             'less_than' => __( 'less than', 'webba-booking-lite' ),
-        ),
+        ],
             'equals',
             true,
             false
@@ -1732,11 +1726,11 @@ class WBK_Model
             __( 'Operator', 'webba-booking-lite' ),
             'radio',
             '',
-            array(
+            [
             'equals'    => __( 'equals', 'webba-booking-lite' ),
             'more_than' => __( 'more than', 'webba-booking-lite' ),
             'less_than' => __( 'less than', 'webba-booking-lite' ),
-        ),
+        ],
             'equals',
             true,
             false
@@ -1758,10 +1752,10 @@ class WBK_Model
             __( 'Only timeslots in the same service', 'webba-booking-lite' ),
             'checkbox',
             '',
-            array(
+            [
             'yes'     => __( 'Yes', 'webba-booking-lite' ),
             'tooltip' => $tooltip,
-        ),
+        ],
             '',
             true,
             false,
@@ -1786,11 +1780,11 @@ class WBK_Model
             __( 'Action', 'webba-booking-lite' ),
             'radio',
             '',
-            array(
+            [
             'increase' => __( 'increase', 'webba-booking-lite' ),
             'reduce'   => __( 'reduce', 'webba-booking-lite' ),
             'replace'  => __( 'replace', 'webba-booking-lite' ),
-        ),
+        ],
             'increase'
         );
         $tooltip = __( 'Set the value by which the price will be increased, decreased, or replaced.', 'webba-booking-lite' );
@@ -1800,11 +1794,11 @@ class WBK_Model
             __( 'Amount', 'webba-booking-lite' ),
             'text',
             '',
-            array(
+            [
             'tooltip'    => $tooltip,
             'field_type' => 'number',
             'type'       => 'none_negative_float',
-        ),
+        ],
             '0',
             true,
             true,
@@ -1816,10 +1810,10 @@ class WBK_Model
             __( 'Fixed / percent', 'webba-booking-lite' ),
             'radio',
             '',
-            array(
+            [
             'fixed'   => __( 'fixed', 'webba-booking-lite' ),
             'percent' => __( 'percent', 'webba-booking-lite' ),
-        ),
+        ],
             'fixed'
         );
         $table->add_field(
@@ -1828,9 +1822,9 @@ class WBK_Model
             __( 'Multiply amount by the field value', 'webba-booking-lite' ),
             'checkbox',
             '',
-            array(
+            [
             'yes' => __( 'Yes', 'webba-booking-lite' ),
-        ),
+        ],
             '',
             true,
             false,
@@ -1842,9 +1836,9 @@ class WBK_Model
             __( 'The field is related to the number of seats booked', 'webba-booking-lite' ),
             'checkbox',
             '',
-            array(
+            [
             'yes' => __( 'Yes', 'webba-booking-lite' ),
-        ),
+        ],
             '',
             true,
             false,
@@ -1852,20 +1846,20 @@ class WBK_Model
         );
         $table->sync_structure();
         $table = Plugion()->tables->add( $table, $db_prefix . 'wbk_pricing_rules' );
-        $table->fields->get_element_at( 'pricing_rule_date_range' )->set_dependency( array( array( 'type', '=', 'date_range' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_days_number' )->set_dependency( array( array( 'type', '=', 'early_booking' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_custom_field_id' )->set_dependency( array( array( 'type', '=', 'custom_field' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_custom_field_operator' )->set_dependency( array( array( 'type', '=', 'custom_field' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_custom_field_value' )->set_dependency( array( array( 'type', '=', 'custom_field' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_number_of_seats_operator' )->set_dependency( array( array( 'type', '=', 'number_of_seats' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_number_of_seats_value' )->set_dependency( array( array( 'type', '=', 'number_of_seats' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_number_of_timeslots_operator' )->set_dependency( array( array( 'type', '=', 'number_of_timeslots' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_number_of_timeslots_value' )->set_dependency( array( array( 'type', '=', 'number_of_timeslots' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_only_same_service' )->set_dependency( array( array( 'type', '=', 'number_of_timeslots' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_multiply_amount' )->set_dependency( array( array( 'type', '=', 'custom_field' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_related_to_seats_number' )->set_dependency( array( array( 'type', '=', 'custom_field' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_day_time' )->set_dependency( array( array( 'type', '=', 'day_of_week_and_time' ) ) );
-        $table->fields->get_element_at( 'pricing_rule_fixed_percent' )->set_dependency( array( array( 'action', '!=', 'replace' ), array( 'action', '!=', 'multiply' ) ) );
+        $table->fields->get_element_at( 'pricing_rule_date_range' )->set_dependency( [ [ 'type', '=', 'date_range' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_days_number' )->set_dependency( [ [ 'type', '=', 'early_booking' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_custom_field_id' )->set_dependency( [ [ 'type', '=', 'custom_field' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_custom_field_operator' )->set_dependency( [ [ 'type', '=', 'custom_field' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_custom_field_value' )->set_dependency( [ [ 'type', '=', 'custom_field' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_number_of_seats_operator' )->set_dependency( [ [ 'type', '=', 'number_of_seats' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_number_of_seats_value' )->set_dependency( [ [ 'type', '=', 'number_of_seats' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_number_of_timeslots_operator' )->set_dependency( [ [ 'type', '=', 'number_of_timeslots' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_number_of_timeslots_value' )->set_dependency( [ [ 'type', '=', 'number_of_timeslots' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_only_same_service' )->set_dependency( [ [ 'type', '=', 'number_of_timeslots' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_multiply_amount' )->set_dependency( [ [ 'type', '=', 'custom_field' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_related_to_seats_number' )->set_dependency( [ [ 'type', '=', 'custom_field' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_day_time' )->set_dependency( [ [ 'type', '=', 'day_of_week_and_time' ] ] );
+        $table->fields->get_element_at( 'pricing_rule_fixed_percent' )->set_dependency( [ [ 'action', '!=', 'replace' ], [ 'action', '!=', 'multiply' ] ] );
     }
 
 }
