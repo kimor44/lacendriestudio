@@ -1,5 +1,5 @@
 <?php exit; ?>{
-    "version": "2.5.0",
+    "version": "2.6.1",
     "cluster.messagebus.debug": false,
     "cluster.messagebus.enabled": false,
     "cluster.messagebus.sns.region": "",
@@ -1056,5 +1056,9 @@
     "extension.user-experience-oembed": "0",
     "file_locking": "0",
     "file_nfs": "0",
-    "extension.imageservice": "1"
+    "extension.imageservice": "1",
+    "pgcache.bad_behavior_path": "",
+    "newrelic": {
+        "monitoring_type": "apm"
+    }
 }
