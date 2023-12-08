@@ -6,6 +6,23 @@ const timeSlots = {
   21: "21h - 00h",
 };
 
+const addSubItemsEvent = () => {
+  setTimeout(() => {
+    const subItems = document.querySelectorAll(".sb_item");
+    if (subItems.length === 0) {
+      addSubItemsEvent();
+    } else {
+      for (const subItem of subItems) {
+        const sub = subItem.querySelector("a");
+        sub?.addEventListener("click", () => {
+          setEndTimeSlots(true, true);
+          addSubItemsEvent();
+        });
+      }
+    }
+  }, TIME_TO_WAIT);
+};
+
 const addDatePickerEvent = () => {
   setTimeout(() => {
     const days = document.querySelectorAll("tr td .ui-state-default");
@@ -59,11 +76,14 @@ const getTimeSlot = (link) => {
  * @param {boolean} initLoading
  * @param {boolean} monthLoading
  */
-const setEndTimeSlots = async (initLoading = false, monthLoading = false) => {
-  await setTimeout(() => {
-    const startTimeSlots = document.querySelectorAll(".slots .availableslot");
+const setEndTimeSlots = (initLoading = false, monthLoading = false) => {
+  setTimeout(() => {
+    const startTimeSlots = document.querySelectorAll(
+      ".slots .availableslot, .slots .usedslot"
+    );
+
     if (startTimeSlots.length === 0) {
-      setEndTimeSlots();
+      setEndTimeSlots(initLoading, monthLoading);
     } else {
       for (const startTimeSlot of startTimeSlots) {
         const link = startTimeSlot.querySelector("a");
@@ -82,6 +102,10 @@ const setEndTimeSlots = async (initLoading = false, monthLoading = false) => {
         }
         if (link) {
           link.innerText = timeSlot;
+          link.addEventListener("click", () => {
+            addSubItemsEvent();
+            setEndTimeSlots(false, false);
+          });
         }
       }
     }
