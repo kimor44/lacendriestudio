@@ -1,8 +1,8 @@
-const page = document.getElementById("post-280");
+// const page = document.getElementById("post-280");
 
-if (!page) {
-  throw new Error("Not on the right page");
-}
+//if (!page) {
+//  throw new Error("Not on the right page");
+// }
 const TIME_TO_WAIT = 600;
 const timeSlots = {
   10: "10h - 14h",

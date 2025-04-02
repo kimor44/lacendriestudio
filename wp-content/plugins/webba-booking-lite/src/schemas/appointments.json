@@ -1,0 +1,178 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "appointment_name": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Client",
+            "tab": "",
+            "misc": {
+                "tooltip": "Entrez le nom du client."
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "appointment_service_id": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": false,
+            "title": "Service",
+            "tab": "",
+            "misc": {
+                "tooltip": "S\u00e9lectionner le service pour lequel la r\u00e9servation est effectu\u00e9e.",
+                "options": "services",
+                "sub_type": "positive_integer"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": null,
+            "editable": true
+        },
+        "appointment_day": {
+            "type": "string",
+            "input_type": "date",
+            "hidden": true,
+            "title": "Date",
+            "tab": "",
+            "misc": {
+                "tooltip": "S\u00e9lectionner la date de r\u00e9servation.",
+                "date_format": "d.m.y",
+                "time_zone": "Europe/Paris"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "appointment_time": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Heure",
+            "tab": "",
+            "misc": {
+                "tooltip": "S\u00e9lectionner l'heure de r\u00e9servation.",
+                "time_format": "G\\hi",
+                "options": "backend"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "appointment_quantity": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Places r\u00e9serv\u00e9es",
+            "tab": "",
+            "misc": {
+                "tooltip": "Pr\u00e9ciser le nombre de places r\u00e9serv\u00e9es pour ce rendez-vous.",
+                "sub_type": "positive_integer",
+                "options": "backend"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": null,
+            "editable": true
+        },
+        "appointment_email": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Email",
+            "tab": "",
+            "misc": {
+                "tooltip": "Entrer l\u2019adresse courriel du client.",
+                "sub_type": "email"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "appointment_phone": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "T\u00e9l\u00e9phone",
+            "tab": "",
+            "misc": {
+                "tooltip": "Entrer le num\u00e9ro de t\u00e9l\u00e9phone du client."
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "appointment_description": {
+            "type": "string",
+            "input_type": "textarea",
+            "hidden": true,
+            "title": "Commentaire",
+            "tab": "",
+            "misc": {
+                "tooltip": "Ajouter tout commentaire suppl\u00e9mentaire li\u00e9 \u00e0 la r\u00e9servation."
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "appointment_extra": {
+            "type": "string",
+            "input_type": "webba_custom_data",
+            "hidden": true,
+            "title": "Champs personnalis\u00e9es",
+            "tab": "",
+            "misc": null,
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "appointment_moment_price": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Paiement",
+            "tab": "",
+            "misc": {
+                "tooltip": "Si le paiement a d\u00e9j\u00e0 \u00e9t\u00e9 effectu\u00e9, entrer le montant pay\u00e9 pour 1 personne.",
+                "sub_type": "none_negative_float"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "appointment_status": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": false,
+            "title": "Statut",
+            "tab": "",
+            "misc": {
+                "tooltip": "Choisir le statut de r\u00e9servation appropri\u00e9 parmi les options disponibles.",
+                "options": {
+                    "pending": "En attente de validation",
+                    "approved": "Valid\u00e9",
+                    "paid": "Pay\u00e9 (en attente de validation)",
+                    "paid_approved": "Paiement valid\u00e9",
+                    "arrived": "Arriv\u00e9",
+                    "woocommerce": "G\u00e9r\u00e9 par Woo Commerce",
+                    "added_by_admin_not_paid": "Ajout\u00e9 par l\u2019administrateur (non pay\u00e9)",
+                    "added_by_admin_paid": "Ajout\u00e9 par l\u2019administrateur (pay\u00e9)"
+                }
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "pending",
+            "editable": true
+        }
+    }
+}

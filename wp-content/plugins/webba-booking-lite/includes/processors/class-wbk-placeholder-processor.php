@@ -11,9 +11,14 @@ class WBK_Placeholder_Processor
             if (!$booking->is_loaded()) {
                 return $message;
             }
+
+            $tax = get_option('wbk_general_tax', '0');
+            if (trim($tax) == '') {
+                $tax = '0';
+            }
             $payment_details = WBK_Price_Processor::get_payment_items(
                 [$bookings],
-                get_option('wbk_general_tax', '0'),
+                $tax,
                 null,
                 false
             );
@@ -103,10 +108,13 @@ class WBK_Placeholder_Processor
             if (!$booking->is_loaded()) {
                 return $message;
             }
-
+            $tax = get_option('wbk_general_tax', '0');
+            if (trim($tax) == '') {
+                $tax = '0';
+            }
             $payment_details = WBK_Price_Processor::get_payment_items(
                 $bookings,
-                get_option('wbk_general_tax', '0'),
+                $tax,
                 null,
                 false
             );
@@ -121,7 +129,6 @@ class WBK_Placeholder_Processor
         }
         return stripslashes($message);
     }
-
     public static function process_not_booked_item_placeholders(
         $service_ids,
         $times,
@@ -194,6 +201,7 @@ class WBK_Placeholder_Processor
                 $price_format
             );
             $form_label = str_replace('#price', $price, $form_label);
+
             $form_label = str_replace(
                 '#description',
                 $service->get_description(),
@@ -501,6 +509,7 @@ class WBK_Placeholder_Processor
         $multi_token = null,
         $multi_token_admin = null
     ) {
+
         $booking = new WBK_Booking($booking_id);
         if (!$booking->is_loaded()) {
             return;
@@ -546,9 +555,14 @@ class WBK_Placeholder_Processor
             $zoom_pass = '';
             $zoom_meeting_id = '';
         }
+        $message = str_replace('amp;', '', $message);
+
         $message = str_replace('#zoom_url', $zoom_url, $message);
         $message = str_replace('#zoom_pass', $zoom_pass, $message);
         $message = str_replace('#zoom_meeting_id', $zoom_meeting_id, $message);
+
+        $message = str_replace('#admin_token', $booking->get('admin_token'), $message);
+        $message = str_replace('#token', $booking->get('token'), $message);
 
         // processing links for payment, cancelation and google event addings
         $payment_link_url = get_option('wbk_email_landing', '');
@@ -752,9 +766,10 @@ class WBK_Placeholder_Processor
 
         $message = str_replace('#attachment', $attachment, $message);
         $message = str_replace('#coupon', $coupon_name, $message);
+
         $message = str_replace(
             '#service_description',
-            $service->get('description'),
+            $service->get_description(),
             $message
         );
         $message = str_replace(
@@ -895,8 +910,8 @@ class WBK_Placeholder_Processor
             wp_date(
                 $time_format,
                 $booking->get_start() +
-                    $correction +
-                    $service->get_duration() * 60,
+                $correction +
+                $service->get_duration() * 60,
                 $timezone_to_use
             );
 
@@ -936,6 +951,21 @@ class WBK_Placeholder_Processor
         );
         $message = str_replace('#appprice', $moment_price, $message);
 
+        $user_dashboard_page_link = sprintf(
+            '<a href="%s" target="_blank">%s</a>',
+            esc_url(get_option('wbk_user_dashboard_page_link', '')),
+            esc_html(get_option('wbk_user_dashboard_link_label', ''))
+        );
+        $message = str_replace('#dashboard_page', $user_dashboard_page_link, $message);
+
+        $userdata = get_query_var('wbk_user_data', false);
+
+        if ($userdata && is_array($userdata) && !empty($userdata)) {
+            foreach($userdata as $placeholder => $value){
+                $message = str_replace('#' . $placeholder, $value, $message);
+            }
+        }
+
         $dynamic_placehodlers = get_option('wbk_general_dynamic_placeholders');
         if ($dynamic_placehodlers != '') {
             $items = explode(',', $dynamic_placehodlers);
@@ -945,6 +975,19 @@ class WBK_Placeholder_Processor
                 }
             }
         }
+        return $message;
+    }
+
+    public static function process($message, $bookings)
+    {
+        $current_time_zone = date_default_timezone_get();
+        date_default_timezone_set(get_option('wbk_timezone', 'UTC'));
+        if (get_option('wbk_multi_booking', '') == 'enabled') {
+            $message = WBK_Placeholder_Processor::process_placeholders($message, $bookings);
+        } else {
+            $message = WBK_Placeholder_Processor::process_placeholders($message, $bookings[0]);
+        }
+        date_default_timezone_set($current_time_zone);
         return $message;
     }
 }

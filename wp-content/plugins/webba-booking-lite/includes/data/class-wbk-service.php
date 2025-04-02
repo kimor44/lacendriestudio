@@ -81,10 +81,10 @@ class WBK_Service extends WBK_Model_Object
      */
     public function get_business_hours()
     {
-        if (!isset($this->fields['business_hours_v4'])) {
+        if (!isset($this->fields['business_hours'])) {
             return null;
         }
-        return $this->fields['business_hours_v4'];
+        return $this->fields['business_hours'];
     }
 
     /**
@@ -167,6 +167,17 @@ class WBK_Service extends WBK_Model_Object
         }
         return [];
     }
+    /**
+     * get on confirmation (On booking) template
+     * @return int id of the on changed template or false 
+     */
+    public function get_on_booking_template()
+    {
+        if (!is_null($this->fields['notification_template'])) {
+            return $this->fields['notification_template'];
+        }
+        return false;
+    }
 
     /**
      * get on changes template
@@ -185,12 +196,22 @@ class WBK_Service extends WBK_Model_Object
      */
     public function get_on_approval_template()
     {
-        if (!is_null($this->fields['approval_template'])) {
+        if (isset($this->fields['approval_template'])) {
             return $this->fields['approval_template'];
         }
         return false;
     }
-
+    /**
+     * get on approval template
+     * @return int id of the on changed template
+     */
+    public function get_arrived_template()
+    {
+        if (!is_null($this->fields['arrived_template'])) {
+            return $this->fields['arrived_template'];
+        }
+        return false;
+    }
     /**
      * get the service fee
      * @return flot service fee
@@ -211,6 +232,17 @@ class WBK_Service extends WBK_Model_Object
             if ($unescaped) {
                 $value = stripcslashes($value);
             }
+        }
+        if ($value != '') {
+            if (function_exists('pll__')) {
+                $value = pll__(stripcslashes($value));
+            }
+            $value = apply_filters(
+                'wpml_translate_single_string',
+                stripcslashes($value),
+                'webba-booking-lite',
+                'Service description id ' . $this->get_id()
+            );
         }
         return $value;
     }
@@ -246,6 +278,14 @@ class WBK_Service extends WBK_Model_Object
         }
         return '';
     }
+
+    public function get_woo_product()
+    {
+        if (!is_null($this->fields['woo_product'])) {
+            return $this->fields['woo_product'];
+        }
+        return 0;
+    }
     public function has_only_arrival_payment_method()
     {
         if ($this->get_payment_methods() == '') {
@@ -268,5 +308,23 @@ class WBK_Service extends WBK_Model_Object
             }
         }
         return false;
+    }
+    public function is_payable()
+    {
+        if ($this->get_payment_methods() == '') {
+            return false;
+        }
+        $payment_methods = json_decode($this->get_payment_methods(), true);
+        if (!is_array($payment_methods)) {
+            return false;
+        }
+        if (
+            count($payment_methods) == 1 &&
+            $payment_methods[0] == 'arrival' &&
+            get_option('wbk_skip_on_arrival_payment_method', 'true') == 'true'
+        ) {
+            return false;
+        }
+        return true;
     }
 }

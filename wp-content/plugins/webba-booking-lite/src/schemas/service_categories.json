@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "category_name": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Nom de cat\u00e9gorie",
+            "tab": "general",
+            "misc": {
+                "tooltip": "Entrer un nom de cat\u00e9gorie"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "list": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": false,
+            "title": "Services",
+            "tab": "general",
+            "misc": {
+                "tooltip": "S\u00e9lectionner les services \u00e0 inclure dans cette cat\u00e9gorie.",
+                "options": "services",
+                "multiple": true
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": null,
+            "editable": true
+        }
+    }
+}

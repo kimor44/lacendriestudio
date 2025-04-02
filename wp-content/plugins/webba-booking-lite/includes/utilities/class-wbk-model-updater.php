@@ -3,12 +3,9 @@
 if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
-class WBK_Model_Updater
-{
-    static function is_update_required( $version )
-    {
+class WBK_Model_Updater {
+    static function is_update_required( $version ) {
         $update_status = get_option( 'wbk_update_status', '' );
-        
         if ( $update_status == '' ) {
             return true;
         } else {
@@ -16,47 +13,38 @@ class WBK_Model_Updater
                 return true;
             }
         }
-        
         return false;
     }
-    
-    static function set_update_as_complete( $version )
-    {
+
+    static function set_update_as_complete( $version ) {
         $update_status = get_option( 'wbk_update_status', '' );
-        
         if ( $update_status == '' ) {
             $update_status = array();
             $update_status[$version] = true;
         } else {
             $update_status[$version] = true;
         }
-        
         update_option( 'wbk_update_status', $update_status );
     }
-    
-    public static function run_update()
-    {
-        /*
-        self::update_4_0_0();
-        self::update_4_0_49();
-        self::update_4_0_62();
-        self::update_4_0_73();
-        self::update_4_1_3();
-        self::update_4_1_4();
-        self::update_4_1_8();
-        self::update_4_2_8();
-        */
+
+    public static function run_update() {
         self::update_4_3_0_1();
         self::update_4_5_1();
         self::update_5_0_0_static();
         self::update_5_0_11();
+        self::update_5_0_37();
+        self::update_5_0_44();
+        self::update_5_0_46();
+        self::update_5_0_55();
+        self::update_5_1_0();
+        self::update_5_1_2();
+        self::update_5_1_3();
+        self::update_5_1_5();
     }
-    
-    public static function run_previous_update()
-    {
+
+    public static function run_previous_update() {
         $update_status = get_option( 'wbk_update_status', '' );
         $run_previous_update = false;
-        
         if ( $update_status == '' ) {
             $run_previous_update = true;
             $update_status = array();
@@ -65,8 +53,6 @@ class WBK_Model_Updater
                 $run_previous_update = true;
             }
         }
-        
-        
         if ( $run_previous_update ) {
             self::update_1_2_0();
             self::update_1_3_0();
@@ -106,12 +92,10 @@ class WBK_Model_Updater
             $update_status['run_prev'] = true;
             update_option( 'wbk_update_status', $update_status );
         }
-    
     }
-    
-    static function update_1_2_0()
-    {
-        global  $wpdb ;
+
+    static function update_1_2_0() {
+        global $wpdb;
         $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_services';
         $found = false;
         foreach ( $wpdb->get_col( "DESC " . $table_name, 0 ) as $column_name ) {
@@ -123,11 +107,10 @@ class WBK_Model_Updater
             $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_services ADD `form` int unsigned NOT NULL default 0" );
         }
     }
-    
+
     // add fields used since 1.3.0
-    static function update_1_3_0()
-    {
-        global  $wpdb ;
+    static function update_1_3_0() {
+        global $wpdb;
         $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_services';
         $found = false;
         foreach ( $wpdb->get_col( "DESC " . $table_name, 0 ) as $column_name ) {
@@ -149,11 +132,10 @@ class WBK_Model_Updater
             $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments ADD `quantity` int unsigned NOT NULL default 1" );
         }
     }
-    
+
     // add fields used since 3.0.0
-    static function update_3_0_0()
-    {
-        global  $wpdb ;
+    static function update_3_0_0() {
+        global $wpdb;
         $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_services';
         $found = false;
         foreach ( $wpdb->get_col( "DESC " . $table_name, 0 ) as $column_name ) {
@@ -193,11 +175,10 @@ class WBK_Model_Updater
             $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments ADD `payment_id` varchar(255) NOT NULL DEFAULT ''" );
         }
     }
-    
+
     // add tables and fields used since 3.0.3
-    static function update_3_0_3()
-    {
-        global  $wpdb ;
+    static function update_3_0_3() {
+        global $wpdb;
         // email templates table
         $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_email_templates (\r\n                id int unsigned NOT NULL auto_increment PRIMARY KEY,\r\n                name varchar(128) default '',\r\n                template varchar(2000) default '',\r\n                UNIQUE KEY id (id)\r\n            )\r\n            DEFAULT CHARACTER SET = utf8\r\n            COLLATE = utf8_general_ci" );
         $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_services';
@@ -220,11 +201,10 @@ class WBK_Model_Updater
             $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_services ADD `reminder_template` int unsigned NOT NULL default 0" );
         }
     }
-    
+
     // add fields used since 3.0.15
-    static function update_3_0_15()
-    {
-        global  $wpdb ;
+    static function update_3_0_15() {
+        global $wpdb;
         $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_services';
         $found = false;
         foreach ( $wpdb->get_col( "DESC " . $table_name, 0 ) as $column_name ) {
@@ -237,80 +217,15 @@ class WBK_Model_Updater
         }
         self::create_ht_file();
     }
-    
+
     // add tables and fields used since 3.1.0
-    static function update_3_1_0()
-    {
-        global  $wpdb ;
-        if ( get_option( 'wbk_3_1_0_upd', '' ) == 'done' ) {
-            return;
-        }
-        // create service category table
-        $wpdb->query( "CREATE TABLE IF NOT EXISTS " . get_option( 'wbk_db_prefix', '' ) . "wbk_service_categories(\r\n                id int unsigned NOT NULL auto_increment PRIMARY KEY,\r\n                name varchar(128) default '',\r\n                category_list varchar(512) default '',\r\n                UNIQUE KEY id (id)\r\n            )\r\n            DEFAULT CHARACTER SET = utf8\r\n            COLLATE = utf8_general_ci" );
-        // add token and created_on fields into wbk_appointments db_prefix
-        $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments';
-        $found = false;
-        foreach ( $wpdb->get_col( "DESC " . $table_name, 0 ) as $column_name ) {
-            if ( $column_name == 'token' ) {
-                $found = true;
-            }
-        }
-        if ( !$found ) {
-            $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments ADD `token` varchar(255) NOT NULL DEFAULT ''" );
-        }
-        // add payment cancel tokend
-        $found = false;
-        foreach ( $wpdb->get_col( "DESC " . $table_name, 0 ) as $column_name ) {
-            if ( $column_name == 'payment_cancel_token' ) {
-                $found = true;
-            }
-        }
-        if ( !$found ) {
-            $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments ADD `payment_cancel_token` varchar(255) NOT NULL DEFAULT''" );
-        }
-        // add transaction started
-        $found = false;
-        foreach ( $wpdb->get_col( "DESC " . $table_name, 0 ) as $column_name ) {
-            if ( $column_name == 'expiration_time' ) {
-                $found = true;
-            }
-        }
-        if ( !$found ) {
-            $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments ADD `expiration_time` int unsigned NOT NULL default 0" );
-        }
-        // extends description field
-        $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments CHANGE `description` `description` VARCHAR(1024) NOT NULL DEFAULT ''" );
-        // add triggers
-        $wpdb->update(
-            get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-            array(
-            'status' => 'approved',
-        ),
-            array(
-            'status' => 'pending',
-        ),
-            array( '%s' ),
-            array( '%s' )
-        );
-        $wpdb->update(
-            get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
-            array(
-            'status' => 'paid_approved',
-        ),
-            array(
-            'status' => 'paid',
-        ),
-            array( '%s' ),
-            array( '%s' )
-        );
-        add_option( 'wbk_3_1_0_upd', 'done' );
-        update_option( 'wbk_3_1_0_upd', 'done' );
+    static function update_3_1_0() {
+        return;
     }
-    
+
     // add fields used since 3.1.21
-    static function update_3_1_21()
-    {
-        global  $wpdb ;
+    static function update_3_1_21() {
+        global $wpdb;
         if ( get_option( 'wbk_3_1_21_upd', '' ) == 'done' ) {
             return;
         }
@@ -327,11 +242,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_1_21_upd', 'done' );
         update_option( 'wbk_3_1_21_upd', 'done' );
     }
-    
+
     // update db structure according to 3.1.6
-    static function update_3_1_6()
-    {
-        global  $wpdb ;
+    static function update_3_1_6() {
+        global $wpdb;
         if ( get_option( 'wbk_3_1_6_upd', '' ) == 'done' ) {
             return;
         }
@@ -340,10 +254,9 @@ class WBK_Model_Updater
         add_option( 'wbk_3_1_6_upd', 'done' );
         update_option( 'wbk_3_1_6_upd', 'done' );
     }
-    
-    static function update_3_1_27()
-    {
-        global  $wpdb ;
+
+    static function update_3_1_27() {
+        global $wpdb;
         if ( get_option( 'wbk_3_1_27_upd', '' ) == 'done' ) {
             return;
         }
@@ -360,10 +273,9 @@ class WBK_Model_Updater
         add_option( 'wbk_3_1_27_upd', 'done' );
         update_option( 'wbk_3_1_27_upd', 'done' );
     }
-    
-    static function update_3_1_31()
-    {
-        global  $wpdb ;
+
+    static function update_3_1_31() {
+        global $wpdb;
         if ( get_option( 'wbk_3_1_31_upd', '' ) == 'done' ) {
             return;
         }
@@ -380,11 +292,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_1_31_upd', 'done' );
         update_option( 'wbk_3_1_31_upd', 'done' );
     }
-    
+
     //update db structure to version 3.2.0
-    static function update_3_2_0()
-    {
-        global  $wpdb ;
+    static function update_3_2_0() {
+        global $wpdb;
         if ( get_option( 'wbk_3_2_0_upd', '' ) == 'done' ) {
             return;
         }
@@ -413,11 +324,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_2_0_upd', 'done' );
         update_option( 'wbk_3_2_0_upd', 'done' );
     }
-    
+
     //update db structure to version 3.2.2
-    static function update_3_2_2()
-    {
-        global  $wpdb ;
+    static function update_3_2_2() {
+        global $wpdb;
         if ( get_option( 'wbk_3_2_2_upd', '' ) == 'done' ) {
             return;
         }
@@ -434,11 +344,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_2_2_upd', 'done' );
         update_option( 'wbk_3_2_2_upd', 'done' );
     }
-    
+
     //update db structure to version 3.2.3
-    static function update_3_2_3()
-    {
-        global  $wpdb ;
+    static function update_3_2_3() {
+        global $wpdb;
         if ( get_option( 'wbk_3_2_3_upd', '' ) == 'done' ) {
             return;
         }
@@ -455,11 +364,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_2_3_upd', 'done' );
         update_option( 'wbk_3_2_3_upd', 'done' );
     }
-    
+
     // update db structure to version 3.2.16
-    static function update_3_2_16()
-    {
-        global  $wpdb ;
+    static function update_3_2_16() {
+        global $wpdb;
         if ( get_option( 'wbk_3_2_16_upd', '' ) == 'done' ) {
             return;
         }
@@ -468,11 +376,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_2_16_upd', 'done' );
         update_option( 'wbk_3_2_16_upd', 'done' );
     }
-    
+
     // update db structure to version 3.2.18
-    static function update_3_2_18()
-    {
-        global  $wpdb ;
+    static function update_3_2_18() {
+        global $wpdb;
         if ( get_option( 'wbk_3_2_18_upd', '' ) == 'done' ) {
             return;
         }
@@ -489,11 +396,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_2_18_upd', 'done' );
         update_option( 'wbk_3_2_18_upd', 'done' );
     }
-    
+
     // update db structure to version 3.2.21
-    static function update_3_2_21()
-    {
-        global  $wpdb ;
+    static function update_3_2_21() {
+        global $wpdb;
         if ( get_option( 'wbk_3_2_21_upd', '' ) == 'done' ) {
             return;
         }
@@ -501,11 +407,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_2_21_upd', 'done' );
         update_option( 'wbk_3_2_21_upd', 'done' );
     }
-    
+
     // update db structure to version 3.3.7
-    static function update_3_3_7()
-    {
-        global  $wpdb ;
+    static function update_3_3_7() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_7_upd', '' ) == 'done' ) {
             return;
         }
@@ -523,11 +428,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_7_upd', 'done' );
         update_option( 'wbk_3_3_7_upd', 'done' );
     }
-    
+
     // update db structure to version 3.3.7.1
-    static function update_3_3_7_1()
-    {
-        global  $wpdb ;
+    static function update_3_3_7_1() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_7_1_upd', '' ) == 'done' ) {
             return;
         }
@@ -544,11 +448,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_7_1_upd', 'done' );
         update_option( 'wbk_3_3_7_1_upd', 'done' );
     }
-    
+
     // update db structure to version 3.3.9
-    static function update_3_3_9()
-    {
-        global  $wpdb ;
+    static function update_3_3_9() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_9_upd', '' ) == 'done' ) {
             return;
         }
@@ -565,11 +468,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_9_upd', 'done' );
         update_option( 'wbk_3_3_9_upd', 'done' );
     }
-    
+
     // update db structure to version 3.2.12+
-    static function update_3_3_12()
-    {
-        global  $wpdb ;
+    static function update_3_3_12() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_12_upd', '' ) == 'done' ) {
             return;
         }
@@ -577,11 +479,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_12_upd', 'done' );
         update_option( 'wbk_3_3_12_upd', 'done' );
     }
-    
+
     // update db structure to version 3.2.14
-    static function update_3_3_14()
-    {
-        global  $wpdb ;
+    static function update_3_3_14() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_14_upd', '' ) == 'done' ) {
             return;
         }
@@ -598,11 +499,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_14_upd', 'done' );
         update_option( 'wbk_3_3_14_upd', 'done' );
     }
-    
+
     // update db structure to version 3.2.14(1)
-    static function update_3_3_14_1()
-    {
-        global  $wpdb ;
+    static function update_3_3_14_1() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_14_1_upd', '' ) == 'done' ) {
             return;
         }
@@ -613,19 +513,16 @@ class WBK_Model_Updater
                 $found = true;
             }
         }
-        
         if ( !$found ) {
             $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_gg_calendars ADD cache_content longtext NOT NULL default ''" );
             $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_gg_calendars ADD cache_time int unsigned NOT NULL default 0" );
         }
-        
         add_option( 'wbk_3_3_14_1_upd', 'done' );
         update_option( 'wbk_3_3_14_1_upd', 'done' );
     }
-    
-    static function update_3_4_8()
-    {
-        global  $wpdb ;
+
+    static function update_3_4_8() {
+        global $wpdb;
         if ( get_option( 'update_3_4_8', '' ) == 'done' ) {
             return;
         }
@@ -637,21 +534,18 @@ class WBK_Model_Updater
                 continue;
             }
             $prepare_time = $service->getPrepareTime();
-            
             if ( $prepare_time != 0 ) {
                 $service->setPrepareTime( $prepare_time * 60 );
                 $service->update();
             }
-        
         }
         add_option( 'update_3_4_8', 'done' );
         update_option( 'update_3_4_8', 'done' );
     }
-    
+
     // update db structure to version 3.3.14.2
-    static function update_3_3_14_2()
-    {
-        global  $wpdb ;
+    static function update_3_3_14_2() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_14_2_upd', '' ) == 'done' ) {
             return;
         }
@@ -668,11 +562,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_14_2_upd', 'done' );
         update_option( 'wbk_3_3_14_2_upd', 'done' );
     }
-    
+
     // update db structure to version 3.3.18
-    static function update_3_3_18()
-    {
-        global  $wpdb ;
+    static function update_3_3_18() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_18_upd', '' ) == 'done' ) {
             return;
         }
@@ -680,11 +573,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_18_upd', 'done' );
         update_option( 'wbk_3_3_18_upd', 'done' );
     }
-    
+
     // update db structure to version 3.4.0
-    static function update_3_3_31()
-    {
-        global  $wpdb ;
+    static function update_3_3_31() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_31_upd', '' ) == 'done' ) {
             return;
         }
@@ -701,11 +593,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_31_upd', 'done' );
         update_option( 'wbk_3_3_31_upd', 'done' );
     }
-    
+
     // update db structure to version 3.3.37
-    static function update_3_3_37()
-    {
-        global  $wpdb ;
+    static function update_3_3_37() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_37_upd', '' ) == 'done' ) {
             return;
         }
@@ -722,11 +613,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_37_upd', 'done' );
         update_option( 'wbk_3_3_37_upd', 'done' );
     }
-    
+
     // update db structure to version 3.3.41
-    static function update_3_3_41()
-    {
-        global  $wpdb ;
+    static function update_3_3_41() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_41_upd', '' ) == 'done' ) {
             return;
         }
@@ -768,24 +658,23 @@ class WBK_Model_Updater
             $result = $wpdb->update(
                 get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
                 array(
-                'extra' => $extras,
-            ),
+                    'extra' => $extras,
+                ),
                 array(
-                'id' => $app_id,
-            ),
-                array( '%s' ),
-                array( '%d' )
+                    'id' => $app_id,
+                ),
+                array('%s'),
+                array('%d')
             );
         }
         $found = false;
         add_option( 'wbk_3_3_41_upd', 'done' );
         update_option( 'wbk_3_3_41_upd', 'done' );
     }
-    
+
     // update db structure to version 3.3.42
-    static function update_3_3_42()
-    {
-        global  $wpdb ;
+    static function update_3_3_42() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_42_upd', '' ) == 'done' ) {
             return;
         }
@@ -811,11 +700,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_42_upd', 'done' );
         update_option( 'wbk_3_3_42_upd', 'done' );
     }
-    
+
     // update db structure to version 3.3.42
-    static function update_3_3_61()
-    {
-        global  $wpdb ;
+    static function update_3_3_61() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_61_upd', '' ) == 'done' ) {
             return;
         }
@@ -823,10 +711,9 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_61_upd', 'done' );
         update_option( 'wbk_3_3_61_upd', 'done' );
     }
-    
-    static function update_3_3_68()
-    {
-        global  $wpdb ;
+
+    static function update_3_3_68() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_68_upd', '' ) == 'done' ) {
             return;
         }
@@ -843,10 +730,9 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_68_upd', 'done' );
         update_option( 'wbk_3_3_68_upd', 'done' );
     }
-    
-    static function update_3_3_73()
-    {
-        global  $wpdb ;
+
+    static function update_3_3_73() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_73_upd', '' ) == 'done' ) {
             return;
         }
@@ -858,20 +744,17 @@ class WBK_Model_Updater
                 continue;
             }
             $prepare_time = $service->getPrepareTime();
-            
             if ( $prepare_time != 0 ) {
                 $service->setPrepareTime( $prepare_time * 24 );
                 $service->update();
             }
-        
         }
         add_option( 'wbk_3_3_73_upd', 'done' );
         update_option( 'wbk_3_3_73_upd', 'done' );
     }
-    
-    static function update_3_3_102()
-    {
-        global  $wpdb ;
+
+    static function update_3_3_102() {
+        global $wpdb;
         if ( get_option( 'wbk_3_3_102_upd', '' ) == 'done' ) {
             return;
         }
@@ -881,11 +764,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_3_102_upd', 'done' );
         update_option( 'wbk_3_3_102_upd', 'done' );
     }
-    
+
     // update db structure to version 3.4.21
-    static function update_3_4_21()
-    {
-        global  $wpdb ;
+    static function update_3_4_21() {
+        global $wpdb;
         if ( get_option( 'wbk_3_4_21_upd', '' ) == 'done' ) {
             return;
         }
@@ -902,11 +784,10 @@ class WBK_Model_Updater
         add_option( 'wbk_3_4_21_upd', 'done' );
         update_option( 'wbk_3_4_21_upd', 'done' );
     }
-    
+
     // update db structure to version 3.4.25
-    static function update_3_4_25()
-    {
-        global  $wpdb ;
+    static function update_3_4_25() {
+        global $wpdb;
         if ( get_option( 'wbk_3_4_25_upd', '' ) == 'done' ) {
             return;
         }
@@ -923,10 +804,9 @@ class WBK_Model_Updater
         add_option( 'wbk_3_4_25_upd', 'done' );
         update_option( 'wbk_3_4_25_upd', 'done' );
     }
-    
+
     // create export file
-    static function create_ht_file()
-    {
+    static function create_ht_file() {
         $path = WP_WEBBA_BOOKING__PLUGIN_DIR . DIRECTORY_SEPARATOR . 'export' . DIRECTORY_SEPARATOR . '.htaccess';
         $content = "RewriteEngine On" . "\r\n";
         $content .= "RewriteCond %{HTTP_REFERER} !^" . get_admin_url() . 'admin.php\\?page\\=wbk-appointments' . '.* [NC]' . "\r\n";
@@ -935,353 +815,22 @@ class WBK_Model_Updater
             file_put_contents( $path, $content );
         }
     }
-    
-    static function update_4_0_0()
-    {
-        global  $wpdb ;
-        
-        if ( self::is_update_required( '4.0.0_service_data_types' ) ) {
-            $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_services CHANGE `multi_mode_limit` `multi_mode_limit` int unsigned NULL default NULL" );
-            $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_services CHANGE `multi_mode_low_limit` `multi_mode_low_limit` int unsigned NULL default NULL" );
-            $service_ids = WBK_Model_Utils::get_service_ids();
-            foreach ( $service_ids as $service_id ) {
-                $service = new WBK_Service( $service_id );
-                $value = $business_hours = $service->get( 'multi_mode_limit' );
-                if ( $value == 0 ) {
-                    $wpdb->update(
-                        get_option( 'wbk_db_prefix', '' ) . 'wbk_services',
-                        array(
-                        'multi_mode_limit' => NULL,
-                    ),
-                        array(
-                        'id' => $service_id,
-                    ),
-                        array( '%s' ),
-                        array( '%d' )
-                    );
-                }
-                $value = $business_hours = $service->get( 'multi_mode_low_limit' );
-                if ( $value == 0 ) {
-                    $wpdb->update(
-                        get_option( 'wbk_db_prefix', '' ) . 'wbk_services',
-                        array(
-                        'multi_mode_low_limit' => NULL,
-                    ),
-                        array(
-                        'id' => $service_id,
-                    ),
-                        array( '%s' ),
-                        array( '%d' )
-                    );
-                }
-            }
-            self::set_update_as_complete( '4.0.0_service_data_types' );
-        }
-        
-        
-        if ( self::is_update_required( '4.0.0_service_business_hours' ) ) {
-            $service_ids = WBK_Model_Utils::get_service_ids();
-            foreach ( $service_ids as $service_id ) {
-                $service = new WBK_Service( $service_id );
-                $business_hours = $service->get( 'business_hours' );
-                if ( $business_hours == '' ) {
-                    continue;
-                }
-                $arr_bh = explode( ';', $business_hours );
-                $business_hours = new WBK_Business_Hours();
-                $business_hours->setFromArray( $arr_bh );
-                $result = array(
-                    'dow_availability' => array(),
-                );
-                $day = 'monday';
-                $day_number = 1;
-                $interval_count = $business_hours->getIntervalCount( $day );
-                if ( $business_hours->isWorkday( $day ) ) {
-                    for ( $i = 1 ;  $i <= $interval_count ;  $i++ ) {
-                        $interval = $business_hours->getInterval( $day, $i );
-                        $start_time = $interval[0] - 2;
-                        $end_time = $interval[1] - 2;
-                        $result['dow_availability'][] = array(
-                            'day_of_week' => $day_number,
-                            'start'       => $start_time,
-                            'end'         => $end_time,
-                            'status'      => 'active',
-                        );
-                    }
-                }
-                $day = 'tuesday';
-                $day_number = 2;
-                $interval_count = $business_hours->getIntervalCount( $day );
-                if ( $business_hours->isWorkday( $day ) ) {
-                    for ( $i = 1 ;  $i <= $interval_count ;  $i++ ) {
-                        $interval = $business_hours->getInterval( $day, $i );
-                        $start_time = $interval[0] - 2;
-                        $end_time = $interval[1] - 2;
-                        $result['dow_availability'][] = array(
-                            'day_of_week' => $day_number,
-                            'start'       => $start_time,
-                            'end'         => $end_time,
-                            'status'      => 'active',
-                        );
-                    }
-                }
-                $day = 'wednesday';
-                $day_number = 3;
-                $interval_count = $business_hours->getIntervalCount( $day );
-                if ( $business_hours->isWorkday( $day ) ) {
-                    for ( $i = 1 ;  $i <= $interval_count ;  $i++ ) {
-                        $interval = $business_hours->getInterval( $day, $i );
-                        $start_time = $interval[0] - 2;
-                        $end_time = $interval[1] - 2;
-                        $result['dow_availability'][] = array(
-                            'day_of_week' => $day_number,
-                            'start'       => $start_time,
-                            'end'         => $end_time,
-                            'status'      => 'active',
-                        );
-                    }
-                }
-                $day = 'thursday';
-                $day_number = 4;
-                $interval_count = $business_hours->getIntervalCount( $day );
-                if ( $business_hours->isWorkday( $day ) ) {
-                    for ( $i = 1 ;  $i <= $interval_count ;  $i++ ) {
-                        $interval = $business_hours->getInterval( $day, $i );
-                        $start_time = $interval[0] - 2;
-                        $end_time = $interval[1] - 2;
-                        $result['dow_availability'][] = array(
-                            'day_of_week' => $day_number,
-                            'start'       => $start_time,
-                            'end'         => $end_time,
-                            'status'      => 'active',
-                        );
-                    }
-                }
-                $day = 'friday';
-                $day_number = 5;
-                $interval_count = $business_hours->getIntervalCount( $day );
-                if ( $business_hours->isWorkday( $day ) ) {
-                    for ( $i = 1 ;  $i <= $interval_count ;  $i++ ) {
-                        $interval = $business_hours->getInterval( $day, $i );
-                        $start_time = $interval[0] - 2;
-                        $end_time = $interval[1] - 2;
-                        $result['dow_availability'][] = array(
-                            'day_of_week' => $day_number,
-                            'start'       => $start_time,
-                            'end'         => $end_time,
-                            'status'      => 'active',
-                        );
-                    }
-                }
-                $day = 'saturday';
-                $day_number = 6;
-                $interval_count = $business_hours->getIntervalCount( $day );
-                if ( $business_hours->isWorkday( $day ) ) {
-                    for ( $i = 1 ;  $i <= $interval_count ;  $i++ ) {
-                        $interval = $business_hours->getInterval( $day, $i );
-                        $start_time = $interval[0] - 2;
-                        $end_time = $interval[1] - 2;
-                        $result['dow_availability'][] = array(
-                            'day_of_week' => $day_number,
-                            'start'       => $start_time,
-                            'end'         => $end_time,
-                            'status'      => 'active',
-                        );
-                    }
-                }
-                $day = 'sunday';
-                $day_number = 7;
-                $interval_count = $business_hours->getIntervalCount( $day );
-                if ( $business_hours->isWorkday( $day ) ) {
-                    for ( $i = 1 ;  $i <= $interval_count ;  $i++ ) {
-                        $interval = $business_hours->getInterval( $day, $i );
-                        $start_time = $interval[0] - 2;
-                        $end_time = $interval[1] - 2;
-                        $result['dow_availability'][] = array(
-                            'day_of_week' => $day_number,
-                            'start'       => $start_time,
-                            'end'         => $end_time,
-                            'status'      => 'active',
-                        );
-                    }
-                }
-                $result = json_encode( $result );
-                $wpdb->update(
-                    get_option( 'wbk_db_prefix', '' ) . 'wbk_services',
-                    array(
-                    'business_hours_v4' => $result,
-                ),
-                    array(
-                    'id' => $service_id,
-                ),
-                    array( '%s' ),
-                    array( '%d' )
-                );
-            }
-            self::set_update_as_complete( '4.0.0_service_business_hours' );
-        }
-        
-        
-        if ( self::is_update_required( '4.0.0_service_array_objects' ) ) {
-            $service_ids = WBK_Model_Utils::get_service_ids();
-            foreach ( $service_ids as $service_id ) {
-                $service = new WBK_Service( $service_id );
-                $gg_calendars = $service->get( 'gg_calendars' );
-                if ( json_decode( $gg_calendars ) === NULL ) {
-                    
-                    if ( $gg_calendars != '' ) {
-                        $gg_calendars = json_encode( explode( ';', $gg_calendars ) );
-                        $wpdb->update(
-                            get_option( 'wbk_db_prefix', '' ) . 'wbk_services',
-                            array(
-                            'gg_calendars' => $gg_calendars,
-                        ),
-                            array(
-                            'id' => $service_id,
-                        ),
-                            array( '%s' ),
-                            array( '%d' )
-                        );
-                    }
-                
-                }
-                $payment_methods = $service->get( 'payment_methods' );
-                if ( json_decode( $payment_methods ) === NULL ) {
-                    
-                    if ( $payment_methods != '' ) {
-                        $payment_methods = json_encode( explode( ';', $payment_methods ) );
-                        $wpdb->update(
-                            get_option( 'wbk_db_prefix', '' ) . 'wbk_services',
-                            array(
-                            'payment_methods' => $payment_methods,
-                        ),
-                            array(
-                            'id' => $service_id,
-                        ),
-                            array( '%s' ),
-                            array( '%d' )
-                        );
-                    }
-                
-                }
-                $users = $service->get( 'users' );
-                if ( json_decode( $users ) === NULL ) {
-                    
-                    if ( $users != '' ) {
-                        $users = json_encode( explode( ';', $users ) );
-                        $wpdb->update(
-                            get_option( 'wbk_db_prefix', '' ) . 'wbk_services',
-                            array(
-                            'users' => $users,
-                        ),
-                            array(
-                            'id' => $service_id,
-                        ),
-                            array( '%s' ),
-                            array( '%d' )
-                        );
-                    }
-                
-                }
-            }
-            self::set_update_as_complete( '4.0.0_service_array_objects' );
-        }
-        
-        
-        if ( self::is_update_required( '4.0.0.coupons' ) ) {
-            $coupons = WBK_Model_Utils::get_coupons();
-            foreach ( $coupons as $key => $value ) {
-                $coupon = new WBK_Coupon( $key );
-                if ( $coupon->get( 'services' ) != '' ) {
-                    
-                    if ( is_null( json_decode( $coupon->get( 'services' ) ) ) ) {
-                        $services = json_encode( explode( ',', $coupon->get( 'services' ) ) );
-                        $wpdb->update(
-                            get_option( 'wbk_db_prefix', '' ) . 'wbk_coupons',
-                            array(
-                            'services' => $services,
-                        ),
-                            array(
-                            'id' => $key,
-                        ),
-                            array( '%s' ),
-                            array( '%d' )
-                        );
-                    }
-                
-                }
-                
-                if ( $coupon->get( 'date_range' ) != '' ) {
-                    $dates = explode( ' - ', $coupon->get( 'date_range' ) );
-                    
-                    if ( is_array( $dates ) && count( $dates ) == 2 ) {
-                        $start = strtotime( $dates[0] );
-                        $end = strtotime( $dates[1] );
-                        $start = date( 'm/d/Y', $start );
-                        $end = date( 'm/d/Y', $end );
-                        $result = $start . ' - ' . $end;
-                        $wpdb->update(
-                            get_option( 'wbk_db_prefix', '' ) . 'wbk_coupons',
-                            array(
-                            'date_range' => $result,
-                        ),
-                            array(
-                            'id' => $key,
-                        ),
-                            array( '%s' ),
-                            array( '%d' )
-                        );
-                    }
-                
-                }
-            
-            }
-            self::set_update_as_complete( '4.0.0.coupons' );
-        }
-        
-        
-        if ( self::is_update_required( '4.0.0.service_categories' ) ) {
-            $category_ids = WBK_Model_Utils::get_service_category_ids();
-            foreach ( $category_ids as $category_id ) {
-                $service_category = new WBK_Service_Category( $category_id );
-                
-                if ( is_null( json_decode( $service_category->get( 'category_list' ) ) ) ) {
-                    $list = json_encode( explode( ',', $service_category->get( 'category_list' ) ) );
-                    $wpdb->update(
-                        get_option( 'wbk_db_prefix', '' ) . 'wbk_service_categories',
-                        array(
-                        'category_list' => $list,
-                    ),
-                        array(
-                        'id' => $category_id,
-                    ),
-                        array( '%s' ),
-                        array( '%d' )
-                    );
-                }
-            
-            }
-            self::set_update_as_complete( '4.0.0.service_categories' );
-        }
-    
+
+    static function update_4_0_0() {
+        return;
     }
-    
-    static function update_4_0_49()
-    {
-        global  $wpdb ;
-        
+
+    static function update_4_0_49() {
+        global $wpdb;
         if ( self::is_update_required( '4.0.49' ) ) {
             $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_coupons CHANGE `amount_fixed` `amount_fixed` float unsigned NULL default NULL" );
             $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_coupons CHANGE `amount_percentage` `amount_percentage` float unsigned NULL default NULL" );
             self::set_update_as_complete( '4.0.49' );
         }
-    
     }
-    
-    static function update_4_0_62()
-    {
-        global  $wpdb ;
-        
+
+    static function update_4_0_62() {
+        global $wpdb;
         if ( self::is_update_required( 'update_4_0_62' ) ) {
             $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments';
             $found = false;
@@ -1299,24 +848,18 @@ class WBK_Model_Updater
             }
             self::set_update_as_complete( 'update_4_0_62' );
         }
-    
     }
-    
-    static function update_4_0_73()
-    {
-        global  $wpdb ;
-        
+
+    static function update_4_0_73() {
+        global $wpdb;
         if ( self::is_update_required( 'update_4_0_73' ) ) {
             $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_services CHANGE `description` `description` MEDIUMTEXT NOT NULL" );
             self::set_update_as_complete( 'update_4_0_73' );
         }
-    
     }
-    
-    static function update_table_names()
-    {
-        global  $wpdb ;
-        
+
+    static function update_table_names() {
+        global $wpdb;
         if ( self::is_update_required( 'update_4_1_0' ) || current_user_can( 'manage_options' ) && isset( $_GET['wbkforceupdate410'] ) ) {
             $prefix = $wpdb->prefix;
             $query = $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( 'wbk_appointments' ) );
@@ -1362,41 +905,31 @@ class WBK_Model_Updater
             update_option( 'wbk_db_prefix', $prefix );
             self::set_update_as_complete( 'update_4_1_0' );
         }
-    
     }
-    
-    static function update_4_1_3()
-    {
-        global  $wpdb ;
+
+    static function update_4_1_3() {
+        global $wpdb;
     }
-    
-    static function update_4_1_4()
-    {
-        
+
+    static function update_4_1_4() {
         if ( self::is_update_required( 'update_4_1_4' ) ) {
             $value = get_option( 'wbk_payment_item_name', '' );
             $value = str_replace( '#service ', '#service_name ', $value );
             update_option( 'wbk_payment_item_name', $value );
             self::set_update_as_complete( 'update_4_1_4' );
         }
-    
     }
-    
-    static function update_4_1_8()
-    {
-        global  $wpdb ;
-        
+
+    static function update_4_1_8() {
+        global $wpdb;
         if ( self::is_update_required( 'update_4_1_8' ) ) {
             $wpdb->query( "ALTER TABLE " . get_option( 'wbk_db_prefix', '' ) . "wbk_appointments CHANGE `time_offset` `time_offset` INT(11) NULL DEFAULT NULL" );
             self::set_update_as_complete( 'update_4_1_8' );
         }
-    
     }
-    
-    static function update_4_2_8()
-    {
-        global  $wpdb ;
-        
+
+    static function update_4_2_8() {
+        global $wpdb;
         if ( self::is_update_required( 'update_4_2_8' ) ) {
             if ( get_option( 'wbk_paypal_mode' ) == 'Live' ) {
                 update_option( 'wbk_paypal_mode', 'live' );
@@ -1406,42 +939,33 @@ class WBK_Model_Updater
             }
             self::set_update_as_complete( 'update_4_2_8' );
         }
-    
     }
-    
-    static function update_4_3_0_1()
-    {
-        global  $wpdb ;
-        
+
+    static function update_4_3_0_1() {
+        global $wpdb;
         if ( self::is_update_required( 'update_4_3_0_1' ) ) {
             $wpdb->query( 'ALTER TABLE ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_services' . ' ROW_FORMAT=DYNAMIC' );
             $wpdb->query( 'ALTER TABLE ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments' . ' ROW_FORMAT=DYNAMIC' );
             self::set_update_as_complete( 'update_4_3_0_1' );
         }
-    
     }
-    
-    static function update_4_5_1()
-    {
-        global  $wpdb ;
-        
+
+    static function update_4_5_1() {
+        global $wpdb;
         if ( self::is_update_required( 'update_4_5_1' ) ) {
             update_option( 'wbk_payment_item_name', __( '#service_name on #appointment_day at #appointment_time', 'webba-booking-lite' ) );
             update_option( 'wbk_appointment_information', 'Appointment on #appointment_day #appointment_time' );
             self::set_update_as_complete( 'update_4_5_1' );
         }
-    
     }
-    
-    static function update_5_0_11()
-    {
+
+    static function update_5_0_11() {
         if ( self::is_update_required( 'update_5_0_11' ) ) {
             update_option( 'wbk_disable_security', 'true' );
         }
     }
-    
-    static function update_5_0_0_static()
-    {
+
+    static function update_5_0_0_static() {
         update_option( 'wbk_mode', 'webba5' );
         update_option( 'wbk_date_format', get_option( 'date_format' ) );
         update_option( 'wbk_time_format', get_option( 'time_format' ) );
@@ -1454,6 +978,192 @@ class WBK_Model_Updater
         update_option( 'wbk_email_customer_cancel_multiple_mode', 'one' );
         update_option( 'wbk_email_admin_cancel_multiple_mode', 'one' );
         update_option( 'wbk_email_admin_cancel_multiple_mode', 'one' );
+    }
+
+    static function update_5_0_37() {
+        global $wpdb;
+        if ( self::is_update_required( 'update_5_0_37' ) ) {
+            $previous_proudct_id = get_option( 'wbk_woo_product_id', '' );
+            if ( is_numeric( $previous_proudct_id ) ) {
+                $services_ids = WBK_Model_Utils::get_service_ids();
+                foreach ( $services_ids as $service_id ) {
+                    $service = new WBK_Service($service_id);
+                    if ( !$service->is_loaded() ) {
+                        continue;
+                    }
+                    if ( $service->get_payment_methods() == '' ) {
+                        continue;
+                    }
+                    $payment_methods = json_decode( $service->get_payment_methods(), true );
+                    if ( is_array( $payment_methods ) && in_array( 'woocommerce', $payment_methods ) ) {
+                        $service->set( 'woo_product', $previous_proudct_id );
+                        $service->save();
+                    }
+                }
+            }
+            self::set_update_as_complete( 'update_5_0_37' );
+        }
+    }
+
+    static function update_5_0_44() {
+        global $wpdb;
+        if ( self::is_update_required( 'update_5_0_44_1' ) ) {
+            $wpdb->query( 'ALTER TABLE ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_services CHANGE `multi_mode_limit` `multi_mode_limit` INT UNSIGNED NULL DEFAULT NULL' );
+            $wpdb->query( 'ALTER TABLE ' . get_option( 'wbk_db_prefix', '' ) . 'wbk_services CHANGE `multi_mode_low_limit` `multi_mode_low_limit` INT UNSIGNED NULL DEFAULT NULL' );
+            self::set_update_as_complete( 'update_5_0_44_1' );
+        }
+    }
+
+    static function update_5_0_46() {
+        global $wpdb;
+        if ( self::is_update_required( 'update_5_0_46' ) ) {
+            $default_value = array('complete_status', 'thankyou_message', 'complete_payment');
+            $value = get_option( 'wbk_woo_complete_action', $default_value );
+            if ( is_array( $value ) && !in_array( 'complete_payment', $value ) ) {
+                $value[] = 'complete_payment';
+                update_option( 'wbk_woo_complete_action', $value );
+            }
+            self::set_update_as_complete( 'update_5_0_46' );
+        }
+    }
+
+    /**
+     * Initialize automatic user creation and create booking customer role
+     *
+     * @return void
+     */
+    static function update_5_0_55() : void {
+        if ( !self::is_update_required( 'update_5_0_55' ) ) {
+            return;
+        }
+        if ( !wbk_fs()->is__premium_only() || !wbk_fs()->can_use_premium_code() ) {
+            return;
+        }
+        $services = WBK_Model_Utils::get_services();
+        if ( count( $services ) > 0 ) {
+            return;
+        }
+        update_option( 'wbk_create_user_on_booking', true );
+        self::set_update_as_complete( 'update_5_0_55' );
+    }
+
+    static function update_5_1_0() {
+        global $wpdb;
+        if ( self::is_update_required( 'update_5_1_0' ) ) {
+            // update business hours format
+            $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_services';
+            $new_column = 'business_hours';
+            $source_column = 'business_hours_v4';
+            $source_column_exists = $wpdb->get_results( $wpdb->prepare( "SHOW COLUMNS FROM `{$table_name}` LIKE %s", $source_column ) );
+            if ( !empty( $source_column_exists ) ) {
+                $wpdb->query( "UPDATE `{$table_name}` SET `{$new_column}` = `{$source_column}` WHERE `{$new_column}` IS NULL OR `{$new_column}` = ''" );
+            }
+            $wpdb->query( " ALTER TABLE `{$table_name}` CHANGE `business_hours` `business_hours` MEDIUMTEXT" );
+            foreach ( WBK_Model_Utils::get_service_ids() as $service_id ) {
+                $service = new WBK_Service($service_id);
+                if ( !$service->is_loaded() ) {
+                    continue;
+                }
+                $service->set( 'business_hours', WBK_Model_Utils::extract_bh_availability_from_v4( $service->get( 'business_hours' ) ) );
+                $service->save();
+            }
+            $prefix = get_option( 'wbk_db_prefix', '' );
+            // Process Google calendars table
+            $cal_table = $prefix . 'wbk_gg_calendars';
+            $cal_old = 'calendar_id';
+            $cal_new = 'ggid';
+            if ( $wpdb->get_var( "SHOW TABLES LIKE '{$cal_table}'" ) == $cal_table ) {
+                $new_exists = $wpdb->get_results( "SHOW COLUMNS FROM {$cal_table} LIKE '{$cal_new}'" );
+                if ( empty( $new_exists ) ) {
+                    $wpdb->query( "ALTER TABLE {$cal_table} ADD COLUMN `{$cal_new}` VARCHAR(256)" );
+                }
+                $old_exists = $wpdb->get_results( "SHOW COLUMNS FROM {$cal_table} LIKE '{$cal_old}'" );
+                if ( !empty( $old_exists ) ) {
+                    $wpdb->query( "UPDATE {$cal_table} SET `{$cal_new}` = `{$cal_old}` WHERE `{$cal_old}` IS NOT NULL" );
+                }
+            }
+            // Process service categories table
+            $cat_table = $prefix . 'wbk_service_categories';
+            $cat_old = 'category_list';
+            $cat_new = 'list';
+            if ( $wpdb->get_var( "SHOW TABLES LIKE '{$cat_table}'" ) == $cat_table ) {
+                $new_exists = $wpdb->get_results( "SHOW COLUMNS FROM {$cat_table} LIKE '{$cat_new}'" );
+                if ( empty( $new_exists ) ) {
+                    $wpdb->query( "ALTER TABLE {$cat_table} ADD COLUMN `{$cat_new}` VARCHAR(1024) NULL DEFAULT NULL" );
+                }
+                $old_exists = $wpdb->get_results( "SHOW COLUMNS FROM {$cat_table} LIKE '{$cat_old}'" );
+                if ( !empty( $old_exists ) ) {
+                    $wpdb->query( "UPDATE {$cat_table} SET `{$cat_new}` = `{$cat_old}` WHERE `{$cat_old}` IS NOT NULL" );
+                }
+            }
+            self::set_update_as_complete( 'update_5_1_0' );
+        }
+    }
+
+    static function update_5_1_2() {
+        global $wpdb;
+        if ( self::is_update_required( 'update_5_1_2' ) ) {
+            $table_name = get_option( 'wbk_db_prefix', '' ) . 'wbk_services';
+            $wpdb->query( " ALTER TABLE `{$table_name}` CHANGE `business_hours` `business_hours` MEDIUMTEXT" );
+            foreach ( WBK_Model_Utils::get_service_ids() as $service_id ) {
+                $service = new WBK_Service($service_id);
+                if ( !$service->is_loaded() ) {
+                    continue;
+                }
+                if ( strpos( $service->get( 'business_hours' ), 'dow_availability' ) !== false ) {
+                    $v4_res = WBK_Model_Utils::extract_bh_availability_from_v4( $service->get( 'business_hours_v4' ) );
+                    if ( !$v4_res ) {
+                        $v4_res = '[]';
+                    }
+                    $service->set( 'business_hours', $v4_res );
+                    $service->save();
+                }
+            }
+        }
+        self::set_update_as_complete( 'update_5_1_2' );
+    }
+
+    static function update_5_1_3() {
+        global $wpdb;
+        if ( self::is_update_required( 'update_5_1_3' ) ) {
+            foreach ( WBK_Model_Utils::get_service_ids() as $service_id ) {
+                $service = new WBK_Service($service_id);
+                if ( !$service->is_loaded() ) {
+                    continue;
+                }
+                $bh = json_decode( $service->get( 'business_hours' ) );
+                if ( $bh == false || is_null( $bh ) ) {
+                    $v4_res = WBK_Model_Utils::extract_bh_availability_from_v4( $service->get( 'business_hours_v4' ) );
+                    if ( !$v4_res ) {
+                        $v4_res = '[]';
+                    }
+                    $service->set( 'business_hours', $v4_res );
+                    $service->save();
+                }
+            }
+        }
+        self::set_update_as_complete( 'update_5_1_3' );
+    }
+
+    static function update_5_1_5() {
+        global $wpdb;
+        if ( self::is_update_required( 'update_5_1_5' ) ) {
+            foreach ( WBK_Model_Utils::get_pricing_rules() as $id => $name ) {
+                $pricing_rule = new WBK_Pricing_Rule($id);
+                if ( !$pricing_rule->is_loaded() || $pricing_rule->get_type() != 'day_of_week_and_time' ) {
+                    continue;
+                }
+                if ( strpos( $pricing_rule->get( 'day_time' ), 'dow_availability' ) !== false ) {
+                    $v4_res = WBK_Model_Utils::extract_bh_availability_from_v4( $pricing_rule->get( 'day_time' ) );
+                    if ( !$v4_res ) {
+                        $v4_res = '[]';
+                    }
+                    $pricing_rule->set( 'day_time', $v4_res );
+                    $pricing_rule->save();
+                }
+            }
+        }
+        self::set_update_as_complete( 'update_5_1_5' );
     }
 
 }

@@ -1,0 +1,108 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "appointment_id_cancelled": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "ID du rendez-vous annul\u00e9",
+            "tab": "",
+            "misc": {
+                "sub_type": "positive_integer"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": false
+        },
+        "appointment_cancelled_by": {
+            "type": "string",
+            "input_type": "textarea",
+            "hidden": false,
+            "title": "Annul\u00e9 par",
+            "tab": "",
+            "misc": null,
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": false
+        },
+        "appointment_service_id": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": false,
+            "title": "Service",
+            "tab": "",
+            "misc": {
+                "sub_type": "positive_integer"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": null,
+            "editable": false
+        },
+        "appointment_created_on": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "created_on",
+            "tab": "",
+            "misc": {
+                "sub_type": "positive_integer"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "appointment_name": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Nom",
+            "tab": "",
+            "misc": null,
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "appointment_phone": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "T\u00e9l\u00e9phone",
+            "tab": "",
+            "misc": null,
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": false
+        },
+        "appointment_description": {
+            "type": "string",
+            "input_type": "textarea",
+            "hidden": true,
+            "title": "Commentaire",
+            "tab": "",
+            "misc": null,
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "appointment_moment_price": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Price",
+            "tab": "",
+            "misc": null,
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": false
+        }
+    }
+}

@@ -4,20 +4,21 @@ if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
 // Webba Booking Stripe integration class
-class WBK_Stripe
-{
-    protected  $api_key ;
-    protected  $api_sectet ;
-    public  $tax ;
-    protected  $currency ;
-    public function init( $service_id )
-    {
-        return FALSE;
+class WBK_Stripe {
+    protected $api_key;
+
+    protected $api_sectet;
+
+    public $tax;
+
+    protected $currency;
+
+    public function init( $service_id ) {
+        return false;
     }
-    
-    public static function getCurrencies()
-    {
-        return array(
+
+    public static function getCurrencies() {
+        return [
             'USD',
             'AED',
             'AFN',
@@ -154,12 +155,11 @@ class WBK_Stripe
             'YER',
             'ZAR',
             'ZMW'
-        );
+        ];
     }
-    
-    public static function isCurrencyZeroDecimal( $currency )
-    {
-        $arr_list = array(
+
+    public static function isCurrencyZeroDecimal( $currency ) {
+        $arr_list = [
             'MGA',
             'BIF',
             'CLP',
@@ -175,45 +175,40 @@ class WBK_Stripe
             'KRW',
             'XOF',
             'XPF'
-        );
-        
+        ];
         if ( in_array( $currency, $arr_list ) ) {
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
-    
     }
-    
+
     public function charge(
         $booking_ids,
         $payment_details,
         $payment_id,
         $intent_id = null
-    )
-    {
-        return array( 0, __( 'Payment method not supported' ) );
+    ) {
+        return [0, __( 'Payment method not supported' )];
     }
-    
+
     public function charge_v5(
         $booking_ids,
         $payment_details,
         $method_id,
         $intent_id = null
-    )
-    {
-        return array( 0, __( 'Payment method not supported' ) );
+    ) {
+        return [0, __( 'Payment method not supported' )];
     }
-    
+
     public static function render_initial_form(
         $input,
         $payment_method,
         $booking_ids,
         $button_class
-    )
-    {
+    ) {
         if ( $payment_method == 'stripe' ) {
-            return $input .= WBK_Renderer::load_template( 'frontend/stripe_init', array( $booking_ids, $button_class ), false );
+            return $input .= WBK_Renderer::load_template( 'frontend/stripe_init', [$booking_ids, $button_class], false );
         }
         return $input;
     }

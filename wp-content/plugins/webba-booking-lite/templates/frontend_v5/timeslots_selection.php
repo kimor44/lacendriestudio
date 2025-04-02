@@ -1,5 +1,9 @@
 <?php
-if ( !defined( 'ABSPATH' ) ) exit;
+if (!defined('ABSPATH'))
+    exit;
 ?>
-<ul class="details-list-w">    
+<div class="wbk_limit_info">
+
+</div>
+<ul class="details-list-w">
 </ul>

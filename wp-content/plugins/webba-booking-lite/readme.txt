@@ -1,63 +1,67 @@
-=== Appointment & Event Booking Calendar Plugin - Webba Booking ===
+=== Appointment Booking & Scheduling Plugin — Webba Booking Calendar ===
 Contributors: Webba agency, freemius
 Donate link: https://webba-booking.com/
-Tags: appointment booking, booking calendar, online scheduling, event booking, service reservations
+Tags:  appointments, appointment booking, booking calendar, scheduling, booking system
 Requires at least: 5.6
-Tested up to: 6.4.1
-Stable tag: 5.0.25
+Tested up to: 6.7.2
+Stable tag: 5.1.
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Webba Booking is the most versatile and easy-to-use appointment & event booking plugin. Accept, get paid and manage your schedule online.
+Free Appointment Booking Plugin 🗓️ unlimited appointments, booking management, calendar sync, notifications, 5* support = powerful booking system!
 
 == DESCRIPTION ==
-= Webba Booking - One-Stop Online Booking Management Solution =
+= Simple and Modern Appointment Booking, Reservation & Scheduling Calendar Plugin 🗓️ =
 
-Are you looking for an online booking plugin that offers a **professional-looking booking form, easy setup and seamless schedule management**? Look no further!
+**[Webba Appointments Booking](https://webba-booking.com/) is powerful, modern and easy to use appointment booking system and scheduling plugin.**
 
-Webba Booking is the most versatile and feature-rich event and appointment scheduling plugin now available on the WordPress.org plugins directory.
+Using Webba you can accept appointment bookings, reservations, hourly bookings for variety of services, rentals, spaces.
 
-Say goodbye to complex scheduling tools and embrace the **convenience of accepting online bookings with Webba Booking.**
+It offers a variety of important features that will make **accepting and managing online bookings** and reservations on your website super easy.
 
 Whether you run a wellness business, salon, any sport or rental business, events, consulting, medical clinic, or any business that relies on appointments, events and service booking, Webba Booking is your one-stop solution.
 
-**Join thousands of businesses** that use Webba to accept and manage bookings through their Wordpress website.
+**Join thousands of businesses** that use Webba to accept and manage bookings through their Wordpress website. Our **world-class support** is ready to help you have the best experience with Webba.
 
-We are proud of our **5-star rating** and world-class support that is ready to help you have the best experience with Webba.
-
-[TRY PRO VERSION FOR FREE](https://webba-booking.com/pricing/ "Pricing of Webba Booking") | [USE CASES & DEMOS](https://webba-booking.com/demos-use-cases "Demo of Webba Booking") | [FEATURES](https://webba-booking.com/features/ "Features Overview of Webba Booking") | [DOCUMENTATION](https://webba-booking.com/documentation/ "Documentation of Webba Booking")
+[TRY PRO VERSION](https://webba-booking.com/pricing/ "Pricing of Webba Booking") | [USE CASES & DEMOS](https://webba-booking.com/demos-use-cases/ "Demo of Webba Booking") | [FEATURES](https://webba-booking.com/features/ "Features Overview of Webba Booking") | [DOCUMENTATION](https://webba-booking.com/documentation/ "Documentation of Webba Booking")
 
 [youtube https://www.youtube.com/watch?v=IX1TfPnZFus]
 
 
-== MAKE ONLINE BOOKINGS EASY WITH WEBBA: ==
+== MAIN FREE FEATURES INCLUDED IN WEBBA LITE: ==
 
-* **Offer as many services as you want:** add as many bookable services/events as you want and categorize them for your and/or your customers’ convenience.
-* **No coding experience needed:** Webba is super easy to use, integrate and manage your bookings with.
-* **Manage bookings and schedules with ease:** in Webba you'll see an overview of all your bookings and be able to add/edit/cancel them with a few clicks.
-* **Control your business hours & holidays:** have complete control on your own availability with our powerful schedule tools.
-* **Enjoy powerful pricing settings:** offer pricing based on time, day, number of time slots already booked and many more options.
-* **Send & Customize Email notifications/reminders:** turn on/off any email notifications for you or your customer and customize them with variables and your own flair.
-* **Get use of our powerful booking logic:** use over 20 different booking settings Webba offers to make special cases and rules applicable for your business
-* **Translate and reach people from all over the world:** Webba offers built-in translations and WPML compatibility.
-* **Track performance through statistics (PRO FEATURE):** track and visualize many bookings you get over time
-* **Create automatic Zoom events (PRO FEATURE):** perfect if your service is provided online through Zoom Video Conferencing!
-* **Offer special deals through Coupons (PRO FEATURE):** Whether it’s Black Friday or your Birthday sale - offer promotional coupons through Webba!
-* **Accept deposits and payments (PRO FEATURE):** Secure online payment integrations with Paypal, Stripe, or Woocommerce (with its 100+ gateways).
-* **Connect with Google Calendar (PRO FEATURE):** track your bookings and avoid double bookings with a 2-way Google Cal integration
-* **Send SMS reminders (PRO FEATURE):** we integrate with Twilio
-* **Comply with strict GDPR (EU) rules:** we offer advanced privacy and data protection settings.
-* **Mobile & Desktop friendly:** booking form design that looks good on all devices and you can change colors to fit your brand
+* **Unlimited Services and Bookings:** add as many bookable services/events as you want and categorize them for your and/or your customers’ convenience.
+* **Multiple appointment bookings, group bookings, service categories:** categorize your services into different categories, allow to book multiple services in one session, instead of repeating the booking process for each service.
+* **Modern booking calendar form:** clean and modern booking form design that looks great on all devices.
+* **Easy bookings management:** approve, add, edit, cancel any bookings with a few clicks. 
+* **Advanced booking rules:** add buffer zones, block times, allow group bookings and other 20+ custom settings available for your convenience
+* **Adjustable business hours & holidays:** have complete control on your own availability with our powerful schedule tools.
+* **Powerful pricing settings:** offer pricing based on time, day, number of time slots already booked and many more options.
+* **Customisable Email notifications/reminders:** turn on/off any email notifications for you or your customer and customize them with variables for automation
+* **Translation ready:** Webba offers built-in translations and WPML compatibility.
+* **GDPR (EU) ready:** we offer advanced privacy and data protection settings.
 
 
-Unlock PRO features with [Webba Booking PRO](https://webba-booking.com/pricing/).
+== MAIN PREMIUM FEATURES INCLUDED IN WEBBA PRO: ==
+* **Two-way Calendar sync:** sync Webba with your calendar and manage your appointments without any double-bookings.
+* **Conversion Tracking with Google Analytics:** automatically track bookings and conversion events with GA4 integration.
+* **User Dashboard:** let your customers easily manage their bookings by rescheduling or canceling them.
+* **Zoom Integration:** create automatic zoom video conferencing events and attach them to the booking confirmation.
+* **Accept deposits and payments:** secure online payment integrations with Paypal, Stripe, or Woocommerce (with 100+ payment gateways).
+* **Track performance through statistics:** track and visualize how many bookings you get over time.
+* **Offer Coupons:** whether it’s Black Friday or your Birthday sale - offer promotional coupons through Webba!
+* **Send SMS reminders:** send appointment confirmations and reminders using SMS provider Twilio.
+* **WooCommerce Integration:** integrate with WooCommerce directly and offer your own checkout experience.
+* **Manage Taxes and Invoices:** enable tax calculation, generate and send professional invoices to your customers automatically.
+
+Unlock PREMIUM features with [Webba Booking PRO](https://webba-booking.com/pricing/).
 
 Explore the full list of [Webba Booking features](https://webba-booking.com/features/).
 
 == OUR CUSTOMERS LOVE US!==
 
-We are proud to have near perfect 5/5 score on both Wordpress.org and Trustpilot:
+We are proud to have near perfect 5/5 score on both [Wordpress](https://wordpress.org/plugins/webba-booking-lite/#reviews "reviews of Webba Booking"): and [Trustpilot](https://www.trustpilot.com/review/webba-booking.com "reviews of Webba Booking"):
 
 *“The customer service for this **plugin is phenomenal!**
 The customer service for this plugin is absolutely second-to-none. I'm blown away by how good they are!”* - R.Tyrrell
@@ -67,32 +71,18 @@ The customer service for this plugin is absolutely second-to-none. I'm blown awa
 *“This plugin is awesome and it can accomplish anything your business needs! OMG the support is NUMBER 1!!!! I will refer this plugin to everyone and let them know **the support is just awesome**. I am very pleased with everything!”* - jbiento
 
 
-== WHICH BUSINESS USE WEBBA THE MOST? ==
+== WHO IS WEBBA PERFECT FOR ==
 
 Webba Booking is perfect for spas, salons, rental businesses, event businesses and more. If you need to take any kind of appointments or bookings, this plugin is for you. Here are some of the areas where Webba Booking can be used:
 
-* **Specialist booking**: personal trainer booking, consultant booking, lawyer booking, wedding coordinators, contractor booking, therapist booking, tutor booking, photographer booking, dance instructors booking, coach booking, any other specialist who needs appointment booking
-* **Wellness and beauty booking**: beauty salon booking, nail salon booking, hair salon booking, cosmetologist booking, hairdresser booking, barbershop booking, manicurist booking, SPA booking, swimming pool booking, massage booking
-* **Activities booking**: event booking, ticket booking, tour scheduling, golf booking, games booking, quest rooms booking, escape room booking, gym booking, fitness booking
-* **Medical booking system**: doctor booking, dentist booking, clinic booking system and other areas related to medicine
-* **Restaurant booking**: table reservation, dining booking, private room reservation
+* **Specialists**: personal trainer booking, consultant booking, lawyer booking, wedding coordinators, contractor booking, therapist booking, tutor booking, photographer booking, dance instructors booking, coach booking, any other specialist who needs appointment booking
+* **Wellness and beauty professionals**: beauty salon booking, nail salon booking, hair salon booking, cosmetologist booking, hairdresser booking, barbershop booking, manicurist booking, SPA booking, swimming pool booking, massage booking
+* **Activity providers **: tour booking, ticket booking, tour scheduling, golf booking, games booking, quest rooms booking, escape room booking, gym booking, fitness booking
+* **Medical services professionals**: doctor booking, dentist booking, therapist booking, clinic booking system and other areas related to medicine
+* **Restaurants and event venues**: table reservation, dining booking, private room reservation
 * **Equipment and transport rental**: car rental system, bike rental, boat rental, yacht booking, technics booking, any other kind of hourly rental
-* **Education and lessons booking**: language school booking system, facility booking, language lessons booking, private tutor booking, driving school lessons booking, private teachers booking, school booking, classroom booking, seminar booking
-* **Service booking**: car service booking, cleaning booking, repairment booking
-
-== KEY BENEFITS ==
-
-Webba Booking makes appointment scheduling and online bookings easy and painless for both business owners and their customers. Here's how:
-
-* **Flexible Scheduling:** Fully customizable scheduling options with unlimited services, business hours and calendars.
-* **Simple Administration:** Straightforward but feature-filled administration in the backend.
-* **Easy set-up and configuration:** Booking form integration with shortcodes easily integrated with popular page builders like Elementor, Divi, or Gutenberg blocks
-* **No coding required:** No need to touch a single line of code. Everything can be done from the backend.
-* **Professional Design:** Clean and modern design that looks great on all devices.
-* **Extensive Documentation:** Comprehensive documentation to guide your trough the setup and all the features.
-* **Free version available:** Most features are available in the free version. The Premium version is a great upgrade if you need more features and flexibility.
-* **Great support**: Quick and helpful support if you should ever need it.
-
+* **Education providers**: language school booking system, facility booking, language lessons booking, private tutor booking, driving school lessons booking, private teachers booking, school booking, classroom booking, seminar booking
+* **Professional Service providers**: car service booking, cleaning booking, repair services booking
 
 Unlock PRO features with [Webba Booking Premium](https://webba-booking.com/pricing/).
 
@@ -107,6 +97,8 @@ In the search field type "Webba Booking" and click Search Plugins. Once you have
 
 After clicking that link you will be asked if you are sure you want to install the plugin. Click yes and WordPress will automatically complete the installation.
 
+After installing, click "Activate" to activate Webba Booking and follow the setup wizard to get going.
+
 **Manual installation**
 The manual installation method involves downloading our plugin and uploading it to your web server via your favorite FTP application.
 
@@ -114,21 +106,18 @@ The manual installation method involves downloading our plugin and uploading it 
 2. Using an FTP program, or your hosting control panel, upload the unzipped plugin folder to your WordPress installations wp-content/plugins/ directory.
 3. Activate the plugin from the Plugins menu within the WordPress admin.
 
-
 **Getting started**
-When the title of the plugin has appeared on your dashboard, you may start the setup. The following steps are required to make it possible for customers use your newly installed plugin:
 
-Browse all the tab and fill with your datas and desired settings
-Add a booking form to a website page using one of the [available shortcodes](https://webba-booking.com/documentation/shortcodes/examples-of-manual-shortcode-usage/).
-
-
+1. When you activate the Webba Booking plugin, the setup wizard will start and help you set up the plugin step by step. You can exit the setup wizard anytime and add your desired services and settings manually. 
+2. When you have configured Webba Booking to your liking, you can now embed the booking form in any page you'd like.
+3. To add a booking form, simply use our Gutenberg block from the block selector or use a shortcode. Follow [detailed instructions here](https://webba-booking.com/documentation/how-to-add-booking-form/).
 
 **Upgrade to pro version**
 
 1. Deactivate free version.
 2. Install and activate premium version.
 
-
+Unlock PRO features with [Webba Booking Premium](https://webba-booking.com/pricing/).
 
 == Screenshots == 
 
@@ -150,18 +139,23 @@ Add a booking form to a website page using one of the [available shortcodes](htt
 **Can I see how Webba Booking works before installation?**
 Yes! Check out our [online demos](https://webba-booking.com/demos-use-cases) to see how the frontend and backend of Webba Booking works.
 
-**Do you offer free trials for the PRO version?**
-Yes! We offer [14-day free trial](https://webba-booking.com/pricing/) so you can test everything you need.
+**How do I add booking form to my website?**
+It's simple! Use our Gutenberg block or if you are using any of the pagebuilders - add a [shortcode](https://webba-booking.com/documentation/how-to-add-booking-form/#shortcode).
+
+Here we have prepared [detailed instructions](https://webba-booking.com/documentation/how-to-add-booking-form/) on how to add the booking form.
+
+**Does Webba Booking offer payment integrations?**
+Yes, [Webba Booking PRO](https://webba-booking.com/pricing/) offers integrations with Paypal, Stripe, and Woocommerce (with 100+ gateways) to provide secure online payment options for your customers.
+
+**How can I sync bookings with my calendar?**
+Two-way calendar integrations are available when using [Webba Booking PRO](https://webba-booking.com/pricing/). This allows you to sync directly with your Google Calendar or other calendar using iCal attachements.
+
+**Can I translate Webba to other languages?**
+Yes, Webba Booking has in-built wording/translation feature for the booking form and it is also compatible with translation plugins like Loco Translate, Polyland and WPML.
 
 **How to upgrade to Webba PRO version?**
 If you have a Webba Booking Lite version, just go to your WP dashboard, click on Webba and in the left menu you’ll see “Pricing” menu item. Click on it and choose the plan you want.
 Alternatively, you can go to [our website](https://webba-booking.com/pricing/) and upgrade right there.
-
-**Does Webba Booking offer payment integrations?**
-Yes, [Webba Booking PRO](https://webba-booking.com/pricing/) offers integrations with Paypal, Stripe, and Woocommerce (with its 100+ gateways) to provide secure online payment options for your customers.
-
-**Can I translate Webba to other languages?**
-Yes, Webba Booking has in-built wording/translation feature for the booking form and it is also compatible with translation plugins like Loco Translate, Polyland and WPML.
 
 **Can email notifications be customized?**
 Yes, Webba Booking offers great email customization features including different placeholders for variable elements.
@@ -178,14 +172,250 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+5.1.9
+
+27/03/2025
+
+- Improvements: integration with the Google Tag (easier conversion tracking)
+- Bug fix: non-admin permissions updated
+- Bug fix: wrong translation of certain languages
+- Bug fix: bug with the cancelled bookings
+ 
+5.1.8
+
+19/03/2025
+
+- Backend interface updated
+ 
+5.0.62
+
+30/01/2025
+
+- Maintenance update
+- Bug fix: bug with the users dashboard
+
+5.0.59
+
+27/01/2025
+
+- Bug fix: resolved an issue with the message displayed after PayPal payment
+
+5.0.58
+
+26/01/2025
+
+- Bug fix: bug with email notifications for bookings scheduled far in advance
+- Bug fix: bug with permissions for resending emails
+
+5.0.57
+
+15/01/2025
+
+- Maintenance update
+
+5.0.56
+
+28/12/2024
+
+- Improvements: Users dashboard - allow users to manage, cancel, reschedule their bookings
+- Improvements: iframes in the messages to embed videos
+- Bug fix: bug with Schedule tools
+
+5.0.53
+
+20/11/2024
+
+- Bug fix: issue with the horizontal calendar when selecting multiple days.
+- Bug fix: bug with proper language detection in certain types of notifications..
+- Bug fix: consecutive bookings are not functioning on single-service forms.
+- Improvements: Bookings page layout improved.
+- Improvements: option to (re)send email notifications manually.
+- Improvements: block WooCommerce order creation if the booking has been automatically cancelled..
+
+5.0.52
+
+16/10/2024
+
+- Bug fix: minor Bug fix.
+- SDK update.
+
+5.0.51
+
+18/09/2024
+
+- Bug fix: minor Bug fix.
+
+5.0.50
+
+16/09/2024
+
+- Improvements: compatibility issue has been resolved.
+- Bug fix: resolved an issue with the message displayed when a user cancels a PayPal payment.
+- Bug fix: resolved issues where certain strings were not translatable.
+- Bug fix: resolved an issue with the title display in the mobile layout.
+
+5.0.48
+
+14/08/2024
+
+- Improvements: added a customizable 'read more' label.
+- Improvements: improved message template sanitization to allow more flexible layout customizations.
+- Bug fix: fixed the start of the week in the weekly calendar.
+- Bug fix: addressed minor issues with translations.
+- Bug fix: bug with the local time when date is selected in the horizontal calendar.
+
+5.0.47
+
+17/07/2024
+
+* Bug fix: bug with updatting on certain configurations
+
+5.0.46
+
+16/07/2024
+
+* Bug fix: bug with not availabile time slots on certain configurations
+
+5.0.45
+
+14/07/2024
+
+* Improvements: improved integration with WooCommerce
+* Improvements: consecutive timeslots
+* Bug fix: adjustments for PHP 8.2 compatibility
+ 
+5.0.44
+
+13/06/2024
+
+* Bug fix: issue with the creation or editing of services on specific configurations
+
+5.0.43
+
+10/06/2024
+
+* Bug fix: bug with time slots selection on certain configurations
+
+5.0.42
+
+09/06/2024
+
+* Improvements: new parameter in pricing rule
+* Improvements: limits for number of time slots to setup packages
+* Improvements: show price with taxes on the Bookings page
+* Improvements: option to automatically select today or first available date
+* Improvements: horizontal calendar UI improved
+* Improvements: showing phone numbers on the Bookings page
+* Improvements: customizable message when booking is paid with coupon
+* Bug fix: bug with the email sent to team members
+* Bug fix: bug with apostrophe in the 'From: email' option
+
+5.0.40
+
+07/05/2024
+
+* Improvements: Gutenberg block
+* Improvements: option to set booking status in the admin multiple booking interface
+* Improvements: option to show name of customer on the single service time slot
+* Bug fix: bug with the booking duplication
+* Bug fix: bug with the date format in the 'Date range' option of the service
+* Bug fix: bug with WooCommerce integration on creation configurations
+
+5.0.38
+
+02/04/2024
+
+* Bug fix: bugs with the dashboard calendar translation
+
+5.0.37
+
+01/04/2024
+
+* Improvements: integration with WooCommerce improved
+* Improvements: schedule interface improved
+* Improvements: option of service emails copies improved
+* Improvements: showing booking on the Schedule tools weekly calendar
+* Improvements: custom email template for arrival notifications
+* Bug fix: bug with subjects of certain notifications
+* Bug fix: error message when booking duplicated
+* Bug fix: bugs with dashboard calendar translation
+
+5.0.35
+
+04/03/2024
+
+* Improvements: ability to send delayed arrival notification
+* Improvements: ability to send payment notification when selecting "Pay on Arrival" method
+* Improvements: improved layout of service descriptions
+* Improvements: improved layout for mobile
+* Improvements: automatic selection of payment method when only one method is available
+
+5.0.33
+
+07/02/2024
+
+* Bug fix: bug with the user roles on certain configurations
+
+5.0.32
+
+03/02/2024
+
+* Bug fix: conflict with certain cache plugins
+
+5.0.31
+
+01/02/2024
+
+* Improvements: new placeholders for admin token and customer token
+* Improvements: option to set behaviour of the form height on the 'Details' step
+* Improvements: option to allow non-admin users edit service properties
+* Improvements: option to show local or server time by default 
+* Improvements: option to define booking details shown in the admin's Calendar
+* Bug fix: bug with validation of mandatory select field
+* Bug fix: bug with showing descriptions on certain configurations
+* Bug fix: bug with mobile layout of Schedule tools
+* Bug fix: bug with creation of pricing rules on certain configurations 
+* Bug fix: admin calendar did not use the general 'Week Starts On' WordPress option
+
+5.0.30
+
+05/01/2024
+
+* Bug fix: bug with email notifications sent on payment
+
+5.0.29
+
+02/01/2024
+
+* Bug fix: bug with searching time on PHP 8.2
+
+5.0.28
+
+01/01/2024
+
+* Improvements: French translation improved
+* Improvements: option 'Automatically proceed to the next step' when time slot is selected
+* Improvements: local hours are shown by default
+* Bug fix: bug with validation of file field and minimal and maximum length 
+* Bug fix: bug with the option 'Actions to complete the payment'
+
+5.0.26
+
+14/12/2023
+
+* Improvements: translation improved
+* Improvements: more CSS classes to customize appearance
+* Improvements: option to show user names in the time slots
+* Improvements: showing service names in the calendar
+ 
 5.0.25
 
 30/11/2023
 
 * Improvements: mobile layout improved
-* Bugfix: bug with service descriptions on certain configurations
-* Bugfix: bug with custom fields encoding
-* Bugfix: bug with the order of services inside category
+* Bug fix: bug with service descriptions on certain configurations
+* Bug fix: bug with custom fields encoding
+* Bug fix: bug with the order of services inside category
  
 
 5.0.23
@@ -196,7 +426,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Improvements: service descriptions in the booking form
 * Improvements: option to set up translation of the cancellation form title  
 * Improvements: #total_amount placeholder in the Booking form label option
-* Bugfix: wrong message when booking can't be canceled due to buffer
+* Bug fix: wrong message when booking can't be canceled due to buffer
    
 5.0.22
 
@@ -205,8 +435,8 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Improvements: conditional fields in custom forms
 * Improvements: choose payment method by default for 'Pay on arrival' payment method
 * Improvements: Back and Next buttons translatable in the Wording / Translation settings
-* Bugfix: issues with special characters in the CSV export
-* Bugfix: issues with email template styling (on saving)
+* Bug fix: issues with special characters in the CSV export
+* Bug fix: issues with email template styling (on saving)
 
 5.0.21
 
@@ -219,33 +449,33 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 21/10/2023
 
-* Bugfix: minor bugfix
+* Bug fix: minor Bug fix
 
 5.0.17
 
 20/10/2023
 
 * Improvements: translation improvements
-* Bugfix: minor bugfix
+* Bug fix: minor Bug fix
 
 5.0.16
 
 12/10/2023
 
-* Bugfix: minor bugfix
+* Bug fix: minor Bug fix
 
 5.0.15
 
 09/10/2023
 
 * Improvements: minor improvements
-* Bugfix: minor bugfix
+* Bug fix: minor Bug fix
 
 5.0.14
 
 05/10/2023
 
-* Bugfix: minor bugfix
+* Bug fix: minor Bug fix
 
 5.0.11
 
@@ -264,13 +494,13 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 21/09/2023
 
 * Improvement: minor style improvements
-* Bugfix: minor bugfix
+* Bug fix: minor Bug fix
 
 5.0.5
 
 19/09/2023
 
-* Bugfix: bugs with the multiple service selection
+* Bug fix: bugs with the multiple service selection
 
 5.0.4
 
@@ -280,27 +510,27 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Improvement: payment icon updated
 * Improvement: minor style improvements
 * Improvement: option to set British date format in the backend
-* Bugfix: with the option 'Week starts'
-* Bugfix: with todays bookings on the Bookings page
-* Bugfix: wrong time on invoices
-* Bugfix: bug with the comment field
-* Bugfix: bug with the import to CSV
-* Bugfix: bugs on the calendar page
+* Bug fix: with the option 'Week starts'
+* Bug fix: with todays bookings on the Bookings page
+* Bug fix: wrong time on invoices
+* Bug fix: bug with the comment field
+* Bug fix: bug with the import to CSV
+* Bug fix: bugs on the calendar page
 
 5.0.3
 
 16/09/2023
 
-* Bugfix: bugs on the calendar page
-* Bugfix: bugs with the checkbox fields
-* Bugfix: bugs with the checkbox fields
-* Bugfix: other minor bug fixes
+* Bug fix: bugs on the calendar page
+* Bug fix: bugs with the checkbox fields
+* Bug fix: bugs with the checkbox fields
+* Bug fix: other minor bug fixes
 
 5.0.2
 
 14/09/2023
 
-* Bugfix: minor bug fix 
+* Bug fix: minor bug fix 
 
 5.0
 
@@ -312,21 +542,21 @@ BIG UPDATE: IMPORTANT - changed everything
 
 01/09/2023
 
-* Bugfix: minor bug fixes
+* Bug fix: minor bug fixes
 * Maintenance update
 
 4.5.31
 
 05/07/2023
 
-* Bugfix: minor bug fixes
+* Bug fix: minor bug fixes
 
 4.5.28
 
 03/06/2023
 
-* Bugfix: bug with the cancellation link on certain configurations
-* Bugfix: bug with time extended mode in certain configurations
+* Bug fix: bug with the cancellation link on certain configurations
+* Bug fix: bug with time extended mode in certain configurations
 
 
 4.5.27
@@ -340,7 +570,7 @@ BIG UPDATE: IMPORTANT - changed everything
 
 09/06/2023
 
-* Bugfix: bug with payments on certain configuration
+* Bug fix: bug with payments on certain configuration
 
 
 4.5.25
@@ -350,29 +580,29 @@ BIG UPDATE: IMPORTANT - changed everything
 * Security: option to set security level for troubleshooting cache problems
 * Improvement: automatically show popup calendar
 * Improvement: availability to set pricing rules with zero amount
-* Bugfix: bug with export to CSV on certain configurations
-* Bugfix: bug with cancellation notifications
+* Bug fix: bug with export to CSV on certain configurations
+* Bug fix: bug with cancellation notifications
 
 
 4.5.24
 
 06/06/2023
 
-* Bugfix: bug in extended mode on certain configurations
+* Bug fix: bug in extended mode on certain configurations
 
 
 4.5.23
 
 01/06/2023
 
-* Bugfix: bug with locked dates on certain configurations
+* Bug fix: bug with locked dates on certain configurations
 
 
 4.5.22
 
 28/05/2023
 
-* Bugfix: bug with the option 'Allow to book the ongoing timeslot'
+* Bug fix: bug with the option 'Allow to book the ongoing timeslot'
 
 
 4.5.21
@@ -380,15 +610,15 @@ BIG UPDATE: IMPORTANT - changed everything
 24/05/2023
 
 * Security update
-* Bugfix: bug with end time of Gooogle calendar event 
-* Bugfix: bug approval notification on certain configurations
-* Bugfix: bug in extended mode on certain configurations
+* Bug fix: bug with end time of Gooogle calendar event 
+* Bug fix: bug approval notification on certain configurations
+* Bug fix: bug in extended mode on certain configurations
 
 4.5.19
 
 19/05/2023
 
-* Bugfix: bug with autlock on certain configurations
+* Bug fix: bug with autlock on certain configurations
 
 
 4.5.18
@@ -397,8 +627,8 @@ BIG UPDATE: IMPORTANT - changed everything
 
 * Improvement: separate message template for automatic cancellation
 * Improvement: custom templates for approval Notifications
-* Bugfix: bugs on the schedule page when time slots unlocked manually
-* Bugfix: narrow timeslots on certain configurations
+* Bug fix: bugs on the schedule page when time slots unlocked manually
+* Bug fix: narrow timeslots on certain configurations
 
 4.5.17
 
@@ -406,28 +636,28 @@ BIG UPDATE: IMPORTANT - changed everything
 
 * Improvement: adding multiple time slots from the backend
 * Improvement: #username placeholder for a single place services
-* Bugfix: bug with redirect after payment on certain configurations
-* Bugfix: bug with custom fields on the schedule page
-* Bugfix: doubled booked time slots
-* Bugfix: issue with iCal in the free version
-* Bugfix: bug with payment methods in the free version
-* Bugfix: bug with disabling dates in the calendar on certain configurations 
-* Bugfix: bug with the timezone after cancellation of booking on the Schedule page
+* Bug fix: bug with redirect after payment on certain configurations
+* Bug fix: bug with custom fields on the schedule page
+* Bug fix: doubled booked time slots
+* Bug fix: issue with iCal in the free version
+* Bug fix: bug with payment methods in the free version
+* Bug fix: bug with disabling dates in the calendar on certain configurations 
+* Bug fix: bug with the timezone after cancellation of booking on the Schedule page
 
 4.5.16
 
 13/04/2023
 
-* Bugfix: critical bug fix in the free version
+* Bug fix: critical bug fix in the free version
 
 4.5.15
 
 11/03/2023
 
-* Bugfix: bug with redirect when payment is made using coupon
-* Bugfix: bug with DST on certain configurations
-* Bugfix: bug with showing booked time slots on certain configurations
-* Bugfix: bug on the Schedule page 
+* Bug fix: bug with redirect when payment is made using coupon
+* Bug fix: bug with DST on certain configurations
+* Bug fix: bug with showing booked time slots on certain configurations
+* Bug fix: bug on the Schedule page 
 
 4.5.12
 
@@ -436,81 +666,81 @@ BIG UPDATE: IMPORTANT - changed everything
 * Improvements: performance improvements
 * Improvements: integration with WooCommerce improved
 * Improvements: option to set service dropdown placeholder
-* Bugfix: bug with booking form submition on certain configurations
-* Bugfix: bug with expiration time on certain configurations
+* Bug fix: bug with booking form submition on certain configurations
+* Bug fix: bug with expiration time on certain configurations
 
 4.5.11
 
 08/03/2023
 
-* Bugfix: bug with the locked dates
+* Bug fix: bug with the locked dates
 
 4.5.10
 
 18/02/2023
 
-* Bugfix: bug dashboard on certain configurations
+* Bug fix: bug dashboard on certain configurations
 
 4.5.9
 
 17/02/2023
 
-* Bugfix: bug with the option 'Show booked timeslots'
-* Bugfix: bug with the message when there is no time slots found
+* Bug fix: bug with the option 'Show booked timeslots'
+* Bug fix: bug with the message when there is no time slots found
 * Improvements: performance improvements
  
 4.5.8
 
 07/02/2023
 
-* Bugfix: bug with the option 'Set status after booking is paid with Stripe to'
-* Bugfix: bug with service description on certain configurations
+* Bug fix: bug with the option 'Set status after booking is paid with Stripe to'
+* Bug fix: bug with service description on certain configurations
 
 4.5.7
 
 02/02/23
 
-* Bugfix: Bug with the option 'Default number of days shown in extended mode' 
-* Bugfix: Bug with the phone formatting on the Schedule page
-* Bugfix: Bug with the option 'Prefill fields in WooCommerce checkout with the data used in the booking form'
-* Bugfix: Bug with adding events to Google calendar when bookings are added in the dashboard
+* Bug fix: Bug with the option 'Default number of days shown in extended mode' 
+* Bug fix: Bug with the phone formatting on the Schedule page
+* Bug fix: Bug with the option 'Prefill fields in WooCommerce checkout with the data used in the booking form'
+* Bug fix: Bug with adding events to Google calendar when bookings are added in the dashboard
 
 4.5.6
 
 28/01/2023
 
-* Bugfix: bug with availability calculation on certain configurations
+* Bug fix: bug with availability calculation on certain configurations
 
 4.5.5
 
 26/01/2023
 
-* Bugfix: bug with autolock on certain configurations
-* Bugfix: bug with the option 'Week starts on'
+* Bug fix: bug with autolock on certain configurations
+* Bug fix: bug with the option 'Week starts on'
 
 4.5.4
 
 15/01/2023
 
-* Bugfix: minor bugfix
+* Bug fix: minor Bug fix
 
 4.5.3
 
 10/01/2023
 
-* Bugfix: minor bugfix
+* Bug fix: minor Bug fix
 
 4.5.2
 
 09/01/2023
 
-* Bugfix: minor bugfix
+* Bug fix: minor Bug fix
 
 4.5.1
 
 09/01/2023
 
-* Bugfix: bug with the export to CSV
+* Bug fix: bug with the export to CSV
 
 4.5.0
 
@@ -522,1572 +752,27 @@ BIG UPDATE: IMPORTANT - changed everything
 
 12/12/2022
 
-* Bugfix: rolling back to previous version due to certain amount of bugs
+* Bug fix: rolling back to previous version due to certain amount of bugs
 
 4.4.6
 
 12/12/2022
 
-* Bugfix: bug with multiple mode on certain configurations
-* Bugfix: bug on the Schedule page when non-admin user is logged
-* Bugfix: bug with updating bookings made in 'night hours mode'
+* Bug fix: bug with multiple mode on certain configurations
+* Bug fix: bug on the Schedule page when non-admin user is logged
+* Bug fix: bug with updating bookings made in 'night hours mode'
 
 4.4.5
 
 11/12/2022
 
-* Bugfix: bug with the night hours option
-* Bugfix: bug with category shortcode
-* Bugfix: bug with the placeholder in the thank you message
+* Bug fix: bug with the night hours option
+* Bug fix: bug with category shortcode
+* Bug fix: bug with the placeholder in the thank you message
 
 4.4.3
 
 10/12/2022
 
-* Bugfix: bug with the Stripe payments
+* Bug fix: bug with the Stripe payments
 
-4.4.1
-
-09/12/2022
-
-* Improvements: core update
-
-4.2.30.5
-
-20/10/2022
-
-* Bugfix: minor bug fix
-
-4.2.30.4
-
-19/10/2022
-
-* Bugfix: minor bug fix
-
-4.2.30.3
-
-17/10/2022
-
-* Bugfix: bugs on the Schedule page
-
-4.2.30.2
-
-17/10/2022
-
-* Bugfix: wrong time on the Appointments page on certain configurations
-* Bugfix: bookings not shown on the Schedule page if the timeslot is locked
-
-4.2.30.1
-
-10/10/2022
-
-* Improvements: PDF attachments for 'on booking' notifications
-* Bugfix: bug on the services page on certain configurations
-
-4.2.30
-
-23/09/2022
-
-* Bugfix: bug with the CSV export
-
-4.2.29
-
-18/09/2022
-
-* Improvements: reply-to headers in the configuration improved
-* Improvements: ability to set number of days prior sending SMS reminder
-* Improvements: integration with Zoom
-* Bugfix: wrong time in the invoices sent on approval
-* Bugfix: issue with performance on websites with large number of users
-* Bugfix: bug with the service name placeholder when adding multi-service events to the google calendar
-
-4.2.27
-
-29/06/2022
-
-* Bugfix: minor bugfix
-
-4.2.26
-
-20/06/2022
-
-* Bugfix: bug with the option 'Maximum number of bookings at a specific time'
-
-4.2.25
-
-24/05/2022
-
-* Improvements: service filter interface improved
-* Improvements: automatic cancellation improved
-* Bugfix: bug with status of time slots on the Schedule page
-* Bugfix: bug with the availability of dates in the calendar on certain configurations
-
-21/04/2022
-
-4.2.24
-
-* Bugfix: Important bug fix
-
-15/04/2022
-
-4.2.22
-
-* Security update
-* Bugfix: Bug with certain characters in the front-end texts
-
-13/04/2022
-
-4.2.21
-
-* Security update
-* Bugfix: Minor bugfix
-
-25/02/2022
-
-4.2.18
-
-* Maintenance update
-
-18/02/2022
-
-4.2.17
-
-* Bugfix: minor bugfix
-
-11/02/2022
-
-4.2.16
-
-* Bugfix: minor bugfix
-
-31/01/2022
-
-4.2.15
-
-* Bugfix: bug with the time in the 'on approval' SMS
-
-28/01/2022
-
-4.2.12
-
-* Bugfix: bug with email validator
-* Bugfix: bug with status auto-update on certain configurations
-
-21/01/2022
-
-4.2.11
-
-* Improvements: sending SMS on approval
-* Improvements: update of total amount removed when regular fields are changed
-* Improvements: option to automatically change status to arrived and send 'On arrival' notification
-* Improvements: option to remove default value from the 'Number of seats' field
-* Bugfix: minor bugfix
-
-13/01/2022
-
-4.2.8
-
-* Bugfix: minor bugfix
-
-11/01/2022
-
-4.2.7
-
-* Bugfix: bug with rendering time slots on certain configurations
-
-10/01/2022
-
-4.2.6
-
-* Bugfix: bug with editing booking on some configurations
-* Bugfix: bug with placeholders on some configurations
-
-01/01/2022
-
-4.2.5
-
-* Bugfix: bug with options on PHP 8
-
-30/12/2021
-
-4.2.4
-
-* Bugfix: bug with the PayPal initialization
-* Bugfix: bug with availability calculation on certain configurations
-
-28/12/2021
-
-4.2.2
-
-* Bugfix: minor bug fix
-
-27/12/2021
-
-4.2.0
-
-* Improvements: export to CSV improved
-* Improvements: option to automatically select the first available date
-* Improvements: option to change the text of selected timeslot
-* Improvements: showing the total amount on the Appointments page
-* Improvements: new placeholder for the 'Booking form label' option - #dnl (dates with new line)
-* Improvements: new placeholder for the 'Booking form label' option - #lrange (local time range in multiple selection mode)
-* Improvements: ability duplicate of bookings on the Appointments page
-* Improvements: default order by date/time on the Appointments page
-* Improvements: order services by time in the multi-service mode
-* Improvements: certain HTML tags are allowed in the option values
-* Improvements: option to disable Nice select in the backend dashboard
-* Improvements: option to add new lines in the ICS description
-* Bugfix: bug with unlocked dates when booking on the same date
-* Bugfix: bug with the number of selected timeslots when range booking is enabled
-* Bugfix: wrong duration in autolock on certain configurations
-* Bugfix: conflict with the Oxygen Builder resolved
-* Dev: action for booking cancellation by a customer
-
-25/10/2021
-
-4.1.8
-
-* Bugfix: Bug with the local time and DST
-
-21/10/2021
-
-4.1.7
-
-* Bugfix: bug with the scroll in extened mode
-
-13/10/2021
-
-4.1.6
-
-* Improvements: option to show a message if date dropdown is empty
-* Improvements: doc and docx formats available for upload
-* Improvements: XSS vulnerability fixed
-* Improvements: added multi-select input support in custom forms
-* Improvements: multi-site support
-* Bugfix: incorrect usage limit in coupons on certain configurations
-* Bugfix: bug with the cancellation of the booking on the Appointments page
-
-25/09/2021
-
-4.1.4
-
-* Bugfix: bug with automatic redirection when payment is completed using coupon_name
-* Bugfix: bug with the service placeholder in the payment item
-* Bugfix: DST issues
-
-22/09/2021
-
-4.1.3
-
-* Bugfix: minor bugfixes
-
-24/08/2021
-
-4.1.1
-
-* Bugfix: minor bugfixes
-
-20/08/2021
-
-4.1.1
-
-* Improvements: option to define status of the booking after payment with stripe
-* Improvements: option to not tax the deposit amount
-* Improvements: WooCommerce coupon restrictions for Service and Pricing rules
-* Bugfix: minor bugfixes
-
-27/07/2021
-
-4.1.0
-
-* Improvements: usage of table prefix in the plugin table names
-* Improvements: sending SMS on manual booking
-* Improvements: the ability to set multiple ICS calendars
-* Bugfix: issue on the schedule page with past bookings
-* Bugfix: issue with notifications when multiple bookings added manually
-
-06/07/2021
-
-4.0.74
-
-* Bugfix: bug with the credit card payment initialization
-
-05/07/2021
-
-4.0.73
-
-* Improvements: show days in one row if there is only one timeslot available
-* Improvements: connection with external ics calendars (integration with Outlook)
-* Improvements: expanded list of possible statuses
-* Improvements: added a confirmation button when deleting bookings on the Schedule page
-* Improvements: the ability to send reminders by email on the current day
-* Improvements: sending data to the administrator if it is impossible to connect to the Google calendar
-* Improvements: show service description for single service forms
-* Improvements: service fees (deposits)
-* Improvements: option to take into account the bookings added by Webba during the two-way synchronization
-* Improvements: limiting options improved
-* Improvements: option to load plgin javascript in footer
-* Bugfix: issue with long service descriptions
-* Bugfix: past bookings are not displayed on the Schedule page
-* Bugfix: bug with night hours
-* Bugfix: bookings are not added to Google calendar when paying with WooCommerce
-* Bugfix: error on PHP 8.0 on certain configurations
-
-17/06/2021
-
-4.0.72
-
-* Bugfix: minor bug fix
-
-16/06/2021
-
-4.0.71
-
-* Bugfix: bug with limit options
-
-01/06/2021
-
-4.0.69
-
-* Bugfix: bug with automatic cancellation of bookings on certain configurations
-
-18/05/2021
-
-4.0.68
-
-* Bugfix: minor bug fix
-
-17/05/2021
-
-4.0.67
-
-* Improvements: option to connect pricing rule with the number of places booked
-* Improvements: option to allow time slots cross midnight
-* Improvements: option to set general service fee
-* Improvements: compatibility with the Food Book plugin
-* Bugfix: bug with pricing rules on certain configurations
-* Bugfix: bug with reminders on certain configurations
-* Bugfix: bug with unexpected warning messages in the dashboard
-* Bugfix: bug with script caching on certain configurations
-
-14/04/2021
-
-4.0.65
-
-* Improvement: new option in pricing rules
-* Improvement: option to set service fee
-* Improvement: additional check of reminders data
-* Improvement: dynamic total amount in the form label
-* Improvement: easy duplication of data in the dashboard
-* Improvement: automatic cancellation does not affect free services
-* Improvement: service description placeholder #description for the form label
-* Bugfix: bug with GDPR option and ongoing bookings
-* Bugfix: bug with availability in overlapping intervals
-* Bugfix: bug with inactive timeslots
-* Bugfix: bug with the option 'Skip time slot selection'
-
-12/03/2021
-
-4.0.57
-
-* Bugfix: bug in multi-service booking on certain configurations
-
-12/03/2021
-
-4.0.56
-
-* Bugfix: bug with the local time conversion on certain time zones
-
-09/03/2021
-
-4.0.55
-
-* Bugfix: bug with availability in the Calendar on iOS device
-
-25/01/2021
-
-4.0.46
-
-* Bugfix: custom field values are not exported to CSV
-* Bugfix: bug with the booking cancellation
-
-22/01/2021
-
-4.0.45
-
-* Improvement: the ability to use HTML in the 'Booking form label' option
-* Improvement: option to disable considering the availability of overlapping time intervals
-* Improvement: option to remove not processed placeholders
-* Bugfix: attachment in the notification sent to a customer
-* Bugfix: bug with popup calendar on certain configurations
-* Bugfix: bug with the email sent to a customer form the group
-* Bugfix: IDs in the CSV export
-
-08/01/2021
-
-4.0.44
-
-* Improvement: 2-way synchronization on checking availability in the calendar
-* Improvement: option to disable shortcode buttons in the editor
-
-05/01/2021
-
-4.0.42
-
-* Bugfix: bug with reminders
-
-30/12/2020
-
-4.0.41
-
-* Improvements: tomorrow's agenda can be customized using the appointment loop
-* Improvements: a new type of email notifications - when booking changed
-* Bugfix: bug with the option 'Synchronization of group services'
-
-23/12/2020
-
-4.0.38
-
-* Improvements: SMS notifications
-
-12/22/2020
-
-4.0.36
-
-* Bugfix: wrong time in the 'on booking' notification on certain configurations
-
-12/18/2020
-
-4.0.35
-
-* Bugfix: minor bug fixes
-* Bugfix: database error on certain configurations
-
-12/17/2020
-
-4.0.33
-
-* Improvements: pricing rules
-* Bugfix: bug with the time format on the Appointments page
-* Bugfix: bug with the service names and description translation using WPML
-* Bugfix: bug with the calendar on certain iOS devices
-
-12/09/2020
-
-4.0.32
-
-* Bugfix: bug with the activation on certain configurations
-* Bugfix: bug with services and coupons update on WP 5.6
-
-12/08/2020
-
-4.0.31
-
-* Bugfix: error on the Coupons page on certain configurations
-
-12/02/2020
-
-4.0.29
-
-* Bugfix: warning message after booking added or updated on the Appointments page
-
-11/30/2020
-
-4.0.28
-
-* Bugfix: bug with the ordering bookings by date or time on the Appointments page
-* Bugfix: bug with the highlighting of acceptance field
-
-11/26/2020
-
-4.0.27
-
-* Improvement: the number of rows in the dashboard tables is remembered
-* Improvement: option to hide postal code in the Stripe element
-* Bugfix: bug with the custom fields title on the Schedule page
-
-11/25/2020
-
-4.0.26
-
-* Bugfix: bug in the dashboard when adding / updating elements
-
-11/25/2020
-
-4.0.25
-
-* Bugfix: bug with cancelled booking in the WooCommerce cart
-* Bugfix: bug with booking udpdate on certain configurations
-
-11/24/2020
-
-4.0.23
-
-* Bugfix: bug with automatic cancellation of not paid booking
-
-11/20/2020
-
-4.0.22
-
-* Bugfix: bug in the multi-service booking mode on certain configuration
-
-11/18/2020
-
-4.0.21
-
-* Bugfix: bug with the service availability limits in multi-service booking mode
-* Bugfix: minor bugs fixed
-
-11/16/2020
-
-4.0.19
-
-* Improvement: break added to default business hours
-* Improvement: ability to set the default number of dates displayed on the Appointments page
-* Improvement: switching the time format when editing services
-* Bugfix: unused requests removed on the dashboard pages
-* Bugfix: removed tags in service description
-* Bugfix: media button in service description not appeared
-* Bugfix: translation issues
-* Bugfix: bug with the name of coupon on the Appointments page
-* Bugfix: cancel button removed on the multiple booking tool
-* Bugfix: issue with the custom fields on the Schedule page
-
-11/03/2020
-
-4.0.17
-
-* Bugfix: problem when exporting a large number of bookings
-* Bugfix: bug with the service names on the Schedule page on certain configurations
-* Bugfix: bug with service edit on certain configurations
-* Bugfix: bug with the Suitable hours form
-
-10/31/2020
-
-4.0.15
-
-* Improvement: up to 5000 rows in the backend
-* Bugfix: bugs related to translation
-* Bugfix: bug with availability calculation on certain configurations
-
-10/25/2020
-
-4.0.12
-
-* Bugfix: bug with the availability calculation when booking is added manually
-* Bugfix: bug on the Schedule page
-
-10/24/2020
-
-4.0.9
-
-* Bugfix: minor bugfix related to data conversions
-
-10/23/2020
-
-4.0.8
-
-* Bugfix: bug with On approval notifications
-
-10/22/2020
-
-4.0.7
-
-* Improvement: maximum rows per page increased
-* Improvement: using HTML tags in the payment methods messages
-* Bugfix: bug with adding bookings manually on certain configurations
-
-10/21/2020
-
-4.0.6
-
-* Bugfix: bug with the chosen control
-
-10/20/2020
-
-4.0.5
-
-* Improvement: complete backend update
-
-10/12/2020
-
-3.8.64
-
-* Bugfix: bug with the Google calendar integration on certain configuration
-
-10/06/2020
-
-3.8.63
-
-* Bugfix: bug with automatic deletion of attachments
-
-10/03/2020
-
-3.8.62
-
-* Bugfix: bug with the custom fields on Appointments page
-
-10/02/2020
-
-3.8.61
-
-* Improvement: default date range increased on the Appointments page
-* Improvement: translation for the service name placeholder
-* Improvement: notification to admin if booking added manually
-* Improvement: store IP if booking added manually
-* Bugfix: bug with the custom column titles if booking added manually
-
-08/27/2020
-
-3.8.55
-
-* Bugfix: issues with the cached data in the service settings popup
-
-08/20/2020
-
-3.8.54
-
-* Bugfix: bug with custom fields when booking manually
-
-08/16/2020
-
-3.8.53
-
-* Bugfix: bug with placeholders.
-
-08/12/2020
-
-3.8.52
-
-* Improvement: storing cancellation time
-* Improvement: storing creation time
-* Bugfix: date conversion issue in certain timezones
-* Bugfix: bug with the option 'Set status after booking is paid with WooCommerce to'
-
-08/12/2020
-
-3.8.51
-
-* Improvement: translation of service names with Polylang
-* Improvement: option to choose the version of Stripe API
-* Improvement: compatibility improvements for the WordPress 5.5
-* Bugfix: #appprice placeholder now takes into account the number of booked places
-* Bugfix: compatibility issues with themes that use jQuery Chosen plugin
-* Bugfix: loading Stripe javascript removed from the free version
-* Bugfix: empty custom fields if title of column is set
-* Bugfix: issues with integration with the Google calendar on certain configurations
-
-07/15/2020
-
-3.8.47
-
-* Bugfix: bug with the 'tank you' message on certain configuration.
-
-
-07/15/2020
-
-3.8.46
-
-* Improvement: preparation time (limit) makes no effect on manual booking.
-* Bugfix: bug with the 'tank you' message when 'add to cart' option is enabled
-
-07/13/2020
-
-* Bugfix: issues with the booking status when WooCommerce is used for payments  
-
-08/07/2020
-
-3.8.44
-
-* Improvement: options to send separate notification when the booking is added manually
-* Improvement: option to set titles for the custom fields ids in the backend interface
-* Improvement: option to show the 'created on' date in the Appointment table
-* Bugfix: bug with additional fields used in Stripe
-* Bugfix: bug with checkboxes in multi-service booking
-* Dev: 'timeslot rendered' event added in js code (wbk_timeslots_rendered)
-
-07/21/2020
-
-3.8.42
-
-* Improvement: reply-to headers for the notifications
-* Improvement: storing of the IP address of the admin who cancels the booking
-* Improvement: options to translate cancellation and approval messages for admin
-* Improvement: support of translation of CF7 forms with the Polylang
-* Bugfix: bug with the time format on the Schedule page
-* Bugfix: bug with the preparation time
-* Bugfix: bug with the sending copy of service emails
-* Bugfix: iСal export fixed
-* Bugfix: bug with availability calculation on certain configuration
-* Dev: filter for the form rendering
-* Dev: filter for the options used in Google calendar integration
-
-06/10/2020
-
-3.8.37
-
-* Bugfix: bug in CF7 integration
-
-06/09/2020
-
-3.8.36
-
-* Bugfix: compatibility issues
-
-06/05/2020
-
-3.8.44
-
-* Improvement: option to show category dropdown for multi-service booking
-* Improvement: option to send alert if Google calendar has been unauthorized
-* Improvement: option to disable Stripe Api
-* Improvement: option to load Stripe JS only on a page with booking forms
-* Improvement: option allow html in select date label options
-* Bugfix: issue in the mass operation on dates with DST event
-
-05/26/2020
-
-3.8.34
-
-* Bugfix: issue with time zones.
-
-05/25/2020
-
-3.8.33
-
-* Bugfix: compatibility issue
-
-05/18/2020
-
-3.8.32
-
-* Improvement: category attribute for the multple service shortcode
-* Improvement: preset appointment status on creation depending on default status
-* Bugfix: date formatting error for dates when DST event occurs
-* Dev: filter for the number of places per time slot
-
-04/22/2020
-
-3.8.31
-
-* Bugfix: bug with the DST on certain configurations
-
-
-03/26/2020
-
-3.8.44
-
-* Improvement: availability to use custom names for the name, email and phone field in CF7 forms
-* Bugfix: wrong end time when using local time
-
-03/07/2020
-
-3.8.28
-
-* Bugfix: bug in WooCommerce integration.
-
-03/05/2020
-
-3.8.27
-
-* Improvement: Stripe API updated
-* Improvement: Reply-To header in the notification to admin is set with the customer's email_label
-* Improvement: option to set special hours for all services
-* Improvement: cancellation buffer can be set in minutes
-* Improvement: hooks for setting the 'Skip time slot' option per services
-* Improvement: new function to add custom JavaScript for the payment buttons click events
-* Improvement: option to show the local time in Start-End format
-* Improvement: Start-End format of the time on the Appointments page
-* Bugfix: bug with availability in the calendar when using the option 'Disable time slots after X hours'
-* Bugfix: bug with the activation on certain websites
-* Bugfix: minor conflicts resolution
-* Bugfix: wrong time after saving appointment on the Appointments page
-
-3.8.24
-
-01/24/2020
-
-* Bugfix: issues with coupons.
-
-3.8.23
-
-01/23/2020
-
-* Improvement: the ability to give access to appointments to users with the subscriber role
-
-3.8.22
-
-01/22/2020
-
-* Improvement: option to set number of days to show in extended mode
-* Improvement: special hours option improved to set rules for all services
-* Improvement: new placeholder for service description - #service_description
-
-* Improvement: images allowed in service description
-* Bugfix: cancellation issues
-* Bugfix: cancel button not worked on certain configurations
-
-* Bugfix: bug with the auto-scroll in multi-service booking mode
-* Bugfix: bug with the shortcode form
-
-3.8.21
-
-01/09/2020
-
-* Improvement: support of the character Count in the CF7 forms
-* Improvement: booking is marked as paid when applied coupon with the fixed discount more than total amount
-* Improvement: new placeholders for date and time when booking is made #booked_on_date, #booked_on_time
-
-3.8.19
-
-01/06/2020
-
-* Bugfix: bug with the multi-service booking.
-
-3.8.18
-
-01/05/2020
-
-* Bugfix: minor Bugfix.
-
-3.8.17
-
-01/03/2020
-
-* Improvement: option to override the business hours of certain services on specific dates
-* Improvement: option to skip date selection in multi-service booking mode
-* Bugfix: bug with the broken loading image on certain themes
-* Bugfix: bug with the translation of coupon input placeholder
-* Bugfix: scroll issue when date and service fields are hidden
-* Bugfix: bug with the shortcode generation form
-
-3.8.14
-
-12/16/2019
-
-* Bugfix: bug with the CSV export
-
-3.8.12
-
-12/13/2019
-
-* Bugfix: issues with datepicker
-
-3.8.11
-
-12/12/2019
-
-* Bugfix: compatibility issues
-
-3.8.9
-
-12/12/2019
-
-* Bugfix: but with the update of the past bookings
-
-3.8.8
-
-11/27/2019
-
-* Improvements: new placeholder #uniqueid to insret random tokens
-* Improvements: option to limit the number of bookings per email per day
-* Bugfix: bug with the locking time before and after booking
-
-3.8.6
-
-11/19/2019
-
-* Bugfix: minor Bugfix
-
-3.8.5
-
-11/14/2019
-
-* Bugfix: bug with the date translation
-
-3.8.4
-
-11/14/2019
-
-* Bugfix: critical Bugfix realted to the time zone conversion
-
-3.8.2
-
-10/27/2019
-
-* Bugfix: bug with activation on certain environment
-
-3.4.24
-
-05/04/2019
-
-* Bugfix: bug with custom fields
-
-3.4.23
-
-05/03/2019
-
-* Improvement: new mass operation tool for adding multiple booking from backend
-* Improvement: ability to set custom fields when creating new booking on Appointments page
-* Improvement: option to lock time slot on Schedule page if  places already booked
-* Improvement: schedule tools (mass operations) improved
-* Improvement: option to set the method of availability calculation
-* Improvement: option to set ascending and descending service order
-* Improvement: preparation time in minutes
-* Bugfix: bug with current category placeholder
-* Bugfix: bug in interface of Appointment popup
-
-3.4.7
-
-02/04/2019
-
-* Improvements: option to set scroll offset value.
-* Improvements: option to set format of delimiter in the price.
-* Improvements: range selection mode
-* Improvements: new placeholders for range selection mode
-* Bugfix: wrong date above the time slots in multi-service mode.
-* Bugfix: bug with automatic cancellation of appointments added manually.
-
-12/16/2018
-
-* Improvements: line removed in multiservice booking when services are not shown.
-* Improvements: specific error message if time slot already booked instead of generic message.
-* Improvements: ready for integration with International phone input plugin.
-* Improvements: option to make holiday option recurring.
-* Improvements: option to show local time in a day label above the time slots.
-* Improvements: new placeholders for range fields #timerange and #timedaterange.
-* Bugfix: symbol “S” in date picker.
-* Bugfix: conflict with the Polylang plugin.
-* Bugfix: bug with the custom fields in the Schedule page.
-* Bugfix: bug with usernames in the Services page.
-* Bugfix: bug with updating appointment on a closed date.
-
-3.4.0
-
-10/26/2018
-
-* Improvements: option for adding gaps before and after appointments improved
-* Improvements: approval of multiple appointments with one email link
-* Improvements: multiple emails in "Send copies of service emails to" option (comma*separated)
-* Improvements: titles of custom field columns in the Appointments page
-* Improvements: new placeholder for appointment duration (#duration)
-* Improvements: option for automatic selection of all services when the Appointments page loaded
-* Improvements: option to lock time slots before and after appointment(s)
-* Improvements: services table UI improved (issue with long descriptions fixed)
-* Bugfix: bug with date format in popup calendar
-* Bugfix: bug with service descriptions
-* Bugfix: bug with not required field in booking form
-* Bugfix: appearance of popup calendar on iPhones fixed
-* Bugfix: bug with date format after update from lite to premium
-
-3.3.96
-
-09/19/2018
-
-* Bugfix: bug with classic calendar in Lite version
-
-3.3.94
-
-09/17/2018
-
-* Improvements: classic date picker
-* Improvements: option "Lock time slot if at least one place is booked" use Autolock mode
-* Improvements: option to lock all day if it list one time slot is booked
-* Bugfix: bug with adding events to Google calendar when appointment approved by the link
-* Bugfix: bug with the number of available places when edit appointments in the Appointments page
-* Bugfix: bug with night hours
-* Bugfix: bug with the last day when date range and date dropdown used
-
-3.3.91
-
-08/25/2018
-
-* Bugfix: checkbox not working when time is slot selection skipped
-* Bugfix: bug with empty categories
-* Bugfix: availability issues
-* Bugfix: phone number issues after previouse update
-* Bugfix: bug with the minimum places per time slot option of the service
-
-3.3.86
-
-08/10/2018
-
-* Bugfix: bug with availability in multi-service mode
-
-3.3.85
-
-08/09/2018
-
-* Improvements: compatibility with php 7.2
-* Improvements: new placeholder #status
-* Improvements: option to show / hide columns on Appointments page
-* Improvements: layout of tables in dashboard improved
-
-3.3.84
-
-08/04/2018
-
-* Improvements: options to add text before and after time in time slots
-* Improvements: subtotal and tax placeholders formatted according to price format
-* Improvements: new placeholder #one_slot_price
-* Bugfix: bug with placeholders used for user name in the dashboard
-* Bugfix: bug with availability of manually unlocked days in the popup calendar
-
-3.3.82
-
-07/24/2018
-
-* Improvements: using of the first booking for the placeholders out of loop
-* Improvements: message to administrator when administrator cancel the appointment by link
-* Improvements: custom fields for the customer name in the Schedule page
-* Improvements: option to redirect when payment with Stripe is succeed
-* Improvements: new placeholders #subtotal_amount, #tax_amount
-* Bugfix: bug with acceptance field
-
-3.3.77
-
-07/14/2018
-
-* Improvements: coupon usage number in the Coupons page
-* Improvements: coupon column in th Appointments table
-* Improvements: option to use additional fields in Stripe checkout
-* Bugfix: bug with availability in popup calendar
-* Bugfix: Bugfixed amount coupons when price is zero
-* Bugfix: bug with 24-hours time slots and night hours mode
-
-3.3.73
-
-07/03/2018
-
-* Improvements: continuous appointments
-* Improvements: option to skip “search time slots” button in extended mode
-* Improvements: added hook for external validation of booking form fields
-* Improvements: availability check-in in the popup calendar improved (option to set number of days to check)
-* Improvements: preparation time in hours
-
-3.3.68
-
-06/24/2018
-
-* Improvements: details of previous appointments in the time slot
-* Improvements: option to skip time slot selection in Extended mode
-* Improvements: option to set minimal places per time slot
-* Improvements: option to set scrolling container
-* Bugfix: bug with night hours
-* Bugfix: bug with DST in Schedule tools
-
-3.3.63
-
-06/11/2018
-
-* Improvements: cancelled appointments in the dedicated table
-* Improvements: option to define the count of days in extended mode
-* Improvements: option to lock time slot if at least one place is booked
-* Improvements: more placeholders for booked time slot
-* Improvements: placeholder for the low limit in the checkout button
-* Bugfix: interface of the Schedule page (layout issues)
-* Bugfix: option to re-configure the booking form label in multi-service booking
-* Bugfix: issues with not displayed appointments on the Schedule page (after count of places changed in the service settings)
-
-3.3.52
-
-04/24/2018
-
-* Bugfix: bug with custom fields placeholder
-* Demo: WooCommerce integration
-
-3.3.42
-
-04/02/2018
-
-* Improvements: custom fields interface improved
-* Improvements: amount field on Appointment page
-* Improvements: WPML integration improved (store data language for reminders)
-* Improvements: service order (priority option)
-* Improvements: option to hide service checkboxes in multi-service mode
-* Improvements: EU GDPR Compliance
-* Improvements: service id in the Services table
-* Improvements: Multi-service booking
-* Improvements: Option for mass cancellation of appointments with the link (for administrator)
-* Improvements: Option to not allow more than one appointment per time slot for the user (restriction by email)
-* Improvements: Option to not allow more than one appointment for the user on given service (restriction by email)
-* Improvements: Option to automatically delete appointments with the Awaiting approval status
-* Bugfix: bug with extended mode and time zones with DST
-* Bug with the time zone when appointment approved
-* Bugfix: DST issues fixed
-* Bugfix: bug with the day availability after 360 days from current date
-* Bugfix: bug in the Schedule page in IE 11
-
-3.3.25
-
-03/03/2018
-
-* Bugfix: bug with the local time in extended mode
-
-3.3.23
-
-02/21/2018
-
-* Improvements: gateway for using Conditional Fields for Contact Form 7
-* Improvements: "night hours" option to include time slots in a previous day
-* Improvements: option to show only local time in time slots
-* Improvements: #local placeholder to show local time in the booking form label
-* Bugfix: bug with notification duplicate on certain configurations
-* Bugfix: bug with Safari and category list shortcode
-* Demo: iCalendar integration
-
-3.3.18
-
-02/10/2018
-
-* Improvements: #id placeholder in the Appointment information option (used in payment and cancellation pages)
-* Improvements: option to lock / unlock time for category on given date and time ranges
-* Improvements: option to show appointments locked by autolock feature as "booked" in front-end
-* Improvements: option to show end time for time slots on Schedule page
-* Improvements: option to show end time in the interface of Appointments page
-* Bugfix: bug with #selected_count pleaceholder in the Booking done messages and form label
-* Bugfix: bug with the long custom forms
-* Bugfix: Bugfixes with the autlock on certain configurations
-* Bugfix: bug with step option of the service on certain configurations
-
-3.3.15
-
-01/30/2018
-
-* Improvements: placeholder in subjects when multiple booking enabled.
-* Improvements: 15 new subject placeholders.
-* Improvements: #selected_count placeholder for subject and messages to show count of booked tims slots in multiple mode.
-* Improvements: option to setup the format of the decimal part of the price.
-* Improvements: #start_end placeholder for the "Appointment information" option.
-* Improvements: minimal limit for multi-booking.
-* Improvements: offline payment methods block automatic cancellation of appointments.
-* Improvements: exclusive checkboxes (CF7 forms).
-* Improvements: service category list on frontend.
-* Improvements: placeholder for time range in the booking form label option
-* Improvements: appointments limit for services (override the global limit setting)
-* Improvements: action to hook booking event in external plugins
-* Improvements: date range placeholder to set start-end format of appointment time
-* Improvements: option to hide Suitable houts in the extended mode
-* Improvements: offline payments methods for services (Pay on arrival, Bank transfer)
-* Bugfix: minor bugs with translation
-* Bugfix: bug with the certain placeholders of the "booking done" message.
-* Bugfix: bug with the certain past dates when dropdown date is enabled and service has limits.
-* Bugfix: bug with the page loading time on certain configurations
-* Bugfix: bug with the colons in a custom fields
-* Bugfix: bug with the placeholders in the Thank you message
-* Demo: prevent automatic cancellation of appointments if the offline payment method is chosen.
-* Demo: payment method column in the Appointments table.
-* Demo: new mode of the Google Calendar integration - import only.
-* Demo: cache for 2-way Google Calendar synchronization.
-* Demo: option to set redirect page for successful PayPal payments
-* Demo: option to sent copies of invoices to administrator.
-* Demo: two-ways Google Calendar synchronization
-* Demo: option for auto-redirect to PayPal without approving
-* Demo: payment link for multiple appointments
-* Demo: cancellation link for multiple appointments
-* Demo: Сoupons
-* Demo: email notification on payment to a customer
-* Demo: email notification on payment to an administrator
-* Demo: option to send one notification to administrator in multiple mode
-* Demo: offline payment methods block automatic cancellation of appointments.
-
-3.3.2
-
-12/03/2017
-
-* Improvements: HTML in the service description
-* Bugfix: bug with attachments in admin notification
-* Demo: online payments with Stripe
-
-3.2.23
-
-11/13/2017
-
-* Improvements: attachments in custom forms.
-* Improvements: option to set checkbox field as required
-* Improvements: option to set selected service in url
-* Improvements: appearance options interface improved
-
-3.2.18
-
-11/11/2017
-
-* Bugfix: bug with design presets list.
-
-3.2.17
-
-10/29/2017
-
-* Improvements: email notification placeholder for current category
-* Improvements: option to show booked time slots for multi-seats services
-* Improvements: service description length increased
-
-3.2.15
-
-10/25/2017
-
-* Bugfix: bug with the "booking done" message editor.
-
-3.2.14
-
-10/24/2017
-
-* Improvements: more translation options.
-* Improvements: option to set count of dates in the dropdown date select input.
-* Improvements: option to show locked time slots as booked in the frontent.
-* Improvements: cancel or approve the appointment by the link sent in administrator notification.
-* Improvements: option to replace popup calendar with date select dropdown.
-* Improvements: new placeholder for email notifications - category names
-* Improvements: option to skip date selection in the booking form (managed by service setting Availability date range)
-* Bugfix: date format in the holidays setting fixed.
-* Bugfix: bug with the user name placeholder in the timeslot.
-* Bugfix: DST issues fixed.
-* Bugfix: compatibility with PHP 5.3.
-* Bugfix: issues with time hole optimization and autolock.
-* Bugfix: dropdown date select become empty when cancel button clicked.
-* Bugfix: notification on cancellation bugs fixed.
-* Bugfix: DST issues on the backend schedule page.
-* Bugfix: hide checkout button when booking form is rendered.
-* Bugfix: unlock the appointments when appointment in connected service is canceled.
-* Bugfix: bug with cancellation of appointments on some versions of iOS.
-
-3.2.0
-
-08/27/2017
-
-* Improvements: more compatibility with WPML.
-* Improvements: ability to edit comments in the Appointments page.
-* Improvements: option to show service description under select service input on frontend.
-* Improvements: option to control the count of places allowed for booking (used for the services with several places per time slot)
-* Improvements: option to optimize schedule when using autolock and services with different durations.
-* Bugfix: bug with appointment controls in appointment table.
-* Bugfix: bug with customer comments appeared as custom field.
-* Bugfix: bug with appearance presets loading on certain web-servers
-* Bugfix: bug with customer comments appeared as custom field.
-* Bugfix: bug with searching time slots on basic mode on certain configurations.
-* Bugfix: time zone conversion conflict on certain configurations.
-* Bugfix: bug with service update, creation on certain configurations.
-* Bugfix: reminders not working correctly after 3.1.26.
-* Bugfix: bug with masked input on Chrome for Android.
-* Bugfix: Bugfix editor.
-* Bugfix: bug with default places count.
-* Bugfix: bug with booked time slots on certain configurations.
-* Bugfix: bug with subject of email sent on approval.
-* Bugfix: bug with appointment time in reminders.
-* Demo: integration with Google Calendar.
-
-3.1.24
-
-07/28/2017
-
-* Bugfix: bug with appearance settings
-
-3.1.23
-
-06/06/2017
-
-* Bugfix: bug with appearance presets loading on certain web-servers
-
-3.1.22
-
-05/28/2017
-
-* Improvements: e-mail notification to administrator.
-* Improvements: option to add custom fields values to customer name in the schedule and appointments table.
-* Improvements: service business hours interface improved.
-* Improvements: option to set the date range of service availability.
-* Improvements: option to skip time slot selection and use default time.
-* Improvements: apply backend date format on the Schedule page.
-* Improvements: appointment table interface improved (select all services, select services by category).
-* Improvements: CF7 textarea field is available as custom field.
-* Improvements: minor CSS improvements.
-* Improvements: control appearance in Safari mobile improved.
-* Bugfix: cancel button duplicate in extended mode.
-* Bugfix: email validation improved (long domains support).
-* Bugfix: bug in jQuery no-conflict mode
-* Bugfix: bug with autolock on certain service settings.
-* Bugfix: bug with searching time slots on certain configurations of extended mode.
-* Bugfix: bug with css on frontend.
-* Bugfix: incorrect message on deleting data in the backend tables.
-* Bugfix: bug in Safari with checkout button.
-
-3.1.10
-
-03/27/2017
-
-* Improvements: input fields appearance in Safari mobile improved.
-* Improvements: time slots interface improved for services with flexible step.
-* Improvements: ability to set the step for services with multiple places per time slot.
-* Improvements: option to disable loading javascript files of pickadate popup calendar .
-* Improvements: option to set the limit of the booking in the multiple booking mode.
-* Improvements: new appearance option for checkout button in the multiple mode.
-* Improvements: option to make the phone field not required in a booking form.
-* Improvements: placeholders in the "Booking done" message.
-* Improvements: options validation improved.
-* Bugfix: hide checkout button on booking done.
-* Bugfix: incorrect message on deleting data in the backend tables.
-* Bugfix: bug in Safari with checkout button.
-
-3.1.6
-
-03/07/2017
-
-* Bugfix: bug with the loader animation.
-
-3.1.5
-
-08/27/2017
-
-* Improvements: autolock of group booking services improved (option to reduce count of available places).
-
-3.1.4
-
-02/24/2017
-
-* Bugfix: bug with multiple booking in one session on certain configuration.
-
-3.1.3
-
-02/20/2017
-
-* Improvements: multiple time slots selection in one session.
-* Improvements: group services by categories (shortcode improved).
-* Improvements: autolock feature improved (ability to lock appointments by service category).
-* Improvements: option to show customer's local time in the time slots, based on time zone.
-* Improvements: additional masked input embeded (more compatibility with mobile devices).
-* Improvements: advanced appointments status system.
-* Improvements: customer's comment length extended to 1024 symbols.
-* Improvements: jQuery no-conflict mode on front end (as option).
-* Improvements: checking current time bofore booking form submit.
-* Bugfix: bug on certain date formats in the appointments table.
-* Demo: CSV-export.
-
-
-3.0.15
-
-12/12/2016
-
-* Improvements: add, edit appointments in the appointment table.
-* Improvements: option to send a copy of emails to predefined email address.
-* Improvements: option to disable dates in popup calendar if no time slots available.
-* Improvements: option to set preparation time for the service to prevent booking on today, tomorrow etc.
-* Improvements: popup calendar style improved
-* Improvements: options interface improved
-
-3.0.9
-
-11/13/2016
-
-* Improvements: option to check if the rendered page has shortcode.
-* Improvements: time slot autolock feature.
-* Improvements: option to display cancel button.
-* Improvements: autolock on manual booking.
-* Bugfix: bug with booked timeslot when show booked slots enabled.
-* Bugfix: unable to select current day on 7 days services.
-* Bugfix: bug with autolock services with custom gaps.
-
-3.0.5
-
-10/27/2016
-
-* Improvements: custom fields in the appointment table.
-* Improvements: status wording improved.
-* Bugfix: form refreshing.
-* Bugfix: email templates with images.
-
-3.0.4
-
-10/22/2016
-
-* Improvements: compatibility with Contact Form 7 Dynamic Text Extension.
-* Improvements: email validation improved.
-
-3.0.3
-
-10/16/2016
-
-* Improvements: option to hide the form when a booking is done.
-* Bugfix: update active time slot when a booking is done.
-* Demo: unlimited email templates for notifications and reminders.
-
-3.0.1
-
-10/06/2016
-
-* Improvements: schedule tools to lock and unlock range of dates..
-* Bugfix: booking form bug on IOS 9.
-
-3.0.0
-
-10/01/2016
-
-* Improvements: custom user roles for service access.
-* Improvements: custom user roles for service access.
-* Improvements: unavailable dates in date picker.
-* Improvements: Minor CSS improvements.
-* Bugfix: default book button text fixed.
-* Bugfix: date picker Bugfix.
-* Demo: online payments interface.
-
-2.2.6
-
-08/22/2016
-
-* Improvements: appointments page.
-* Improvements: connection between services.
-* Improvements: frontend css improvements.
-* Improvements: editable form title with placeholders.
-
-2.2.3
-
-08/11/2016
-
-* Bugfix: error if appointment duration is less then 10 minutes.
-
-2.2.2
-
-08/10/2016
-
-* Improvements: Javascript API (enable to trigger custom js code on booking).
-
-2.2.1
-
-07/28/2016
-
-* Improvements: option to display booked time slot.
-* Improvements: option to edit booked time slot text (with placeholders).
-* Improvements: minor css improvements.
-* Bugfix: slot with 0 available.
-* Bugfix: error message in booking form with defined service.
-* Bugfix: time slot interval witout gap.
-* Bugfix: issue with the custom checkboxes.
-
-2.1.7
-
-07/11/2016
-
-* Improvements: Saving data on uninstall.
-
-2.1.6
-
-07/10/2016
-
-* Improvements: format of time on the time slot block.
-* Improvements: Detailed or simple timeslot view.
-* Improvements: CF7 select field validation (required / not required).
-
-2.1.5
-
-07/06/2016
-
-* Bugfix: phone mask issue.
-* Bugfix: list of users at service page.
-* Improvements: business hours setup with 15 minutes step.
-
-2.1.2
-
-06/26/2016
-
-* Minor backend improvements.
-
-2.1.1
-
-06/26/2016
-
-* Appointments limit removed.
-* Email notifications removed.
-
-2.1.0
-
-06/15/2016
-
-* HTML available for the translation settings.
-* Bugfix.
-
-
-2.0.7
-
-05/30/2016
-
-* Frontend css improved.
-* Service duration minimal limit removed.
-
-2.0.4
-
-05/19/2016
-
-* Minor Bugfix.
-
-2.0.0
-
-05/07/2016
-
-* Appearance customization: 79 frontend design presets, 80+ options.
-* CF7 acceptance field support.
-* Active time slot visualization.
-* Minor Bugfix.
-
-1.3.3
-
-03/24/2016
-
-* Color customization options.
-
-1.3.1
-
-03/01/2016
-
-* Team booking.
-* Frontend labels as editable options.
-* Minor backend interface improve.
-* Minor Bugfix.
-* Custom fields in booking form feature available.
-* Integration with the Contact Form 7.
-
-1.1.0
-
-02/02/2016
-
-* Appointment duration limit removed.
-* Romanian language available.
-* Russian language availabale.
-
-1.0.8
-
-01/22/2016
-
-* German language available.
-* Minor Bugfix.
-
-1.0.5
-
-01/05/2016
-
-* French language available.
-* Minor Bugfix.
-
-1.0.4
-
-12/16/2015
-
-* Booking form style updated
-* Translation enabled (pot-file included)
-* Bugfix
-
-1.0.2
-
-12/15/2015
-
-* Bugfix
-
-1.0.1
-
-12/10/2015
-
-* Backend interface improvements
-
-1.0
-
-12/07/2015
-
-* Initial release

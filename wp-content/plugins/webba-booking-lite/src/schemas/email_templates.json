@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Nom",
+            "tab": "",
+            "misc": {
+                "tooltip": "Entrer un nom pour identifier le mod\u00e8le de courriel."
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "template": {
+            "type": "string",
+            "input_type": "editor",
+            "hidden": true,
+            "title": "Mod\u00e8le",
+            "tab": "",
+            "misc": {
+                "tooltip": "Utiliser l\u2019\u00e9diteur de texte pour pr\u00e9parer le mod\u00e8le de courriel. <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/placeholders/\">Liste des places r\u00e9serv\u00e9es disponibles</a>"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        }
+    }
+}

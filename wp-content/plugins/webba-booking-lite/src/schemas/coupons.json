@@ -1,0 +1,110 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "coupon_name": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Coupon",
+            "tab": "",
+            "misc": {
+                "tooltip": "Entrez un code promo."
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "coupon_date_range": {
+            "type": "string",
+            "input_type": "date_range",
+            "hidden": false,
+            "title": "Disponible sur",
+            "tab": "",
+            "misc": {
+                "tooltip": "D\u00e9finir la dur\u00e9e de validit\u00e9 du coupon.",
+                "time_zone": "Europe/Paris"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "coupon_services": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Services",
+            "tab": "",
+            "misc": {
+                "tooltip": "Choisir le(s) service(s) pour lequel le coupon sera applicable.",
+                "multiple": true,
+                "options": "services"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": null,
+            "editable": true
+        },
+        "coupon_maximum": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Limite d'usage",
+            "tab": "",
+            "misc": {
+                "tooltip": "Sp\u00e9cifier la limite d\u2019utilisation pour le coupon - le nombre maximum de fois qu\u2019il peut \u00eatre appliqu\u00e9. Le laisser vide signifie une utilisation illimit\u00e9e.",
+                "sub_type": "none_negative_integer"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "coupon_used": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Utilis\u00e9",
+            "tab": "",
+            "misc": {
+                "sub_type": "positive_integer"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": false
+        },
+        "coupon_amount_fixed": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "R\u00e9duction (fixe)",
+            "tab": "",
+            "misc": {
+                "tooltip": "Pr\u00e9ciser le montant fixe qui sera appliqu\u00e9 comme remise.",
+                "sub_type": "none_negative_float"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "coupon_amount_percentage": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "R\u00e9duction (pourcentage)",
+            "tab": "",
+            "misc": {
+                "tooltip": "Pr\u00e9ciser le pourcentage qui sera appliqu\u00e9 comme r\u00e9duction.",
+                "sub_type": "none_negative_float"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "100",
+            "editable": true
+        }
+    }
+}

@@ -82,6 +82,25 @@ jQuery(function ($) {
                             times_htmls +=
                                 '<div class="field-block-wb"><label class="label-wb"><b>Booking items count</b></label><div class="custom-select-wb-holder"><div class="custom-select-wb"><select class="schedule_tools_quantity_mass_add" >'
                             times_htmls += '</select></div></div></div>'
+                            times_htmls +=
+                                '<div class="field-block-wb"><label class="label-wb"><b>Booking status</b></label><div class="custom-select-wb-holder"><div class="custom-select-wb"><select class="schedule_tools_status_mass_add" >'
+                            times_htmls +=
+                                '<option value="pending">Awaiting approval</option>'
+                            times_htmls +=
+                                '<option value="approved">Approved</option>'
+                            times_htmls +=
+                                '<option value="paid">Paid (awaiting approval)</option>'
+                            times_htmls +=
+                                '<option value="paid_approved">Paid (approved)</option>'
+                            times_htmls +=
+                                '<option value="arrived">Arrived</option>'
+                            times_htmls +=
+                                '<option value="woocommerce">Managed by WooCommerce</option>'
+                            times_htmls +=
+                                '<option value="added_by_admin_not_paid">Added by the administrator (not paid)</option>'
+                            times_htmls +=
+                                '<option value="added_by_admin_paid">Added by the administrator (paid)</option>'
+                            times_htmls += '</select></div></div></div>'
 
                             times_htmls +=
                                 '<div class="field-block-wb"><label class="label-wb"><b>Customer name</b></label><div class="field-wrapper-wb"><input type="text" value="" class="schedule_tools_customer_name" name="schedule_tools_customer_name"></div></div>'
@@ -102,6 +121,9 @@ jQuery(function ($) {
                             jQuery('.schedule_tools_times_mass_add').chosen()
                             jQuery(
                                 '.schedule_tools_quantity_mass_add'
+                            ).niceSelect()
+                            jQuery(
+                                '.schedule_tools_status_mass_add'
                             ).niceSelect()
                             jQuery('.schedule_tools_times_mass_add').change(
                                 function () {
@@ -290,6 +312,10 @@ jQuery(function ($) {
             form_data.append('desc', comment)
             form_data.append('times', times)
             form_data.append('quantity', qty)
+            form_data.append(
+                'status',
+                tab.find('.schedule_tools_status_mass_add').val()
+            )
 
             if (!error_status) {
                 return
@@ -462,12 +488,12 @@ function wbk_update_appearance_preview(elem) {
 function wbk_change_button_status(elem, status) {
     if (status == 'loading') {
         elem.addClass('loading-btn-wb')
-        elem.find('.btn-ring-wb').css('opacity', '1')
+        elem.find('.btn-ring-wbk').css('opacity', '1')
         elem.attr('disabled', true)
     }
     if (status == 'regular') {
         elem.removeClass('loading-btn-wb')
-        elem.find('.btn-ring-wb').css('opacity', '0')
+        elem.find('.btn-ring-wbk').css('opacity', '0')
         elem.attr('disabled', false)
     }
 }

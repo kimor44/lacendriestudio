@@ -1,0 +1,538 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "service_name": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Nom de service",
+            "tab": "general",
+            "misc": {
+                "tooltip": "Entrer un nom de service"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_description": {
+            "type": "string",
+            "input_type": "editor",
+            "hidden": true,
+            "title": "Description",
+            "tab": "general",
+            "misc": {
+                "tooltip": "Entrez une description du service."
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_date_range": {
+            "type": "string",
+            "input_type": "date_range",
+            "hidden": true,
+            "title": "Disponibilit\u00e9 de plage de dates",
+            "tab": "hours",
+            "misc": {
+                "tooltip": "Sp\u00e9cifier une plage de dates si le service n\u2019est valide que pour une p\u00e9riode sp\u00e9cifique.",
+                "date_format": "d.m.y",
+                "time_zone": "Europe/Paris"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_business_hours": {
+            "type": "json",
+            "input_type": "business_hours",
+            "hidden": true,
+            "title": "Heures d'ouverture",
+            "tab": "hours",
+            "misc": {
+                "tooltip": "S\u00e9lectionner les jours et les intervalles de temps lorsque ce service est disponible pour la r\u00e9servation."
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": [
+                {
+                    "start": 32400,
+                    "end": 46800,
+                    "day_of_week": "1",
+                    "status": "active"
+                },
+                {
+                    "start": 50400,
+                    "end": 64800,
+                    "day_of_week": "1",
+                    "status": "active"
+                },
+                {
+                    "start": 32400,
+                    "end": 46800,
+                    "day_of_week": "2",
+                    "status": "active"
+                },
+                {
+                    "start": 50400,
+                    "end": 64800,
+                    "day_of_week": "2",
+                    "status": "active"
+                },
+                {
+                    "start": 32400,
+                    "end": 46800,
+                    "day_of_week": "3",
+                    "status": "active"
+                },
+                {
+                    "start": 50400,
+                    "end": 64800,
+                    "day_of_week": "3",
+                    "status": "active"
+                },
+                {
+                    "start": 32400,
+                    "end": 46800,
+                    "day_of_week": "4",
+                    "status": "active"
+                },
+                {
+                    "start": 50400,
+                    "end": 64800,
+                    "day_of_week": "4",
+                    "status": "active"
+                },
+                {
+                    "start": 32400,
+                    "end": 46800,
+                    "day_of_week": "5",
+                    "status": "active"
+                },
+                {
+                    "start": 50400,
+                    "end": 64800,
+                    "day_of_week": "5",
+                    "status": "active"
+                }
+            ],
+            "editable": true
+        },
+        "service_price": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Prix",
+            "tab": "pricing",
+            "misc": {
+                "tooltip": "Fixer le prix du service. Si vous n\u2019utilisez pas les paiements en ligne, le garder \u00e0 z\u00e9ro.",
+                "sub_type": "none_negative_float"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_email": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Email",
+            "tab": "email",
+            "misc": {
+                "tooltip": "Entrer le courriel des administrateurs qui recevront des notifications pour les r\u00e9servations li\u00e9es \u00e0 ce service.",
+                "sub_type": "email"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_priority": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Priorit\u00e9",
+            "tab": "general",
+            "misc": {
+                "sub_type": "none_negative_integer",
+                "tooltip": "Si vous avez plusieurs services dans un seul formulaire, d\u00e9finissez la priorit\u00e9 d\u2019affichage en entrant un num\u00e9ro de priorit\u00e9. Un nombre inf\u00e9rieur indique une priorit\u00e9 plus \u00e9lev\u00e9e."
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_min_quantity": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Nombre minimum de r\u00e9servations par tranche horaire",
+            "tab": "general",
+            "misc": {
+                "tooltip": "Si vous acceptez les r\u00e9servations de groupe, vous pouvez sp\u00e9cifier le nombre minimum de r\u00e9servations requises par tranche horaire.",
+                "sub_type": "positive_integer"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "1",
+            "editable": true
+        },
+        "service_quantity": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "R\u00e9servation maximum limite pour un cr\u00e9neau horaire",
+            "tab": "general",
+            "misc": {
+                "tooltip": "Par d\u00e9faut, une r\u00e9servation est autoris\u00e9e par tranche horaire. Si vous acceptez les r\u00e9servations de groupe, d\u00e9finissez le nombre maximum de r\u00e9servations autoris\u00e9es par tranche horaire.",
+                "sub_type": "positive_integer"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "1",
+            "editable": true
+        },
+        "service_form": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Formulaire de r\u00e9servation",
+            "tab": "general",
+            "misc": {
+                "tooltip": "Choose your preferred booking form: either keep the default value or select a <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/set-up-frontend-booking-process/using-custom-fields-in-the-booking-form/\">CF7 form.</a>",
+                "options": "backend",
+                "null_value": [
+                    "Formulaire par d\u00e9faut"
+                ]
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_gg_calendars": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Calendrier Google",
+            "tab": "general",
+            "misc": {
+                "tooltip": "If you've integrated <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/google-calendar/\">Google Calendar</a>, choose the specific Google Calendar to synchronize with the service.",
+                "multiple": true,
+                "options": "gg_calendars"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": null,
+            "editable": true
+        },
+        "service_users": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Utilisateurs",
+            "tab": "general",
+            "misc": {
+                "multiple": true,
+                "tooltip": "Ajoutez des utilisateurs qui ont besoin d\u2019acc\u00e9der \u00e0 l\u2019horaire de ce service.",
+                "options": "backend"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": 0,
+            "editable": true
+        },
+        "service_users_allow_edit": {
+            "type": "string",
+            "input_type": "checkbox",
+            "hidden": true,
+            "title": "Allow users edit service parameters",
+            "tab": "general",
+            "misc": {
+                "yes": "Oui",
+                "tooltip": "Ajoutez des utilisateurs qui ont besoin d\u2019acc\u00e9der \u00e0 l\u2019horaire de ce service."
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_duration": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Dur\u00e9e (minutes)",
+            "tab": "hours",
+            "misc": {
+                "sub_type": "positive_integer",
+                "tooltip": "Entrez la dur\u00e9e de chaque r\u00e9servation."
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "30",
+            "editable": true
+        },
+        "service_prepare_time": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Temps de pr\u00e9paration (minutes)",
+            "tab": "general",
+            "misc": {
+                "sub_type": "none_negative_integer",
+                "tooltip": "Sp\u00e9cifiez la p\u00e9riode tampon pour les nouvelles r\u00e9servations. Par exemple, s\u2019il est 9 h et que vous voulez offrir des plages horaires commen\u00e7ant 24 heures plus tard, entrez 1440 (24 heures * 60 minutes)."
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_interval_between": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Ecart(minutes)",
+            "tab": "hours",
+            "misc": {
+                "tooltip": "Entrer le temps n\u00e9cessaire entre les r\u00e9servations. La valeur par d\u00e9faut est z\u00e9ro pour la planification cons\u00e9cutive.",
+                "sub_type": "none_negative_integer"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_step": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Espace (minutes)",
+            "tab": "hours",
+            "misc": {
+                "tooltip": "  ",
+                "sub_type": "positive_integer"
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "30",
+            "editable": true
+        },
+        "service_notification_template": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Mod\u00e8le de notification 'pendant la r\u00e9servation'",
+            "tab": "email",
+            "misc": {
+                "tooltip": "S\u00e9lectionner un mod\u00e8le pour les notifications de confirmation de r\u00e9servation.",
+                "options": "email_templates",
+                "null_value": [
+                    "D\u00e9faut"
+                ]
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_reminder_template": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Mod\u00e8le d\u2019avis de rappel",
+            "tab": "email",
+            "misc": {
+                "tooltip": "S\u00e9lectionner un mod\u00e8le pour les rappels de r\u00e9servation.",
+                "null_value": [
+                    "D\u00e9faut"
+                ],
+                "options": "email_templates"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_invoice_template": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Mod\u00e8le de notification de facture",
+            "tab": "email",
+            "misc": {
+                "tooltip": "S\u00e9lectionner un mod\u00e8le pour les factures.",
+                "null_value": [
+                    "D\u00e9faut"
+                ],
+                "options": "email_templates"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_booking_changed_template": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Mod\u00e8le de changement de r\u00e9servation",
+            "tab": "email",
+            "misc": {
+                "tooltip": "S\u00e9lectionner un mod\u00e8le pour les notifications de modification de r\u00e9servation.",
+                "null_value": [
+                    "D\u00e9faut"
+                ],
+                "options": "email_templates"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_arrived_template": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Status \"arrived\" template",
+            "tab": "email",
+            "misc": {
+                "tooltip": "Select a template for status \"Arrived\" notification. ",
+                "null_value": [
+                    "D\u00e9faut"
+                ],
+                "options": "email_templates"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_payment_methods": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "M\u00e9thodes de paiement",
+            "tab": "pricing",
+            "misc": {
+                "tooltip": "S\u00e9lectionner le ou les modes de paiement pr\u00e9f\u00e9r\u00e9s pour ce service.",
+                "multiple": true,
+                "options": "backend"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": null,
+            "editable": true
+        },
+        "service_service_fee": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Ajouter le montant \u00e0 la commande (d\u00e9p\u00f4t)",
+            "tab": "pricing",
+            "misc": {
+                "tooltip": "Sp\u00e9cifier le montant du d\u00e9p\u00f4t n\u00e9cessaire pour la r\u00e9servation. Le laisser \u00e0 0 pour le paiement initial complet.",
+                "sub_type": "none_negative_float"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_pricing_rules": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "R\u00e8gles de prix",
+            "tab": "pricing",
+            "misc": {
+                "tooltip": "Select the <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/payment/pricing-rules/\">pricing rules</a> to be applied to this service.",
+                "options": "pricing_rules",
+                "multiple": true
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": null,
+            "editable": true
+        },
+        "service_woo_product": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "ID de produit WooCommerce",
+            "tab": "pricing",
+            "misc": {
+                "tooltip": "Set ID of the product associated with this service. Set only if WooCommerce is used as payment mehtod.",
+                "sub_type": "none_negative_integer",
+                "pro_version": true
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "service_zoom": {
+            "type": "string",
+            "input_type": "checkbox",
+            "hidden": true,
+            "title": "Cr\u00e9er des \u00e9v\u00e9nements Zoom",
+            "tab": "general",
+            "misc": {
+                "yes": "Oui",
+                "tooltip": "Check this to automatically create <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/integrations/integration-with-zoom/\">Zoom events</a> for each booking of this service."
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_multi_mode_low_limit": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Minimum time slots per booking",
+            "tab": "general",
+            "misc": {
+                "sub_type": "none_negative_integer",
+                "tooltip": "Minimum number of time slots required to make a booking. Applicable only if \"Settings -> User Interface -> Multiple Bookings in One Session\" is enabled."
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_multi_mode_limit": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Maximum time slots per booking",
+            "tab": "general",
+            "misc": {
+                "sub_type": "none_negative_integer",
+                "tooltip": "Maximum number of time slots allowed to make a booking. Applicable only if \"Settings -> User Interface -> Multiple Bookings in One Session\" is enabled."
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_consecutive_timeslots": {
+            "type": "string",
+            "input_type": "checkbox",
+            "hidden": true,
+            "title": "Consecutive time slots",
+            "tab": "general",
+            "misc": {
+                "yes": "Oui",
+                "tooltip": "When this option is enabled, the system allows customers to select only consecutive time slots."
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        }
+    }
+}

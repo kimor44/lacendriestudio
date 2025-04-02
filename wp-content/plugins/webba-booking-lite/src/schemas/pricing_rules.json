@@ -1,0 +1,399 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "pricing_rule_name": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Nom",
+            "tab": "",
+            "misc": {
+                "tooltip": "Entrer un nom pour identifier la r\u00e8gle de tarification."
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "pricing_rule_priority": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": false,
+            "title": "Priorit\u00e9",
+            "tab": "",
+            "misc": {
+                "tooltip": "Pr\u00e9ciser l\u2019ordre d\u2019application des r\u00e8gles de tarification \u00e0 un service. Cela est important lorsque vous appliquez plusieurs r\u00e8gles pour le m\u00eame service.",
+                "options": {
+                    "1": "bas",
+                    "10": "moyen",
+                    "20": "haut"
+                }
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": 1,
+            "editable": true
+        },
+        "pricing_rule_type": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": false,
+            "title": "Type",
+            "tab": "",
+            "misc": {
+                "tooltip": "Select the <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/payment/pricing-rules/\">type of pricing rule</a>.",
+                "options": {
+                    "date_range": "Prix pour la plage de dates",
+                    "early_booking": "Prix pour r\u00e9servation anticip\u00e9e",
+                    "custom_field": "Prix bas\u00e9 sur la valeur du champ personnalis\u00e9",
+                    "day_of_week_and_time": "Prix pour le jour de la semaine et la plage horaire",
+                    "number_of_seats": "Prix bas\u00e9 sur le nombre de si\u00e8ges r\u00e9serv\u00e9s",
+                    "number_of_timeslots": "Prix bas\u00e9 sur le nombre de cr\u00e9neaux horaires r\u00e9serv\u00e9s"
+                }
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": null,
+            "editable": true
+        },
+        "pricing_rule_date_range": {
+            "type": "string",
+            "input_type": "date_range",
+            "hidden": true,
+            "title": "Plage de date",
+            "tab": "",
+            "misc": {
+                "time_zone": "Europe/Paris"
+            },
+            "required": true,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "date_range"
+                ]
+            ],
+            "default_value": "",
+            "editable": true
+        },
+        "pricing_rule_days_number": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Nombre minimum de jours avant la date r\u00e9serv\u00e9e",
+            "tab": "",
+            "misc": {
+                "sub_type": "positive_integer"
+            },
+            "required": true,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "early_booking"
+                ]
+            ],
+            "default_value": "",
+            "editable": true
+        },
+        "pricing_rule_custom_field_id": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "ID de champ personnalis\u00e9",
+            "tab": "",
+            "misc": null,
+            "required": true,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "custom_field"
+                ]
+            ],
+            "default_value": "",
+            "editable": true
+        },
+        "pricing_rule_custom_field_operator": {
+            "type": "string",
+            "input_type": "radio",
+            "hidden": true,
+            "title": "Op\u00e9rateur",
+            "tab": "",
+            "misc": {
+                "options": {
+                    "equals": "\u00e9gale",
+                    "more_than": "plus que",
+                    "less_than": "moins que"
+                }
+            },
+            "required": true,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "custom_field"
+                ]
+            ],
+            "default_value": "equals",
+            "editable": true
+        },
+        "pricing_rule_custom_field_value": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Valeur du champ personnalis\u00e9",
+            "tab": "",
+            "misc": null,
+            "required": true,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "custom_field"
+                ]
+            ],
+            "default_value": "",
+            "editable": true
+        },
+        "pricing_rule_number_of_seats_operator": {
+            "type": "string",
+            "input_type": "radio",
+            "hidden": true,
+            "title": "Op\u00e9rateur",
+            "tab": "",
+            "misc": {
+                "options": {
+                    "equals": "\u00e9gale",
+                    "more_than": "plus que",
+                    "less_than": "moins que"
+                }
+            },
+            "required": true,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "number_of_seats"
+                ]
+            ],
+            "default_value": "equals",
+            "editable": true
+        },
+        "pricing_rule_number_of_seats_value": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "nombre de places",
+            "tab": "",
+            "misc": null,
+            "required": true,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "number_of_seats"
+                ]
+            ],
+            "default_value": "",
+            "editable": true
+        },
+        "pricing_rule_number_of_timeslots_operator": {
+            "type": "string",
+            "input_type": "radio",
+            "hidden": true,
+            "title": "Op\u00e9rateur",
+            "tab": "",
+            "misc": {
+                "options": {
+                    "equals": "\u00e9gale",
+                    "more_than": "plus que",
+                    "less_than": "moins que"
+                }
+            },
+            "required": true,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "number_of_timeslots"
+                ]
+            ],
+            "default_value": "equals",
+            "editable": true
+        },
+        "pricing_rule_number_of_timeslots_value": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Nombre de plages horaires",
+            "tab": "",
+            "misc": null,
+            "required": true,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "number_of_timeslots"
+                ]
+            ],
+            "default_value": "",
+            "editable": true
+        },
+        "pricing_rule_only_same_service": {
+            "type": "string",
+            "input_type": "checkbox",
+            "hidden": true,
+            "title": "Seulement les cr\u00e9neaux horaires dans le m\u00eame service",
+            "tab": "",
+            "misc": {
+                "yes": "Oui",
+                "tooltip": "Select the <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/payment/pricing-rules/\">type of pricing rule</a>."
+            },
+            "required": false,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "number_of_timeslots"
+                ]
+            ],
+            "default_value": "",
+            "editable": true
+        },
+        "pricing_rule_day_time": {
+            "type": "json",
+            "input_type": "business_hours",
+            "hidden": true,
+            "title": "Jour de la semaine et plage horaire",
+            "tab": "",
+            "misc": null,
+            "required": false,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "day_of_week_and_time"
+                ]
+            ],
+            "default_value": [],
+            "editable": true
+        },
+        "pricing_rule_action": {
+            "type": "string",
+            "input_type": "radio",
+            "hidden": false,
+            "title": "Action",
+            "tab": "",
+            "misc": {
+                "options": {
+                    "increase": "augmentation",
+                    "reduce": "r\u00e9duction",
+                    "replace": "remplacer"
+                }
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "increase",
+            "editable": true
+        },
+        "pricing_rule_amount": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Montant",
+            "tab": "",
+            "misc": {
+                "tooltip": "D\u00e9finir la valeur par laquelle le prix sera augment\u00e9, diminu\u00e9 ou remplac\u00e9.",
+                "sub_type": "none_negative_float"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
+        "pricing_rule_fixed_percent": {
+            "type": "string",
+            "input_type": "radio",
+            "hidden": false,
+            "title": "Fixe / pourcentage",
+            "tab": "",
+            "misc": {
+                "options": {
+                    "fixed": "fixe",
+                    "percent": "pourcentage"
+                }
+            },
+            "required": true,
+            "dependency": [
+                [
+                    "action",
+                    "!=",
+                    "replace"
+                ],
+                [
+                    "action",
+                    "!=",
+                    "multiply"
+                ]
+            ],
+            "default_value": "fixed",
+            "editable": true
+        },
+        "pricing_rule_multiply_amount": {
+            "type": "string",
+            "input_type": "checkbox",
+            "hidden": true,
+            "title": "Multiplier le montant par la valeur du champ",
+            "tab": "",
+            "misc": {
+                "yes": "Oui"
+            },
+            "required": false,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "custom_field"
+                ]
+            ],
+            "default_value": "",
+            "editable": true
+        },
+        "pricing_rule_related_to_seats_number": {
+            "type": "string",
+            "input_type": "checkbox",
+            "hidden": true,
+            "title": "Le champ est li\u00e9 au nombre de places r\u00e9serv\u00e9es",
+            "tab": "",
+            "misc": {
+                "yes": "Oui"
+            },
+            "required": false,
+            "dependency": [
+                [
+                    "type",
+                    "=",
+                    "custom_field"
+                ]
+            ],
+            "default_value": "",
+            "editable": true
+        },
+        "pricing_rule_is_for_entire_order": {
+            "type": "string",
+            "input_type": "checkbox",
+            "hidden": true,
+            "title": "Apply the pricing rule to the entire order instead of individual time slots.",
+            "tab": "",
+            "misc": {
+                "yes": "Oui"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        }
+    }
+}

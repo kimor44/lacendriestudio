@@ -1,18 +1,85 @@
 {
     "packages": [
         {
-            "name": "johngrogg/ics-parser",
-            "version": "v3.3.1",
-            "version_normalized": "3.3.1.0",
+            "name": "eluceo/ical",
+            "version": "2.14.0",
+            "version_normalized": "2.14.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/u01jmg3/ics-parser.git",
-                "reference": "eeb51c4c0c06e6df3266f85ea774ca314536aba4"
+                "url": "https://github.com/markuspoerschke/iCal.git",
+                "reference": "3123533f7ff0af015da1d788476204f936d18135"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/u01jmg3/ics-parser/zipball/eeb51c4c0c06e6df3266f85ea774ca314536aba4",
-                "reference": "eeb51c4c0c06e6df3266f85ea774ca314536aba4",
+                "url": "https://api.github.com/repos/markuspoerschke/iCal/zipball/3123533f7ff0af015da1d788476204f936d18135",
+                "reference": "3123533f7ff0af015da1d788476204f936d18135",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=7.4 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
+                "symfony/deprecation-contracts": "^2.1 || ^3.0"
+            },
+            "conflict": {
+                "php": "7.4.6"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.23.1",
+                "friendsofphp/php-cs-fixer": "^3.4",
+                "infection/infection": "^0.23 || ^0.26 || ^0.27",
+                "phpmd/phpmd": "^2.13",
+                "phpunit/phpunit": "^9.5",
+                "vimeo/psalm": "^4.8 || ^5.0"
+            },
+            "time": "2024-07-11T22:33:13+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Eluceo\\iCal\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Markus Poerschke",
+                    "email": "markus@poerschke.nrw",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The eluceo/iCal package offers an abstraction layer for creating iCalendars. You can easily create iCal files by using PHP objects instead of typing your *.ics file by hand. The output will follow RFC 5545 as best as possible.",
+            "homepage": "https://github.com/markuspoerschke/iCal",
+            "keywords": [
+                "calendar",
+                "iCalendar",
+                "ical",
+                "ics",
+                "php calendar"
+            ],
+            "support": {
+                "docs": "https://ical.poerschke.nrw",
+                "forum": "https://github.com/markuspoerschke/iCal/discussions",
+                "issues": "https://github.com/markuspoerschke/iCal/issues",
+                "source": "https://github.com/markuspoerschke/iCal"
+            },
+            "install-path": "../eluceo/ical"
+        },
+        {
+            "name": "johngrogg/ics-parser",
+            "version": "v3.4.1",
+            "version_normalized": "3.4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/u01jmg3/ics-parser.git",
+                "reference": "abb41a4a46256389aa4e6f582bad76f0d4cb3ebc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/u01jmg3/ics-parser/zipball/abb41a4a46256389aa4e6f582bad76f0d4cb3ebc",
+                "reference": "abb41a4a46256389aa4e6f582bad76f0d4cb3ebc",
                 "shasum": ""
             },
             "require": {
@@ -22,7 +89,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^5|^9|^10"
             },
-            "time": "2023-10-10T09:58:49+00:00",
+            "time": "2024-06-26T08:18:40+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -57,7 +124,7 @@
             ],
             "support": {
                 "issues": "https://github.com/u01jmg3/ics-parser/issues",
-                "source": "https://github.com/u01jmg3/ics-parser/tree/v3.3.1"
+                "source": "https://github.com/u01jmg3/ics-parser/tree/v3.4.1"
             },
             "funding": [
                 {
@@ -66,6 +133,58 @@
                 }
             ],
             "install-path": "../johngrogg/ics-parser"
+        },
+        {
+            "name": "mixpanel/mixpanel-php",
+            "version": "2.11.0",
+            "version_normalized": "2.11.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mixpanel/mixpanel-php.git",
+                "reference": "4b0fafacf2129eff5d50721e129b07f0c32687e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mixpanel/mixpanel-php/zipball/4b0fafacf2129eff5d50721e129b07f0c32687e7",
+                "reference": "4b0fafacf2129eff5d50721e129b07f0c32687e7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.0"
+            },
+            "require-dev": {
+                "phpdocumentor/phpdocumentor": "2.9.*",
+                "phpunit/phpunit": "5.6.*"
+            },
+            "time": "2023-04-11T23:03:57+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "lib/Mixpanel.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Mixpanel <dev@mixpanel.com>",
+                    "homepage": "https://mixpanel.com/"
+                }
+            ],
+            "description": "The Official PHP library for Mixpanel",
+            "homepage": "https://mixpanel.com/help/reference/php",
+            "keywords": [
+                "mixpanel",
+                "mixpanel php"
+            ],
+            "support": {
+                "issues": "https://github.com/mixpanel/mixpanel-php/issues",
+                "source": "https://github.com/mixpanel/mixpanel-php/tree/2.11.0"
+            },
+            "install-path": "../mixpanel/mixpanel-php"
         },
         {
             "name": "paypal/rest-api-sdk-php",
@@ -179,17 +298,17 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v12.6.0",
-            "version_normalized": "12.6.0.0",
+            "version": "v8.12.0",
+            "version_normalized": "8.12.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "e0c15e4cbf252e708b937482bb1a50fa7e01bc9d"
+                "reference": "1b7b1ea75c744b8a9f55a0942112f8e822a6a482"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/e0c15e4cbf252e708b937482bb1a50fa7e01bc9d",
-                "reference": "e0c15e4cbf252e708b937482bb1a50fa7e01bc9d",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/1b7b1ea75c744b8a9f55a0942112f8e822a6a482",
+                "reference": "1b7b1ea75c744b8a9f55a0942112f8e822a6a482",
                 "shasum": ""
             },
             "require": {
@@ -200,11 +319,11 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "3.5.0",
-                "php-coveralls/php-coveralls": "^2.5",
                 "phpstan/phpstan": "^1.2",
-                "phpunit/phpunit": "^5.7 || ^9.0"
+                "phpunit/phpunit": "^5.7 || ^9.0",
+                "squizlabs/php_codesniffer": "^3.3"
             },
-            "time": "2023-10-05T18:01:43+00:00",
+            "time": "2022-07-25T14:42:34+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -236,27 +355,97 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v12.6.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v8.12.0"
             },
             "install-path": "../stripe/stripe-php"
         },
         {
-            "name": "symfony/polyfill-iconv",
-            "version": "v1.28.0",
-            "version_normalized": "1.28.0.0",
+            "name": "symfony/deprecation-contracts",
+            "version": "v3.5.1",
+            "version_normalized": "3.5.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/polyfill-iconv.git",
-                "reference": "6de50471469b8c9afc38164452ab2b6170ee71c1"
+                "url": "https://github.com/symfony/deprecation-contracts.git",
+                "reference": "74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/6de50471469b8c9afc38164452ab2b6170ee71c1",
-                "reference": "6de50471469b8c9afc38164452ab2b6170ee71c1",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6",
+                "reference": "74c71c939a79f7d5bf3c1ce9f5ea37ba0114c6f6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=8.1"
+            },
+            "time": "2024-09-25T14:20:29+00:00",
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
+                "branch-alias": {
+                    "dev-main": "3.5-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "function.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "A generic function and convention to trigger deprecation notices",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.5.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "install-path": "../symfony/deprecation-contracts"
+        },
+        {
+            "name": "symfony/polyfill-iconv",
+            "version": "v1.31.0",
+            "version_normalized": "1.31.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-iconv.git",
+                "reference": "48becf00c920479ca2e910c22a5a39e5d47ca956"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-iconv/zipball/48becf00c920479ca2e910c22a5a39e5d47ca956",
+                "reference": "48becf00c920479ca2e910c22a5a39e5d47ca956",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2"
             },
             "provide": {
                 "ext-iconv": "*"
@@ -264,15 +453,12 @@
             "suggest": {
                 "ext-iconv": "For best performance"
             },
-            "time": "2023-01-26T09:26:14+00:00",
+            "time": "2024-09-09T11:45:10+00:00",
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-main": "1.28-dev"
-                },
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -308,7 +494,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-iconv/tree/v1.28.0"
+                "source": "https://github.com/symfony/polyfill-iconv/tree/v1.31.0"
             },
             "funding": [
                 {
@@ -328,34 +514,31 @@
         },
         {
             "name": "symfony/polyfill-intl-grapheme",
-            "version": "v1.28.0",
-            "version_normalized": "1.28.0.0",
+            "version": "v1.31.0",
+            "version_normalized": "1.31.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-grapheme.git",
-                "reference": "875e90aeea2777b6f135677f618529449334a612"
+                "reference": "b9123926e3b7bc2f98c02ad54f6a4b02b91a8abe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-grapheme/zipball/875e90aeea2777b6f135677f618529449334a612",
-                "reference": "875e90aeea2777b6f135677f618529449334a612",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-grapheme/zipball/b9123926e3b7bc2f98c02ad54f6a4b02b91a8abe",
+                "reference": "b9123926e3b7bc2f98c02ad54f6a4b02b91a8abe",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "suggest": {
                 "ext-intl": "For best performance"
             },
-            "time": "2023-01-26T09:26:14+00:00",
+            "time": "2024-09-09T11:45:10+00:00",
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-main": "1.28-dev"
-                },
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -392,7 +575,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.28.0"
+                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.31.0"
             },
             "funding": [
                 {
@@ -412,34 +595,31 @@
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
-            "version": "v1.28.0",
-            "version_normalized": "1.28.0.0",
+            "version": "v1.31.0",
+            "version_normalized": "1.31.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
-                "reference": "8c4ad05dd0120b6a53c1ca374dca2ad0a1c4ed92"
+                "reference": "3833d7255cc303546435cb650316bff708a1c75c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/8c4ad05dd0120b6a53c1ca374dca2ad0a1c4ed92",
-                "reference": "8c4ad05dd0120b6a53c1ca374dca2ad0a1c4ed92",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/3833d7255cc303546435cb650316bff708a1c75c",
+                "reference": "3833d7255cc303546435cb650316bff708a1c75c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "suggest": {
                 "ext-intl": "For best performance"
             },
-            "time": "2023-01-26T09:26:14+00:00",
+            "time": "2024-09-09T11:45:10+00:00",
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-main": "1.28-dev"
-                },
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -479,7 +659,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.28.0"
+                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.31.0"
             },
             "funding": [
                 {
@@ -499,21 +679,21 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.28.0",
-            "version_normalized": "1.28.0.0",
+            "version": "v1.31.0",
+            "version_normalized": "1.31.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "42292d99c55abe617799667f454222c54c60e229"
+                "reference": "85181ba99b2345b0ef10ce42ecac37612d9fd341"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/42292d99c55abe617799667f454222c54c60e229",
-                "reference": "42292d99c55abe617799667f454222c54c60e229",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/85181ba99b2345b0ef10ce42ecac37612d9fd341",
+                "reference": "85181ba99b2345b0ef10ce42ecac37612d9fd341",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "provide": {
                 "ext-mbstring": "*"
@@ -521,15 +701,12 @@
             "suggest": {
                 "ext-mbstring": "For best performance"
             },
-            "time": "2023-07-28T09:04:16+00:00",
+            "time": "2024-09-09T11:45:10+00:00",
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-main": "1.28-dev"
-                },
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "installation-source": "dist",
@@ -565,7 +742,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.28.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.31.0"
             },
             "funding": [
                 {
@@ -585,40 +762,28 @@
         },
         {
             "name": "symfony/polyfill-php72",
-            "version": "v1.28.0",
-            "version_normalized": "1.28.0.0",
+            "version": "v1.31.0",
+            "version_normalized": "1.31.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php72.git",
-                "reference": "70f4aebd92afca2f865444d30a4d2151c13c3179"
+                "reference": "fa2ae56c44f03bed91a39bfc9822e31e7c5c38ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/70f4aebd92afca2f865444d30a4d2151c13c3179",
-                "reference": "70f4aebd92afca2f865444d30a4d2151c13c3179",
+                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/fa2ae56c44f03bed91a39bfc9822e31e7c5c38ce",
+                "reference": "fa2ae56c44f03bed91a39bfc9822e31e7c5c38ce",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
-            "time": "2023-01-26T09:26:14+00:00",
-            "type": "library",
+            "time": "2024-09-09T11:45:10+00:00",
+            "type": "metapackage",
             "extra": {
-                "branch-alias": {
-                    "dev-main": "1.28-dev"
-                },
                 "thanks": {
-                    "name": "symfony/polyfill",
-                    "url": "https://github.com/symfony/polyfill"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php72\\": ""
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -644,7 +809,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-php72/tree/v1.28.0"
+                "source": "https://github.com/symfony/polyfill-php72/tree/v1.31.0"
             },
             "funding": [
                 {
@@ -660,21 +825,21 @@
                     "type": "tidelift"
                 }
             ],
-            "install-path": "../symfony/polyfill-php72"
+            "install-path": null
         },
         {
             "name": "twilio/sdk",
-            "version": "7.11.1",
-            "version_normalized": "7.11.1.0",
+            "version": "6.44.4",
+            "version_normalized": "6.44.4.0",
             "source": {
                 "type": "git",
-                "url": "git@github.com:twilio/twilio-php.git",
-                "reference": "f6ffe7073e7f13250c7aa201468fedd342037350"
+                "url": "https://github.com/twilio/twilio-php.git",
+                "reference": "08aad5f377e2245b9cd7508e7762d95e7392fa4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/f6ffe7073e7f13250c7aa201468fedd342037350",
-                "reference": "f6ffe7073e7f13250c7aa201468fedd342037350",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/08aad5f377e2245b9cd7508e7762d95e7392fa4d",
+                "reference": "08aad5f377e2245b9cd7508e7762d95e7392fa4d",
                 "shasum": ""
             },
             "require": {
@@ -687,7 +852,7 @@
             "suggest": {
                 "guzzlehttp/guzzle": "An HTTP client to execute the API requests"
             },
-            "time": "2023-10-05T08:46:00+00:00",
+            "time": "2023-02-22T19:59:53+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -712,6 +877,10 @@
                 "sms",
                 "twilio"
             ],
+            "support": {
+                "issues": "https://github.com/twilio/twilio-php/issues",
+                "source": "https://github.com/twilio/twilio-php/tree/6.44.4"
+            },
             "install-path": "../twilio/sdk"
         },
         {
@@ -802,17 +971,17 @@
         },
         {
             "name": "voku/portable-ascii",
-            "version": "2.0.1",
-            "version_normalized": "2.0.1.0",
+            "version": "2.0.3",
+            "version_normalized": "2.0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/voku/portable-ascii.git",
-                "reference": "b56450eed252f6801410d810c8e1727224ae0743"
+                "reference": "b1d923f88091c6bf09699efcd7c8a1b1bfd7351d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/voku/portable-ascii/zipball/b56450eed252f6801410d810c8e1727224ae0743",
-                "reference": "b56450eed252f6801410d810c8e1727224ae0743",
+                "url": "https://api.github.com/repos/voku/portable-ascii/zipball/b1d923f88091c6bf09699efcd7c8a1b1bfd7351d",
+                "reference": "b1d923f88091c6bf09699efcd7c8a1b1bfd7351d",
                 "shasum": ""
             },
             "require": {
@@ -824,7 +993,7 @@
             "suggest": {
                 "ext-intl": "Use Intl for transliterator_transliterate() support"
             },
-            "time": "2022-03-08T17:03:00+00:00",
+            "time": "2024-11-21T01:49:47+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -839,7 +1008,7 @@
             "authors": [
                 {
                     "name": "Lars Moelleken",
-                    "homepage": "http://www.moelleken.org/"
+                    "homepage": "https://www.moelleken.org/"
                 }
             ],
             "description": "Portable ASCII library - performance optimized (ascii) string functions for php.",
@@ -851,7 +1020,7 @@
             ],
             "support": {
                 "issues": "https://github.com/voku/portable-ascii/issues",
-                "source": "https://github.com/voku/portable-ascii/tree/2.0.1"
+                "source": "https://github.com/voku/portable-ascii/tree/2.0.3"
             },
             "funding": [
                 {

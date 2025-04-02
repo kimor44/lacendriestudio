@@ -197,6 +197,55 @@ class Plugion_WBK {
                     .siblings('.plugion_input_container_small')
                     .find('.plugion_input_datetime_date')
                     .pickadate({
+                        monthsFull: [
+                            wbk_dashboardl10n.january,
+                            wbk_dashboardl10n.february,
+                            wbk_dashboardl10n.march,
+                            wbk_dashboardl10n.april,
+                            wbk_dashboardl10n.may,
+                            wbk_dashboardl10n.june,
+                            wbk_dashboardl10n.july,
+                            wbk_dashboardl10n.august,
+                            wbk_dashboardl10n.september,
+                            wbk_dashboardl10n.october,
+                            wbk_dashboardl10n.november,
+                            wbk_dashboardl10n.december,
+                        ],
+                        monthsShort: [
+                            wbk_dashboardl10n.jan,
+                            wbk_dashboardl10n.feb,
+                            wbk_dashboardl10n.mar,
+                            wbk_dashboardl10n.apr,
+                            wbk_dashboardl10n.mays,
+                            wbk_dashboardl10n.jun,
+                            wbk_dashboardl10n.jul,
+                            wbk_dashboardl10n.aug,
+                            wbk_dashboardl10n.sep,
+                            wbk_dashboardl10n.oct,
+                            wbk_dashboardl10n.nov,
+                            wbk_dashboardl10n.dec,
+                        ],
+                        weekdaysFull: [
+                            wbk_dashboardl10n.sunday,
+                            wbk_dashboardl10n.monday,
+                            wbk_dashboardl10n.tuesday,
+                            wbk_dashboardl10n.wednesday,
+                            wbk_dashboardl10n.thursday,
+                            wbk_dashboardl10n.friday,
+                            wbk_dashboardl10n.saturday,
+                        ],
+                        weekdaysShort: [
+                            wbk_dashboardl10n.sun,
+                            wbk_dashboardl10n.mon,
+                            wbk_dashboardl10n.tue,
+                            wbk_dashboardl10n.wed,
+                            wbk_dashboardl10n.thu,
+                            wbk_dashboardl10n.fri,
+                            wbk_dashboardl10n.sat,
+                        ],
+                        today: wbk_dashboardl10n.today,
+                        clear: wbk_dashboardl10n.clear,
+                        close: wbk_dashboardl10n.close,
                         format: element.attr('data-dateformat'),
                         onSet: function (thingSet) {
                             if (thingSet.select == null) {
@@ -303,6 +352,55 @@ class Plugion_WBK {
             },
             date: function (element, value) {
                 var datepicker = element.pickadate({
+                    monthsFull: [
+                        wbk_dashboardl10n.january,
+                        wbk_dashboardl10n.february,
+                        wbk_dashboardl10n.march,
+                        wbk_dashboardl10n.april,
+                        wbk_dashboardl10n.may,
+                        wbk_dashboardl10n.june,
+                        wbk_dashboardl10n.july,
+                        wbk_dashboardl10n.august,
+                        wbk_dashboardl10n.september,
+                        wbk_dashboardl10n.october,
+                        wbk_dashboardl10n.november,
+                        wbk_dashboardl10n.december,
+                    ],
+                    monthsShort: [
+                        wbk_dashboardl10n.jan,
+                        wbk_dashboardl10n.feb,
+                        wbk_dashboardl10n.mar,
+                        wbk_dashboardl10n.apr,
+                        wbk_dashboardl10n.mays,
+                        wbk_dashboardl10n.jun,
+                        wbk_dashboardl10n.jul,
+                        wbk_dashboardl10n.aug,
+                        wbk_dashboardl10n.sep,
+                        wbk_dashboardl10n.oct,
+                        wbk_dashboardl10n.nov,
+                        wbk_dashboardl10n.dec,
+                    ],
+                    weekdaysFull: [
+                        wbk_dashboardl10n.sunday,
+                        wbk_dashboardl10n.monday,
+                        wbk_dashboardl10n.tuesday,
+                        wbk_dashboardl10n.wednesday,
+                        wbk_dashboardl10n.thursday,
+                        wbk_dashboardl10n.friday,
+                        wbk_dashboardl10n.saturday,
+                    ],
+                    weekdaysShort: [
+                        wbk_dashboardl10n.sun,
+                        wbk_dashboardl10n.mon,
+                        wbk_dashboardl10n.tue,
+                        wbk_dashboardl10n.wed,
+                        wbk_dashboardl10n.thu,
+                        wbk_dashboardl10n.fri,
+                        wbk_dashboardl10n.sat,
+                    ],
+                    today: wbk_dashboardl10n.today,
+                    clear: wbk_dashboardl10n.clear,
+                    close: wbk_dashboardl10n.close,
                     firstDay: 1,
                     format: element.attr('data-dateformat'),
                     formatSubmit: 'yyyy-mm-dd',
@@ -433,6 +531,55 @@ class Plugion_WBK {
                         .parent()
                         .find('.plugion_input_date_range_start')
                         .pickadate({
+                            monthsFull: [
+                                wbk_dashboardl10n.january,
+                                wbk_dashboardl10n.february,
+                                wbk_dashboardl10n.march,
+                                wbk_dashboardl10n.april,
+                                wbk_dashboardl10n.may,
+                                wbk_dashboardl10n.june,
+                                wbk_dashboardl10n.july,
+                                wbk_dashboardl10n.august,
+                                wbk_dashboardl10n.september,
+                                wbk_dashboardl10n.october,
+                                wbk_dashboardl10n.november,
+                                wbk_dashboardl10n.december,
+                            ],
+                            monthsShort: [
+                                wbk_dashboardl10n.jan,
+                                wbk_dashboardl10n.feb,
+                                wbk_dashboardl10n.mar,
+                                wbk_dashboardl10n.apr,
+                                wbk_dashboardl10n.mays,
+                                wbk_dashboardl10n.jun,
+                                wbk_dashboardl10n.jul,
+                                wbk_dashboardl10n.aug,
+                                wbk_dashboardl10n.sep,
+                                wbk_dashboardl10n.oct,
+                                wbk_dashboardl10n.nov,
+                                wbk_dashboardl10n.dec,
+                            ],
+                            weekdaysFull: [
+                                wbk_dashboardl10n.sunday,
+                                wbk_dashboardl10n.monday,
+                                wbk_dashboardl10n.tuesday,
+                                wbk_dashboardl10n.wednesday,
+                                wbk_dashboardl10n.thursday,
+                                wbk_dashboardl10n.friday,
+                                wbk_dashboardl10n.saturday,
+                            ],
+                            weekdaysShort: [
+                                wbk_dashboardl10n.sun,
+                                wbk_dashboardl10n.mon,
+                                wbk_dashboardl10n.tue,
+                                wbk_dashboardl10n.wed,
+                                wbk_dashboardl10n.thu,
+                                wbk_dashboardl10n.fri,
+                                wbk_dashboardl10n.sat,
+                            ],
+                            today: wbk_dashboardl10n.today,
+                            clear: wbk_dashboardl10n.clear,
+                            close: wbk_dashboardl10n.close,
                             format: element.attr('data-dateformat'),
                             onSet: function (thingSet) {
                                 if (thingSet.select == null) {
@@ -713,6 +860,8 @@ class Plugion_WBK {
                 })
             },
         }
+
+        jQuery(document).trigger('plugion_setter_added')
         get_this().field_getters = {
             // getter for radio
             radio: function (element) {
@@ -822,7 +971,7 @@ class Plugion_WBK {
             }
         })
 
-        jQuery('[data-js="close-button-wb"]').click(function () {
+        jQuery('[data-js="close-button-wbkb"]').click(function () {
             jQuery(this)
                 .parent()
                 .find('.delete-confirm-wb')
@@ -909,7 +1058,9 @@ class Plugion_WBK {
             order_col = 3
         }
 
-        var dt_lang = {}
+        var dt_lang = {
+            emptyTable: wbk_dashboardl10n.empty_table,
+        }
 
         if (jQuery('[data-empty-table]').length) {
             dt_lang['zeroRecords'] = jQuery('[data-empty-table]')
@@ -973,6 +1124,55 @@ class Plugion_WBK {
         jQuery('.plugion_filter_daterange').each(function () {
             var element = jQuery(this)
             jQuery(this).pickadate({
+                monthsFull: [
+                    wbk_dashboardl10n.january,
+                    wbk_dashboardl10n.february,
+                    wbk_dashboardl10n.march,
+                    wbk_dashboardl10n.april,
+                    wbk_dashboardl10n.may,
+                    wbk_dashboardl10n.june,
+                    wbk_dashboardl10n.july,
+                    wbk_dashboardl10n.august,
+                    wbk_dashboardl10n.september,
+                    wbk_dashboardl10n.october,
+                    wbk_dashboardl10n.november,
+                    wbk_dashboardl10n.december,
+                ],
+                monthsShort: [
+                    wbk_dashboardl10n.jan,
+                    wbk_dashboardl10n.feb,
+                    wbk_dashboardl10n.mar,
+                    wbk_dashboardl10n.apr,
+                    wbk_dashboardl10n.mays,
+                    wbk_dashboardl10n.jun,
+                    wbk_dashboardl10n.jul,
+                    wbk_dashboardl10n.aug,
+                    wbk_dashboardl10n.sep,
+                    wbk_dashboardl10n.oct,
+                    wbk_dashboardl10n.nov,
+                    wbk_dashboardl10n.dec,
+                ],
+                weekdaysFull: [
+                    wbk_dashboardl10n.sunday,
+                    wbk_dashboardl10n.monday,
+                    wbk_dashboardl10n.tuesday,
+                    wbk_dashboardl10n.wednesday,
+                    wbk_dashboardl10n.thursday,
+                    wbk_dashboardl10n.friday,
+                    wbk_dashboardl10n.saturday,
+                ],
+                weekdaysShort: [
+                    wbk_dashboardl10n.sun,
+                    wbk_dashboardl10n.mon,
+                    wbk_dashboardl10n.tue,
+                    wbk_dashboardl10n.wed,
+                    wbk_dashboardl10n.thu,
+                    wbk_dashboardl10n.fri,
+                    wbk_dashboardl10n.sat,
+                ],
+                today: wbk_dashboardl10n.today,
+                clear: wbk_dashboardl10n.clear,
+                close: wbk_dashboardl10n.close,
                 firstDay: 1,
                 format: jQuery(this).attr('data-dateformat'),
                 onSet: function (thingSet) {
@@ -1001,6 +1201,7 @@ class Plugion_WBK {
         get_this().table_checkbox_add_class_to_row()
         get_this().toggle_business_hours()
         get_this().appointments_status_change_init()
+        get_this().resend_email()
 
         jQuery(document).trigger('plugion_properties_form_initialized')
     }
@@ -1099,7 +1300,7 @@ class Plugion_WBK {
 
         get_this().row_controls_tabs_reset()
 
-        title.text('New')
+        title.text(wbk_dashboardl10n.new)
 
         sidebarRoll.addClass('slide-wb')
         setTimeout(function () {
@@ -1284,6 +1485,7 @@ class Plugion_WBK {
                         get_this().unfreeze_form()
                         get_this().filter_form_values[table] = filters
                         get_this().appointments_status_change_init()
+                        get_this().resend_email()
                         get_this().initialize_property_form()
                         get_this().set_properties_default()
                     },
@@ -1689,7 +1891,7 @@ class Plugion_WBK {
             get_this().error_reset()
             get_this().row_controls_tabs_reset()
 
-            title.text('Edit')
+            title.text(wbk_dashboardl10n.edit)
 
             sidebarRoll.addClass('slide-wb')
             sidebarRoll
@@ -1698,7 +1900,6 @@ class Plugion_WBK {
                 .addClass('wbk_wide_tooltip')
             setTimeout(function () {
                 sidebarRoll.addClass('open-wb')
-                sidebarRoll.addClass('loading')
             }, 200)
             jQuery('body').addClass('freeze_form')
             jQuery('[data-js="main-curtain-wb"]').fadeIn(200)
@@ -1739,7 +1940,9 @@ class Plugion_WBK {
                         if ('wp_wbk_service_categories' === table) {
                             get_this().update_service_list(table)
                         }
+                        jQuery('.slide-wb').removeClass('loading')
                         sidebarRoll.removeClass('loading')
+                        jQuery(document).trigger('plugion_properties_form_set')
                     },
                     400: function (response) {
                         get_this().unfreeze_form()
@@ -1849,6 +2052,9 @@ class Plugion_WBK {
             return this
         }
         if (typeof elem.attr('data-setter') !== 'undefined') {
+            if (!get_this().field_setters[elem.attr('data-setter')]) {
+                return
+            }
             get_this().field_setters[elem.attr('data-setter')](elem, value)
         } else {
             elem.val(value)
@@ -2245,12 +2451,9 @@ class Plugion_WBK {
                 .first()
                 .addClass('wbk_wide_tooltip')
             const title = containerAdd.find('.property_form_title')
-
             this.row_controls_tabs_reset()
-
-            title.text('New')
+            title.text(wbk_dashboardl10n.new)
             sidebarRoll.addClass('slide-wb')
-
             setTimeout(function () {
                 sidebarRoll.addClass('open-wb')
             }, 200)
@@ -2351,6 +2554,49 @@ class Plugion_WBK {
         })
     }
 
+    resend_email(){
+        const resend_btn = jQuery('.resend_email_btn')
+        resend_btn.unbind('click')
+        resend_btn.on('click', function () {
+            const normal_text = jQuery(this).html();
+            const button =  jQuery(this)
+            button.html(button.attr('data-action-text'));
+            button.attr('disabled', true);
+            button.siblings('.wbk_email_resend_result').html('')
+            button.siblings('.wbk_email_resend_result').removeClass('wbk_font_green')
+            button.siblings('.wbk_email_resend_result').removeClass('wbk_font_red')
+            const notification_type = jQuery(this).siblings('.wbk_resend_email').val();
+            const booking_id = parseInt(jQuery(this).closest('tr').find('td:first-child').html().replace(/<[^>]*>/g, "").replace(/\s+/g, "").replace(/\D/g, ""));       
+            let data = {
+                id: booking_id,
+                notification_type: notification_type,
+            }        
+            jQuery.ajax(
+                plugionl10n.rest_url + 'wbk/v1/resend-email',
+                {
+                    method: 'POST',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-WP-Nonce', plugionl10n.nonce)
+                    },
+                    data: data,
+                    complete: function(xhr, status) {                    
+                        button.html(normal_text);
+                        button.attr('disabled', false);
+                        button.siblings('.wbk_email_resend_result').html(xhr.responseJSON.message);
+                    },  
+                    success: function (response) {
+                        button.siblings('.wbk_email_resend_result').addClass('wbk_font_green')
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        button.siblings('.wbk_email_resend_result').addClass('wbk_font_red') 
+                    }
+                    
+                }
+            )
+            
+        });
+    }
+
     appointments_status_change_init() {
         const statusChange = jQuery('.appointments_status_change')
         statusChange.unbind('change')
@@ -2419,6 +2665,7 @@ class Plugion_WBK {
 var plugion
 jQuery(function ($) {
     plugion = new Plugion_WBK()
+
     jQuery(document).trigger('plugion_initialized')
 })
 
@@ -2506,7 +2753,7 @@ jQuery(function () {
         selectOtherMonths: true,
         dayNamesMin: jQuery.datepicker._defaults.dayNamesShort,
         onSelect: function () {
-            jQuery('[data-js="next-step-button-w"]').removeAttr('disabled')
+            jQuery('[data-js="next-step-button-wbk"]').removeAttr('disabled')
         },
     })
 
@@ -2624,7 +2871,7 @@ jQuery(function () {
 
     /** Graph */
     dashboard_graph()
-    jQuery('.button-wb-appearance-save').click(function () {
+    jQuery('.button-wbkb-appearance-save').click(function () {
         var appearance_data = []
         var btn = jQuery(this)
         wbk_change_button_status(btn, 'loading')
@@ -2819,7 +3066,7 @@ function copy_to_clipboard() {
         )
 
         jQuerycopy_fieldset_wb
-            .find('[data-js="copy-button-wb"]')
+            .find('[data-js="copy-button-wbkb"]')
             .click(function (e) {
                 e.preventDefault()
 
@@ -3144,11 +3391,11 @@ function toggle_switcher_mobile() {
             jQuery(this).addClass('active-wb')
 
             if (jQuery(this).hasClass('toggle-item-mobile-wb')) {
-                jQuery('[data-js-appointment-box-wrapper]').addClass(
+                jQuery('[data-js-appointment-box-wbkrapper]').addClass(
                     'mobile-version-wb'
                 )
             } else {
-                jQuery('[data-js-appointment-box-wrapper]').removeClass(
+                jQuery('[data-js-appointment-box-wbkrapper]').removeClass(
                     'mobile-version-wb'
                 )
             }
@@ -3201,7 +3448,7 @@ function clear_datepicker_w() {
 
     jQuerydatepicker_w.datepicker('show')
 
-    jQuery('[data-js="next-step-button-w"]').attr('disabled', 'disabled')
+    jQuery('[data-js="next-step-button-wbk"]').attr('disabled', 'disabled')
 }
 
 /* END clear datepicker */
@@ -3860,6 +4107,7 @@ function fullcalendar() {
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
             timeZone: 'UTC',
+
             initialView: 'dayGridMonth',
             allDaySlot: false,
             dayHeaderFormat: { weekday: 'short', day: 'numeric' },
@@ -4381,14 +4629,44 @@ class WBK_Dashboard {
             if (value == '') {
                 return
             }
+
             var custom_data = jQuery.parseJSON(value)
+            var parent = jQuery('#appointment_extra').parent()
             jQuery.each(custom_data, function (k, v) {
                 var id = v[0].trim()
+                var label = v[1].trim()
                 var value = v[2].trim()
-                element
-                    .parent()
-                    .find('[data-field-id="' + id + '"]')
-                    .val(value)
+
+                value = value.replace('&#039;', "'")
+
+                if (
+                    element.parent().find('[data-field-id="' + id + '"]')
+                        .length == 0
+                ) {
+                    var new_custom_field = '<div><div class="label-wb">'
+                    new_custom_field +=
+                        '<label for="appointment_extra_last_name">' +
+                        label +
+                        '</label></div>'
+                    new_custom_field += '<div class="field-wrapper-wb">'
+                    new_custom_field +=
+                        '<input value="' +
+                        value +
+                        '" id="appointment_extra_' +
+                        id +
+                        '" name="extra" data-title="' +
+                        label +
+                        '" data-field-id="' +
+                        id +
+                        '" class="plugion_input plugion_input_text plugion_simple_text_input wbk_custom_data_item" type="text" required="">'
+                    new_custom_field += '</div></div>'
+                    parent.append(new_custom_field)
+                } else {
+                    element
+                        .parent()
+                        .find('[data-field-id="' + id + '"]')
+                        .val(value)
+                }
             })
         })
         plugion.add_getter('wbk_date_range', function (element) {
