@@ -33,10 +33,8 @@ function cendrie_add_theme_scripts()
 
   /* Register scripts */
   wp_register_script('script', get_template_directory_uri() . '/node_modules/tw-elements/dist/js/index.min.js', array(), time(), array('in_footer' => true));
-  wp_register_script('set_end_time_slot', get_template_directory_uri() . '/assets/js/set_end_time_slot.js', array(), time(), array('in_footer' => true));
   /* Enqueue scripts */
   wp_enqueue_script('script');
-  wp_enqueue_script('set_end_time_slot');
 
 
   /* conditional loading script
