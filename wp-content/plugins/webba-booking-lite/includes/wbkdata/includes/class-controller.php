@@ -64,7 +64,10 @@ class Controller
      */
     public function save_item($request)
     {
-        $model = get_option('wbk_db_prefix', '') . 'wbk_' . trim(sanitize_text_field($request['model']));
+        $model =
+            get_option('wbk_db_prefix', '') .
+            'wbk_' .
+            trim(sanitize_text_field($request['model']));
         $fields = $request['data'];
         $id = null;
         if (isset($fields['id'])) {
@@ -81,37 +84,89 @@ class Controller
             if ($action_result[0] == true) {
                 unset($action_result[0]);
                 $model = trim(sanitize_text_field($request['model']));
-                if ($model === 'appointments') {
-                    $action_result['extra_data']['dynamic_title'] = WBK_Placeholder_Processor::process_placeholders(get_option('wbk_backend_calendar_booking_text', '#customer_name [#service_name]'), $action_result['id']);
-                }
 
                 if ($model === 'services') {
-                    $action_result['can_edit'] = \WBK_User_Utils::check_access_to_particular_service($action_result['id'], true);
-                    $action_result['can_delete'] = \WBK_User_Utils::check_access_to_particular_service($action_result['id'], false);
-                } elseif($model === 'appointments') {
-                    $action_result['can_edit'] = \WBK_User_Utils::check_access_to_particular_service($fields['service_id'], false);
-                    $action_result['can_delete'] = \WBK_User_Utils::check_access_to_particular_service($fields['service_id'], false);
+                    $action_result['data'][
+                        'can_edit'
+                    ] = \WBK_User_Utils::check_access_to_particular_service(
+                        $action_result['id'],
+                        true
+                    );
+                    $action_result['data'][
+                        'can_delete'
+                    ] = \WBK_User_Utils::check_access_to_particular_service(
+                        $action_result['id'],
+                        false
+                    );
+                } elseif ($model === 'appointments') {
+                    $action_result['data'][
+                        'can_edit'
+                    ] = \WBK_User_Utils::check_access_to_particular_service(
+                        $fields['service_id'],
+                        false
+                    );
+                    $action_result['data'][
+                        'can_delete'
+                    ] = \WBK_User_Utils::check_access_to_particular_service(
+                        $fields['service_id'],
+                        false
+                    );
+
+                    $action_result['extra_data'][
+                        'dynamic_title'
+                    ] = WBK_Placeholder_Processor::process_placeholders(
+                        get_option(
+                            'wbk_backend_calendar_booking_text',
+                            '#customer_name [#service_name]'
+                        ),
+                        $action_result['id']
+                    );
                 } else {
-                    $action_result['can_edit'] = true;
-                    $action_result['can_delete'] = true;
+                    $action_result['data']['can_edit'] = true;
+                    $action_result['data']['can_delete'] = true;
                 }
 
-                return new \WP_REST_Response(['status' => 'succces', 'details' => $action_result], 200);
+                return new \WP_REST_Response(
+                    [
+                        'status' => 'succces',
+                        'id' => $action_result['id'],
+                        'data' => $action_result['data'],
+                        'extra_data' => $action_result['extra_data'],
+                    ],
+                    200
+                );
             } else {
-                return new \WP_REST_Response(['status' => 'fail', 'invalid_fields' => $action_result[1]], 400);
+                return new \WP_REST_Response(
+                    ['status' => 'fail', 'invalid_fields' => $action_result[1]],
+                    400
+                );
             }
         } else {
             $action_result = WbkData()
                 ->models->get_element_at($model)
                 ->update_item($fields, $id);
             if ($action_result[0] == true) {
-                return new \WP_REST_Response(['status' => 'succces', 'id' => $id], 200);
+                return new \WP_REST_Response(
+                    [
+                        'status' => 'succces',
+                        'id' => $id,
+                        'data' => $action_result['data'],
+                        'extra_data' => $action_result['extra_data'],
+                    ],
+                    200
+                );
             } else {
-                return new \WP_REST_Response(['status' => 'fail', 'invalid_fields' => $action_result['invalid_fields']], 400);
+                return new \WP_REST_Response(
+                    [
+                        'status' => 'fail',
+
+                        'data' => $action_result['invalid_fields'],
+                    ],
+                    400
+                );
             }
         }
     }
-
 
     /**
      * Summary of send_response
@@ -136,7 +191,10 @@ class Controller
         global $wpdb;
 
         $params = $request->get_params();
-        $model = $wpdb->prefix . 'wbk_' . trim(sanitize_text_field($params['model']));
+        $model =
+            $wpdb->prefix .
+            'wbk_' .
+            trim(sanitize_text_field($params['model']));
 
         $filters = !empty($params['filters']) ? $params['filters'] : [];
         $data = null;
@@ -150,23 +208,76 @@ class Controller
         if (false === $result) {
             return $this->send_response(404, $data);
         }
+
         date_default_timezone_set(get_option('wbk_timezone', 'UTC'));
         foreach ($result as $item) {
             if (trim(sanitize_text_field($params['model'])) === 'services') {
-                $item->can_edit = \WBK_User_Utils::check_access_to_particular_service($item->id, true);
+                $item->can_edit = \WBK_User_Utils::check_access_to_particular_service(
+                    $item->id,
+                    true
+                );
                 $item->can_delete = current_user_can('manage_options');
-            } elseif (trim(sanitize_text_field($params['model'])) === 'appointments'){
+            } elseif (
+                trim(sanitize_text_field($params['model'])) === 'appointments'
+            ) {
                 $item->can_edit = true;
-                $item->can_delete = WBK_User_Utils::is_user_associated_with_service(get_current_user_id(), $item->service_id);
+                $item->can_delete = WBK_User_Utils::is_user_associated_with_service(
+                    get_current_user_id(),
+                    $item->service_id
+                );
+            } elseif (
+                trim(sanitize_text_field($params['model'])) ===
+                'email_templates'
+            ) {
+                $item->can_edit = true;
+                $item->can_delete = $item->is_default === 'yes' ? false : true;
             } else {
                 $item->can_delete = true;
                 $item->can_edit = true;
             }
-            
-            if (trim(sanitize_text_field($params['model'])) === 'appointments') {
+
+            if (
+                trim(sanitize_text_field($params['model'])) === 'appointments'
+            ) {
                 $item->extra_data = [
-                    'dynamic_title' => WBK_Placeholder_Processor::process_placeholders(get_option('wbk_backend_calendar_booking_text', '#customer_name [#service_name]'), $item->id)
+                    'dynamic_title' => WBK_Placeholder_Processor::process_placeholders(
+                        get_option(
+                            'wbk_backend_calendar_booking_text',
+                            '#customer_name [#service_name]'
+                        ),
+                        $item->id
+                    ),
                 ];
+                $item->formatted_date = wp_date(
+                    get_option('wbk_date_format_backend'),
+                    $item->day,
+                    new \DateTimeZone(get_option('wbk_timezone', 'UTC'))
+                );
+            }
+
+            if (
+                trim(sanitize_text_field($params['model'])) === 'gg_calendars'
+            ) {
+                if ($item->ggid == '' && $item->easy_auth == 'yes') {
+                    $calendars = \WBK_Google::get_google_calendars_in_account(
+                        $item->id
+                    );
+                    if (is_array($calendars) && count($calendars) > 0) {
+                        $selected_key = null;
+                        // Check if primary calendar exists
+                        if (isset($calendars['primary'])) {
+                            $selected_key = 'primary';
+                        } else {
+                            // If no primary calendar found, use the first element's key
+                            $selected_key = array_keys($calendars)[0];
+                        }
+
+                        $item->ggid = $selected_key;
+                        $google = new \WBK_Google_Calendar($item->id);
+                        $google->set('ggid', $item->ggid);
+                        $google->save();
+                    }
+                }
             }
         }
 
@@ -181,7 +292,10 @@ class Controller
      */
     public function delete_items($request)
     {
-        $model = get_option('wbk_db_prefix', '') . 'wbk_' . trim(sanitize_text_field($request['model']));
+        $model =
+            get_option('wbk_db_prefix', '') .
+            'wbk_' .
+            trim(sanitize_text_field($request['model']));
         $data = null;
         if (false === WbkData()->models->get_element_at($model)) {
             return new \WP_REST_Response(['status' => 'fail'], 400);
@@ -211,7 +325,10 @@ class Controller
      */
     public function save_item_permission($request)
     {
-        if (current_user_can('manage_options') || current_user_can('manage_sites')) {
+        if (
+            current_user_can('manage_options') ||
+            current_user_can('manage_sites')
+        ) {
             return true;
         }
 
@@ -219,7 +336,10 @@ class Controller
 
         if ($request['model'] == 'services') {
             if (is_numeric($row_id)) {
-                return \WBK_User_Utils::check_access_to_particular_service($row_id, true);
+                return \WBK_User_Utils::check_access_to_particular_service(
+                    $row_id,
+                    true
+                );
             }
         }
 
@@ -229,9 +349,15 @@ class Controller
                 if (!$booking->is_loaded()) {
                     return false;
                 }
-                return \WBK_User_Utils::check_access_to_particular_service($booking->get_service(), false);
+                return \WBK_User_Utils::check_access_to_particular_service(
+                    $booking->get_service(),
+                    false
+                );
             } elseif (isset($request['data']['service_id'])) {
-                return \WBK_User_Utils::check_access_to_particular_service((int)@$request['data']['service_id'], false);
+                return \WBK_User_Utils::check_access_to_particular_service(
+                    (int) @$request['data']['service_id'],
+                    false
+                );
             }
         }
 
@@ -245,11 +371,13 @@ class Controller
      */
     public function get_items_permission($request)
     {
-        $model = get_option('wbk_db_prefix', '') . 'wbk_' . sanitize_text_field($request['model']);
+        $model =
+            get_option('wbk_db_prefix', '') .
+            'wbk_' .
+            sanitize_text_field($request['model']);
         if (false === WbkData()->models->get_element_at($model)) {
             return false;
         }
-
 
         $result = WbkData()
             ->models->get_element_at($model)
@@ -263,23 +391,37 @@ class Controller
      */
     public function delete_items_permission($request)
     {
-        $model = get_option('wbk_db_prefix', '') . 'wbk_' . sanitize_text_field($request['model']);
+        $model =
+            get_option('wbk_db_prefix', '') .
+            'wbk_' .
+            sanitize_text_field($request['model']);
         if (false === WbkData()->models->get_element_at($model)) {
             return false;
         }
-        if (current_user_can('manage_options') || current_user_can('manage_sites')) {
+        if (
+            current_user_can('manage_options') ||
+            current_user_can('manage_sites')
+        ) {
             return true;
         }
 
-        if(trim(sanitize_text_field($request['model'])) === 'appointments' && is_array($request['ids']) && count($request['ids']) > 0){
+        if (
+            trim(sanitize_text_field($request['model'])) === 'appointments' &&
+            is_array($request['ids']) &&
+            count($request['ids']) > 0
+        ) {
             foreach ($request['ids'] as $id) {
                 if (is_numeric($id)) {
                     $booking = new \WBK_Booking($id);
                     if (!$booking->is_loaded()) {
                         return false;
                     }
-                    
-                    if (WBK_User_Utils::check_access_to_particular_service($booking->service_id)) {
+
+                    if (
+                        WBK_User_Utils::check_access_to_particular_service(
+                            $booking->service_id
+                        )
+                    ) {
                         return false;
                     }
                 }
@@ -301,11 +443,13 @@ class Controller
         if (false === WbkData()->tables->get_element_at($table)) {
             return false;
         }
-        if (current_user_can('manage_options') || current_user_can('manage_sites')) {
+        if (
+            current_user_can('manage_options') ||
+            current_user_can('manage_sites')
+        ) {
             return true;
         }
         return false;
-
     }
 
     /**
@@ -393,18 +537,24 @@ class Controller
                 $formated_row_values[] = $row['id'];
                 date_default_timezone_set(get_option('wbk_timezone', 'UTC'));
 
-
-
                 $formated_row_values[] = [
                     'display' =>
-                        date(get_option('wbk_date_format_backend', 'm/d/y'), $row['time']) .
+                        date(
+                            get_option('wbk_date_format_backend', 'm/d/y'),
+                            $row['time']
+                        ) .
                         '<br />' .
                         date(get_option('time_format', 'g:i a'), $row['time']),
                     '@data-order' => $row['time'],
                 ];
                 $row['duration'] = $duration;
             }
-            foreach (WbkData()->tables->get_element_at($table)->get_data('fields_to_view') as $field_slug => $field) {
+            foreach (
+                WbkData()
+                    ->tables->get_element_at($table)
+                    ->get_data('fields_to_view')
+                as $field_slug => $field
+            ) {
                 if (!$field->get_in_row()) {
                     continue;
                 }

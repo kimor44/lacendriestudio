@@ -8,11 +8,9 @@
 namespace W3TC;
 
 /**
- * W3 Cache class
- */
-
-/**
- * Class: Cache
+ * Class Cache
+ *
+ * phpcs:disable WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
  */
 class Cache {
 	/**
@@ -20,6 +18,7 @@ class Cache {
 	 *
 	 * @param string $engine Engine key code.
 	 * @param array  $config Configuration.
+	 *
 	 * @return W3_Cache_Base
 	 */
 	public static function instance( $engine, $config = array() ) {
@@ -37,7 +36,7 @@ class Cache {
 				case 'apc':
 					if ( function_exists( 'apcu_store' ) ) {
 						$instances[ $instance_key ] = new Cache_Apcu( $config );
-					} else if ( function_exists( 'apc_store' ) ) {
+					} elseif ( function_exists( 'apc_store' ) ) {
 							$instances[ $instance_key ] = new Cache_Apc( $config );
 					}
 					break;
@@ -79,7 +78,7 @@ class Cache {
 					break;
 
 				default:
-					trigger_error( 'Incorrect cache engine ' . esc_html( $engine ), E_USER_WARNING );
+					trigger_error( 'Incorrect cache engine ' . esc_html( $engine ), E_USER_WARNING ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error
 					$instances[ $instance_key ] = new Cache_Base( $config );
 					break;
 			}
@@ -93,7 +92,7 @@ class Cache {
 	}
 
 	/**
-	 * Returns caching engine name
+	 * Returns caching engine name.
 	 *
 	 * @param string $engine Engine key code.
 	 * @param string $module Module.
@@ -159,19 +158,19 @@ class Cache {
 				break;
 
 			case 'cf':
-				$engine_name = 'Amazon Cloudfront';
+				$engine_name = 'Amazon CloudFront';
 				break;
 
 			case 'google_drive':
 				$engine_name = 'Google Drive';
 				break;
 
-			case 'highwinds':
-				$engine_name = 'Highwinds';
+			case 'cf2':
+				$engine_name = 'Amazon CloudFront';
 				break;
 
-			case 'cf2':
-				$engine_name = 'Amazon Cloudfront';
+			case 'cloudfront':
+				$engine_name = 'Amazon CloudFront';
 				break;
 
 			case 'rscf':
@@ -180,6 +179,10 @@ class Cache {
 
 			case 'azure':
 				$engine_name = 'Microsoft Azure Storage';
+				break;
+
+			case 'azuremi':
+				$engine_name = 'Microsoft Azure Storage (Managed Identity)';
 				break;
 
 			case 'edgecast':
@@ -192,10 +195,6 @@ class Cache {
 
 			case 'rackspace_cdn':
 				$engine_name = 'Rackspace';
-				break;
-
-			case 'stackpath2':
-				$engine_name = 'StackPath';
 				break;
 
 			case 'bunnycdn':

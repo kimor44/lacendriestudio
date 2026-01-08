@@ -1,24 +1,22 @@
 <?php
-
-if ( !defined( 'ABSPATH' ) ) {
-    exit;
+if (!defined('ABSPATH')) {
+    exit();
 }
 // webba booking Stripe integration class
-class WBK_Stripe {
+class WBK_Stripe
+{
     protected $api_key;
-
     protected $api_sectet;
-
     protected $tax;
-
     protected $currency;
 
-    public function init( $service_id ) {
-        return FALSE;
+    public function init($service_id)
+    {
+        return false;
     }
-
-    public static function getCurrencies() {
-        return array(
+    public static function get_currencies()
+    {
+        return [
             'USD',
             'AED',
             'AFN',
@@ -154,12 +152,12 @@ class WBK_Stripe {
             'XPF',
             'YER',
             'ZAR',
-            'ZMW'
-        );
+            'ZMW',
+        ];
     }
-
-    public static function isCurrencyZeroDecimal( $currency ) {
-        $arr_list = array(
+    public static function is_currency_zero_decimal($currency)
+    {
+        $arr_list = [
             'MGA',
             'BIF',
             'CLP',
@@ -174,114 +172,18 @@ class WBK_Stripe {
             'KMF',
             'KRW',
             'XOF',
-            'XPF'
-        );
-        if ( in_array( $currency, $arr_list ) ) {
-            return TRUE;
+            'XPF',
+        ];
+        if (in_array($currency, $arr_list)) {
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
-    static function renderPaymentMethods( $service_id, $appointment_ids, $button_class = '' ) {
-        global $wbk_wording;
-        if ( !is_array( $service_id ) ) {
-            $services = array($service_id);
-        } else {
-            $services = $service_id;
-        }
-        foreach ( $services as $service_id ) {
-            $service = new WBK_Service_deprecated();
-            if ( !$service->setId( $service_id ) ) {
-                return 'Unable to access service: wrong service id.';
-            }
-            if ( !$service->load() ) {
-                return 'Unable to access service: load failed.';
-            }
-            $arr_items = json_decode( $service->getPayementMethods() );
-            if ( !in_array( 'stripe', $arr_items ) ) {
-                return '';
-            }
-        }
-        $html = '';
-        $stripe_btn_text = WBK_Validator::alfa_numeric( get_option( 'wbk_stripe_button_text', 'Pay with credit card' ) );
-        $html .= '<input class="wbk-button wbk-width-100 wbk-mt-10-mb-10 wbk-payment-init ' . $button_class . '" data-method="stripe" data-app-id="' . implode( ',', $appointment_ids ) . '"  value="' . $stripe_btn_text . '" type="button">';
-        return $html;
-    }
-
-    public function createPayment( $method, $app_ids, $coupon ) {
-        $html = '';
-        return $html;
-    }
-
-    public function getOrderData( $app_ids, $coupon = FALSE ) {
-        $subtotal = 0;
-        $time_format = WBK_Date_Time_Utils::get_time_format();
-        $date_format = WBK_Format_Utils::get_date_format();
-        $result_item_name = array();
-        foreach ( $app_ids as $app_id ) {
-            $service_id = WBK_Db_Utils::getServiceIdByAppointmentId( $app_id );
-            if ( $service_id === false ) {
-                continue;
-            }
-            $service = new WBK_Service_deprecated();
-            if ( !$service->setId( $service_id ) ) {
-                continue;
-            }
-            if ( !$service->load() ) {
-                continue;
-            }
-            $appointment = new WBK_Appointment_deprecated();
-            if ( !$appointment->setId( $app_id ) ) {
-                continue;
-            }
-            if ( !$appointment->load() ) {
-                continue;
-            }
-            $price = $service->getPrice( $appointment->getTime() );
-            $price = apply_filters(
-                'wbk_stripe_price_per_appointment',
-                $price,
-                $app_id,
-                $service_id
-            );
-            $quantity = $appointment->getQuantity();
-            $subtotal += $price * $quantity;
-            $item_name = get_option( 'wbk_payment_item_name', '' );
-            if ( $item_name == '' ) {
-                $item_name = sanitize_text_field( $wbk_wording['payment_item_name'] );
-            }
-            $item_name = str_replace( '#date', wp_date( $date_format, $appointment->getTime(), new DateTimeZone(date_default_timezone_get()) ), $item_name );
-            $item_name = str_replace( '#time', wp_date( $time_format, $appointment->getTime(), new DateTimeZone(date_default_timezone_get()) ), $item_name );
-            $item_name = str_replace( '#id', $appointment->getId(), $item_name );
-            $item_name = WBK_Db_Utils::message_placeholder_processing( $item_name, $appointment, $service );
-            $result_item_name[] = $item_name;
-        }
-        if ( $coupon != FALSE ) {
-            if ( intval( $coupon[1] ) > 0 ) {
-                $subtotal -= intval( $coupon[1] );
-            }
-            if ( intval( $coupon[2] ) > 0 ) {
-                $discounted = $subtotal / 100 * intval( $coupon[2] );
-                $subtotal -= $discounted;
-            }
-        }
-        $tax_to_pay = $subtotal / 100 * $this->tax;
-        $total = $subtotal + $tax_to_pay;
-        if ( self::isCurrencyZeroDecimal( $this->currency ) ) {
-            return array(round( $total ), implode( ', ', $result_item_name ));
-        } else {
-            return array(round( $total * 100 ), implode( ', ', $result_item_name ));
-        }
-    }
-
-    public function charge(
-        $app_ids,
-        $amount,
-        $payment_id,
-        $intent_id = null
-    ) {
-        return array(0, __( 'Payment method not supported' ));
+    public function charge($app_ids, $amount, $payment_id, $intent_id = null)
+    {
+        return [0, __('Payment method not supported')];
     }
 
     public static function render_initial_form(
@@ -292,5 +194,6 @@ class WBK_Stripe {
     ) {
         return $input;
     }
-
+    public function create_payment_intent($booking_ids, $payment_details) {}
 }
+?>

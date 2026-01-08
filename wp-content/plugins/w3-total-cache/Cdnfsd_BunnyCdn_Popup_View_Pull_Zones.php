@@ -5,7 +5,7 @@
  * Assists with configuring Bunny CDN as a full-site delivery CDN.
  * A pull zone selection is presented along with a form to add a new pull zone.
  *
- * @since   X.X.X
+ * @since   2.6.0
  * @package W3TC
  *
  * @param array $details {
@@ -40,7 +40,7 @@ defined( 'W3TC' ) || die();
 					}
 
 					// Get the CDN hostname and custom hostnames.
-					$cdn_hostname = '?';
+					$cdn_hostname     = '?';
 					$custom_hostnames = array();
 
 					foreach ( $pull_zone['Hostnames'] as $hostname ) {

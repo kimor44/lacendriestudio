@@ -50,7 +50,7 @@ class UserExperience_Preload_Requests_Extension {
 		add_filter( 'w3tc_save_options', array( $this, 'w3tc_save_options' ) );
 
 		// Renders the Preload Reqeusts settings metabox on the User Expereince advanced setting page.
-		add_action( 'w3tc_userexperience_page', array( $this, 'w3tc_userexperience_page' ) );
+		add_action( 'w3tc_userexperience_page', array( $this, 'w3tc_userexperience_page' ), 20 );
 
 		// This filter is documented in Generic_AdminActions_Default.php under the read_request method.
 		add_filter( 'w3tc_config_key_descriptor', array( $this, 'w3tc_config_key_descriptor' ), 10, 2 );
@@ -68,7 +68,9 @@ class UserExperience_Preload_Requests_Extension {
 	 * @return void
 	 */
 	public function w3tc_userexperience_page() {
-		include __DIR__ . '/UserExperience_Preload_Requests_Page_View.php';
+		if ( self::is_enabled() ) {
+			include __DIR__ . '/UserExperience_Preload_Requests_Page_View.php';
+		}
 	}
 
 	/**
@@ -83,8 +85,8 @@ class UserExperience_Preload_Requests_Extension {
 	 */
 	public function w3tc_config_key_descriptor( $descriptor, $key ) {
 		if (
-			is_array( $key )
-			&& in_array(
+			is_array( $key ) &&
+			in_array(
 				implode( '.', $key ),
 				array(
 					'user-experience-preload-requests.dns-prefetch',
@@ -96,7 +98,8 @@ class UserExperience_Preload_Requests_Extension {
 					'user-experience-preload-requests.preload-videos',
 					'user-experience-preload-requests.preload-audio',
 					'user-experience-preload-requests.preload-documents',
-				)
+				),
+				true
 			)
 		) {
 			$descriptor = array( 'type' => 'array' );
@@ -143,7 +146,7 @@ class UserExperience_Preload_Requests_Extension {
 		foreach ( $preconnect as $url ) {
 			echo '<link rel="preconnect" href="' . esc_url( $url ) . '" crossorigin>';
 		}
-		
+
 		$dns_prefetch = $this->config->get_array( array( 'user-experience-preload-requests', 'dns-prefetch' ) );
 		foreach ( $dns_prefetch as $url ) {
 			echo '<link rel="dns-prefetch" href="' . esc_url( $url ) . '">';

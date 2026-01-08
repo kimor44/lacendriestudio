@@ -25,14 +25,14 @@ if ( ! defined( 'W3TC' ) ) {
 
 <div class="tablenav top">
 
-	<?php if ( ! $config->is_sealed( 'extensions.active' ) ) : ?>
+	<?php if ( ! $this->_config->is_sealed( 'extensions.active' ) ) : ?>
 		<div class="alignleft actions">
 			<select name="action">
 				<option value="-1" selected="selected"><?php esc_html_e( 'Bulk Actions', 'w3-total-cache' ); ?></option>
 				<option value="activate-selected"><?php esc_html_e( 'Activate', 'w3-total-cache' ); ?></option>
 				<option value="deactivate-selected"><?php esc_html_e( 'Deactivate', 'w3-total-cache' ); ?></option>
 			</select>
-			<input type="submit" name="" id="doaction" class="w3tc-button-save button action" value="<?php esc_attr_e( 'Apply' ); ?>">
+			<input type="submit" name="" id="doaction" class="w3tc-button-save button action" value="<?php esc_attr_e( 'Apply', 'w3-total-cache' ); ?>">
 		</div>
 	<?php endif ?>
 
@@ -45,7 +45,8 @@ if ( ! defined( 'W3TC' ) ) {
 						// translators: 1 count of extensions.
 						_n_noop(
 							'%s extension',
-							'%s extensions'
+							'%s extensions',
+							'w3-total-cache'
 						),
 						count( $extensions ),
 						'w3-total-cache'
@@ -84,7 +85,7 @@ if ( ! defined( 'W3TC' ) ) {
 			do_action( "w3tc_extension_before_row-{$extension}" );
 
 			?>
-			<tr id="<?php echo esc_attr( $extension ); ?>" class="<?php echo $config->is_extension_active( $extension ) ? 'active' : 'inactive'; ?>">
+			<tr id="<?php echo esc_attr( $extension ); ?>" class="<?php echo $this->_config->is_extension_active( $extension ) ? 'active' : 'inactive'; ?>">
 				<th scope="row" class="check-column">
 					<label class="screen-reader-text" for="checkbox_<?php echo esc_attr( $cb_id ); ?>"><?php echo esc_html( sprintf( /* translators: 1 label for Extension select/deselect checkobox */ __( 'Select %1$s', 'w3-total-cache' ), $meta['name'] ) ); ?></label>
 					<input type="checkbox" name="checked[]" value="<?php echo esc_attr( $extension ); ?>" id="checkbox_<?php echo esc_attr( $cb_id ); ?>" class="w3tc_extensions_input_active" <?php disabled( ! $meta['enabled'] ); ?>>
@@ -93,7 +94,7 @@ if ( ! defined( 'W3TC' ) ) {
 					<strong><?php echo esc_html( $meta['name'] ); ?></strong>
 					<div class="row-actions-visible">
 						<?php
-						if ( $config->is_extension_active( $extension ) ) :
+						if ( $this->_config->is_extension_active( $extension ) ) :
 							$extra_links = array();
 
 							if ( isset( $meta['settings_exists'] ) && $meta['settings_exists'] ) {
@@ -125,20 +126,20 @@ if ( ! defined( 'W3TC' ) ) {
 
 							<span class="0"></span>
 
-							<?php if ( ! $config->is_sealed( 'extensions.active' ) ) : ?>
+							<?php if ( ! $this->_config->is_sealed( 'extensions.active' ) ) : ?>
 								<?php echo $links ? ' | ' : ''; ?>
 								<span class="deactivate">
 									<a href="<?php echo esc_url( wp_nonce_url( Util_Ui::admin_url( sprintf( 'admin.php?page=w3tc_extensions&action=deactivate&extension=%s&amp;extension_status=%s&amp;paged=%d', $extension, $extension_status, $page ) ), 'w3tc' ) ); ?>" title="<?php esc_attr_e( 'Deactivate this extension', 'w3-total-cache' ); ?> ">
-										<?php esc_html_e( 'Deactivate' ); ?>
+										<?php esc_html_e( 'Deactivate', 'w3-total-cache' ); ?>
 									</a>
 								</span>
 							<?php endif ?>
 						<?php else : ?>
 							<span class="activate">
 								<?php if ( $meta['enabled'] ) : ?>
-									<?php if ( ! $config->is_sealed( 'extensions.active' ) ) : ?>
+									<?php if ( ! $this->_config->is_sealed( 'extensions.active' ) ) : ?>
 										<a href="<?php echo esc_url( wp_nonce_url( Util_Ui::admin_url( sprintf( 'admin.php?page=w3tc_extensions&action=activate&extension=%s&amp;extension_status=%s&amp;paged=%d', $extension, $extension_status, $page ) ), 'w3tc' ) ); ?>" title="<?php esc_attr_e( 'Activate this extension', 'w3-total-cache' ); ?> ">
-											<?php esc_html_e( 'Activate' ); ?>
+											<?php esc_html_e( 'Activate', 'w3-total-cache' ); ?>
 										</a>
 									<?php endif ?>
 								<?php else : ?>
@@ -183,7 +184,7 @@ if ( ! defined( 'W3TC' ) ) {
 						</p>
 					</div>
 
-					<div class="<?php echo $config->is_extension_active( $extension ) ? 'active' : 'inactive'; ?> second plugin-version-author-uri">
+					<div class="<?php echo $this->_config->is_extension_active( $extension ) ? 'active' : 'inactive'; ?> second plugin-version-author-uri">
 						<?php
 						echo esc_html(
 							sprintf(
@@ -230,7 +231,7 @@ if ( ! defined( 'W3TC' ) ) {
 </table>
 <div class="tablenav bottom">
 
-	<?php if ( ! $config->is_sealed( 'extensions.active' ) ) : ?>
+	<?php if ( ! $this->_config->is_sealed( 'extensions.active' ) ) : ?>
 		<div class="alignleft actions">
 			<select name="action2">
 				<option value="-1" selected="selected"><?php esc_html_e( 'Bulk Actions', 'w3-total-cache' ); ?></option>
@@ -250,7 +251,8 @@ if ( ! defined( 'W3TC' ) ) {
 						// translators: 1 count of extensions.
 						_n_noop(
 							'%s extension',
-							'%s extensions'
+							'%s extensions',
+							'w3-total-cache'
 						),
 						count( $extensions ),
 						'w3-total-cache'

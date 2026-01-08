@@ -17,7 +17,7 @@ class WBK_Stripe {
         return false;
     }
 
-    public static function getCurrencies() {
+    public static function get_currencies() {
         return [
             'USD',
             'AED',
@@ -158,7 +158,7 @@ class WBK_Stripe {
         ];
     }
 
-    public static function isCurrencyZeroDecimal( $currency ) {
+    public static function is_currency_zero_decimal( $currency ) {
         $arr_list = [
             'MGA',
             'BIF',
@@ -181,6 +181,13 @@ class WBK_Stripe {
         } else {
             return false;
         }
+    }
+
+    public function create_payment_intent( $booking_ids, $payment_details, $payment_method_id = null ) {
+        return [
+            'success' => false,
+            'error'   => __( 'Payment method not supported', 'webba-booking-lite' ),
+        ];
     }
 
     public function charge(

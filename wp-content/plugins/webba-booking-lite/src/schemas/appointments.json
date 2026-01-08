@@ -6,10 +6,10 @@
             "type": "string",
             "input_type": "text",
             "hidden": false,
-            "title": "Client",
+            "title": "Customer",
             "tab": "",
             "misc": {
-                "tooltip": "Entrez le nom du client."
+                "tooltip": "Enter the name of the customer."
             },
             "required": true,
             "dependency": [],
@@ -23,7 +23,7 @@
             "title": "Service",
             "tab": "",
             "misc": {
-                "tooltip": "S\u00e9lectionner le service pour lequel la r\u00e9servation est effectu\u00e9e.",
+                "tooltip": "Select the service for which the booking is being made.",
                 "options": "services",
                 "sub_type": "positive_integer"
             },
@@ -39,9 +39,9 @@
             "title": "Date",
             "tab": "",
             "misc": {
-                "tooltip": "S\u00e9lectionner la date de r\u00e9servation.",
-                "date_format": "d.m.y",
-                "time_zone": "Europe/Paris"
+                "tooltip": "Select the booking date.",
+                "date_format": "M d, Y",
+                "time_zone": "Europe/Warsaw"
             },
             "required": true,
             "dependency": [],
@@ -52,11 +52,11 @@
             "type": "string",
             "input_type": "select",
             "hidden": true,
-            "title": "Heure",
+            "title": "Time",
             "tab": "",
             "misc": {
-                "tooltip": "S\u00e9lectionner l'heure de r\u00e9servation.",
-                "time_format": "G\\hi",
+                "tooltip": "Select the booking time.",
+                "time_format": "g:i a",
                 "options": "backend"
             },
             "required": true,
@@ -68,10 +68,10 @@
             "type": "string",
             "input_type": "select",
             "hidden": true,
-            "title": "Places r\u00e9serv\u00e9es",
+            "title": "Places booked",
             "tab": "",
             "misc": {
-                "tooltip": "Pr\u00e9ciser le nombre de places r\u00e9serv\u00e9es pour ce rendez-vous.",
+                "tooltip": "Specify the number of places being booked for this appointment.",
                 "sub_type": "positive_integer",
                 "options": "backend"
             },
@@ -80,6 +80,20 @@
             "default_value": null,
             "editable": true
         },
+        "appointment_duration": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Duration",
+            "tab": "",
+            "misc": {
+                "sub_type": "positive_integer"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": false
+        },
         "appointment_email": {
             "type": "string",
             "input_type": "text",
@@ -87,7 +101,7 @@
             "title": "Email",
             "tab": "",
             "misc": {
-                "tooltip": "Entrer l\u2019adresse courriel du client.",
+                "tooltip": "Enter the customer's email address.",
                 "sub_type": "email"
             },
             "required": true,
@@ -98,11 +112,11 @@
         "appointment_phone": {
             "type": "string",
             "input_type": "text",
-            "hidden": false,
-            "title": "T\u00e9l\u00e9phone",
+            "hidden": true,
+            "title": "Phone",
             "tab": "",
             "misc": {
-                "tooltip": "Entrer le num\u00e9ro de t\u00e9l\u00e9phone du client."
+                "tooltip": "Enter the customer's phone number."
             },
             "required": false,
             "dependency": [],
@@ -113,10 +127,10 @@
             "type": "string",
             "input_type": "textarea",
             "hidden": true,
-            "title": "Commentaire",
+            "title": "Comment",
             "tab": "",
             "misc": {
-                "tooltip": "Ajouter tout commentaire suppl\u00e9mentaire li\u00e9 \u00e0 la r\u00e9servation."
+                "tooltip": "Add any additional comments related to the booking."
             },
             "required": false,
             "dependency": [],
@@ -127,7 +141,7 @@
             "type": "string",
             "input_type": "webba_custom_data",
             "hidden": true,
-            "title": "Champs personnalis\u00e9es",
+            "title": "Custom fields",
             "tab": "",
             "misc": null,
             "required": false,
@@ -139,10 +153,10 @@
             "type": "string",
             "input_type": "text",
             "hidden": true,
-            "title": "Paiement",
+            "title": "Price",
             "tab": "",
             "misc": {
-                "tooltip": "Si le paiement a d\u00e9j\u00e0 \u00e9t\u00e9 effectu\u00e9, entrer le montant pay\u00e9 pour 1 personne.",
+                "tooltip": "If the payment has already been made, enter the payment amount paid for 1 person.",
                 "sub_type": "none_negative_float"
             },
             "required": false,
@@ -150,23 +164,36 @@
             "default_value": "",
             "editable": true
         },
+        "appointment_amount_paid": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Amount paid",
+            "tab": "",
+            "misc": {
+                "tooltip": "Enter the exact amount of money that was actually paid",
+                "sub_type": "none_negative_float"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
+            "editable": true
+        },
         "appointment_status": {
             "type": "string",
             "input_type": "select",
             "hidden": false,
-            "title": "Statut",
+            "title": "Status",
             "tab": "",
             "misc": {
-                "tooltip": "Choisir le statut de r\u00e9servation appropri\u00e9 parmi les options disponibles.",
+                "tooltip": "Choose the appropriate booking status from the options available.",
                 "options": {
-                    "pending": "En attente de validation",
-                    "approved": "Valid\u00e9",
-                    "paid": "Pay\u00e9 (en attente de validation)",
-                    "paid_approved": "Paiement valid\u00e9",
-                    "arrived": "Arriv\u00e9",
-                    "woocommerce": "G\u00e9r\u00e9 par Woo Commerce",
-                    "added_by_admin_not_paid": "Ajout\u00e9 par l\u2019administrateur (non pay\u00e9)",
-                    "added_by_admin_paid": "Ajout\u00e9 par l\u2019administrateur (pay\u00e9)"
+                    "pending": "Pending",
+                    "approved": "Approved",
+                    "rejected": "Rejected",
+                    "cancelled": "Cancelled",
+                    "arrived": "Arrived",
+                    "noshow": "No-Show"
                 }
             },
             "required": true,

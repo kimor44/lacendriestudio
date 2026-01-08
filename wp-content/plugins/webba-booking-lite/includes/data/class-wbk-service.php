@@ -34,7 +34,7 @@ class WBK_Service extends WBK_Model_Object
     public function get_interval_between()
     {
         if (!isset($this->fields['interval_between'])) {
-            return null;
+            return 0;
         }
         return $this->fields['interval_between'];
     }
@@ -77,14 +77,18 @@ class WBK_Service extends WBK_Model_Object
 
     /**
      * get business hours
-     * @return array business hours
+     * @return array|string|null business hours
      */
     public function get_business_hours()
     {
         if (!isset($this->fields['business_hours'])) {
             return null;
         }
-        return $this->fields['business_hours'];
+        $hours = $this->fields['business_hours'];
+        if (is_string($hours)) {
+            return $hours;
+        }
+        return $hours;
     }
 
     /**
@@ -93,8 +97,16 @@ class WBK_Service extends WBK_Model_Object
      */
     public function get_quantity($time = null)
     {
-        if (!isset($this->fields['quantity'])) {
-            return null;
+        if (
+            !WBK_Feature_Gate::have_required_plan('standard', 'only_old_users')
+        ) {
+            return 1;
+        }
+        if (
+            !isset($this->fields['quantity']) ||
+            empty($this->fields['quantity'])
+        ) {
+            return 1;
         }
         return apply_filters(
             'wbk_service_quantity',
@@ -110,12 +122,35 @@ class WBK_Service extends WBK_Model_Object
      */
     public function get_min_quantity($time = null)
     {
-        if (!isset($this->fields['min_quantity'])) {
-            return null;
+        if (
+            !isset($this->fields['min_quantity']) ||
+            empty($this->fields['min_quantity'])
+        ) {
+            return 1;
         }
         return apply_filters(
             'wbk_service_quantity',
             $this->fields['min_quantity'],
+            $this->get_id(),
+            $time
+        );
+    }
+
+    /**
+     * get maximum quantity
+     * @return int quantity
+     */
+    public function get_max_quantity($time = null)
+    {
+        if (
+            !isset($this->fields['quantity']) ||
+            empty($this->fields['quantity'])
+        ) {
+            return 1;
+        }
+        return apply_filters(
+            'wbk_service_quantity',
+            $this->fields['quantity'],
             $this->get_id(),
             $time
         );
@@ -169,7 +204,7 @@ class WBK_Service extends WBK_Model_Object
     }
     /**
      * get on confirmation (On booking) template
-     * @return int id of the on changed template or false 
+     * @return int id of the on changed template or false
      */
     public function get_on_booking_template()
     {
@@ -214,7 +249,7 @@ class WBK_Service extends WBK_Model_Object
     }
     /**
      * get the service fee
-     * @return flot service fee
+     * @return float service fee
      */
     public function get_fee()
     {
@@ -241,7 +276,7 @@ class WBK_Service extends WBK_Model_Object
                 'wpml_translate_single_string',
                 stripcslashes($value),
                 'webba-booking-lite',
-                'Service description id ' . $this->get_id()
+                'webba_service_description_' . $this->get_id()
             );
         }
         return $value;
@@ -326,5 +361,25 @@ class WBK_Service extends WBK_Model_Object
             return false;
         }
         return true;
+    }
+    public function is_deposit_enabled()
+    {
+        if (!WBK_Feature_Gate::have_required_plan('premium', false)) {
+            return false;
+        }
+        if (
+            !is_null($this->fields['enable_deposit']) &&
+            $this->fields['enable_deposit'] == 'yes'
+        ) {
+            return true;
+        }
+        return false;
+    }
+    public function get_deposit_amount()
+    {
+        if (!is_null($this->fields['deposit_amount'])) {
+            return $this->fields['deposit_amount'];
+        }
+        return 0;
     }
 }

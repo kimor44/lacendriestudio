@@ -6,7 +6,7 @@
             "type": "string",
             "input_type": "text",
             "hidden": false,
-            "title": "ID du rendez-vous annul\u00e9",
+            "title": "ID of cancelled appointment",
             "tab": "",
             "misc": {
                 "sub_type": "positive_integer"
@@ -20,7 +20,7 @@
             "type": "string",
             "input_type": "textarea",
             "hidden": false,
-            "title": "Annul\u00e9 par",
+            "title": "Cancelled by",
             "tab": "",
             "misc": null,
             "required": false,
@@ -60,7 +60,7 @@
             "type": "string",
             "input_type": "text",
             "hidden": false,
-            "title": "Nom",
+            "title": "Name",
             "tab": "",
             "misc": null,
             "required": true,
@@ -72,7 +72,7 @@
             "type": "string",
             "input_type": "text",
             "hidden": false,
-            "title": "T\u00e9l\u00e9phone",
+            "title": "Phone",
             "tab": "",
             "misc": null,
             "required": false,
@@ -84,7 +84,7 @@
             "type": "string",
             "input_type": "textarea",
             "hidden": true,
-            "title": "Commentaire",
+            "title": "Comment",
             "tab": "",
             "misc": null,
             "required": false,
@@ -100,6 +100,20 @@
             "tab": "",
             "misc": null,
             "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": false
+        },
+        "appointment_duration": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": false,
+            "title": "Duration",
+            "tab": "",
+            "misc": {
+                "sub_type": "positive_integer"
+            },
+            "required": false,
             "dependency": [],
             "default_value": "",
             "editable": false

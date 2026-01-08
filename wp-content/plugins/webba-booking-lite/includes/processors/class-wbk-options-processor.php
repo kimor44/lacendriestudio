@@ -14,9 +14,7 @@ final class WBK_Options_Processor
 
     protected $options;
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     public function add_option(
         $slug,
@@ -65,6 +63,11 @@ final class WBK_Options_Processor
                 $render_callback = 'render_zoom_auth';
                 $validation_callback = 'validate_zoom_auth';
                 break;
+            case 'google_connect':
+                $render_callback = 'render_google_connect';
+                $validation_callback = 'validate_google_connect';
+                break;
+
             default:
                 $render_callback = 'render_text';
                 $validation_callback = 'validate_text';
@@ -85,7 +88,11 @@ final class WBK_Options_Processor
         $args = array_merge($default_args, $args);
 
         // update default values
-        if (!empty($args['default']) && get_option($slug) === false && $args['default'] !== false) {
+        if (
+            !empty($args['default']) &&
+            get_option($slug) === false &&
+            $args['default'] !== false
+        ) {
             update_option($slug, $args['default']);
         }
 
@@ -98,7 +105,6 @@ final class WBK_Options_Processor
             $args
         );
         register_setting($group, $slug, [$this, $validation_callback]);
-
     }
     public function validate_text($input)
     {
@@ -142,6 +148,10 @@ final class WBK_Options_Processor
     {
         return $input;
     }
+    public function validate_google_connect($input)
+    {
+        return $input;
+    }
     public function validate_this_domain_url($input)
     {
         return $input;
@@ -182,13 +192,15 @@ final class WBK_Options_Processor
     {
         WBK_Renderer::load_template('options/zoom_auth', $args);
     }
+    public function render_google_connect($args)
+    {
+        WBK_Renderer::load_template('options/google_connect', $args);
+    }
     public function render_editor($args)
     {
         WBK_Renderer::load_template('options/editor_field', $args);
     }
-    public function wbk_settings_section_callback($arg)
-    {
-    }
+    public function wbk_settings_section_callback($arg) {}
 
     /**
      * returns instance of object

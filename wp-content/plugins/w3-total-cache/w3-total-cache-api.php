@@ -7,12 +7,10 @@
  * phpcs:disable WordPress.PHP
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	die();
-}
+defined( 'ABSPATH' ) || die;
 
 define( 'W3TC', true );
-define( 'W3TC_VERSION', '2.6.1' );
+define( 'W3TC_VERSION', '2.8.14' );
 define( 'W3TC_POWERED_BY', 'W3 Total Cache' );
 define( 'W3TC_EMAIL', 'w3tc@w3-edge.com' );
 define( 'W3TC_TEXT_DOMAIN', 'w3-total-cache' );
@@ -32,16 +30,24 @@ define( 'W3TC_TERMS_URL', 'https://api.w3-edge.com/v1/redirects/policies-terms' 
 define( 'W3TC_TERMS_ACCEPT_URL', 'https://api.w3-edge.com/v1/redirects/policies-accept' );
 define( 'W3TC_MAILLINGLIST_SIGNUP_URL', 'https://api.w3-edge.com/v1/signup-newsletter' );
 define( 'W3TC_NEWRELIC_SIGNUP_URL', 'https://api.w3-edge.com/v1/redirects/newrelic/signup' );
-define( 'W3TC_STACKPATH_AUTHORIZE_URL', 'https://api.w3-edge.com/v1/redirects/stackpath/authorize' );
-define( 'W3TC_STACKPATH2_AUTHORIZE_URL', 'https://api.w3-edge.com/v1/redirects/stackpath2/authorize' );
 define( 'W3TC_GOOGLE_DRIVE_AUTHORIZE_URL', 'https://api.w3-edge.com/v1/googledrive/authorize' );
 define( 'W3TC_BUNNYCDN_SIGNUP_URL', 'https://api.w3-edge.com/v1/redirects/bunnycdn/signup' );
 define( 'W3TC_BUNNYCDN_SETTINGS_URL', 'https://api.w3-edge.com/v1/redirects/bunnycdn/settings' );
 define( 'W3TC_BUNNYCDN_CDN_URL', 'https://api.w3-edge.com/v1/redirects/bunnycdn/cdn' );
+define( 'W3TC_PARTNER_IMH', 'https://api.w3-edge.com/v1/redirects/partners/imh' );
+define( 'W3TC_PARTNER_A2', 'https://api.w3-edge.com/v1/redirects/partners/a2' );
+define( 'W3TC_PARTNER_CONVESIO', 'https://api.w3-edge.com/v1/redirects/partners/convesio' );
+define( 'W3TC_PARTNER_DREAMHOST', 'https://api.w3-edge.com/v1/redirects/partners/dreamhost' );
+define( 'W3TC_BOLDGRID_FORUM_API', 'https://www.boldgrid.com/support/wp-json/w3tc/v1/help_topics?tag=' );
+
+// Admin notices from API.
+if ( ! defined( 'W3TC_NOTICE_FEED' ) ) {
+	define( 'W3TC_NOTICE_FEED', 'https://api2.w3-edge.com/notices' );
+}
 
 // Image Service rate constants.
-define( 'W3TC_IMAGE_SERVICE_FREE_HLIMIT', 100 );
-define( 'W3TC_IMAGE_SERVICE_FREE_MLIMIT', 1000 );
+define( 'W3TC_IMAGE_SERVICE_FREE_HLIMIT', 10 );
+define( 'W3TC_IMAGE_SERVICE_FREE_MLIMIT', 100 );
 define( 'W3TC_IMAGE_SERVICE_PRO_HLIMIT', 10000 );
 define( 'W3TC_IMAGE_SERVICE_PRO_MLIMIT', 0 );
 
@@ -165,8 +171,8 @@ if ( ! defined( 'W3TC_FEED_REGEXP' ) ) {
 	define( 'W3TC_FEED_REGEXP', '~/feed(/|$)~' );
 }
 
-@ini_set( 'pcre.backtrack_limit', 4194304 );
-@ini_set( 'pcre.recursion_limit', 4194304 );
+@ini_set( 'pcre.backtrack_limit', 4194304 ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
+@ini_set( 'pcre.recursion_limit', 4194304 ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
 
 global $w3_late_init;
 $w3_late_init = false;
@@ -174,41 +180,52 @@ $w3_late_init = false;
 /**
  * Class autoloader.
  *
- * @param string $class Classname.
+ * @param string $class_value Classname.
  */
-function w3tc_class_autoload( $class ) {
+function w3tc_class_autoload( $class_value ) {
 	// Some php pass classes with slash.
-	if ( substr( $class, 0, 1 ) == '\\' ) {
-		$class = substr( $class, 1 );
+	if ( '\\' === substr( $class_value, 0, 1 ) ) {
+		$class_value = substr( $class_value, 1 );
 	}
 
 	// Try core w3tc classes first.
-	if ( substr( $class, 0, 5 ) == 'W3TC\\' ) {
-		$filename = W3TC_DIR . DIRECTORY_SEPARATOR . substr( $class, 5 ) . '.php';
+	if ( 'W3TC\\' === substr( $class_value, 0, 5 ) ) {
+		$filename = W3TC_DIR . DIRECTORY_SEPARATOR . substr( $class_value, 5 ) . '.php';
 
 		if ( file_exists( $filename ) ) {
 			require $filename;
 			return;
 		} elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-			echo esc_html(
-				sprintf(
-					// translators: 1 class name, 2 file name.
-					__(
-						'Attempt to create object of class %1$s has been made, but file %2$s doesnt exists',
-						'w3-total-cache'
-					),
-					$class,
-					$filename
-				)
-			);
+			if ( function_exists( 'esc_html' ) && function_exists( '__' ) ) {
+				echo esc_html(
+					sprintf(
+						// translators: 1 class name, 2 file name.
+						__(
+							'Attempt to create object of class %1$s has been made, but file %2$s doesnt exists',
+							'w3-total-cache'
+						),
+						$class_value,
+						$filename
+					)
+				);
+			} else {
+				printf(
+					'Attempt to create object of class %1$s has been made, but file %2$s doesnt exists',
+					$class_value, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					$filename // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				);
+			}
+
 			debug_print_backtrace();
 		}
 	}
 
-	if ( substr( $class, 0, 13 ) == 'W3TCG_Google_' &&
-		( ! defined( 'W3TC_GOOGLE_LIBRARY' ) || W3TC_GOOGLE_LIBRARY ) ) {
+	if (
+		'W3TCG_Google_' === substr( $class_value, 0, 13 ) &&
+		( ! defined( 'W3TC_GOOGLE_LIBRARY' ) || W3TC_GOOGLE_LIBRARY )
+	) {
 		// Google library.
-		$class_path = explode( '_', substr( $class, 6 ) );
+		$class_path = explode( '_', substr( $class_value, 6 ) );
 		if ( count( $class_path ) > 3 ) {
 			// Maximum class file path depth in this project is 3.
 			$class_path = array_slice( $class_path, 0, 3 );
@@ -223,12 +240,12 @@ function w3tc_class_autoload( $class ) {
 		return;
 	}
 
-	if ( substr( $class, 0, 6 ) == 'W3TCL\\' ) {
-		$base  = W3TC_LIB_DIR . DIRECTORY_SEPARATOR;
-		$class = substr( $class, 6 );
+	if ( 'W3TCL\\' === substr( $class_value, 0, 6 ) ) {
+		$base        = W3TC_LIB_DIR . DIRECTORY_SEPARATOR;
+		$class_value = substr( $class_value, 6 );
 
 		// PSR loader.
-		$file = $base . strtr( $class, '\\_', DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR ) . '.php';
+		$file = $base . strtr( $class_value, '\\_', DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR ) . '.php';
 
 		if ( file_exists( $file ) ) {
 			require_once $file;
@@ -519,6 +536,8 @@ function w3tc_get_referrer_group( $group ) {
 if ( defined( 'W3TC_CONFIG_HIDE' ) && W3TC_CONFIG_HIDE ) {
 	/**
 	 * Class: W3_Config
+	 *
+	 * phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter
 	 */
 	class W3_Config { // phpcs:ignore
 		/**
@@ -533,39 +552,45 @@ if ( defined( 'W3TC_CONFIG_HIDE' ) && W3TC_CONFIG_HIDE ) {
 		/**
 		 * Get string.
 		 *
-		 * @param string  $key     Key.
-		 * @param string  $default Default.
-		 * @param boolean $trim    Trim.
+		 * @param string  $key           Key.
+		 * @param string  $default_value Default.
+		 * @param boolean $trim          Trim.
+		 *
 		 * @return string
 		 */
-		public function get_string( $key, $default = '', $trim = true ) {
+		public function get_string( $key, $default_value = '', $trim = true ) {
 			return '';
 		}
 
 		/**
 		 * Get integer.
 		 *
-		 * @param string $key     Key.
-		 * @param int    $default Default.
+		 * @param string $key           Key.
+		 * @param int    $default_value Default.
+		 *
+		 * @return int
 		 */
-		public function get_integer( $key, $default = 0 ) {
+		public function get_integer( $key, $default_value = 0 ) {
 			return 0;
 		}
 
 		/**
 		 * Get boolean.
 		 *
-		 * @param string $key     Key.
-		 * @param bool   $default Default.
+		 * @param string $key           Key.
+		 * @param bool   $default_value Default.
+		 *
 		 * @return bool
 		 */
-		public function get_boolean( $key, $default = false ) {
+		public function get_boolean( $key, $default_value = false ) {
 			return false;
 		}
 	}
 } else {
 	/**
 	 * Class: W3_Config.
+	 *
+	 * phpcs:disable Universal.CodeAnalysis.ConstructorDestructorReturn.ReturnValueFound
 	 */
 	class W3_Config extends \W3TC\Config { // phpcs:ignore
 		/**
@@ -627,12 +652,12 @@ class W3_ConfigWriter { // phpcs:ignore
 /**
  * Deprecated.  Retained for 3rd parties that use it. see w3tc_config().
  *
- * @param string $class Class name.
+ * @param string $class_value Class name.
  */
-function w3_instance( $class ) {
+function w3_instance( $class_value ) {
 	$legacy_class_name = null;
 
-	switch ( $class ) {
+	switch ( $class_value ) {
 		case 'W3_Config':
 			if ( defined( 'W3TC_CONFIG_HIDE' ) && W3TC_CONFIG_HIDE ) {
 				return new W3_Config();

@@ -1,5 +1,6 @@
 <?php
 
+use function PHPUnit\Framework\isNull;
 if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -11,11 +12,6 @@ class WBK_Booking_Factory {
         }
         if ( !WBK_Validator::check_email( $data['email'] ) ) {
             return [false, 'Incorrect email'];
-        }
-        if ( get_option( 'wbk_phone_required', '3' ) != '' ) {
-            if ( !WBK_Validator::check_string_size( $data['phone'], 3, 128 ) ) {
-                return [false, 'Incorrect phone'];
-            }
         }
         if ( !WBK_Validator::check_integer( $data['time'], 1438426800, 4901674778 ) ) {
             return [false, 'Incorrect time'];
@@ -83,7 +79,7 @@ class WBK_Booking_Factory {
         $data['admin_token'] = uniqid();
         $data['created_on'] = time();
         $ip = '';
-        if ( get_option( 'wbk_gdrp', 'disabled' ) == 'enabled' ) {
+        if ( get_option( 'wbk_gdrp', 'disabled' ) == 'enabled' && WBK_Feature_Gate::have_required_plan( 'standard', 'only_old_users' ) ) {
             if ( !isset( $_SERVER['REMOTE_ADDR'] ) ) {
                 $ip = $_SERVER['REMOTE_ADDR'];
             }
@@ -97,7 +93,7 @@ class WBK_Booking_Factory {
         }
         if ( get_option( 'wbk_appointments_delete_not_paid_mode', 'disabled' ) == 'on_booking' ) {
             $expiration_time = get_option( 'wbk_appointments_expiration_time', '60' );
-            if ( is_numeric( $expiration_time ) && intval( $expiration_time ) >= 5 ) {
+            if ( is_numeric( $expiration_time ) && intval( $expiration_time ) >= 1 ) {
                 if ( $service->get_price() == 0 ) {
                     $expiration_value = 0;
                 } else {
@@ -121,6 +117,7 @@ class WBK_Booking_Factory {
     public function post_production( $booking_ids, $event = 'on_booking' ) {
         $prev_time_zone = date_default_timezone_get();
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+        $result = [];
         foreach ( $booking_ids as $booking_id ) {
             $booking = new WBK_Booking($booking_id);
             $service_id = $booking->get_service();
@@ -148,7 +145,7 @@ class WBK_Booking_Factory {
                 $booking->get( 'status' )
             );
             WBK_Model_Utils::set_booking_end( $booking->get_id() );
-            if ( get_option( 'wbk_gdrp', 'disabled' ) == 'disabled' ) {
+            if ( get_option( 'wbk_gdrp', 'disabled' ) == 'disabled' && WBK_Feature_Gate::have_required_plan( 'standard', 'only_old_users' ) ) {
                 if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
                     WbkData()->set_value(
                         get_option( 'wbk_db_prefix', '' ) . 'wbk_appointments',
@@ -195,7 +192,7 @@ class WBK_Booking_Factory {
             }
             if ( get_option( 'wbk_appointments_delete_not_paid_mode', 'disabled' ) == 'on_booking' ) {
                 $expiration_time = get_option( 'wbk_appointments_expiration_time', '60' );
-                if ( is_numeric( $expiration_time ) && intval( $expiration_time ) >= 5 ) {
+                if ( is_numeric( $expiration_time ) && intval( $expiration_time ) >= 1 ) {
                     if ( $service->get_price() == 0 || $amount['price'] == 0 ) {
                         $expiration_value = 0;
                     } else {
@@ -231,54 +228,20 @@ class WBK_Booking_Factory {
         );
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
         if ( $event == 'on_booking' ) {
-            foreach ( $notification_booking_ids as $notification_booking_id ) {
-                $booking = new WBK_Booking($notification_booking_id);
-                if ( !$booking->is_loaded() ) {
-                    continue;
-                }
-                // single send
-                $noifications = new WBK_Email_Notifications($booking->get_service(), $notification_booking_id, $booking->get( 'service_category' ));
-                $noifications->send( 'book' );
-                // sending invoice
-                if ( get_option( 'wbk_email_customer_send_invoice', 'disabled' ) == 'onbooking' ) {
-                    if ( get_option( 'wbk_multi_booking', 'disabled' ) != 'enabled' ) {
-                        $noifications->sendSingleInvoice();
-                    }
-                }
-            }
-            // member's notifications
-            WBK_Email_Processor::send( $notification_booking_ids, 'confirmation_members' );
-            $sort_array = [];
-            foreach ( $booking_ids as $temp_id ) {
-                $booking = new WBK_Booking($temp_id);
-                $sort_array[] = $booking->get_start();
-            }
-            array_multisort(
-                $sort_array,
-                SORT_ASC,
-                SORT_NUMERIC,
-                $booking_ids
-            );
-            if ( count( $booking_ids ) > 0 ) {
-                $booking = new WBK_Booking($booking_ids[0]);
-                if ( $booking->is_loaded() ) {
-                    if ( get_option( 'wbk_multi_booking', 'disabled' ) == 'enabled' ) {
-                        $noifications = new WBK_Email_Notifications($booking->get_service(), $booking_ids[0]);
-                        $noifications->sendMultipleCustomerNotification( $booking_ids );
-                        if ( get_option( 'wbk_email_customer_send_invoice', 'disabled' ) == 'onbooking' ) {
-                            $noifications->sendMultipleCustomerInvoice( $booking_ids );
-                        }
-                    }
-                    if ( get_option( 'wbk_multi_booking', 'disabled' ) == 'enabled' ) {
-                        $noifications = new WBK_Email_Notifications($booking->get_service(), $booking_ids[0]);
-                        $noifications->sendMultipleAdminNotification( $booking_ids );
-                    }
-                }
-            }
+            WBK_Email_Processor::send( $notification_booking_ids, 'booking_created_by_customer' );
+        } else {
+            WBK_Email_Processor::send( $notification_booking_ids, 'booking_created_by_admin' );
         }
-        if ( $event == 'on_manual_booking' ) {
-            $noifications = new WBK_Email_Notifications($service_id, $booking_ids[0]);
-            $noifications->sendSingleBookedManually();
+        // preset woocommerce order form
+        if ( get_option( 'wbk_woo_prefil_fields', '' ) == 'true' ) {
+            if ( !session_id() ) {
+                session_start();
+            }
+            $full_name = explode( ' ', $booking->get_name() );
+            $_SESSION['wbk_name'] = $full_name[0];
+            $_SESSION['wbk_last_name'] = $full_name[1];
+            $_SESSION['wbk_email'] = $booking->get( 'email' );
+            $_SESSION['wbk_phone'] = $booking->get( 'phone' );
         }
         do_action( 'wbebba_after_bookings_added', $booking_ids );
         date_default_timezone_set( $prev_time_zone );
@@ -290,25 +253,20 @@ class WBK_Booking_Factory {
             return false;
         }
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-        // sending emails
-        $noifications = new WBK_Email_Notifications($booking->get_service(), $booking_id);
-        $send_single_bookigng_email = true;
-        if ( $by == 'Service administrator (dashboard)' || get_option( 'wbk_multi_booking' ) != 'enabled' ) {
-            $by_customer = false;
-            if ( $by == 'customer' ) {
-                $by_customer = true;
-            }
-            $noifications->prepareOnCancelCustomer( $by_customer );
-            $noifications->sendOnCancelCustomer();
-        }
-        if ( $by == 'Service administrator (dashboard)' || get_option( 'wbk_multi_booking' ) != 'enabled' ) {
-            $noifications->prepareOnCancel();
-            $noifications->sendOnCancel();
-        }
         do_action( 'webba_before_cancel_booking', $booking_id );
-        WBK_Model_Utils::copy_booking_to_cancelled( $booking_id, $by );
         if ( $force_deletion ) {
             WBK_Model_Utils::delete_booking( $booking_id );
+        } else {
+            if ( $by == 'customer' ) {
+                WBK_Model_Utils::set_booking_status( $booking_id, 'cancelled' );
+                WBK_Email_Processor::send( [$booking_id], 'booking_cancelled_by_customer' );
+            } elseif ( $by == 'administrator' ) {
+                WBK_Model_Utils::set_booking_status( $booking_id, 'rejected' );
+                WBK_Email_Processor::send( [$booking_id], 'booking_cancelled_by_admin' );
+            } elseif ( $by == 'auto' ) {
+                WBK_Model_Utils::set_booking_status( $booking_id, 'cancelled' );
+                WBK_Email_Processor::send( [$booking_id], 'booking_cancelled_auto' );
+            }
         }
         date_default_timezone_set( 'UTC' );
         return true;
@@ -323,36 +281,33 @@ class WBK_Booking_Factory {
                 continue;
             }
             $status = $booking->get( 'status' );
-            if ( $status == 'pending' || $status == 'paid' ) {
+            if ( $status == 'pending' ) {
                 $i++;
                 if ( $status == 'pending' ) {
                     $booking->set( 'status', 'approved' );
-                }
-                if ( $status == 'paid' ) {
-                    $booking->set( 'status', 'paid_approved' );
                 }
                 $booking->save();
                 $valid = true;
                 $service_id = $booking->get( 'service_id' );
                 $expiration_mode = get_option( 'wbk_appointments_delete_not_paid_mode', 'disabled' );
                 if ( $expiration_mode == 'on_approve' ) {
-                    WBK_Db_Utils::setAppointmentsExpiration( $booking_id );
+                    WBK_Model_Utils::set_booking_expiration( $booking_id );
                 }
                 if ( get_option( 'wbk_gg_when_add', 'onbooking' ) == 'onpaymentorapproval' ) {
-                    if ( !WBK_Db_Utils::idEventAddedToGoogle( $booking_id ) ) {
+                    if ( !WBK_Model_Utils::is_event_added_to_google( $booking_id ) ) {
                     }
                 } else {
                 }
             }
         }
         if ( $valid ) {
-            WBK_Email_Processor::send( $booking_ids, 'approval' );
+            WBK_Email_Processor::send( $booking_ids, 'booking_approved' );
         }
         date_default_timezone_set( 'UTC' );
         return $i;
     }
 
-    public function set_as_paid( $booking_ids, $method ) {
+    public function set_as_paid( $booking_ids, $method, $total_amount ) {
         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
         $coupon_id = null;
         $booking_ids_t = $booking_ids;
@@ -372,51 +327,20 @@ class WBK_Booking_Factory {
         }
         if ( count( $booking_ids ) > 0 ) {
         }
+        $price_per_booking = number_format(
+            $total_amount / count( $booking_ids ),
+            get_option( 'wbk_price_fractional', '2' ),
+            get_option( 'wbk_price_separator', '.' ),
+            ''
+        );
         if ( count( $booking_ids ) > 0 ) {
             foreach ( $booking_ids as $booking_id ) {
                 $booking = new WBK_Booking($booking_id);
                 if ( !$booking->is_loaded() ) {
                     continue;
                 }
-                if ( $method == 'woocommerce' ) {
-                    $update_status = get_option( 'wbk_woo_update_status', 'paid' );
-                    if ( $update_status == 'disabled' ) {
-                        $update_status = 'woocommerce';
-                    }
-                    // send approval sms here
-                    $booking->set( 'prev_status', $booking->get( 'status' ) );
-                    $booking->set( 'status', $update_status );
-                } else {
-                    $status_assigned = false;
-                    if ( $method == 'Stripe' && get_option( 'wbk_stripe_status_after_payment', 'based' ) != 'based' ) {
-                        if ( $booking->get( 'status' ) == 'pending' ) {
-                            $booking->set( 'status', 'paid' );
-                        } elseif ( $booking->get( 'status' ) == 'approved' ) {
-                            $booking->set( 'status', 'paid_approved' );
-                        }
-                        $booking->set( 'status', get_option( 'wbk_stripe_status_after_payment' ) );
-                        $status_assigned = true;
-                    }
-                    if ( !$status_assigned ) {
-                        if ( $booking->get( 'status' ) == 'pending' ) {
-                            $booking->set( 'status', 'paid' );
-                            $booking->set( 'prev_status', 'pending' );
-                        } elseif ( $booking->get( 'status' ) == 'approved' ) {
-                            $booking->set( 'status', 'paid_approved' );
-                            $booking->set( 'prev_status', 'approved' );
-                        }
-                    }
-                    if ( !$status_assigned ) {
-                        if ( $booking->get( 'status' ) == 'pending' ) {
-                            $booking->set( 'status', 'paid' );
-                            $booking->set( 'prev_status', 'pending' );
-                        } elseif ( $booking->get( 'status' ) == 'approved' ) {
-                            $booking->set( 'status', 'paid_approved' );
-                            $booking->set( 'prev_status', 'approved' );
-                        }
-                    }
-                }
                 $booking->set( 'payment_method', $method );
+                $booking->set( 'amount_paid', $price_per_booking );
                 $booking->save();
                 $coupon_id = $booking->get( 'coupon' );
                 if ( get_option( 'wbk_gg_when_add', 'onbooking' ) == 'onpaymentorapproval' ) {
@@ -439,7 +363,7 @@ class WBK_Booking_Factory {
         $curent_invoice++;
         update_option( 'wbk_email_current_invoice_number', $curent_invoice );
         if ( count( $booking_ids ) > 0 ) {
-            WBK_Email_Processor::send( $booking_ids, 'payment' );
+            WBK_Email_Processor::send( $booking_ids, 'booking_paid' );
         }
         do_action( 'wbk_after_set_as_paid', $booking_ids );
         date_default_timezone_set( 'UTC' );
@@ -453,12 +377,18 @@ class WBK_Booking_Factory {
             if ( !$booking->is_loaded() ) {
                 return;
             }
+            $start_time = $booking->get_start();
+            $prev_time_zone = date_default_timezone_get();
+            date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
+            $booking->set( 'day', strtotime( 'midnight', $start_time ) );
+            date_default_timezone_set( $prev_time_zone );
+            $booking->save();
             $current_status = $booking->get( 'status' );
             $prev_status = $booking->get( 'prev_status' );
             $service_id = $booking->get( 'service_id' );
-            if ( $prev_status == 'pending' || $prev_status == 'paid' ) {
-                if ( $current_status == 'approved' || $current_status == 'paid_approved' ) {
-                    WBK_Email_Processor::send( [$booking_id], 'approval' );
+            if ( $prev_status == 'pending' ) {
+                if ( $current_status == 'approved' ) {
+                    WBK_Email_Processor::send( [$booking_id], 'booking_approved' );
                     $noifications = new WBK_Email_Notifications($service_id, $booking_id);
                     if ( get_option( 'wbk_email_customer_send_invoice', 'disabled' ) == 'onapproval' ) {
                         date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
@@ -467,31 +397,27 @@ class WBK_Booking_Factory {
                     }
                     $expiration_mode = get_option( 'wbk_appointments_delete_not_paid_mode', 'disabled' );
                     if ( $expiration_mode == 'on_approve' ) {
-                        WBK_Db_Utils::setAppointmentsExpiration( $booking_id );
+                        WBK_Model_Utils::set_booking_expiration( $booking_id );
                     }
                     if ( get_option( 'wbk_gg_when_add', 'onbooking' ) == 'onpaymentorapproval' ) {
-                        if ( !WBK_Db_Utils::idEventAddedToGoogle( $booking_id ) ) {
+                        if ( !WBK_Model_Utils::is_event_added_to_google( $booking_id ) ) {
                         }
                     }
                 }
             }
-            $service_id = WBK_Db_Utils::getServiceIdByAppointmentId( $booking_id );
+            $service_id = WBK_Model_Utils::get_service_id_by_booking_id( $booking_id );
             $noifications = new WBK_Email_Notifications($service_id, $booking_id);
             if ( $prev_status != 'arrived' && $current_status == 'arrived' ) {
                 if ( get_option( 'wbk_email_customer_arrived_status', '' ) != '' ) {
                     WBK_Email_Processor::arrival_email_send_or_schedule( $booking_id );
                 }
             }
-            $service = new WBK_Service($service_id);
-            $template = $service->get_on_changes_template();
-            if ( $template != false ) {
-                $template = WBK_Db_Utils::getEmailTemplate( $template );
-                date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-                $noifications->send_single_notification( $booking_id, $template, get_option( 'wbk_email_on_update_booking_subject', '' ) );
-                date_default_timezone_set( 'UTC' );
+            if ( $current_status == 'cancelled' && $prev_status != 'cancelled' || $current_status == 'rejected' && $prev_status != 'rejected' ) {
+                WBK_Email_Processor::send( [$booking_id], 'booking_cancelled_by_admin' );
             }
+            $service = new WBK_Service($service_id);
             date_default_timezone_set( get_option( 'wbk_timezone', 'UTC' ) );
-            WBK_Db_Utils::updateAppointmentDataAtGGCelendar( $booking_id );
+            WBK_Model_Utils::update_booking_data_at_gg_calendar( $booking_id );
             date_default_timezone_set( 'UTC' );
             WBK_Model_Utils::set_booking_end( $booking_id );
             WbkData()->set_value(
@@ -500,6 +426,7 @@ class WBK_Booking_Factory {
                 $booking_id,
                 $booking->get( 'status' )
             );
+            WBK_Email_Processor::send( [$booking_id], 'booking_updated_by_admin' );
         }
     }
 

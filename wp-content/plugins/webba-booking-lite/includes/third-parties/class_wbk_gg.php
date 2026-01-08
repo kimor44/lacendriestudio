@@ -18,10 +18,12 @@ class WBK_Google {
 
     protected $calendar_id;
 
-    protected $gg_calendar_id;
+    protected $ggid;
+
+    protected $scopes;
 
     public function init( $calendar_id ) {
-        return FALSE;
+        return false;
     }
 
     public function get_auth_url() {
@@ -33,7 +35,7 @@ class WBK_Google {
     // 1 - authorization success
     // 2 - authorization failed
     public function connect() {
-        return array(2, 'not connected, premium feature not available');
+        return [2, 'not connected, premium feature not available'];
     }
 
     public function render_calendar_block() {
@@ -75,7 +77,7 @@ class WBK_Google {
         $calendar_id = '',
         $use_current_time_zone = false
     ) {
-        return FALSE;
+        return false;
     }
 
     public function update_event(
@@ -86,19 +88,23 @@ class WBK_Google {
         $end = null,
         $time_zone = null
     ) {
-        return FALSE;
+        return false;
     }
 
     public function delete_event( $event_id ) {
-        return FALSE;
+        return false;
     }
 
     public function init_calendar_by_authcode( $code ) {
-        return FALSE;
+        return false;
     }
 
     public function getEventsTimeRanges( $start, $end ) {
-        return FALSE;
+        return false;
+    }
+
+    public function get_all_calendars() {
+        return false;
     }
 
     public static function add_booking_to_gg_calendar( $booking_id ) {
@@ -114,7 +120,11 @@ class WBK_Google {
     }
 
     static function add_booking_to_customer_calendar( $booking_ids, $code ) {
-        return FALSE;
+        return false;
+    }
+
+    public static function get_google_calendars_in_account( $calendar_id ) {
+        return false;
     }
 
 }

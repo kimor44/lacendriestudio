@@ -6,10 +6,10 @@
             "type": "string",
             "input_type": "text",
             "hidden": false,
-            "title": "Nom de cat\u00e9gorie",
+            "title": "Category name",
             "tab": "general",
             "misc": {
-                "tooltip": "Entrer un nom de cat\u00e9gorie"
+                "tooltip": "Enter category name."
             },
             "required": true,
             "dependency": [],
@@ -23,7 +23,7 @@
             "title": "Services",
             "tab": "general",
             "misc": {
-                "tooltip": "S\u00e9lectionner les services \u00e0 inclure dans cette cat\u00e9gorie.",
+                "tooltip": "Select the services to be included in this category.",
                 "options": "services",
                 "multiple": true
             },

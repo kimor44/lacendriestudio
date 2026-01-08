@@ -24,6 +24,59 @@
     font-weight: bold;
 }
 
+/* ubuntu */
+@font-face {
+    font-family: Ubuntu;
+    src: url(./../../src/fonts/ubuntu/Ubuntu-Light.ttf);
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: Ubuntu;
+    src: url(./../../src/fonts/ubuntu/Ubuntu-LightItalic.ttf);
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Ubuntu;
+    src: url(./../../src/fonts/ubuntu/Ubuntu-Regular.ttf);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: Ubuntu;
+    src: url(./../../src/fonts/ubuntu/Ubuntu-Italic.ttf);
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Ubuntu;
+    src: url(./../../src/fonts/ubuntu/Ubuntu-Medium.ttf);
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: Ubuntu;
+    src: url(./../../src/fonts/ubuntu/Ubuntu-MediumItalic.ttf);
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Ubuntu;
+    src: url(./../../src/fonts/ubuntu/Ubuntu-Bold.ttf);
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: Ubuntu;
+    src: url(./../../src/fonts/ubuntu/Ubuntu-BoldItalic.ttf);
+    font-weight: 700;
+    font-style: italic;
+}
+
 body {
     margin: 0;
 }
@@ -61,9 +114,9 @@ body {
     margin-left: 46px !important;
 }
 @media (max-width: 768px) {
-    .wbk_go_premium_banner{
-        margin-left: 0!important;
-        max-width: 100%!important;
+    .wbk_go_premium_banner {
+        margin-left: 0 !important;
+        max-width: 100% !important;
         object-fit: contain;
     }
 }
@@ -127,7 +180,7 @@ body {
 }
 
 .main-block-wb {
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     box-sizing: border-box;
     color: #212121;
     font-size: 16px;
@@ -162,7 +215,8 @@ body {
 }
 
 .main-block-wb b {
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
     font-weight: normal;
     word-wrap: break-word;
 }
@@ -175,7 +229,7 @@ body {
     height: 50px;
     margin: 0;
     padding: 0 20px 0 20px;
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 16px;
     color: #212121;
 }
@@ -188,14 +242,14 @@ body {
     min-height: 100px;
     max-width: 100%;
     padding: 10px 20px 10px 20px;
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 16px;
     line-height: normal;
     color: #212121;
 }
 
 .main-block-wb button {
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 16px;
 }
 
@@ -208,20 +262,32 @@ body {
 }
 
 .main-block-wb .main-part-wrapper-wb {
-    padding: 45px 50px 45px 50px;
     width: 100%;
+}
+
+.main-part-wrapper-wb .button-wbkb {
+    margin-left: 20px;
 }
 
 .header-main-wb {
     display: flex;
     align-items: center;
     border-bottom: 1px solid #c2c7c7;
-    padding: 0 0 30px 0;
+    padding: 20px;
     margin: 0 0 30px 0;
+    background-color: #fff;
+    gap: 10px;
+    max-height: 100px;
 }
 
-.header-main-wb .logo-main-wb {
-    margin: 0 13px 0 0;
+.header-main-wb > a > img {
+    width: 100%;
+    height: auto;
+    max-height: 80px;
+    -o-object-fit: contain;
+    object-fit: contain;
+    min-height: 80px;
+    max-width: 150px;
 }
 
 .header-main-wb .vertical-line-wb {
@@ -229,18 +295,19 @@ body {
     height: 30px;
     width: 1px;
     background: #c2c4d6;
-    margin: 0 13px 0 0;
 }
 
 .header-main-wb .page-title-wb {
-    font-size: 32px;
+    font-size: 22px;
     line-height: 32px;
+    font-weight: 300;
 }
 
 .header-main-wb .main-menu-wb {
     margin-left: auto;
     display: flex;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
 }
 
 .header-main-wb .main-menu-wb a {
@@ -271,7 +338,7 @@ body {
     background-color: #1f6763;
     border: 0;
     color: #fff;
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 16px;
     padding: 0 30px 0 30px;
     border-radius: 15px;
@@ -331,6 +398,7 @@ body {
     column-gap: 25px;
     row-gap: 25px;
     grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+    margin: 0px 20px 20px 20px;
 }
 
 .settings-list-wb li {
@@ -339,6 +407,11 @@ body {
     box-shadow: 0 0 15px rgba(161, 164, 182, 0.5);
     padding: 30px 30px 40px 30px;
     cursor: pointer;
+    position: relative;
+}
+
+.settings-list-wb li:has(.plan-requirement-wb) {
+    cursor: default;
 }
 
 .settings-list-wb .card-title-wb {
@@ -361,7 +434,8 @@ body {
 
 .settings-list-wb .card-title-wb .card-title-text-wb {
     font-size: 24px;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     transition: 0.2s;
     position: relative;
     text-transform: capitalize;
@@ -369,13 +443,22 @@ body {
 }
 
 .settings-list-wb .view-settings-link-wb .text-wb {
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
     margin: 0 10px 0 0;
     transition: 0.2s;
 }
 
 .settings-list-wb li:hover .card-title-text-wb {
     opacity: 0.7;
+}
+
+.settings-list-wb li:has(.plan-requirement-wb):hover .card-title-text-wb {
+    opacity: 1;
+}
+
+.settings-list-wb li:hover .plan-requirement-wb {
+    backdrop-filter: blur(1px);
 }
 
 .settings-list-wb li .view-settings-link-wb .hover-icon-wb {
@@ -408,7 +491,7 @@ body {
 
 @media (max-width: 1500px) {
     .main-block-wb .main-part-wrapper-wb {
-        padding: 25px 30px 25px 30px;
+        /* padding: 25px 30px 25px 30px; */
     }
 }
 
@@ -447,8 +530,8 @@ body {
 
 @media (max-width: 1200px) {
     .header-main-wb {
-        padding-bottom: 15px;
-        margin-bottom: 20px;
+        padding-bottom: 20;
+        margin-bottom: 30px;
     }
 
     .header-main-wb .page-title-wb {
@@ -487,7 +570,7 @@ body {
 
 @media (max-width: 1100px) {
     .main-block-wb .main-part-wrapper-wb {
-        padding: 15px 15px 25px 15px;
+        /* padding: 15px 15px 25px 15px; */
     }
 }
 
@@ -688,7 +771,8 @@ body {
     top: 0;
     right: 0;
     font-size: 32px;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     line-height: 36px;
     margin: 0 0 30px 0;
     background: #fff;
@@ -732,7 +816,8 @@ body {
     display: flex;
     align-items: center;
     font-size: 24px;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     cursor: pointer;
     transition: 0.2s;
     margin: 0 0 30px 0;
@@ -762,6 +847,11 @@ body {
 
 .field-block-wb {
     margin: 0 0 25px 0;
+    position: relative;
+}
+
+.field-block-wb .plan-requirement-wb {
+    backdrop-filter: blur(1.5px);
 }
 
 .field-block-wb .label-wb {
@@ -780,7 +870,8 @@ body {
 
 .field-block-wb .label-wb label b {
     font-weight: normal;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
 }
 
 .main-block-wb input[type='password'],
@@ -1106,7 +1197,7 @@ input.slidebox-wb:checked:after {
     border-radius: 15px;
     color: #fff;
     padding: 0 20px 0 20px;
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 16px;
     min-width: 110px;
     transition: 0.2s;
@@ -1220,7 +1311,8 @@ input.slidebox-wb:checked:after {
 }
 
 .sidebar-warning-block-wb .warning-text-wb {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
 }
 
 .sidebar-warning-block-wb .button-wbkb {
@@ -1318,7 +1410,8 @@ input.slidebox-wb:checked:after {
     position: relative;
     list-style: none;
     justify-content: space-between;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     font-size: 24px;
     color: #8a9393;
     align-items: center;
@@ -1442,7 +1535,8 @@ input.slidebox-wb:checked:after {
 }
 
 .setup-fields-wb .block-heading-wb {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     font-weight: normal;
     font-size: 32px;
     text-align: center;
@@ -1600,7 +1694,8 @@ input.slidebox-wb:checked:after {
 }
 
 .custom-radiobutton-wbkb input:checked ~ .radio-title-wb {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
 }
 
 .custom-radiobutton-wbkb input:checked ~ .radio-title-wb {
@@ -1972,7 +2067,7 @@ input.slidebox-wb:checked:after {
     .chosen-choices
     .chosen-search-input {
     margin: 0 !important;
-    font-family: poppins, arial !important;
+    font-family: 'Ubuntu', sans-serif !important;
     font-size: 16px !important;
     color: #212121 !important;
 }
@@ -2122,7 +2217,8 @@ input.slidebox-wb:checked:after {
 }
 
 .custom-multiple-select-wb .chosen-drop .no-results span {
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
     margin: 0 0 0 10px;
 }
 
@@ -2214,6 +2310,7 @@ input.slidebox-wb:checked:after {
 
 .appearance-block-wb {
     display: flex;
+    margin: 0px 20px 0px 20px;
 }
 
 .appearance-menu-wrapper-wb {
@@ -2224,7 +2321,8 @@ input.slidebox-wb:checked:after {
     display: flex;
     list-style: none;
     font-size: 22px;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     color: #8a9393;
     border-bottom: 1px solid #8a9393;
     padding: 0 0 1px 0;
@@ -2268,7 +2366,8 @@ input.slidebox-wb:checked:after {
 
 .field-wrapper-wb .block-label-wb {
     display: inline-block;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     margin: 0 0 10px 0;
 }
 
@@ -2285,7 +2384,7 @@ input.slidebox-wb:checked:after {
 }
 
 .field-wrapper-wb .custom-radiobutton-wbkb input:checked ~ .radio-title-wb {
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 .appearance-block-wb .left-part-wb .buttons-block-wb .button-wbkb {
@@ -2495,7 +2594,8 @@ input.slidebox-wb:checked:after {
 
 .field-row-w label {
     display: flex;
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
     margin: 0 0 10px 0;
 }
 
@@ -2586,7 +2686,7 @@ input.slidebox-wb:checked:after {
 }
 
 .checkbox-row-w .checkbox-text-w {
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 16px;
 }
 
@@ -2627,7 +2727,8 @@ input.slidebox-wb:checked:after {
 }
 
 .appointment-box-wbk .button-wbk {
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
     display: inline-block;
     background: #1f6763;
     border-radius: 15px;
@@ -2720,7 +2821,8 @@ input.slidebox-wb:checked:after {
 
 .appointment-status-text-mobile-wbk .current-step-wbk {
     font-size: 20px;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
 }
 
 .appearance-block-wb .right-part-wb .buttons-block-wb {
@@ -2733,7 +2835,7 @@ input.slidebox-wb:checked:after {
     border-radius: 20px;
     width: 100%;
     padding: 0 40px 0 20px;
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 16px;
     color: #212121;
     background: #fff url(../images/select-arrow.png) no-repeat right 20px center;
@@ -2767,7 +2869,7 @@ input.slidebox-wb:checked:after {
 
 .service-cards-list-w .service-card-w {
     display: block;
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     max-width: 215px;
     position: relative;
     margin: 0;
@@ -2957,7 +3059,8 @@ input.slidebox-wb:checked:after {
 
 .mobile-version-wb .heading-mobile-wb {
     display: block;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     font-weight: normal;
     text-align: center;
     margin: 0 0 20px 0;
@@ -3057,7 +3160,8 @@ input.slidebox-wb:checked:after {
     background: #212121;
     padding: 8px 15px 8px 15px;
     color: #fff;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     margin: 0 0 20px 0;
 }
 
@@ -3148,7 +3252,7 @@ input.slidebox-wb:checked:after {
     box-shadow: 0 0 10px rgba(161, 164, 182, 0.16);
     border-radius: 20px;
     padding: 25px 10px 25px 10px;
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 16px;
     background: #fff;
     width: 445px;
@@ -3218,7 +3322,8 @@ input.slidebox-wb:checked:after {
 
 .ui-datepicker .ui-datepicker-header .ui-datepicker-title {
     text-align: center;
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
     color: #212121;
     line-height: 18px;
 }
@@ -3264,7 +3369,7 @@ input.slidebox-wb:checked:after {
     border: none;
     cursor: pointer;
     font-size: 16px;
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     transition: 0.2s;
     padding: 0;
 }
@@ -3574,7 +3679,8 @@ input.slidebox-wb:checked:after {
     .radio-time-block-w
     .radio-time-inner-w
     .time-w {
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
 }
 
 .appontment-time-list-w.group-list-w .radio-time-block-w .group-active-icon-w {
@@ -3585,7 +3691,8 @@ input.slidebox-wb:checked:after {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: poppins-light, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 300;
     font-size: 14px;
 }
 
@@ -5308,7 +5415,8 @@ input.slidebox-wb:checked:after {
 
 .payment-details-wrapper-w table tfoot tr:last-child td {
     padding-top: 10px;
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
 }
 
 .custom-radiobutton-wbk {
@@ -5835,7 +5943,8 @@ input.slidebox-wb:checked:after {
 }
 
 .services-blank-wb .block-title-wb {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     font-size: 32px;
     font-weight: normal;
     margin: 0 0 20px 0;
@@ -5846,7 +5955,8 @@ input.slidebox-wb:checked:after {
 }
 
 .services-bank-content-wb .block-text-wb {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     font-size: 24px;
     margin: 20px 0 30px 0;
 }
@@ -5868,7 +5978,8 @@ input.slidebox-wb:checked:after {
     display: flex;
     list-style: none;
     border-bottom: 1px solid #c2c7c7;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     margin: 0 0 35px 0;
     user-select: none;
 }
@@ -6056,7 +6167,8 @@ input.slidebox-wb:checked:after {
 
 .add-image-block-wb .block-title-wb {
     display: block;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     margin: 10px 0 10px 0;
 }
 
@@ -7197,7 +7309,8 @@ table.dataTable td {
 }
 
 .table-area-wb .block-heading-wb .block-title-wb {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     font-weight: normal;
     font-size: 32px;
 }
@@ -7224,7 +7337,8 @@ table.dataTable td {
     cursor: default !important;
     border-bottom: 0;
     vertical-align: middle;
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
     padding: 20px !important;
     background-color: #cbe7e7;
 }
@@ -7606,7 +7720,8 @@ table.dataTable td {
     .paginate_button.current {
     background: #cbe7e7 !important;
     color: #1f6763 !important;
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
     cursor: default;
 }
 
@@ -8060,7 +8175,8 @@ input.slider-range-working-hours-time-wb {
     display: flex;
     align-items: center;
     font-size: 32px;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     margin: 0 0 15px 0;
 }
 
@@ -8127,7 +8243,8 @@ input.slider-range-working-hours-time-wb {
 
 .dashboard-data-wb .data-content-wb .digit-wb {
     display: inline-block;
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
     font-size: 46px;
     line-height: 1.5;
 }
@@ -8176,7 +8293,8 @@ input.slider-range-working-hours-time-wb {
 
 .intersests-conversion-block-wb .block-header-wb .title-wb {
     font-size: 32px;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
 }
 
 .intersests-conversion-block-wb .block-header-wb .title-wb .help-popover-wb {
@@ -8198,7 +8316,8 @@ input.slider-range-working-hours-time-wb {
     user-select: none;
     cursor: pointer;
     transition: 0.2s;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
 }
 
 .toggle-switch-wb li:hover {
@@ -8450,7 +8569,8 @@ input.slider-range-working-hours-time-wb {
 }
 
 .table-empty-content-wb .text-wb {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     font-size: 24px;
     margin: 0 0 20px 0;
 }
@@ -8862,7 +8982,8 @@ input.slider-range-working-hours-time-wb {
 }
 
 .selected-customers-list-wb .name-item-wb {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
 }
 
 .selected-customers-list-wb .delete-row-wb {
@@ -9224,7 +9345,8 @@ input.slider-range-working-hours-time-wb {
 }
 
 .upgrade-message-wb .text-wb {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     margin: 0 10px 0 0;
 }
 
@@ -9241,7 +9363,8 @@ input.slider-range-working-hours-time-wb {
 }
 
 .upgrade-content-wb .text-wb {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     font-size: 24px;
     padding: 25px 0 130px 0;
 }
@@ -9492,7 +9615,8 @@ input.slider-range-working-hours-time-wb {
 }
 
 .add-image-block-wb .add-image-wb .text-wb {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
 }
 
 .add-image-block-wb .add-image-field-wb {
@@ -11048,7 +11172,8 @@ a.fc-event:hover {
 
 .schedules-calendar-wrapper-wb .fc-header-toolbar .fc-toolbar-title {
     font-weight: normal;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     font-size: 24px;
 }
 
@@ -11135,7 +11260,8 @@ a.fc-event:hover {
 }
 
 .schedules-calendar-wrapper-wb .fc-timegrid-slot-label-frame {
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     font-size: 16px;
 }
 
@@ -11157,7 +11283,8 @@ a.fc-event:hover {
 .schedules-calendar-wrapper-wb .fc-v-event .fc-event-main {
     color: #212121;
     font-size: 12px;
-    font-family: poppins-medium, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
     padding: 5px;
     border-left: 3px solid #1f6763;
     border-radius: 4px 0 0 4px;
@@ -11273,7 +11400,8 @@ a.fc-event:hover {
     .fc-event-main
     .event-popover-wb
     .popover-title-wb {
-    font-family: poppins-semibold, arial;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
     margin: 0 0 5px 0;
 }
 
@@ -11576,8 +11704,8 @@ a.fc-event:hover {
     margin-bottom: 20px;
     margin-right: 20px;
 }
-.webba-booking_page_wbk-options .main-block-wb {
-    left: -20px;
+.webba-booking_page_wbk-options .main-block-wb .wrap {
+    margin: 0;
 }
 .mail-block-wb-wizard {
     left: 0 !important;
@@ -11854,7 +11982,7 @@ span.wbk_email_resend_result {
     border: 1px solid transparent;
     border-radius: 15px;
     padding: 0 20px 0 20px;
-    font-family: poppins, arial;
+    font-family: 'Ubuntu', sans-serif;
     font-size: 16px;
     min-width: 110px;
     transition: 0.2s allease;
@@ -11863,4 +11991,84 @@ span.wbk_email_resend_result {
     position: relative;
     background: #1f6763;
     color: #fff;
+}
+
+#wpcontent {
+    padding-left: 0;
+}
+
+@media screen and (max-width: 782px) {
+    .auto-fold #wpcontent {
+        padding-left: 0;
+    }
+}
+
+.plan-requirement-wb {
+    color: #fff;
+    border-radius: 5px;
+    padding: 3px 8px 3px 8px;
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.0196078431);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plan-requirement-upgrade-buton-wb {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 10px 28px 10px 28px !important;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: normal;
+    font-style: normal;
+    min-width: 110px;
+    transition: 0.2s all ease;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    white-space: nowrap;
+    background: #ff6d6d;
+    color: #fff;
+    border: none;
+    transition: .3s all ease-in-out;
+
+    img {
+        width: auto;
+        height: 16px;
+        -o-object-fit: contain;
+        object-fit: contain;
+        filter: brightness(0) invert(1);
+    }
+}
+
+.plan-requirement-upgrade-buton-wb:hover {
+    background: #e54a4a;
+    color: #fff;
+    padding: 8px 12px;
+
+    .plan-requirement-icon-hover {
+        display: inline-block;
+    }
+
+    .plan-requirement-icon {
+        display: none;
+    }
+}
+
+.plan-requirement-icon-hover {
+    display: none;
 }

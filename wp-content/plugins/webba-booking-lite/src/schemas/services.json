@@ -30,6 +30,20 @@
             "default_value": "",
             "editable": true
         },
+        "service_image": {
+            "type": "string",
+            "input_type": "file",
+            "hidden": false,
+            "title": "Image",
+            "tab": "general",
+            "misc": {
+                "tooltip": "Image to show in service preview"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
         "service_date_range": {
             "type": "string",
             "input_type": "date_range",
@@ -38,7 +52,7 @@
             "tab": "hours",
             "misc": {
                 "tooltip": "Sp\u00e9cifier une plage de dates si le service n\u2019est valide que pour une p\u00e9riode sp\u00e9cifique.",
-                "date_format": "d.m.y",
+                "date_format": "y/m/d",
                 "time_zone": "Europe/Paris"
             },
             "required": false,
@@ -136,17 +150,86 @@
             "default_value": "0",
             "editable": true
         },
+        "service_enable_deposit": {
+            "type": "string",
+            "input_type": "checkbox",
+            "hidden": true,
+            "title": "Enable deposit",
+            "tab": "pricing",
+            "misc": {
+                "yes": "Oui",
+                "tooltip": "Allow customers to pay only a part of the total price online as a deposit.",
+                "description": "When enabled, customers will be charged the deposit amount instead of the full service price during online payment.",
+                "required_plan": "premium",
+                "available_in_old_free": false
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_deposit_amount": {
+            "type": "string",
+            "input_type": "text",
+            "hidden": true,
+            "title": "Deposit amount",
+            "tab": "pricing",
+            "misc": {
+                "tooltip": "The part of the service price that must be paid online in advance.",
+                "sub_type": "none_negative_float",
+                "dependent_value": {
+                    "condition": [
+                        "enable_deposit",
+                        "!=",
+                        "yes"
+                    ],
+                    "value": "0"
+                },
+                "hide": [
+                    [
+                        "enable_deposit",
+                        "=",
+                        "yes"
+                    ]
+                ],
+                "required_plan": "premium",
+                "available_in_old_free": false
+            },
+            "required": true,
+            "dependency": [],
+            "default_value": "1",
+            "editable": true
+        },
         "service_email": {
             "type": "string",
             "input_type": "text",
             "hidden": false,
-            "title": "Email",
+            "title": "Notification email(s)",
             "tab": "email",
             "misc": {
-                "tooltip": "Entrer le courriel des administrateurs qui recevront des notifications pour les r\u00e9servations li\u00e9es \u00e0 ce service.",
+                "tooltip": "Enter the email address of administrators who will receive notifications for bookings related to this service (use comma to add multiple).",
                 "sub_type": "email"
             },
             "required": true,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_color": {
+            "type": "string",
+            "input_type": "color",
+            "hidden": true,
+            "title": "Color",
+            "tab": "general",
+            "misc": {
+                "tooltip": "Select a color for this service.",
+                "generate_random": true,
+                "generate_key": [
+                    "services",
+                    "color"
+                ]
+            },
+            "required": false,
             "dependency": [],
             "default_value": "",
             "editable": true
@@ -166,6 +249,24 @@
             "default_value": "0",
             "editable": true
         },
+        "service_group_booking": {
+            "type": "string",
+            "input_type": "checkbox",
+            "hidden": true,
+            "title": "Enable group booking",
+            "tab": "general",
+            "misc": {
+                "yes": "Oui",
+                "tooltip": "Si vous acceptez les r\u00e9servations de groupe, vous pouvez sp\u00e9cifier le nombre minimum de r\u00e9servations requises par tranche horaire.",
+                "description": "If you accept group reservations, you can specify the minimum number of bookings required per time slot and set the maximum number of bookings allowed per time slot by enabling the option above.",
+                "required_plan": "standard",
+                "available_in_old_free": true
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
         "service_min_quantity": {
             "type": "string",
             "input_type": "text",
@@ -174,7 +275,22 @@
             "tab": "general",
             "misc": {
                 "tooltip": "Si vous acceptez les r\u00e9servations de groupe, vous pouvez sp\u00e9cifier le nombre minimum de r\u00e9servations requises par tranche horaire.",
-                "sub_type": "positive_integer"
+                "sub_type": "positive_integer",
+                "dependent_value": {
+                    "condition": [
+                        "group_booking",
+                        "!=",
+                        "yes"
+                    ],
+                    "value": "1"
+                },
+                "hide": [
+                    [
+                        "group_booking",
+                        "=",
+                        "yes"
+                    ]
+                ]
             },
             "required": true,
             "dependency": [],
@@ -189,29 +305,26 @@
             "tab": "general",
             "misc": {
                 "tooltip": "Par d\u00e9faut, une r\u00e9servation est autoris\u00e9e par tranche horaire. Si vous acceptez les r\u00e9servations de groupe, d\u00e9finissez le nombre maximum de r\u00e9servations autoris\u00e9es par tranche horaire.",
-                "sub_type": "positive_integer"
+                "sub_type": "positive_integer",
+                "dependent_value": {
+                    "condition": [
+                        "group_booking",
+                        "!=",
+                        "yes"
+                    ],
+                    "value": "1"
+                },
+                "hide": [
+                    [
+                        "group_booking",
+                        "=",
+                        "yes"
+                    ]
+                ]
             },
             "required": true,
             "dependency": [],
             "default_value": "1",
-            "editable": true
-        },
-        "service_form": {
-            "type": "string",
-            "input_type": "select",
-            "hidden": true,
-            "title": "Formulaire de r\u00e9servation",
-            "tab": "general",
-            "misc": {
-                "tooltip": "Choose your preferred booking form: either keep the default value or select a <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/set-up-frontend-booking-process/using-custom-fields-in-the-booking-form/\">CF7 form.</a>",
-                "options": "backend",
-                "null_value": [
-                    "Formulaire par d\u00e9faut"
-                ]
-            },
-            "required": false,
-            "dependency": [],
-            "default_value": "0",
             "editable": true
         },
         "service_gg_calendars": {
@@ -223,11 +336,54 @@
             "misc": {
                 "tooltip": "If you've integrated <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/google-calendar/\">Google Calendar</a>, choose the specific Google Calendar to synchronize with the service.",
                 "multiple": true,
-                "options": "gg_calendars"
+                "options": "gg_calendars",
+                "required_plan": "start"
             },
             "required": false,
             "dependency": [],
             "default_value": null,
+            "editable": true
+        },
+        "service_extcalendar": {
+            "type": "string",
+            "input_type": "textarea",
+            "hidden": true,
+            "title": "Prendre en compte le calendrier externe (ics)",
+            "tab": "general",
+            "misc": {
+                "tooltip": "Si vous souhaitez int\u00e9grer d\u2019autres calendriers, veuillez fournir les URL externes du calendrier iCal.",
+                "pro_version": true,
+                "required_plan": "premium"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_extcalendar_group_mode": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Calendrier externe pour les services de groupe",
+            "tab": "general",
+            "misc": {
+                "pro_version": true,
+                "required_plan": "premium"
+            },
+            "required": true,
+            "dependency": [
+                [
+                    "quantity",
+                    ">",
+                    "1"
+                ],
+                [
+                    "extcalendar",
+                    "!=",
+                    ""
+                ]
+            ],
+            "default_value": "",
             "editable": true
         },
         "service_users": {
@@ -265,11 +421,11 @@
             "type": "string",
             "input_type": "text",
             "hidden": false,
-            "title": "Dur\u00e9e (minutes)",
+            "title": "Duration",
             "tab": "hours",
             "misc": {
                 "sub_type": "positive_integer",
-                "tooltip": "Entrez la dur\u00e9e de chaque r\u00e9servation."
+                "tooltip": "Enter the duration of each booking in minutes."
             },
             "required": true,
             "dependency": [],
@@ -313,102 +469,12 @@
             "title": "Espace (minutes)",
             "tab": "hours",
             "misc": {
-                "tooltip": "  ",
+                "tooltip": "Enter the default time interval for time slots, which helps organize business hours and appointment durations.",
                 "sub_type": "positive_integer"
             },
             "required": true,
             "dependency": [],
             "default_value": "30",
-            "editable": true
-        },
-        "service_notification_template": {
-            "type": "string",
-            "input_type": "select",
-            "hidden": true,
-            "title": "Mod\u00e8le de notification 'pendant la r\u00e9servation'",
-            "tab": "email",
-            "misc": {
-                "tooltip": "S\u00e9lectionner un mod\u00e8le pour les notifications de confirmation de r\u00e9servation.",
-                "options": "email_templates",
-                "null_value": [
-                    "D\u00e9faut"
-                ]
-            },
-            "required": false,
-            "dependency": [],
-            "default_value": "0",
-            "editable": true
-        },
-        "service_reminder_template": {
-            "type": "string",
-            "input_type": "select",
-            "hidden": true,
-            "title": "Mod\u00e8le d\u2019avis de rappel",
-            "tab": "email",
-            "misc": {
-                "tooltip": "S\u00e9lectionner un mod\u00e8le pour les rappels de r\u00e9servation.",
-                "null_value": [
-                    "D\u00e9faut"
-                ],
-                "options": "email_templates"
-            },
-            "required": false,
-            "dependency": [],
-            "default_value": "0",
-            "editable": true
-        },
-        "service_invoice_template": {
-            "type": "string",
-            "input_type": "select",
-            "hidden": true,
-            "title": "Mod\u00e8le de notification de facture",
-            "tab": "email",
-            "misc": {
-                "tooltip": "S\u00e9lectionner un mod\u00e8le pour les factures.",
-                "null_value": [
-                    "D\u00e9faut"
-                ],
-                "options": "email_templates"
-            },
-            "required": false,
-            "dependency": [],
-            "default_value": "0",
-            "editable": true
-        },
-        "service_booking_changed_template": {
-            "type": "string",
-            "input_type": "select",
-            "hidden": true,
-            "title": "Mod\u00e8le de changement de r\u00e9servation",
-            "tab": "email",
-            "misc": {
-                "tooltip": "S\u00e9lectionner un mod\u00e8le pour les notifications de modification de r\u00e9servation.",
-                "null_value": [
-                    "D\u00e9faut"
-                ],
-                "options": "email_templates"
-            },
-            "required": false,
-            "dependency": [],
-            "default_value": "0",
-            "editable": true
-        },
-        "service_arrived_template": {
-            "type": "string",
-            "input_type": "select",
-            "hidden": true,
-            "title": "Status \"arrived\" template",
-            "tab": "email",
-            "misc": {
-                "tooltip": "Select a template for status \"Arrived\" notification. ",
-                "null_value": [
-                    "D\u00e9faut"
-                ],
-                "options": "email_templates"
-            },
-            "required": false,
-            "dependency": [],
-            "default_value": "0",
             "editable": true
         },
         "service_payment_methods": {
@@ -431,10 +497,10 @@
             "type": "string",
             "input_type": "text",
             "hidden": true,
-            "title": "Ajouter le montant \u00e0 la commande (d\u00e9p\u00f4t)",
+            "title": "Add one-time service fee",
             "tab": "pricing",
             "misc": {
-                "tooltip": "Sp\u00e9cifier le montant du d\u00e9p\u00f4t n\u00e9cessaire pour la r\u00e9servation. Le laisser \u00e0 0 pour le paiement initial complet.",
+                "tooltip": "Add one-time service fee that will be added to the final order amount. Leave 0 to disable",
                 "sub_type": "none_negative_float"
             },
             "required": false,
@@ -451,7 +517,9 @@
             "misc": {
                 "tooltip": "Select the <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/payment/pricing-rules/\">pricing rules</a> to be applied to this service.",
                 "options": "pricing_rules",
-                "multiple": true
+                "multiple": true,
+                "required_plan": "premium",
+                "available_in_old_free": true
             },
             "required": false,
             "dependency": [],
@@ -467,7 +535,8 @@
             "misc": {
                 "tooltip": "Set ID of the product associated with this service. Set only if WooCommerce is used as payment mehtod.",
                 "sub_type": "none_negative_integer",
-                "pro_version": true
+                "pro_version": true,
+                "required_plan": "standard"
             },
             "required": false,
             "dependency": [],
@@ -482,7 +551,27 @@
             "tab": "general",
             "misc": {
                 "yes": "Oui",
-                "tooltip": "Check this to automatically create <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/integrations/integration-with-zoom/\">Zoom events</a> for each booking of this service."
+                "tooltip": "Check this to automatically create <a rel=\"noopener\" target=\"_blank\" href=\"https://webba-booking.com/documentation/integrations/integration-with-zoom/\">Zoom events</a> for each booking of this service.",
+                "pro_version": true,
+                "required_plan": "premium"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "",
+            "editable": true
+        },
+        "service_limited_timeslot": {
+            "type": "string",
+            "input_type": "checkbox",
+            "hidden": true,
+            "title": "Limit timeslot selection",
+            "tab": "general",
+            "misc": {
+                "yes": "Oui",
+                "tooltip": "Check this to limit the number of time slots per booking. Applicable only if \"Settings -> User Interface -> Multiple Bookings in One Session\" is enabled.",
+                "description": "You can limit the number of time slots selection per booking by enable the option above. If the number of selected time slots is less than the minimum or greater than the maximum, the user will not be able to continue with the booking.",
+                "required_plan": "standard",
+                "available_in_old_free": true
             },
             "required": false,
             "dependency": [],
@@ -500,7 +589,13 @@
                 "tooltip": "Minimum number of time slots required to make a booking. Applicable only if \"Settings -> User Interface -> Multiple Bookings in One Session\" is enabled."
             },
             "required": false,
-            "dependency": [],
+            "dependency": [
+                [
+                    "limited_timeslot",
+                    "=",
+                    "yes"
+                ]
+            ],
             "default_value": "",
             "editable": true
         },
@@ -515,7 +610,13 @@
                 "tooltip": "Maximum number of time slots allowed to make a booking. Applicable only if \"Settings -> User Interface -> Multiple Bookings in One Session\" is enabled."
             },
             "required": false,
-            "dependency": [],
+            "dependency": [
+                [
+                    "limited_timeslot",
+                    "=",
+                    "yes"
+                ]
+            ],
             "default_value": "",
             "editable": true
         },
@@ -532,6 +633,25 @@
             "required": false,
             "dependency": [],
             "default_value": "",
+            "editable": true
+        },
+        "service_form_builder": {
+            "type": "string",
+            "input_type": "select",
+            "hidden": true,
+            "title": "Form",
+            "tab": "general",
+            "misc": {
+                "tooltip": "Select form to populate fields in booking form",
+                "options": "forms",
+                "null_value": [
+                    "Default form"
+                ],
+                "required_plan": "standard"
+            },
+            "required": false,
+            "dependency": [],
+            "default_value": "0",
             "editable": true
         }
     }

@@ -9,7 +9,7 @@
             "title": "Coupon",
             "tab": "",
             "misc": {
-                "tooltip": "Entrez un code promo."
+                "tooltip": "Enter a coupon code."
             },
             "required": true,
             "dependency": [],
@@ -20,11 +20,11 @@
             "type": "string",
             "input_type": "date_range",
             "hidden": false,
-            "title": "Disponible sur",
+            "title": "Available on",
             "tab": "",
             "misc": {
-                "tooltip": "D\u00e9finir la dur\u00e9e de validit\u00e9 du coupon.",
-                "time_zone": "Europe/Paris"
+                "tooltip": "Define the time period during which the coupon will be valid.",
+                "time_zone": "Europe/Warsaw"
             },
             "required": false,
             "dependency": [],
@@ -38,7 +38,7 @@
             "title": "Services",
             "tab": "",
             "misc": {
-                "tooltip": "Choisir le(s) service(s) pour lequel le coupon sera applicable.",
+                "tooltip": "Choose the service(-s) for which the coupon will be applicable.",
                 "multiple": true,
                 "options": "services"
             },
@@ -51,10 +51,10 @@
             "type": "string",
             "input_type": "text",
             "hidden": false,
-            "title": "Limite d'usage",
+            "title": "Usage limit",
             "tab": "",
             "misc": {
-                "tooltip": "Sp\u00e9cifier la limite d\u2019utilisation pour le coupon - le nombre maximum de fois qu\u2019il peut \u00eatre appliqu\u00e9. Le laisser vide signifie une utilisation illimit\u00e9e.",
+                "tooltip": "Specify the Usage limit for the coupon - the maximum number of times it can be applied. Leaving it blank means unlimited use.",
                 "sub_type": "none_negative_integer"
             },
             "required": false,
@@ -66,7 +66,7 @@
             "type": "string",
             "input_type": "text",
             "hidden": false,
-            "title": "Utilis\u00e9",
+            "title": "Used",
             "tab": "",
             "misc": {
                 "sub_type": "positive_integer"
@@ -80,10 +80,10 @@
             "type": "string",
             "input_type": "text",
             "hidden": false,
-            "title": "R\u00e9duction (fixe)",
+            "title": "Discount (fixed)",
             "tab": "",
             "misc": {
-                "tooltip": "Pr\u00e9ciser le montant fixe qui sera appliqu\u00e9 comme remise.",
+                "tooltip": "Speficy the fixed amount that will be applied as the discount.",
                 "sub_type": "none_negative_float"
             },
             "required": true,
@@ -95,10 +95,10 @@
             "type": "string",
             "input_type": "text",
             "hidden": false,
-            "title": "R\u00e9duction (pourcentage)",
+            "title": "Discount (percentage)",
             "tab": "",
             "misc": {
-                "tooltip": "Pr\u00e9ciser le pourcentage qui sera appliqu\u00e9 comme r\u00e9duction.",
+                "tooltip": "Speficy the percentage that will be applied as the discount.",
                 "sub_type": "none_negative_float"
             },
             "required": true,

@@ -53,6 +53,7 @@ const config = {
     entry: {
         ...defaultEntries,
         ...srcJsEntries,
+        'wizard_page': './src/scss/wizard_page.scss',
     },
     output: {
         ...defaultConfig.output,
@@ -71,6 +72,21 @@ const config = {
             {
                 test: imageAssetsRegex,
                 type: 'asset/inline',
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    'postcss-loader',
+                    'sass-loader',
+                    {
+                        loader: 'sass-resources-loader',
+                        options: {
+                            resources: [
+                                './src/scss/config/config.scss'
+                            ],
+                        },
+                    },
+                ],
             },
         ],
     },

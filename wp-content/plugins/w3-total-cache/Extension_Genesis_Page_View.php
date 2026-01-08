@@ -1,4 +1,10 @@
 <?php
+/**
+ * File: Extension_Genesis_Page_View.php
+ *
+ * @package W3TC
+ */
+
 namespace W3TC;
 
 if ( ! defined( 'W3TC' ) ) {
@@ -192,7 +198,7 @@ if ( ! defined( 'W3TC' ) ) {
 				'control'        => 'checkbox',
 				'checkbox_label' => esc_html__( 'Enable', 'w3-total-cache' ),
 				'label'          => esc_html__( 'Disable fragment cache:', 'w3-total-cache' ),
-				'description'    => esc_html__( 'Don\'t use fragment cache with the following hooks and for the specified user roles.' ),
+				'description'    => esc_html__( 'Don\'t use fragment cache with the following hooks and for the specified user roles.', 'w3-total-cache' ),
 			)
 		);
 		?>

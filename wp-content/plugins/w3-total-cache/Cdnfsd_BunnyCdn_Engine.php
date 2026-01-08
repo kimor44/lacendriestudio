@@ -2,7 +2,7 @@
 /**
  * File: Cdnfsd_BunnyCdn_Engine.php
  *
- * @since   X.X.X
+ * @since   2.6.0
  * @package W3TC
  */
 
@@ -11,13 +11,13 @@ namespace W3TC;
 /**
  * Class: Cdnfsd_Bunny_Cdn_Engine
  *
- * @since X.X.X
+ * @since 2.6.0
  */
 class Cdnfsd_BunnyCdn_Engine {
 	/**
 	 * CDN configuration.
 	 *
-	 * @since X.X.X
+	 * @since 2.6.0
 	 *
 	 * @var array
 	 */
@@ -26,7 +26,7 @@ class Cdnfsd_BunnyCdn_Engine {
 	/**
 	 * Constructor.
 	 *
-	 * @since X.X.X
+	 * @since 2.6.0
 	 *
 	 * @param array $config CDN configuration.
 	 */
@@ -37,7 +37,7 @@ class Cdnfsd_BunnyCdn_Engine {
 	/**
 	 * Flush URLs.
 	 *
-	 * @since X.X.X
+	 * @since 2.6.0
 	 *
 	 * @param  array $urls URLs.
 	 * @throws \Exception Exception.
@@ -45,7 +45,7 @@ class Cdnfsd_BunnyCdn_Engine {
 	 */
 	public function flush_urls( array $urls ) {
 		if ( empty( $this->config['account_api_key'] ) ) {
-			throw new \Exception( esc_html__( 'Account API key not specified.', 'w3-total-cache' ) );
+			throw new \Exception( \esc_html__( 'Account API key not specified.', 'w3-total-cache' ) );
 		}
 
 		$api   = new Cdn_BunnyCdn_Api( $this->config );
@@ -61,8 +61,8 @@ class Cdnfsd_BunnyCdn_Engine {
 		try {
 			$api->purge( array( 'items' => $items ) );
 		} catch ( \Exception $ex ) {
-			if ( $ex->getMessage() == 'Validation Failure: Purge url must contain one of your hostnames' ) {
-				throw new \Exception( esc_html__( 'CDN site is not configured correctly: Delivery Domain must match your site domain', 'w3-total-cache' ) );
+			if ( 'Validation Failure: Purge url must contain one of your hostnames' === $ex->getMessage() ) {
+				throw new \Exception( \esc_html__( 'CDN site is not configured correctly: Delivery Domain must match your site domain', 'w3-total-cache' ) );
 			} else {
 				throw $ex;
 			}
@@ -72,7 +72,7 @@ class Cdnfsd_BunnyCdn_Engine {
 	/**
 	 * Flushes CDN completely.
 	 *
-	 * @since X.X.X
+	 * @since 2.6.0
 	 *
 	 * @throws \Exception Exception.
 	 */
